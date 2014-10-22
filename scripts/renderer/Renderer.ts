@@ -3,7 +3,7 @@
  * @author Simon Urli <simon@the6thscreen.fr, simon.urli@gmail.com>
  */
 
-/// <reference path="../info/Info.ts" />
+/// <reference path="../../t6s-core/core/scripts/infotype/Info.ts" />
 
 interface Renderer<RenderInfo extends Info> {
     transformForBehaviour<ProcessInfo extends Info>(listInfos : Array<ProcessInfo>, renderPolicy : RenderPolicy<ProcessInfo>) : Array<RenderInfo>;
