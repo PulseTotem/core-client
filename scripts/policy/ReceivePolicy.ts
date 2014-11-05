@@ -4,7 +4,8 @@
  */
 
 /// <reference path="./Policy.ts" />
+/// <reference path="../../t6s-core/core/scripts/infotype/Info.ts" />
 
-class ReceivePolicy extends Policy {
-
+interface ReceivePolicy extends Policy {
+    process(listInfos : Array<Info>) : Array<Info>;
 }

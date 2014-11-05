@@ -10,12 +10,25 @@ class Behaviour {
 	private _isRunning : boolean;
 	private _currentDisplayedInformationIndex : number;
 	private _domElement : any;
-	private _tick : number;
+    private _timeout : any;
 
 	constructor() {
 		this._listMapInfoRenderer = new Array<MapInfoRenderer<any>>();
-		this._tick = 5000;
+        this._timeout = null;
 	}
+
+    restart(calls : Array<Call>) {
+        var self = this;
+
+        if(this._timeout != null) {
+            clearTimeout(this._timeout);
+            this._timeout = null;
+        }
+        this._isRunning = false;
+
+        this.buildListMapInfoRenderer(calls);
+        this.displayInfo();
+    }
 
 	buildListMapInfoRenderer(calls : Array<Call>) {
 		var self = this;
@@ -51,7 +64,7 @@ class Behaviour {
 
 		if (now < info.getObsoleteDate()) {
 			renderer.render(info, this._domElement);
-			setTimeout(function() {
+			this._timeout = setTimeout(function() {
 				self.displayInfo();
 			}, info.getDurationToDisplay());
 		} else {
