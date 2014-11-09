@@ -7,6 +7,9 @@
 
 class FeedContentDumbRenderPolicy implements RenderPolicy<FeedContent> {
     process(listInfos : Array<FeedContent>) : Array<FeedContent> {
+        Logger.debug("FeedContentDumbRenderPolicy : listInfos");
+        Logger.debug(listInfos);
+
         return listInfos;
     }
 }
