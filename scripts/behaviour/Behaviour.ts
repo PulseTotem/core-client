@@ -87,10 +87,10 @@ class Behaviour {
 		}
 
         if(this._listMapInfoRenderer.length > 0) {
-            var mapToDispay:MapInfoRenderer<any> = this._listMapInfoRenderer[this._currentDisplayedInformationIndex];
+            var mapToDisplay:MapInfoRenderer<any> = this._listMapInfoRenderer[this._currentDisplayedInformationIndex];
 
-            var info = mapToDispay.info;
-            var renderer = mapToDispay.renderer;
+            var info = mapToDisplay.info;
+            var renderer = mapToDisplay.renderer;
 
             this._currentDisplayedInformationIndex = (this._currentDisplayedInformationIndex + 1) % (this._listMapInfoRenderer.length);
 
@@ -99,7 +99,7 @@ class Behaviour {
 
             try {
 
-                if (DateJS.compare(DateJS.today(), new DateJS(info.getObsoleteDate())) <= 0) {
+                //if (DateJS.compare(DateJS.today(), new DateJS(info.getObsoleteDate())) <= 0) {
                     Logger.debug("displayInfo - render");
                     renderer.render(info, this._domElement);
                     Logger.debug("displayInfo : wait ");
@@ -108,10 +108,10 @@ class Behaviour {
                         Logger.debug("displayInfo");
                         self.displayInfo();
                     }, info.getDurationToDisplay());
-                } else {
+                /*} else {
                     Logger.debug("displayInfo : Obsolete");
                     this.displayInfo();
-                }
+                }*/ // Infinite loop if all info are obsolete. Moreover, obsolete infos should be process only once. And finally, obsolete process don't have to be done here... (ReceivePolicy ?)
             } catch(e) {
                 Logger.error(e.name + " : " + e.message);
             }
