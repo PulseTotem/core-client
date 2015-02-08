@@ -57,10 +57,50 @@ class FeedNodeRendererGeneric implements Renderer<FeedNode> {
     }
 
     render(info : FeedNode, domElem : any) {
-        var titleH1 = $("<h1>");
-        titleH1.html(info.getTitle());
+        var feedNodeHTML = $("<div>");
+        feedNodeHTML.addClass("feednode");
+
+        var titleContent = $("<div>");
+        titleContent.addClass("title_content");
+
+        feedNodeHTML.append(titleContent);
+
+        var title = $("<div>");
+        title.addClass("title");
+
+        titleContent.append(title);
+
+        var logo = $("<div>");
+        logo.addClass("logo");
+
+        titleContent.append(logo);
+
+        var titleClear = $("<div>");
+        titleClear.addClass("titleClear");
+
+        titleContent.append(titleClear);
+
+        var feedContent = $("<div>");
+        feedContent.addClass("main_content");
+
+        feedNodeHTML.append(feedContent);
+
+        var summary = $("<div>");
+
+        feedContent.append(summary);
+
+        var description = $("<div>");
+
+        feedContent.append(description);
+
+        //Fullfill with info
+
+        title.html(info.getTitle());
+        summary.html(info.getSummary());
+        description.html(info.getDescription());
+
         $(domElem).empty();
-        $(domElem).append(titleH1);
+        $(domElem).append(feedNodeHTML);
 
         info.setCastingDate(new Date());
     }

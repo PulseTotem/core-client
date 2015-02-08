@@ -133,4 +133,11 @@ class Behaviour {
         }
         return null;
     }
+
+    stop() {
+        if (this._isRunning) {
+            clearTimeout(this._timeout);
+            this._isRunning = false;
+        }
+    }
 }
