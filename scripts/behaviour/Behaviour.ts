@@ -14,9 +14,13 @@ class Behaviour {
 	private _domElement : any;
     private _timeout : any;
 
+    private _loadingLogoHidden : boolean;
+
 	constructor() {
 		this._listMapInfoRenderer = new Array<MapInfoRenderer<any>>();
         this._timeout = null;
+
+        this._loadingLogoHidden = false;
 	}
 
     setZoneDiv(zoneDiv : any) {
@@ -101,6 +105,13 @@ class Behaviour {
 
                 //if (DateJS.compare(DateJS.today(), new DateJS(info.getObsoleteDate())) <= 0) {
                     Logger.debug("displayInfo - render");
+
+                    //Manage Loading logo
+                    if(! this._loadingLogoHidden) {
+                        $('#logo_loading').fadeOut(1000);
+                        this._loadingLogoHidden = true;
+                    }
+
                     renderer.render(info, this._domElement);
                     Logger.debug("displayInfo : wait ");
                     Logger.debug(info.getDurationToDisplay());
