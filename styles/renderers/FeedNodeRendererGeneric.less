@@ -1,0 +1,45 @@
+@import "../common/share.less";
+
+.feednode {
+  .title_content {
+    color: #222222;
+    font-weight: 500;
+    font-size: 135%;
+    line-height: 135%;
+    padding: 20px;
+    background: transparent;
+
+    .title {
+      float: left;
+      margin-right: 70px;
+    }
+
+    .logo {
+      width: 70px;
+      height: 70px;
+      background-image: url('../images/rss.png');
+      margin-left: -70px;
+      margin-top: -10px;
+      float: right;
+    }
+
+    .titleClear {
+      .clearfix;
+    }
+  }
+
+  .main_content {
+    width: 100%;
+    padding: 20px;
+
+    .feednode_media {
+      float: right;
+      margin: 5px;
+
+      img {
+        max-width: 200px;
+        max-height: 200px;
+      }
+    }
+  }
+}
