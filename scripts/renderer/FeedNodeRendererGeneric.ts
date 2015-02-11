@@ -96,8 +96,21 @@ class FeedNodeRendererGeneric implements Renderer<FeedNode> {
         //Fullfill with info
 
         title.html(info.getTitle());
-        summary.html(info.getSummary());
-        description.html(info.getDescription());
+
+        if(info.getMediaUrl() != null) {
+            var media = $("<div>");
+            media.addClass("feednode_media");
+            var mediaImg = $("<img>");
+            mediaImg.attr("src", info.getMediaUrl());
+            media.append(mediaImg);
+            summary.append(media);
+        }
+
+        summary.append(info.getSummary());
+
+        if(info.getDescription() != info.getSummary()) {
+            description.html(info.getDescription());
+        }
 
         $(domElem).empty();
         $(domElem).append(feedNodeHTML);
