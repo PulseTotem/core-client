@@ -2,6 +2,8 @@
  * @author Christian Brel <christian@the6thscreen.fr, ch.brel@gmail.com>
  */
 
+/// <reference path="./LoggerLevel.ts" />
+
 declare var log : any; // Use 'log' lib.
 
 /**
@@ -22,6 +24,16 @@ class Logger {
     static color : boolean = true;
 
     /**
+     * Level status of the logger.
+     *
+     * @property level
+     * @type LoggerLevel
+     * @static
+     * @default Error
+     */
+    static level : LoggerLevel = LoggerLevel.Error;
+
+    /**
      * Change the color status.
      *
      * @method useColor
@@ -33,6 +45,17 @@ class Logger {
     }
 
     /**
+     * Change the level of the logger.
+     *
+     * @method setLevel
+     * @static
+     * @param level
+     */
+    static setLevel(level : LoggerLevel) {
+        Logger.level = level;
+    }
+
+    /**
      * Log message as Debug Level.
      *
      * @method debug
@@ -40,10 +63,8 @@ class Logger {
      * @param {string} msg - The message to log.
      */
     static debug(msg) {
-        if(typeof msg !== "string") {
-            console.log(msg);
-        } else {
-            if(Logger.color) {
+        if (Logger.level === LoggerLevel.Debug) {
+            if (Logger.color && msg != null && msg != undefined && (typeof(msg) == "string" || msg instanceof String)) {
                 log("[c=\"color:green\"]" + msg + "[c]");
             } else {
                 console.log(msg);
@@ -59,10 +80,12 @@ class Logger {
      * @param {string} msg - The message to log.
      */
     static info(msg) {
-        if(Logger.color) {
-            log("[c=\"color:blue\"]" + msg + "[c]");
-        } else {
-            console.log(msg);
+        if (Logger.level === LoggerLevel.Debug || Logger.level === LoggerLevel.Info) {
+            if (Logger.color && msg != null && msg != undefined && (typeof(msg) == "string" || msg instanceof String)) {
+                log("[c=\"color:blue\"]" + msg + "[c]");
+            } else {
+                console.log(msg);
+            }
         }
     }
 
@@ -74,10 +97,12 @@ class Logger {
      * @param {string} msg - The message to log.
      */
     static warn(msg) {
-        if(Logger.color) {
-            log("[c=\"color:orange\"]" + msg + "[c]");
-        } else {
-            console.log(msg);
+        if (Logger.level === LoggerLevel.Debug || Logger.level === LoggerLevel.Info || Logger.level === LoggerLevel.Warning) {
+            if (Logger.color && msg != null && msg != undefined && (typeof(msg) == "string" || msg instanceof String)) {
+                log("[c=\"color:orange\"]" + msg + "[c]");
+            } else {
+                console.log(msg);
+            }
         }
     }
 
@@ -89,10 +114,10 @@ class Logger {
      * @param {string} msg - The message to log.
      */
     static error(msg) {
-        if(Logger.color) {
+        if(Logger.color && msg != null && msg != undefined && (typeof(msg) == "string" || msg instanceof String)) {
             log("[c=\"color:red\"]" + msg + "[c]");
         } else {
-            console.log(msg);
+            console.error(msg);
         }
     }
 
