@@ -13,13 +13,7 @@ declare var $: any; // Use of JQuery
 class FeedNodeRendererGeneric implements Renderer<FeedNode> {
     transformForBehaviour(listInfos : Array<FeedContent>, renderPolicy : RenderPolicy<FeedContent>) : Array<FeedNode> {
 
-        Logger.debug("Renderer : listInfos");
-        Logger.debug(listInfos);
-
         var newListInfos : Array<FeedContent> = new Array<FeedContent>();
-
-        Logger.debug("Renderer : listInfos.length");
-        Logger.debug(listInfos.length);
 
         for(var iInfo in listInfos) {
             try {
@@ -31,13 +25,7 @@ class FeedNodeRendererGeneric implements Renderer<FeedNode> {
             }
         }
 
-        Logger.debug("Renderer : newListInfos");
-        Logger.debug(newListInfos);
-
         var feedContents : Array<FeedContent> = renderPolicy.process(newListInfos);
-
-        Logger.debug("Renderer : feedContents");
-        Logger.debug(feedContents);
 
         var feedNodes : Array<FeedNode> = new Array<FeedNode>();
 
@@ -49,9 +37,6 @@ class FeedNodeRendererGeneric implements Renderer<FeedNode> {
                 feedNodes.push(fn);
             }
         }
-
-        Logger.debug("Renderer : feedNodes");
-        Logger.debug(feedNodes);
 
         return feedNodes;
     }

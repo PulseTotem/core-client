@@ -12,13 +12,7 @@ declare var $: any; // Use of JQuery
 class DiscountRenderer implements Renderer<Discount> {
     transformForBehaviour(listInfos : Array<DiscountsList>, renderPolicy : RenderPolicy<any>) : Array<Discount> {
 
-        Logger.debug("Renderer : listInfos");
-        Logger.debug(listInfos);
-
         var newListInfos : Array<DiscountsList> = new Array<DiscountsList>();
-
-        Logger.debug("Renderer : listInfos.length");
-        Logger.debug(listInfos.length);
 
         for(var iInfo in listInfos) {
             try {
@@ -30,14 +24,8 @@ class DiscountRenderer implements Renderer<Discount> {
             }
         }
 
-        Logger.debug("Renderer : newListInfos");
-        Logger.debug(newListInfos);
-
         //var discountsLists : Array<DiscountsList> = renderPolicy.process(newListInfos);
         var discountsLists : Array<DiscountsList> = newListInfos;
-
-        Logger.debug("Renderer : discountsLists");
-        Logger.debug(discountsLists);
 
         var discounts : Array<Discount> = new Array<Discount>();
 
@@ -49,9 +37,6 @@ class DiscountRenderer implements Renderer<Discount> {
                 discounts.push(d);
             }
         }
-
-        Logger.debug("Renderer : discounts");
-        Logger.debug(discounts);
 
         return discounts;
     }

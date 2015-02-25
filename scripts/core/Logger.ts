@@ -86,20 +86,29 @@ class Logger {
      * @param {Object} msg
      */
     static storeMessage(date : Date, level : LoggerLevel, msg : any) {
-        var sStorage : any = sessionStorage;
+        /*var sStorage : any = sessionStorage;
+
         var logMessages : any = null;
-        if(typeof (sStorage.logMessages) == "undefined") {
+        if(sStorage.length == 0) {
             logMessages = new Array();
         } else {
-            logMessages = JSON.parse(sStorage.logMessages);
+            logMessages = JSON.parse(sStorage.getItem("logMessages"));
         }
+
         var logMessage : Object = new Object();
         logMessage["date"] = date;
         logMessage["level"] = level;
         logMessage["msg"] = msg;
-        logMessages.push(logMessage);
+        logMessages.push(JSON.stringify(logMessage));
 
-        sStorage.logMessages = JSON.stringify(logMessages);
+        sStorage.setItem("logMessages", JSON.stringify(logMessages));*/
+
+        /*var logMessage : Object = new Object();
+        logMessage["date"] = date;
+        logMessage["level"] = level;
+        logMessage["msg"] = msg;
+        sStorage.setItem(sStorage.length, JSON.stringify(logMessage));*/
+
     }
 
     /**
@@ -109,9 +118,9 @@ class Logger {
      * @static
      */
     static clear() {
-        var sStorage : any = sessionStorage;
+        /*var sStorage : any = sessionStorage;
 
-        sStorage.logMessages = JSON.stringify(new Array());
+        sStorage.clear();*/
     }
 
     /**
@@ -122,7 +131,7 @@ class Logger {
      * @param {string} msg - The message to log.
      */
     static debug(msg) {
-        Logger.storeMessage(new Date(), LoggerLevel.Debug, msg);
+//        Logger.storeMessage(new Date(), LoggerLevel.Debug, msg);
 
         if (Logger.display && Logger.level === LoggerLevel.Debug) {
             if (Logger.color && msg != null && msg != undefined && (typeof(msg) == "string" || msg instanceof String)) {
@@ -141,7 +150,7 @@ class Logger {
      * @param {string} msg - The message to log.
      */
     static info(msg) {
-        Logger.storeMessage(new Date(), LoggerLevel.Info, msg);
+//        Logger.storeMessage(new Date(), LoggerLevel.Info, msg);
 
         if (Logger.display && (Logger.level === LoggerLevel.Debug || Logger.level === LoggerLevel.Info)) {
             if (Logger.color && msg != null && msg != undefined && (typeof(msg) == "string" || msg instanceof String)) {
@@ -160,7 +169,7 @@ class Logger {
      * @param {string} msg - The message to log.
      */
     static warn(msg) {
-        Logger.storeMessage(new Date(), LoggerLevel.Warning, msg);
+//        Logger.storeMessage(new Date(), LoggerLevel.Warning, msg);
 
         if (Logger.display && (Logger.level === LoggerLevel.Debug || Logger.level === LoggerLevel.Info || Logger.level === LoggerLevel.Warning)) {
             if (Logger.color && msg != null && msg != undefined && (typeof(msg) == "string" || msg instanceof String)) {
@@ -179,7 +188,8 @@ class Logger {
      * @param {string} msg - The message to log.
      */
     static error(msg) {
-        Logger.storeMessage(new Date(), LoggerLevel.Error, msg);
+//        Logger.storeMessage(new Date(), LoggerLevel.Error, msg);
+
         if(Logger.display) {
             if (Logger.color && msg != null && msg != undefined && (typeof(msg) == "string" || msg instanceof String)) {
                 log("[c=\"color:red\"]" + msg + "[c]");

@@ -24,15 +24,11 @@ class Behaviour {
 	}
 
     setZoneDiv(zoneDiv : any) {
-        Logger.debug("setZoneDiv");
         this._domElement = zoneDiv;
     }
 
     restart(calls : Array<Call>) {
         var self = this;
-
-        Logger.debug("restart");
-        Logger.debug(calls);
 
         if(calls != null) {
 
@@ -50,27 +46,12 @@ class Behaviour {
 	buildListMapInfoRenderer(calls : Array<Call>) {
 		var self = this;
 
-        Logger.debug("buildListMapInfoRenderer");
-
 		calls.forEach(function(call) {
 			var listInfos = call.getListInfos();
 			var renderer = call.getRenderer();
 			var renderPolicy = call.getRenderPolicy();
 
-            Logger.debug("listInfos");
-            Logger.debug(listInfos);
-
-            Logger.debug("renderer");
-            Logger.debug(renderer);
-
-            Logger.debug("renderPolicy");
-            Logger.debug(renderPolicy);
-
 			var processedList = renderer.transformForBehaviour(listInfos, renderPolicy);
-
-            Logger.debug("processedList");
-            Logger.debug(processedList);
-
             if(processedList != null) {
                 processedList.forEach(function (info) {
                     if(self.retrieveMapInfoRenderer(info) == null) {
@@ -98,13 +79,10 @@ class Behaviour {
 
             this._currentDisplayedInformationIndex = (this._currentDisplayedInformationIndex + 1) % (this._listMapInfoRenderer.length);
 
-            Logger.debug("displayInfo - obsolete date");
-            Logger.debug(info.getObsoleteDate());
-
             try {
 
                 //if (DateJS.compare(DateJS.today(), new DateJS(info.getObsoleteDate())) <= 0) {
-                    Logger.debug("displayInfo - render");
+//                    Logger.debug("displayInfo - render");
 
                     //Manage Loading logo
                     if(! this._loadingLogoHidden) {
@@ -113,10 +91,8 @@ class Behaviour {
                     }
 
                     renderer.render(info, this._domElement);
-                    Logger.debug("displayInfo : wait ");
-                    Logger.debug(info.getDurationToDisplay());
                     this._timeout = setTimeout(function () {
-                        Logger.debug("displayInfo");
+//                        Logger.debug("displayInfo");
                         self.displayInfo();
                     }, info.getDurationToDisplay());
                 /*} else {
@@ -128,14 +104,12 @@ class Behaviour {
             }
         } else {
             this._timeout = setTimeout(function () {
-                Logger.debug("displayInfo : relance");
                 self.displayInfo();
             }, 5000);
         }
 	}
 
     retrieveMapInfoRenderer(info : Info) {
-        Logger.debug("retrieveMapInfoRenderer");
         for(var iMir in this._listMapInfoRenderer) {
             var mir = this._listMapInfoRenderer[iMir];
             if(mir.info.getId() == info.getId()) {
