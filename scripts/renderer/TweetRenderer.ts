@@ -12,7 +12,7 @@ declare var $: any; // Use of JQuery
 class TweetRenderer implements Renderer<Tweet> {
 	transformForBehaviour(listInfos : Array<TweetList>, renderPolicy : RenderPolicy<any>) : Array<Tweet> {
 
-		/*var newListInfos : Array<TweetList> = new Array<TweetList>();
+		var newListInfos : Array<TweetList> = new Array<TweetList>();
 
 		for(var iInfo in listInfos) {
 			try {
@@ -38,11 +38,10 @@ class TweetRenderer implements Renderer<Tweet> {
 			}
 		}
 
-		return tweets;*/
-		return new Array<Tweet>();
+		return tweets;
 	}
 
-	render(info : Discount, domElem : any) {
+	render(info : Tweet, domElem : any) {
 		/*var feedNodeHTML = $("<div>");
 		 feedNodeHTML.addClass("feednode");
 
@@ -104,7 +103,7 @@ class TweetRenderer implements Renderer<Tweet> {
 		 info.setCastingDate(new Date());*/
 
 		$(domElem).empty();
-		$(domElem).html(info.getProductName() + '<br/><br/>' + info.getProductDescription());
+		$(domElem).html(info.getMessage());
 
 		info.setCastingDate(new Date());
 	}
