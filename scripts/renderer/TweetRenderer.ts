@@ -34,7 +34,7 @@ class TweetRenderer implements Renderer<Tweet> {
 			var tlTweets : Array<Tweet> = tl.getTweets();
 			for(var iT in tlTweets) {
 				var t : Tweet = tlTweets[iT];
-				tlTweets.push(t);
+				tweets.push(t);
 			}
 		}
 
@@ -102,8 +102,12 @@ class TweetRenderer implements Renderer<Tweet> {
 
 		 info.setCastingDate(new Date());*/
 
+		var tweetHTML = $("<div>");
+		tweetHTML.addClass("tweet");
+		tweetHTML.html(info.getMessage());
+
 		$(domElem).empty();
-		$(domElem).html(info.getMessage());
+		$(domElem).append(tweetHTML);
 
 		info.setCastingDate(new Date());
 	}
