@@ -2,22 +2,22 @@
  * @author Christian Brel <christian@the6thscreen.fr, ch.brel@gmail.com>
  */
 
-/// <reference path="../../t6s-core/core/scripts/infotype/DiscountsList.ts" />
-/// <reference path="../../t6s-core/core/scripts/infotype/Discount.ts" />
+/// <reference path="../../t6s-core/core/scripts/infotype/TweetList.ts" />
+/// <reference path="../../t6s-core/core/scripts/infotype/Tweet.ts" />
 /// <reference path="../policy/RenderPolicy.ts" />
 /// <reference path="./Renderer.ts" />
 
 declare var $: any; // Use of JQuery
 
-class DiscountRenderer implements Renderer<Discount> {
-	transformForBehaviour(listInfos : Array<DiscountsList>, renderPolicy : RenderPolicy<any>) : Array<Discount> {
+class TweetRenderer implements Renderer<Tweet> {
+	transformForBehaviour(listInfos : Array<TweetList>, renderPolicy : RenderPolicy<any>) : Array<Tweet> {
 
-		var newListInfos : Array<DiscountsList> = new Array<DiscountsList>();
+		/*var newListInfos : Array<TweetList> = new Array<TweetList>();
 
 		for(var iInfo in listInfos) {
 			try {
 				var infoDesc = listInfos[iInfo];
-				var infoInstance = DiscountsList.fromJSONObject(infoDesc);
+				var infoInstance = TweetList.fromJSONObject(infoDesc);
 				newListInfos.push(infoInstance);
 			} catch(e) {
 				Logger.error(e.message);
@@ -25,20 +25,21 @@ class DiscountRenderer implements Renderer<Discount> {
 		}
 
 		//var discountsLists : Array<DiscountsList> = renderPolicy.process(newListInfos);
-		var discountsLists : Array<DiscountsList> = newListInfos;
+		var tweetLists : Array<TweetList> = newListInfos;
 
-		var discounts : Array<Discount> = new Array<Discount>();
+		var tweets : Array<Tweet> = new Array<Tweet>();
 
-		for(var iDL in discountsLists) {
-			var dl : DiscountsList = discountsLists[iDL];
-			var dlDiscounts : Array<Discount> = dl.getDiscounts();
-			for(var iD in dlDiscounts) {
-				var d : Discount = dlDiscounts[iD];
-				discounts.push(d);
+		for(var iTL in tweetLists) {
+			var tl : TweetList = tweetLists[iTL];
+			var tlTweets : Array<Tweet> = tl.getTweets();
+			for(var iT in tlTweets) {
+				var t : Tweet = tlTweets[iT];
+				tlTweets.push(t);
 			}
 		}
 
-		return discounts;
+		return tweets;*/
+		return new Array<Tweet>();
 	}
 
 	render(info : Discount, domElem : any) {
