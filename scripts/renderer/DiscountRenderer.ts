@@ -1,48 +1,48 @@
 /**
  * @author Christian Brel <christian@the6thscreen.fr, ch.brel@gmail.com>
- * @author Simon Urli <simon@the6thscreen.fr, simon.urli@gmail.com>
  */
 
-/// <reference path="../../t6s-core/core/scripts/infotype/FeedContent.ts" />
-/// <reference path="../../t6s-core/core/scripts/infotype/FeedNode.ts" />
+/// <reference path="../../t6s-core/core/scripts/infotype/DiscountsList.ts" />
+/// <reference path="../../t6s-core/core/scripts/infotype/Discount.ts" />
 /// <reference path="../policy/RenderPolicy.ts" />
 /// <reference path="./Renderer.ts" />
 
 declare var $: any; // Use of JQuery
 
-class FeedNodeRendererGeneric implements Renderer<FeedNode> {
-    transformForBehaviour(listInfos : Array<FeedContent>, renderPolicy : RenderPolicy<FeedContent>) : Array<FeedNode> {
+class DiscountRenderer implements Renderer<Discount> {
+    transformForBehaviour(listInfos : Array<DiscountsList>, renderPolicy : RenderPolicy<any>) : Array<Discount> {
 
-        var newListInfos : Array<FeedContent> = new Array<FeedContent>();
+        var newListInfos : Array<DiscountsList> = new Array<DiscountsList>();
 
         for(var iInfo in listInfos) {
             try {
                 var infoDesc = listInfos[iInfo];
-                var infoInstance = FeedContent.fromJSONObject(infoDesc);
+                var infoInstance = DiscountsList.fromJSONObject(infoDesc);
                 newListInfos.push(infoInstance);
             } catch(e) {
                 Logger.error(e.message);
             }
         }
 
-        var feedContents : Array<FeedContent> = renderPolicy.process(newListInfos);
+        //var discountsLists : Array<DiscountsList> = renderPolicy.process(newListInfos);
+        var discountsLists : Array<DiscountsList> = newListInfos;
 
-        var feedNodes : Array<FeedNode> = new Array<FeedNode>();
+        var discounts : Array<Discount> = new Array<Discount>();
 
-        for(var iFC in feedContents) {
-            var fc : FeedContent = feedContents[iFC];
-            var fcNodes : Array<FeedNode> = fc.getFeedNodes();
-            for(var iFN in fcNodes) {
-                var fn : FeedNode = fcNodes[iFN];
-                feedNodes.push(fn);
+        for(var iDL in discountsLists) {
+            var dl : DiscountsList = discountsLists[iDL];
+            var dlDiscounts : Array<Discount> = dl.getDiscounts();
+            for(var iD in dlDiscounts) {
+                var d : Discount = dlDiscounts[iD];
+                discounts.push(d);
             }
         }
 
-        return feedNodes;
+        return discounts;
     }
 
-    render(info : FeedNode, domElem : any) {
-        var feedNodeHTML = $("<div>");
+    render(info : Discount, domElem : any) {
+        /*var feedNodeHTML = $("<div>");
         feedNodeHTML.addClass("feednode");
 
         var titleContent = $("<div>");
@@ -99,6 +99,11 @@ class FeedNodeRendererGeneric implements Renderer<FeedNode> {
 
         $(domElem).empty();
         $(domElem).append(feedNodeHTML);
+
+        info.setCastingDate(new Date());*/
+
+        $(domElem).empty();
+        $(domElem).html(info.getProductName() + '<br/><br/>' + info.getProductDescription());
 
         info.setCastingDate(new Date());
     }
