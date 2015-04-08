@@ -9,17 +9,25 @@
 /// <reference path="./Renderer.ts" />
 
 class PictureAlbumRenderer implements Renderer<PictureAlbum> {
-    transformForBehaviour(listInfos : Array<Picture>, renderPolicy : RenderPolicy<Picture>) : Array<PictureAlbum> {
-        var listPicture = renderPolicy.process(listInfos);
-        var result = new PictureAlbum();
-        listPicture.forEach(function(pic) {
-            result.addPicture(pic);
+    transformForBehaviour(listInfos : Array<PictureAlbum>, renderPolicy : RenderPolicy<PictureAlbum>) : Array<Picture> {
+        var listPictureAlbums = renderPolicy.process(listInfos);
+        var result = new Array<Picture>();
+        listPictureAlbums.forEach(function(pictureAlbum : PictureAlbum) {
+            pictureAlbum.getPictures().forEach(function (picture : Picture) {
+                result.push(picture);
+            })
         });
 
-        return new Array(result);
+        return result;
     }
 
-    render(info : PictureAlbum, domElem : any) {
+    render(info : Picture, domElem : any) {
+        var pictureHTML = $("<img>");
+        pictureHTML.src(info.getMedium().getURL());
 
+        $(domElem).empty();
+        $(domElem).append(pictureHTML);
+
+        info.setCastingDate(new Date());
     }
 }
