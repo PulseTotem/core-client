@@ -8,9 +8,14 @@
 /// <reference path="../policy/RenderPolicy.ts" />
 /// <reference path="./Renderer.ts" />
 
-class PictureAlbumRenderer implements Renderer<PictureAlbum> {
+class PictureAlbumRenderer implements Renderer<Picture> {
     transformForBehaviour(listInfos : Array<PictureAlbum>, renderPolicy : RenderPolicy<PictureAlbum>) : Array<Picture> {
+        console.log("List d'informations : ");
+        console.log(listInfos);
         var listPictureAlbums = renderPolicy.process(listInfos);
+        console.log("List processed : ");
+        console.log(listPictureAlbums);
+
         var result = new Array<Picture>();
         listPictureAlbums.forEach(function(pictureAlbum : PictureAlbum) {
             pictureAlbum.getPictures().forEach(function (picture : Picture) {
