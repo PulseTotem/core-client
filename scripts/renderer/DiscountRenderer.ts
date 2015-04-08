@@ -4,6 +4,7 @@
 
 /// <reference path="../../t6s-core/core/scripts/infotype/DiscountsList.ts" />
 /// <reference path="../../t6s-core/core/scripts/infotype/Discount.ts" />
+/// <reference path="../../t6s-core/core/scripts/infotype/Info.ts" />
 /// <reference path="../policy/RenderPolicy.ts" />
 /// <reference path="./Renderer.ts" />
 
@@ -11,18 +12,12 @@ declare var $: any; // Use of JQuery
 
 class DiscountRenderer implements Renderer<Discount> {
     transformForBehaviour(listInfos : Array<DiscountsList>, renderPolicy : RenderPolicy<any>) : Array<Discount> {
-
-        var newListInfos : Array<DiscountsList> = new Array<DiscountsList>();
-
-        for(var iInfo in listInfos) {
-            try {
-                var infoDesc = listInfos[iInfo];
-                var infoInstance = DiscountsList.fromJSONObject(infoDesc);
-                newListInfos.push(infoInstance);
-            } catch(e) {
-                Logger.error(e.message);
-            }
-        }
+		var newListInfos : Array<DiscountsList> = new Array<DiscountsList>();
+		try {
+			newListInfos = Info.fromJSONArray(listInfos, DiscountsList);
+		} catch(e) {
+			Logger.error(e.message);
+		}
 
         //var discountsLists : Array<DiscountsList> = renderPolicy.process(newListInfos);
         var discountsLists : Array<DiscountsList> = newListInfos;

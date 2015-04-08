@@ -5,6 +5,7 @@
 
 /// <reference path="../../t6s-core/core/scripts/infotype/FeedContent.ts" />
 /// <reference path="../../t6s-core/core/scripts/infotype/FeedNode.ts" />
+/// <reference path="../../t6s-core/core/scripts/infotype/Info.ts" />
 /// <reference path="../policy/RenderPolicy.ts" />
 /// <reference path="./Renderer.ts" />
 
@@ -12,18 +13,12 @@ declare var $: any; // Use of JQuery
 
 class FeedNodeRendererGeneric implements Renderer<FeedNode> {
     transformForBehaviour(listInfos : Array<FeedContent>, renderPolicy : RenderPolicy<FeedContent>) : Array<FeedNode> {
-
-        var newListInfos : Array<FeedContent> = new Array<FeedContent>();
-
-        for(var iInfo in listInfos) {
-            try {
-                var infoDesc = listInfos[iInfo];
-                var infoInstance = FeedContent.fromJSONObject(infoDesc);
-                newListInfos.push(infoInstance);
-            } catch(e) {
-                Logger.error(e.message);
-            }
-        }
+		var newListInfos : Array<FeedContent> = new Array<FeedContent>();
+		try {
+			newListInfos = Info.fromJSONArray(listInfos, FeedContent);
+		} catch(e) {
+			Logger.error(e.message);
+		}
 
         var feedContents : Array<FeedContent> = renderPolicy.process(newListInfos);
 
