@@ -111,6 +111,7 @@ class TweetRenderer implements Renderer<Tweet> {
 		tweetHeader.append(tweetProfilPictureDiv);
 
 		var tweetProfilPictureImg = $("<img>");
+		tweetProfilPictureImg.addClass("img-circle");
 		tweetProfilPictureImg.attr("src", info.getOwner().getProfilPicture());
 
 		tweetProfilPictureDiv.append(tweetProfilPictureImg);
@@ -121,21 +122,50 @@ class TweetRenderer implements Renderer<Tweet> {
 		tweetHeader.append(tweetProfilInfoDiv);
 
 		var tweetProfilRealname = $("<div>");
+		tweetProfilRealname.addClass("TweetRenderer_profil_realname");
 		tweetProfilRealname.html(info.getOwner().getRealname());
 
 		tweetProfilInfoDiv.append(tweetProfilRealname);
 
 		var tweetProfilUsername = $("<div>");
+		tweetProfilUsername.addClass("TweetRenderer_profil_username");
 		tweetProfilUsername.html(info.getOwner().getUsername());
 
 		tweetProfilInfoDiv.append(tweetProfilUsername);
 
+		var tweetTwitterLogo = $("<div>");
+		tweetTwitterLogo.addClass("TweetRenderer_twitter_logo");
+
+		tweetHeader.append(tweetTwitterLogo);
+
+
+		var clearFixHeader = $("<div class=\"clearfix\"></div>");
+
+		tweetHeader.append(clearFixHeader);
 
 		var tweetContent = $("<div>");
 		tweetContent.addClass("TweetRenderer_content");
 		tweetContent.html(info.getMessage());
 
 		tweetHTML.append(tweetContent);
+
+		if(info.getPictures().length > 0) {
+			var tweetPictures = $("<div>");
+			tweetPictures.addClass("TweetRenderer_pictures");
+
+			info.getPictures().forEach(function(picture : Picture) {
+				var tweetPicture = $("<img>");
+				tweetPicture.addClass("img-responsive img-thumbnail pull-left");
+				tweetPicture.attr("src", picture.getThumb().getURL());
+
+				tweetPictures.append(tweetPicture);
+			});
+
+			var clearFixPictures = $("<div class=\"clearfix\"></div>");
+			tweetPictures.append(clearFixPictures);
+
+			tweetHTML.append(tweetPictures);
+		}
 
 		var tweetFooter = $("<div>");
 		tweetFooter.addClass("TweetRenderer_footer");
@@ -144,21 +174,33 @@ class TweetRenderer implements Renderer<Tweet> {
 
 		var tweetCreateDate = $("<div>");
 		tweetCreateDate.addClass("TweetRenderer_create_date");
-		tweetCreateDate.html(info.getCreationDate());
+		var DateClass : any = <any>Date;
+		var creationDate : any = new DateClass(info.getCreationDate());
+		var displayCreationDate = creationDate.toString("dd/MM/yyyy ") + creationDate.toString("HH") + "h" + creationDate.toString("mm");
+		tweetCreateDate.html(displayCreationDate);
 
 		tweetFooter.append(tweetCreateDate);
 
 		var tweetFavoriteDiv = $("<div>");
 		tweetFavoriteDiv.addClass("TweetRenderer_favorite_count");
-		tweetFavoriteDiv.html(info.getFavoriteCount());
+		var glyphiconStar = $("<span class=\"glyphicon glyphicon-star\" aria-hidden=\"true\">");
+		var tweetFavoriteContent = $("<span>&nbsp;" + info.getFavoriteCount() + "</span>");
+		tweetFavoriteDiv.append(glyphiconStar);
+		tweetFavoriteDiv.append(tweetFavoriteContent);
 
 		tweetFooter.append(tweetFavoriteDiv);
 
 		var tweetRetweetDiv = $("<div>");
 		tweetRetweetDiv.addClass("TweetRenderer_retweet_count");
-		tweetRetweetDiv.html(info.getRetweetCount());
+		var glyphiconRetweet = $("<span class=\"glyphicon glyphicon-retweet\" aria-hidden=\"true\">");
+		var tweetRetweetContent = $("<span>&nbsp;" + info.getRetweetCount() + "</span>");
+		tweetRetweetDiv.append(glyphiconRetweet);
+		tweetRetweetDiv.append(tweetRetweetContent);
 
 		tweetFooter.append(tweetRetweetDiv);
+
+		var clearFixFooter = $("<div class=\"clearfix\"></div>");
+		tweetFooter.append(clearFixFooter);
 
 		$(domElem).empty();
 		$(domElem).append(tweetHTML);
