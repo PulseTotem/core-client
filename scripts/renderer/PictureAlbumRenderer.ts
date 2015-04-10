@@ -37,13 +37,76 @@ class PictureAlbumRenderer implements Renderer<Picture> {
     }
 
     render(info : Picture, domElem : any) {
-        console.log("Info reçue : ");
-        console.log(info);
-        var pictureHTML = $("<img>");
-        var pictureUrl : any = info.getMedium();
-        console.log("URL : ");
-        console.log(pictureUrl);
-        pictureHTML.attr('src',pictureUrl._url);
+
+		var domElemHeight = $(domElem).height();
+
+		var pictureHTML = $("<div>");
+		pictureHTML.addClass("PictureAlbumRenderer_picture");
+
+		var pictureHeader = $("<div>");
+		pictureHeader.addClass("PictureAlbumRenderer_header");
+
+		pictureHTML.append(pictureHeader);
+
+		if(info.getTitle() != null && info.getTitle() != "") {
+			var pictureTitle = $("<div>");
+			pictureTitle.addClass("PictureAlbumRenderer_title");
+			pictureTitle.html(info.getTitle());
+
+			pictureHeader.append(pictureTitle);
+		}
+
+		var pictureContent = $("<div>");
+		pictureContent.addClass("PictureAlbumRenderer_content");
+		pictureContent.attr("style", "line-height: " + domElemHeight + ";");
+
+		pictureHTML.append(pictureContent);
+
+		var pictureImg = $("<img>");
+		pictureImg.addClass("img-responsive center-block");
+		var picURL = null;
+		if(info.getMedium() != null) {
+			picURL = info.getMedium();
+		} else if(info.getSmall() != null) {
+			picURL = info.getSmall();
+		} else if(info.getThumb() != null) {
+			picURL = info.getThumb();
+		}
+
+		if(picURL != null) {
+			pictureImg.attr("src", picURL.getURL());
+		}
+
+		pictureContent.append(pictureImg);
+
+		var pictureFooter = $("<div>");
+		pictureFooter.addClass("PictureAlbumRenderer_footer");
+
+		pictureHTML.append(pictureFooter);
+
+		if(info.getTags().length > 0) {
+			var pictureTags = $("<div>");
+			pictureTags.addClass("PictureAlbumRenderer_tags");
+
+			info.getTags().forEach(function(tag) {
+				var picTag = $("<span>");
+				picTag.addClass("PictureAlbumRenderer_tag");
+				picTag.html(tag.getName());
+			});
+
+			pictureFooter.append(pictureTags);
+		}
+
+		if(info.getOwner() != null && info.getOwner().getRealname() != null) {
+			var pictureOwner = $("<div>");
+			pictureOwner.addClass("PictureAlbumRenderer_owner");
+			pictureOwner.html(info.getOwner().getRealname());
+
+			pictureFooter.append(pictureOwner);
+		}
+
+		var clearFixFooter = $("<div class=\"clearfix\"></div>");
+		pictureFooter.append(clearFixFooter);
 
         $(domElem).empty();
         $(domElem).append(pictureHTML);

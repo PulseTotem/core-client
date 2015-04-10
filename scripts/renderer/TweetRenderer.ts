@@ -37,66 +37,6 @@ class TweetRenderer implements Renderer<Tweet> {
 	}
 
 	render(info : Tweet, domElem : any) {
-		/*var feedNodeHTML = $("<div>");
-		 feedNodeHTML.addClass("feednode");
-
-		 var titleContent = $("<div>");
-		 titleContent.addClass("title_content");
-
-		 feedNodeHTML.append(titleContent);
-
-		 var title = $("<div>");
-		 title.addClass("title");
-
-		 titleContent.append(title);
-
-		 var logo = $("<div>");
-		 logo.addClass("logo");
-
-		 titleContent.append(logo);
-
-		 var titleClear = $("<div>");
-		 titleClear.addClass("titleClear");
-
-		 titleContent.append(titleClear);
-
-		 var feedContent = $("<div>");
-		 feedContent.addClass("main_content");
-
-		 feedNodeHTML.append(feedContent);
-
-		 var summary = $("<div>");
-
-		 feedContent.append(summary);
-
-		 var description = $("<div>");
-
-		 feedContent.append(description);
-
-		 //Fullfill with info
-
-		 title.html(info.getTitle());
-
-		 if(info.getMediaUrl() != null) {
-		 var media = $("<div>");
-		 media.addClass("feednode_media");
-		 var mediaImg = $("<img>");
-		 mediaImg.attr("src", info.getMediaUrl());
-		 media.append(mediaImg);
-		 summary.append(media);
-		 }
-
-		 summary.append(info.getSummary());
-
-		 if(info.getDescription() != info.getSummary()) {
-		 description.html(info.getDescription());
-		 }
-
-		 $(domElem).empty();
-		 $(domElem).append(feedNodeHTML);
-
-		 info.setCastingDate(new Date());*/
-
 		var tweetHTML = $("<div>");
 		tweetHTML.addClass("TweetRenderer_tweet");
 
