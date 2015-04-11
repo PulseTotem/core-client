@@ -37,11 +37,10 @@ class EventListRenderer implements Renderer<CityEvent> {
 
     render(info : CityEvent, domElem : any) {
 
-		var domElemHeight = $(domElem).height();
-
 		var eventHTML = $("<div>");
 
 	    eventHTML.append(info.name());
+        $(domElem).empty();
         $(domElem).append(eventHTML);
 
         info.setCastingDate(new Date());
