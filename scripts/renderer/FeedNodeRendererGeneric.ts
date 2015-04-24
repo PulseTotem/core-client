@@ -38,47 +38,54 @@ class FeedNodeRendererGeneric implements Renderer<FeedNode> {
 
     render(info : FeedNode, domElem : any) {
         var feedNodeHTML = $("<div>");
-        feedNodeHTML.addClass("feednode");
+        feedNodeHTML.addClass("FeedNodeRendererGeneric_feednode");
 
         var titleContent = $("<div>");
-        titleContent.addClass("title_content");
+        titleContent.addClass("FeedNodeRendererGeneric_title_content");
 
         feedNodeHTML.append(titleContent);
 
         var title = $("<div>");
-        title.addClass("title");
+        title.addClass("FeedNodeRendererGeneric_title");
 
         titleContent.append(title);
 
         var logo = $("<div>");
-        logo.addClass("logo");
+        logo.addClass("FeedNodeRendererGeneric_logo");
 
         titleContent.append(logo);
 
         var titleClear = $("<div>");
-        titleClear.addClass("titleClear");
+        titleClear.addClass("FeedNodeRendererGeneric_titleClear");
 		titleClear.addClass("clearfix");
 
         titleContent.append(titleClear);
 
         var feedContent = $("<div>");
-        feedContent.addClass("main_content");
+        feedContent.addClass("FeedNodeRendererGeneric_main_content");
 
         feedNodeHTML.append(feedContent);
 
         var summary = $("<div>");
+		summary.addClass("FeedNodeRendererGeneric_summary");
 
         feedContent.append(summary);
 
         var description = $("<div>");
+        description.addClass("FeedNodeRendererGeneric_description");
 
         feedContent.append(description);
+
+        var descriptionContent = $("<div>");
+        descriptionContent.addClass("FeedNodeRendererGeneric_description_content");
+
+        description.append(descriptionContent);
 
         title.html(info.getTitle());
 
         if(info.getMediaUrl() != null) {
             var media = $("<div>");
-            media.addClass("feednode_media");
+            media.addClass("FeedNodeRendererGeneric_feednode_media");
             var mediaImg = $("<img>");
             mediaImg.attr("src", info.getMediaUrl());
             media.append(mediaImg);
@@ -88,7 +95,7 @@ class FeedNodeRendererGeneric implements Renderer<FeedNode> {
         summary.append(info.getSummary());
 
         if(info.getDescription() != info.getSummary()) {
-            description.html(info.getDescription());
+            descriptionContent.html(info.getDescription());
         }
 
         $(domElem).empty();
