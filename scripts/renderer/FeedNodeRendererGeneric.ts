@@ -57,6 +57,7 @@ class FeedNodeRendererGeneric implements Renderer<FeedNode> {
 
         var titleClear = $("<div>");
         titleClear.addClass("titleClear");
+		titleClear.addClass("clearfix");
 
         titleContent.append(titleClear);
 
@@ -72,8 +73,6 @@ class FeedNodeRendererGeneric implements Renderer<FeedNode> {
         var description = $("<div>");
 
         feedContent.append(description);
-
-        //Fullfill with info
 
         title.html(info.getTitle());
 
