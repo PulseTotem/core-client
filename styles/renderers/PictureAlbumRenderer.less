@@ -1,0 +1,56 @@
+@import "../common/share.less";
+
+.PictureAlbumRenderer_picture {
+  padding: 10px;
+
+  .PictureAlbumRenderer_header {
+    position: absolute;
+    top: 0px;
+    background-color: rgba(255, 255, 255, 0.6);
+    left: 0px;
+    right: 0px;
+    text-align: center;
+    z-index: 10000;
+
+    .PictureAlbumRenderer_title {
+      margin-left: 10px;
+      font-weight: bold;
+    }
+  }
+
+  .PictureAlbumRenderer_content {
+    img {
+      vertical-align: center;
+    }
+  }
+
+  .PictureAlbumRenderer_footer {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.6);
+    bottom: 0px;
+    z-index: 10000;
+    left: 0px;
+    right: 0px;
+
+    .PictureAlbumRenderer_tags {
+      float: left;
+
+      .PictureAlbumRenderer_tag::before {
+        content: "#";
+      }
+
+      .PictureAlbumRenderer_tag {
+        color: rgb(109, 109, 109);
+      }
+    }
+
+    .PictureAlbumRenderer_owner {
+      float: right;
+      color: black;
+      font-family: arial;
+      font-style: italic;
+      padding-right: 10px;
+    }
+  }
+
+}

@@ -1,0 +1,72 @@
+@import "../common/share.less";
+
+.TweetRenderer_tweet {
+  padding: 10px;
+
+  .TweetRenderer_header {
+    height: 100%;
+
+    .TweetRenderer_profil_picture {
+      float: left;
+    }
+
+    .TweetRenderer_profil_info {
+      float: left;
+      margin-left: 10px;
+      font-size: 0.9em;
+
+      .TweetRenderer_profil_realname {
+        font-weight: bold;
+        font-size: 1.1em;
+      }
+
+      .TweetRenderer_profil_username::before {
+        content: "@";
+      }
+
+      .TweetRenderer_profil_username {
+         color: white;
+      }
+    }
+
+    .TweetRenderer_twitter_logo {
+      float: right;
+      background-image: url("../images/Twitter_logo_blue.png");
+      min-height: 50px;
+      max-width: 50px;
+      max-height: 50px;
+      background-size: 50px;
+      min-width: 50px;
+      background-repeat: no-repeat;
+    }
+  }
+
+  .TweetRenderer_content {
+    font-size: 1.3em;
+    color: black;
+    font-family: arial;
+  }
+
+  .TweetRenderer_pictures {
+
+  }
+
+  .TweetRenderer_footer {
+    margin-top: 10px;
+
+    .TweetRenderer_create_date {
+      float: left;
+      color: rgb(109, 109, 109);
+    }
+
+    .TweetRenderer_favorite_count {
+      float: right;
+      margin-left: 10px;
+    }
+
+    .TweetRenderer_retweet_count {
+      float: right;
+    }
+
+  }
+}
