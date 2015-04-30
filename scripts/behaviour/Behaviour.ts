@@ -26,7 +26,7 @@ class Behaviour {
 	 * @property _listInfoRenderers
 	 * @type Array<InfoRenderer>
 	 */
-	private _listInfoRenderers : Array<InfoRenderer>;
+	private _listInfoRenderers : Array<InfoRenderer<any>>;
 
 	/**
 	 * Behaviour's current InfoRenderer id in _listInfoRenderers array.
@@ -51,7 +51,7 @@ class Behaviour {
 	 */
 	constructor() {
 		this._zone = null;
-		this._listInfoRenderers = new Array<InfoRenderer>();
+		this._listInfoRenderers = new Array<InfoRenderer<any>>();
 		this._currentInfoRendererId = null;
 		this._loopTimeout = null;
 	}
@@ -72,7 +72,7 @@ class Behaviour {
 	 * @method setListInfoRenderers
 	 * @param {Array<InfoRenderer>} listInfoRenderers - The InfoRenderer list to set.
 	 */
-	setListInfoRenderers(listInfoRenderers : Array<InfoRenderer>) {
+	setListInfoRenderers(listInfoRenderers : Array<InfoRenderer<any>>) {
 		this._listInfoRenderers = listInfoRenderers;
 		this._currentInfoRendererId = null;
 	}

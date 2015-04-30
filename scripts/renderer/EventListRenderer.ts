@@ -14,13 +14,14 @@ class EventListRenderer implements Renderer<CityEvent> {
 	 * Transform the Info list to another Info list.
 	 *
 	 * @method transformInfo<ProcessInfo extends Info>
-	 * @param {Array<ProcessInfo>} listInfos - The Info list to transform.
+	 * @param {ProcessInfo} info - The Info to transform.
 	 * @return {Array<RenderInfo>} listTransformedInfos - The Info list after transformation.
 	 */
-	transformInfo(listInfos : Array<EventList>) : Array<CityEvent> {
+	transformInfo(info : EventList) : Array<CityEvent> {
 		var newListInfos : Array<EventList> = new Array<EventList>();
 		try {
-			newListInfos = Info.fromJSONArray(listInfos, EventList);
+			var newInfo = EventList.fromJSONObject(info);
+			newListInfos.push(newInfo);
 		} catch(e) {
 			Logger.error(e.message);
 		}

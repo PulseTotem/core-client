@@ -14,18 +14,17 @@ class DiscountRenderer implements Renderer<Discount> {
 	 * Transform the Info list to another Info list.
 	 *
 	 * @method transformInfo<ProcessInfo extends Info>
-	 * @param {Array<ProcessInfo>} listInfos - The Info list to transform.
+	 * @param {ProcessInfo} info - The Info to transform.
 	 * @return {Array<RenderInfo>} listTransformedInfos - The Info list after transformation.
 	 */
-	transformInfo(listInfos : Array<DiscountsList>) : Array<Discount> {
-		var newListInfos : Array<DiscountsList> = new Array<DiscountsList>();
+	transformInfo(info : DiscountsList) : Array<Discount> {
+		var discountsLists : Array<DiscountsList> = new Array<DiscountsList>();
 		try {
-			newListInfos = Info.fromJSONArray(listInfos, DiscountsList);
+			var newInfo = DiscountsList.fromJSONObject(info);
+			discountsLists.push(newInfo);
 		} catch(e) {
 			Logger.error(e.message);
 		}
-
-        var discountsLists : Array<DiscountsList> = newListInfos;
 
         var discounts : Array<Discount> = new Array<Discount>();
 

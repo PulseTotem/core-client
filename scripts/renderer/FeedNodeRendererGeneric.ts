@@ -14,13 +14,14 @@ class FeedNodeRendererGeneric implements Renderer<FeedNode> {
 	 * Transform the Info list to another Info list.
 	 *
 	 * @method transformInfo<ProcessInfo extends Info>
-	 * @param {Array<ProcessInfo>} listInfos - The Info list to transform.
+	 * @param {ProcessInfo} info - The Info to transform.
 	 * @return {Array<RenderInfo>} listTransformedInfos - The Info list after transformation.
 	 */
-	transformInfo(listInfos : Array<FeedContent>) : Array<FeedNode> {
+	transformInfo(info : FeedContent) : Array<FeedNode> {
 		var newListInfos : Array<FeedContent> = new Array<FeedContent>();
 		try {
-			newListInfos = Info.fromJSONArray(listInfos, FeedContent);
+			var newInfo = FeedContent.fromJSONObject(info);
+			newListInfos.push(newInfo);
 		} catch(e) {
 			Logger.error(e.message);
 		}

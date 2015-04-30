@@ -15,13 +15,14 @@ class PictureAlbumRenderer implements Renderer<Picture> {
 	 * Transform the Info list to another Info list.
 	 *
 	 * @method transformInfo<ProcessInfo extends Info>
-	 * @param {Array<ProcessInfo>} listInfos - The Info list to transform.
+	 * @param {ProcessInfo} info - The Info to transform.
 	 * @return {Array<RenderInfo>} listTransformedInfos - The Info list after transformation.
 	 */
-	transformInfo(listInfos : Array<PictureAlbum>) : Array<Picture> {
+	transformInfo(info : PictureAlbum) : Array<Picture> {
 		var newListInfos : Array<PictureAlbum> = new Array<PictureAlbum>();
 		try {
-			newListInfos = Info.fromJSONArray(listInfos, PictureAlbum);
+			var newInfo = PictureAlbum.fromJSONObject(info);
+			newListInfos.push(newInfo);
 		} catch(e) {
 			Logger.error(e.message);
 		}

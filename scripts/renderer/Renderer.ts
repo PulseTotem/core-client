@@ -15,10 +15,10 @@ interface Renderer<RenderInfo extends Info> {
 	 * Transform the Info list to another Info list.
 	 *
 	 * @method transformInfo<ProcessInfo extends Info>
-	 * @param {Array<ProcessInfo>} listInfos - The Info list to transform.
+	 * @param {ProcessInfo} info - The Info to transform.
 	 * @return {Array<RenderInfo>} listTransformedInfos - The Info list after transformation.
 	 */
-    transformInfo<ProcessInfo extends Info>(listInfos : Array<ProcessInfo>) : Array<RenderInfo>;
+    transformInfo<ProcessInfo extends Info>(info : ProcessInfo) : Array<RenderInfo>;
 
 	/**
 	 * Render the Info in specified DOM Element.

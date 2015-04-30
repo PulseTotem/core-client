@@ -14,18 +14,17 @@ class TweetRenderer implements Renderer<Tweet> {
 	 * Transform the Info list to another Info list.
 	 *
 	 * @method transformInfo<ProcessInfo extends Info>
-	 * @param {Array<ProcessInfo>} listInfos - The Info list to transform.
+	 * @param {ProcessInfo} info - The Info to transform.
 	 * @return {Array<RenderInfo>} listTransformedInfos - The Info list after transformation.
 	 */
-	transformInfo(listInfos : Array<TweetList>) : Array<Tweet> {
-		var newListInfos : Array<TweetList> = new Array<TweetList>();
+	transformInfo(info : TweetList) : Array<Tweet> {
+		var tweetLists : Array<TweetList> = new Array<TweetList>();
 		try {
-			newListInfos = Info.fromJSONArray(listInfos, TweetList);
+			var newInfo = TweetList.fromJSONObject(info);
+			tweetLists.push(newInfo);
 		} catch(e) {
 			Logger.error(e.message);
 		}
-
-		var tweetLists : Array<TweetList> = newListInfos;
 
 		var tweets : Array<Tweet> = new Array<Tweet>();
 
