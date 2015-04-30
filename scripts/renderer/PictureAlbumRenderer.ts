@@ -6,22 +6,25 @@
 /// <reference path="../../t6s-core/core/scripts/infotype/PictureAlbum.ts" />
 /// <reference path="../../t6s-core/core/scripts/infotype/Picture.ts" />
 /// <reference path="../../t6s-core/core/scripts/infotype/PictureURL.ts" />
-/// <reference path="../../t6s-core/core/scripts/infotype/Info.ts" />
-/// <reference path="../policy/RenderPolicy.ts" />
 /// <reference path="./Renderer.ts" />
 
 declare var $: any; // Use of JQuery
 
 class PictureAlbumRenderer implements Renderer<Picture> {
-    transformForBehaviour(listInfos : Array<PictureAlbum>, renderPolicy : RenderPolicy<PictureAlbum>) : Array<Picture> {
+	/**
+	 * Transform the Info list to another Info list.
+	 *
+	 * @method transformInfo<ProcessInfo extends Info>
+	 * @param {Array<ProcessInfo>} listInfos - The Info list to transform.
+	 * @return {Array<RenderInfo>} listTransformedInfos - The Info list after transformation.
+	 */
+	transformInfo(listInfos : Array<PictureAlbum>) : Array<Picture> {
 		var newListInfos : Array<PictureAlbum> = new Array<PictureAlbum>();
 		try {
 			newListInfos = Info.fromJSONArray(listInfos, PictureAlbum);
 		} catch(e) {
 			Logger.error(e.message);
 		}
-
-        //var listPictureAlbums : Array<PictureAlbum> = renderPolicy.process(listInfos);
 
         var result = new Array<Picture>();
 
@@ -36,7 +39,14 @@ class PictureAlbumRenderer implements Renderer<Picture> {
         return result;
     }
 
-    render(info : Picture, domElem : any) {
+	/**
+	 * Render the Info in specified DOM Element.
+	 *
+	 * @method render
+	 * @param {RenderInfo} info - The Info to render.
+	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 */
+	render(info : Picture, domElem : any) {
 
 		var domElemHeight = $(domElem).height();
 
@@ -64,7 +74,7 @@ class PictureAlbumRenderer implements Renderer<Picture> {
 
 		var pictureImg = $("<img>");
 		pictureImg.addClass("img-responsive center-block");
-		var picURL = null;
+		var picURL : PictureURL = null;
 		if(info.getMedium() != null) {
 			picURL = info.getMedium();
 		} else if(info.getSmall() != null) {
@@ -111,6 +121,6 @@ class PictureAlbumRenderer implements Renderer<Picture> {
         $(domElem).empty();
         $(domElem).append(pictureHTML);
 
-        info.setCastingDate(new Date());
+
     }
 }

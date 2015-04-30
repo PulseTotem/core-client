@@ -3,126 +3,127 @@
  * @author Simon Urli <simon@the6thscreen.fr, simon.urli@gmail.com>
  */
 
-/// <reference path="../core/MapInfoRenderer.ts" />
+/// <reference path="../core/InfoRenderer.ts" />
 
-var DateJS = <any>Date; // Use of DateJS
-
+/**
+ * Represents a Behaviour of The6thScreen Client.
+ *
+ * @class Behaviour
+ */
 class Behaviour {
-	private _listMapInfoRenderer : Array<MapInfoRenderer<any>>;
-	private _isRunning : boolean;
-	private _currentDisplayedInformationIndex : number;
-	private _domElement : any;
-    private _timeout : any;
 
-    private _loadingLogoHidden : boolean;
+	/**
+	 * Zone linked to a Behaviour.
+	 *
+	 * @property _zone
+	 * @type Zone
+	 */
+	private _zone : Zone;
 
+	/**
+	 * InfoRenderer list.
+	 *
+	 * @property _listInfoRenderers
+	 * @type Array<InfoRenderer>
+	 */
+	private _listInfoRenderers : Array<InfoRenderer>;
+
+	/**
+	 * Behaviour's current InfoRenderer id in _listInfoRenderers array.
+	 *
+	 * @property _currentInfoRendererId
+	 * @type number
+	 */
+	private _currentInfoRendererId : number;
+
+	/**
+	 * Behaviour's loop timeout.
+	 *
+	 * @property _loopTimeout
+	 * @type number (id of timeout)
+	 */
+	private _loopTimeout : any;
+
+	/**
+	 * Constructor.
+	 *
+	 * @constructor
+	 */
 	constructor() {
-		this._listMapInfoRenderer = new Array<MapInfoRenderer<any>>();
-        this._timeout = null;
-
-        this._loadingLogoHidden = false;
+		this._zone = null;
+		this._listInfoRenderers = new Array<InfoRenderer>();
+		this._currentInfoRendererId = null;
+		this._loopTimeout = null;
 	}
 
-    setZoneDiv(zoneDiv : any) {
-        this._domElement = zoneDiv;
-    }
-
-    restart(calls : Array<Call>) {
-        var self = this;
-
-        if(calls != null) {
-
-            if (this._timeout != null) {
-                clearTimeout(this._timeout);
-                this._timeout = null;
-            }
-            this._isRunning = false;
-
-            this.buildListMapInfoRenderer(calls);
-            this.displayInfo();
-        }
-    }
-
-	buildListMapInfoRenderer(calls : Array<Call>) {
-		var self = this;
-
-		calls.forEach(function(call) {
-			var listInfos = call.getListInfos();
-			var renderer = call.getRenderer();
-			var renderPolicy = call.getRenderPolicy();
-
-			var processedList = renderer.transformForBehaviour(listInfos, renderPolicy);
-            if(processedList != null) {
-                processedList.forEach(function (info) {
-                    if(self.retrieveMapInfoRenderer(info) == null) {
-                        self._listMapInfoRenderer.push(new MapInfoRenderer(info, renderer));
-                    }
-                });
-            }
-		});
+	/**
+	 * Set Zone.
+	 *
+	 * @method setZone
+	 * @param {Zone} zone - The Zone to set.
+	 */
+	setZone(zone : Zone) {
+		this._zone = zone;
 	}
 
-	displayInfo() {
+	/**
+	 * Set list InfoRenderer.
+	 *
+	 * @method setListInfoRenderers
+	 * @param {Array<InfoRenderer>} listInfoRenderers - The InfoRenderer list to set.
+	 */
+	setListInfoRenderers(listInfoRenderers : Array<InfoRenderer>) {
+		this._listInfoRenderers = listInfoRenderers;
+		this._currentInfoRendererId = null;
+	}
 
+	/**
+	 * Start.
+	 *
+	 * @method start
+	 */
+	start() {
+		this._nextInfoRenderer();
+	}
+
+	/**
+	 * Manage next InfoRenderer to display.
+	 *
+	 * @method _nextInfoRenderer
+	 * @private
+	 */
+	private _nextInfoRenderer() {
 		var self = this;
 
-		if (!this._isRunning) {
-			this._currentDisplayedInformationIndex = 0;
-			this._isRunning = true;
+		this._loopTimeout = null;
+
+		if(this._currentInfoRendererId == null) {
+			this._currentInfoRendererId = 0;
+		} else {
+			this._currentInfoRendererId = (this._currentInfoRendererId + 1) % (this._listInfoRenderers.length);
 		}
 
-        if(this._listMapInfoRenderer.length > 0) {
-            var mapToDisplay:MapInfoRenderer<any> = this._listMapInfoRenderer[this._currentDisplayedInformationIndex];
+		var currentInfoRenderer = this._listInfoRenderers[this._currentInfoRendererId];
 
-            var info = mapToDisplay.info;
-            var renderer = mapToDisplay.renderer;
+		var renderer = currentInfoRenderer.getRenderer();
 
-            this._currentDisplayedInformationIndex = (this._currentDisplayedInformationIndex + 1) % (this._listMapInfoRenderer.length);
+		renderer.render(currentInfoRenderer.getInfo(), this._zone.getZoneDiv());
 
-            try {
+		currentInfoRenderer.getInfo().setCastingDate(new Date());
 
-                //if (DateJS.compare(DateJS.today(), new DateJS(info.getObsoleteDate())) <= 0) {
-//                    Logger.debug("displayInfo - render");
-
-                    //Manage Loading logo
-                    if(! this._loadingLogoHidden) {
-                        $('#logo_loading').fadeOut(1000);
-                        this._loadingLogoHidden = true;
-                    }
-
-                    renderer.render(info, this._domElement);
-                    this._timeout = setTimeout(function () {
-//                        Logger.debug("displayInfo");
-                        self.displayInfo();
-                    }, info.getDurationToDisplay());
-                /*} else {
-                    Logger.debug("displayInfo : Obsolete");
-                    this.displayInfo();
-                }*/ // Infinite loop if all info are obsolete. Moreover, obsolete infos should be process only once. And finally, obsolete process don't have to be done here... (ReceivePolicy ?)
-            } catch(e) {
-                Logger.error(e.name + " : " + e.message);
-            }
-        } else {
-            this._timeout = setTimeout(function () {
-                self.displayInfo();
-            }, 5000);
-        }
+		this._loopTimeout = setTimeout(function() {
+			self._nextInfoRenderer();
+		}, currentInfoRenderer.getInfo().getDurationToDisplay());
 	}
 
-    retrieveMapInfoRenderer(info : Info) {
-        for(var iMir in this._listMapInfoRenderer) {
-            var mir = this._listMapInfoRenderer[iMir];
-            if(mir.info.getId() == info.getId()) {
-                return mir;
-            }
-        }
-        return null;
-    }
 
-    stop() {
-        if (this._isRunning) {
-            clearTimeout(this._timeout);
-            this._isRunning = false;
-        }
-    }
+	/**
+	 * Stop.
+	 *
+	 * @method stop
+	 */
+	stop() {
+		clearTimeout(this._loopTimeout);
+		this._loopTimeout = null;
+	}
 }

@@ -1,17 +1,23 @@
 /**
  * @author Christian Brel <christian@the6thscreen.fr, ch.brel@gmail.com>
+ * @author Simon Urli <simon@the6thscreen.fr, simon.urli@gmail.com>
  */
 
 /// <reference path="../../t6s-core/core/scripts/infotype/DiscountsList.ts" />
 /// <reference path="../../t6s-core/core/scripts/infotype/Discount.ts" />
-/// <reference path="../../t6s-core/core/scripts/infotype/Info.ts" />
-/// <reference path="../policy/RenderPolicy.ts" />
 /// <reference path="./Renderer.ts" />
 
 declare var $: any; // Use of JQuery
 
 class DiscountRenderer implements Renderer<Discount> {
-    transformForBehaviour(listInfos : Array<DiscountsList>, renderPolicy : RenderPolicy<any>) : Array<Discount> {
+	/**
+	 * Transform the Info list to another Info list.
+	 *
+	 * @method transformInfo<ProcessInfo extends Info>
+	 * @param {Array<ProcessInfo>} listInfos - The Info list to transform.
+	 * @return {Array<RenderInfo>} listTransformedInfos - The Info list after transformation.
+	 */
+	transformInfo(listInfos : Array<DiscountsList>) : Array<Discount> {
 		var newListInfos : Array<DiscountsList> = new Array<DiscountsList>();
 		try {
 			newListInfos = Info.fromJSONArray(listInfos, DiscountsList);
@@ -19,7 +25,6 @@ class DiscountRenderer implements Renderer<Discount> {
 			Logger.error(e.message);
 		}
 
-        //var discountsLists : Array<DiscountsList> = renderPolicy.process(newListInfos);
         var discountsLists : Array<DiscountsList> = newListInfos;
 
         var discounts : Array<Discount> = new Array<Discount>();
@@ -36,7 +41,14 @@ class DiscountRenderer implements Renderer<Discount> {
         return discounts;
     }
 
-    render(info : Discount, domElem : any) {
+	/**
+	 * Render the Info in specified DOM Element.
+	 *
+	 * @method render
+	 * @param {RenderInfo} info - The Info to render.
+	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 */
+	render(info : Discount, domElem : any) {
         /*var feedNodeHTML = $("<div>");
         feedNodeHTML.addClass("feednode");
 
@@ -99,7 +111,5 @@ class DiscountRenderer implements Renderer<Discount> {
 
         $(domElem).empty();
         $(domElem).html(info.getProductName() + '<br/><br/>' + info.getProductDescription());
-
-        info.setCastingDate(new Date());
     }
 }
