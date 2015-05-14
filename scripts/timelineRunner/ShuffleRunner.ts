@@ -8,6 +8,7 @@
 /// <reference path="../../t6s-core/core/scripts/infotype/Info.ts" />
 /// <reference path="../core/InfoRenderer.ts" />
 /// <reference path="../renderer/Renderer.ts" />
+/// <reference path="../core/Timer.ts" />
 
 
 declare var _: any; // Use of Lodash
@@ -16,16 +17,17 @@ declare var _: any; // Use of Lodash
  * Represents "Shuffle" Runner of The6thScreen Client.
  *
  * @class ShuffleRunner
+ * @extends TimelineRunner
  */
 class ShuffleRunner extends TimelineRunner {
 
 	/**
-	 * ShuffleRunner's loop timeout.
+	 * ShuffleRunner's timer.
 	 *
-	 * @property _loopTimeout
-	 * @type number (id of timeout)
+	 * @property _timer
+	 * @type Timer
 	 */
-	private _loopTimeout : any;
+	private _timer : any;
 
 	/**
 	 * Constructor.
@@ -34,7 +36,7 @@ class ShuffleRunner extends TimelineRunner {
 	 */
 	constructor() {
 		super();
-		this._loopTimeout = null;
+		this._timer = null;
 	}
 
 	/**
@@ -55,7 +57,7 @@ class ShuffleRunner extends TimelineRunner {
 	private _shuffle() {
 		var self = this;
 
-		this._loopTimeout = null;
+		this.stop();
 
 		var relativeEvents : Array<RelativeEventItf> = this.relativeTimeline.getRelativeEvents();
 
@@ -86,13 +88,35 @@ class ShuffleRunner extends TimelineRunner {
 
 			this.relativeTimeline.display(allInfoRenderers);
 
-			this._loopTimeout = setTimeout(function () {
+			this._timer = new Timer(function () {
 				self._shuffle();
 			}, totalTime * 1000);
 		} else {
-			setTimeout(function() {
+			this._timer = new Timer(function() {
 				self._shuffle();
 			}, 1000);
+		}
+	}
+
+	/**
+	 * Pause.
+	 *
+	 * @method pause
+	 */
+	pause() {
+		if(this._timer != null) {
+			this._timer.pause();
+		}
+	}
+
+	/**
+	 * Resume.
+	 *
+	 * @method resume
+	 */
+	resume() {
+		if(this._timer != null) {
+			this._timer.resume();
 		}
 	}
 
@@ -102,9 +126,9 @@ class ShuffleRunner extends TimelineRunner {
 	 * @method stop
 	 */
 	stop() {
-		if(this._loopTimeout != null) {
-			clearTimeout(this._loopTimeout);
-			this._loopTimeout = null;
+		if(this._timer != null) {
+			this._timer.stop();
+			this._timer = null;
 		}
 	}
 }

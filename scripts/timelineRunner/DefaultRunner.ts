@@ -8,11 +8,13 @@
 /// <reference path="../../t6s-core/core/scripts/infotype/Info.ts" />
 /// <reference path="../core/InfoRenderer.ts" />
 /// <reference path="../renderer/Renderer.ts" />
+/// <reference path="../core/Timer.ts" />
 
 /**
  * Represents "Default" Runner of The6thScreen Client.
  *
  * @class DefaultRunner
+ * @extends TimelineRunner
  */
 class DefaultRunner extends TimelineRunner {
 
@@ -25,12 +27,12 @@ class DefaultRunner extends TimelineRunner {
 	private _currentEventId : number;
 
 	/**
-	 * TimelineRunner's loop timeout.
+	 * TimelineRunner's timer.
 	 *
-	 * @property _loopTimeout
-	 * @type number (id of timeout)
+	 * @property _timer
+	 * @type Timer
 	 */
-	private _loopTimeout : any;
+	private _timer : Timer;
 
 	/**
 	 * Constructor.
@@ -40,7 +42,7 @@ class DefaultRunner extends TimelineRunner {
 	constructor() {
 		super();
 		this._currentEventId = null;
-		this._loopTimeout = null;
+		this._timer = null;
 	}
 
 	/**
@@ -63,7 +65,7 @@ class DefaultRunner extends TimelineRunner {
 
 		var relativeEvents : Array<RelativeEventItf> = this.relativeTimeline.getRelativeEvents();
 
-		this._loopTimeout = null;
+		this._timer = null;
 
 		if(this._currentEventId == null) {
 			this._currentEventId = 0;
@@ -86,19 +88,44 @@ class DefaultRunner extends TimelineRunner {
 			if (listInfoRenderers.length > 0) {
 				this.relativeTimeline.display(listInfoRenderers);
 
-				this._loopTimeout = setTimeout(function () {
+				this.stop();
+				this._timer = new Timer(function () {
 					self._nextEvent();
 				}, currentEvent.getDuration() * 1000);
 			} else {
-				setTimeout(function() {
+				this.stop();
+				this._timer = new Timer(function() {
 					self._nextEvent();
 				}, 1000);
 			}
 
 		} else {
-			setTimeout(function() {
+			this.stop();
+			this._timer = new Timer(function() {
 				self._nextEvent();
 			}, 1000);
+		}
+	}
+
+	/**
+	 * Pause.
+	 *
+	 * @method pause
+	 */
+	pause() {
+		if(this._timer != null) {
+			this._timer.pause();
+		}
+	}
+
+	/**
+	 * Resume.
+	 *
+	 * @method resume
+	 */
+	resume() {
+		if(this._timer != null) {
+			this._timer.resume();
 		}
 	}
 
@@ -109,9 +136,9 @@ class DefaultRunner extends TimelineRunner {
 	 * @method stop
 	 */
 	stop() {
-		if(this._loopTimeout != null) {
-			clearTimeout(this._loopTimeout);
-			this._loopTimeout = null;
+		if(this._timer != null) {
+			this._timer.stop();
+			this._timer = null;
 		}
 	}
 }

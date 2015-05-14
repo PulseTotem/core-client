@@ -3,14 +3,16 @@
  * @author Simon Urli <simon@the6thscreen.fr, simon.urli@gmail.com>
  */
 
+/// <reference path="../../t6s-core/core/scripts/infotype/Info.ts" />
 /// <reference path="../timeline/RelativeTimelineItf.ts" />
+/// <reference path="../timeline/RelativeEventItf.ts" />
 
 /**
- * Represents a TimelineRunner of The6thScreen Client.
+ * Represents a SystemTrigger of The6thScreen Client.
  *
- * @class TimelineRunner
+ * @class SystemTrigger
  */
-class TimelineRunner {
+class SystemTrigger {
 
 	/**
 	 * RelativeTimeline controlled by TimelineRunner.
@@ -40,38 +42,13 @@ class TimelineRunner {
 	}
 
 	/**
-	 * Start.
+	 * Trigger.
 	 *
-	 * @method start
+	 * @method trigger
+	 * @param {Array<Info>} listInfos - New received Info list.
+	 * @param {RelativeEventItf} event - event associated to Infos in listInfos
 	 */
-	start() {
-		Logger.error("TimelineRunner - start : Method need to be implemented.");
-	}
-
-	/**
-	 * Pause.
-	 *
-	 * @method pause
-	 */
-	pause() {
-		Logger.error("TimelineRunner - pause : Method need to be implemented.");
-	}
-
-	/**
-	 * Resume.
-	 *
-	 * @method resume
-	 */
-	resume() {
-		Logger.error("TimelineRunner - resume : Method need to be implemented.");
-	}
-
-	/**
-	 * Stop.
-	 *
-	 * @method stop
-	 */
-	stop() {
-		Logger.error("TimelineRunner - stop : Method need to be implemented.");
+	trigger(listInfos : Array<Info>, event : RelativeEventItf) {
+		Logger.error("SystemTrigger - trigger : Method need to be implemented.");
 	}
 }

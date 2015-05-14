@@ -28,4 +28,27 @@ interface RelativeTimelineItf {
 	 * @param {Array<InfoRenderer<any>>>} listInfoRenderers - InfoRenderer list to display.
 	 */
 	display(listInfoRenderers : Array<InfoRenderer<any>>);
+
+	/**
+	 * Pause timeline and display InfoRenderer list in priority.
+	 *
+	 * @method pauseAndDisplay
+	 * @param {Array<InfoRenderer<any>>>} listInfoRenderers - InfoRenderer list to display.
+	 */
+	pauseAndDisplay(listInfoRenderers : Array<InfoRenderer<any>>);
+
+	/**
+	 * Add some InfoRenderer to current InfoRenderer list.
+	 *
+	 * @method addToCurrentDisplay
+	 * @param {Array<InfoRenderer<any>>>} listInfoRenderers - InfoRenderer list to add.
+	 */
+	addToCurrentDisplay(listInfoRenderers : Array<InfoRenderer<any>>);
+
+	/**
+	 * Resume.
+	 *
+	 * @method resume
+	 */
+	resume();
 }

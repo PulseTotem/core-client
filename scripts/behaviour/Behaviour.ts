@@ -29,6 +29,14 @@ class Behaviour {
 	private _listInfoRenderers : Array<InfoRenderer<any>>;
 
 	/**
+	 * Backup of InfoRenderer list.
+	 *
+	 * @property _listInfoRenderersBackup
+	 * @type Array<InfoRenderer>
+	 */
+	private _listInfoRenderersBackup : Array<InfoRenderer<any>>;
+
+	/**
 	 * Constructor.
 	 *
 	 * @constructor
@@ -36,6 +44,7 @@ class Behaviour {
 	constructor() {
 		this._zone = null;
 		this._listInfoRenderers = new Array<InfoRenderer<any>>();
+		this._listInfoRenderersBackup = null;
 	}
 
 	/**
@@ -77,6 +86,20 @@ class Behaviour {
 	}
 
 	/**
+	 * Add some InfoRenderer to current InfoRenderer list.
+	 *
+	 * @method addToCurrentListInfoRenderers
+	 * @param {Array<InfoRenderer>} listInfoRenderers - The InfoRenderer list to add.
+	 */
+	addToCurrentListInfoRenderers(listInfoRenderers : Array<InfoRenderer<any>>) {
+		var self = this;
+
+		listInfoRenderers.forEach(function(infoR : InfoRenderer<any>) {
+			self._listInfoRenderers.push(infoR);
+		})
+	}
+
+	/**
 	 * Start.
 	 *
 	 * @method start
@@ -85,6 +108,23 @@ class Behaviour {
 		Logger.error("Behaviour - start : Method need to be implemented.");
 	}
 
+	/**
+	 * Pause.
+	 *
+	 * @method pause
+	 */
+	pause() {
+		Logger.error("Behaviour - pause : Method need to be implemented.");
+	}
+
+	/**
+	 * Resume.
+	 *
+	 * @method resume
+	 */
+	resume() {
+		Logger.error("Behaviour - resume : Method need to be implemented.");
+	}
 
 	/**
 	 * Stop.
@@ -93,5 +133,26 @@ class Behaviour {
 	 */
 	stop() {
 		Logger.error("Behaviour - stop : Method need to be implemented.");
+	}
+
+	/**
+	 * Save.
+	 *
+	 * @method save
+	 */
+	save() {
+		this._listInfoRenderersBackup = this._listInfoRenderers;
+	}
+
+	/**
+	 * Restore.
+	 *
+	 * @method restore
+	 */
+	restore() {
+		if(this._listInfoRenderersBackup != null) {
+			this._listInfoRenderers = this._listInfoRenderersBackup;
+			this._listInfoRenderersBackup = null;
+		}
 	}
 }

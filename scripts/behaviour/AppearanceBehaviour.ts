@@ -4,6 +4,7 @@
  */
 
 /// <reference path="./Behaviour.ts" />
+/// <reference path="../core/Timer.ts" />
 
 /**
  * Represents "Appearance" Behaviour of The6thScreen Client.
@@ -21,12 +22,28 @@ class AppearanceBehaviour extends Behaviour {
 	private _currentInfoRendererId : number;
 
 	/**
-	 * AppearanceBehaviour's loop timeout.
+	 * AppearanceBehaviour's timer.
 	 *
-	 * @property _loopTimeout
-	 * @type number (id of timeout)
+	 * @property _timer
+	 * @type Timer
 	 */
-	private _loopTimeout : any;
+	private _timer : Timer;
+
+	/**
+	 * Backup of AppearanceBehaviour's current InfoRenderer id.
+	 *
+	 * @property _currentInfoRendererIdBackup
+	 * @type number
+	 */
+	private _currentInfoRendererIdBackup : number;
+
+	/**
+	 * Backup of AppearanceBehaviour's timer.
+	 *
+	 * @property _timerBackup
+	 * @type Timer
+	 */
+	private _timerBackup : Timer;
 
 	/**
 	 * Constructor.
@@ -36,7 +53,9 @@ class AppearanceBehaviour extends Behaviour {
     constructor() {
         super();
 		this._currentInfoRendererId = null;
-		this._loopTimeout = null;
+		this._timer = null;
+		this._currentInfoRendererIdBackup = null;
+		this._timerBackup = null;
     }
 
 	/**
@@ -68,7 +87,7 @@ class AppearanceBehaviour extends Behaviour {
 	private _nextInfoRenderer() {
 		var self = this;
 
-		this._loopTimeout = null;
+		this._timer = null;
 
 		var listInfoRenderers = this.getListInfoRenderers();
 
@@ -86,11 +105,32 @@ class AppearanceBehaviour extends Behaviour {
 
 		currentInfoRenderer.getInfo().setCastingDate(new Date());
 
-		this._loopTimeout = setTimeout(function() {
+		this._timer = new Timer(function() {
 			self._nextInfoRenderer();
 		}, currentInfoRenderer.getInfo().getDurationToDisplay());
 	}
 
+	/**
+	 * Pause.
+	 *
+	 * @method pause
+	 */
+	pause() {
+		if(this._timer != null) {
+			this._timer.pause();
+		}
+	}
+
+	/**
+	 * Resume.
+	 *
+	 * @method resume
+	 */
+	resume() {
+		if(this._timer != null) {
+			this._timer.resume();
+		}
+	}
 
 	/**
 	 * Stop.
@@ -98,9 +138,39 @@ class AppearanceBehaviour extends Behaviour {
 	 * @method stop
 	 */
 	stop() {
-		if(this._loopTimeout != null) {
-			clearTimeout(this._loopTimeout);
-			this._loopTimeout = null;
+		if(this._timer != null) {
+			this._timer.stop();
+			this._timer = null;
+		}
+	}
+
+	/**
+	 * Save.
+	 *
+	 * @method save
+	 */
+	save() {
+		super.save();
+		this._currentInfoRendererIdBackup = this._currentInfoRendererId;
+		this._timerBackup = this._timer;
+	}
+
+	/**
+	 * Restore.
+	 *
+	 * @method restore
+	 */
+	restore() {
+		super.restore();
+
+		if(this._currentInfoRendererIdBackup != null) {
+			this._currentInfoRendererId = this._currentInfoRendererIdBackup;
+			this._currentInfoRendererIdBackup = null;
+		}
+
+		if(this._timerBackup != null) {
+			this._timer = this._timerBackup;
+			this._timerBackup = null;
 		}
 	}
 }
