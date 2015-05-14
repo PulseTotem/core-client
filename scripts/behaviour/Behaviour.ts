@@ -29,22 +29,6 @@ class Behaviour {
 	private _listInfoRenderers : Array<InfoRenderer<any>>;
 
 	/**
-	 * Behaviour's current InfoRenderer id in _listInfoRenderers array.
-	 *
-	 * @property _currentInfoRendererId
-	 * @type number
-	 */
-	private _currentInfoRendererId : number;
-
-	/**
-	 * Behaviour's loop timeout.
-	 *
-	 * @property _loopTimeout
-	 * @type number (id of timeout)
-	 */
-	private _loopTimeout : any;
-
-	/**
 	 * Constructor.
 	 *
 	 * @constructor
@@ -52,8 +36,15 @@ class Behaviour {
 	constructor() {
 		this._zone = null;
 		this._listInfoRenderers = new Array<InfoRenderer<any>>();
-		this._currentInfoRendererId = null;
-		this._loopTimeout = null;
+	}
+
+	/**
+	 * Get Zone.
+	 *
+	 * @method getZone
+	 */
+	getZone() {
+		return this._zone;
 	}
 
 	/**
@@ -67,6 +58,15 @@ class Behaviour {
 	}
 
 	/**
+	 * Get list InfoRenderer.
+	 *
+	 * @method getListInfoRenderers
+	 */
+	getListInfoRenderers() {
+		return this._listInfoRenderers;
+	}
+
+	/**
 	 * Set list InfoRenderer.
 	 *
 	 * @method setListInfoRenderers
@@ -74,7 +74,6 @@ class Behaviour {
 	 */
 	setListInfoRenderers(listInfoRenderers : Array<InfoRenderer<any>>) {
 		this._listInfoRenderers = listInfoRenderers;
-		this._currentInfoRendererId = null;
 	}
 
 	/**
@@ -83,37 +82,7 @@ class Behaviour {
 	 * @method start
 	 */
 	start() {
-		this._nextInfoRenderer();
-	}
-
-	/**
-	 * Manage next InfoRenderer to display.
-	 *
-	 * @method _nextInfoRenderer
-	 * @private
-	 */
-	private _nextInfoRenderer() {
-		var self = this;
-
-		this._loopTimeout = null;
-
-		if(this._currentInfoRendererId == null) {
-			this._currentInfoRendererId = 0;
-		} else {
-			this._currentInfoRendererId = (this._currentInfoRendererId + 1) % (this._listInfoRenderers.length);
-		}
-
-		var currentInfoRenderer = this._listInfoRenderers[this._currentInfoRendererId];
-
-		var renderer = currentInfoRenderer.getRenderer();
-
-		renderer.render(currentInfoRenderer.getInfo(), this._zone.getZoneDiv());
-
-		currentInfoRenderer.getInfo().setCastingDate(new Date());
-
-		this._loopTimeout = setTimeout(function() {
-			self._nextInfoRenderer();
-		}, currentInfoRenderer.getInfo().getDurationToDisplay());
+		Logger.error("Behaviour - start : Method need to be implemented.");
 	}
 
 
@@ -123,7 +92,6 @@ class Behaviour {
 	 * @method stop
 	 */
 	stop() {
-		clearTimeout(this._loopTimeout);
-		this._loopTimeout = null;
+		Logger.error("Behaviour - stop : Method need to be implemented.");
 	}
 }
