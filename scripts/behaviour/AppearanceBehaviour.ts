@@ -99,15 +99,26 @@ class AppearanceBehaviour extends Behaviour {
 
 		var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
 
-		var renderer = currentInfoRenderer.getRenderer();
-
-		renderer.render(currentInfoRenderer.getInfo(), this.getZone().getZoneDiv());
-
-		currentInfoRenderer.getInfo().setCastingDate(new Date());
+		this._displayInfoRenderer(currentInfoRenderer);
 
 		this._timer = new Timer(function() {
 			self._nextInfoRenderer();
-		}, currentInfoRenderer.getInfo().getDurationToDisplay());
+		}, currentInfoRenderer.getInfo().getDurationToDisplay()); //TODO: ADD * 1000 after Services Update !!!!
+	}
+
+	/**
+	 * Display InfoRender in param.
+	 *
+	 * @method _displayInfoRenderer
+	 * @private
+	 * @param {InfoRenderer} infoRenderer - The InfoRenderer to display.
+	 */
+	private _displayInfoRenderer(infoRenderer : InfoRenderer<any>) {
+		var renderer = infoRenderer.getRenderer();
+
+		renderer.render(infoRenderer.getInfo(), this.getZone().getZoneDiv());
+
+		infoRenderer.getInfo().setCastingDate(new Date());
 	}
 
 	/**
@@ -166,6 +177,10 @@ class AppearanceBehaviour extends Behaviour {
 		if(this._currentInfoRendererIdBackup != null) {
 			this._currentInfoRendererId = this._currentInfoRendererIdBackup;
 			this._currentInfoRendererIdBackup = null;
+
+			var listInfoRenderers = this.getListInfoRenderers();
+			var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
+			this._displayInfoRenderer(currentInfoRenderer);
 		}
 
 		if(this._timerBackup != null) {
