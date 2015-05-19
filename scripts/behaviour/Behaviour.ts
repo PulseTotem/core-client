@@ -29,20 +29,12 @@ class Behaviour {
 	private _listInfoRenderers : Array<InfoRenderer<any>>;
 
 	/**
-	 * Behaviour's current InfoRenderer id in _listInfoRenderers array.
+	 * Backup of InfoRenderer list.
 	 *
-	 * @property _currentInfoRendererId
-	 * @type number
+	 * @property _listInfoRenderersBackup
+	 * @type Array<InfoRenderer>
 	 */
-	private _currentInfoRendererId : number;
-
-	/**
-	 * Behaviour's loop timeout.
-	 *
-	 * @property _loopTimeout
-	 * @type number (id of timeout)
-	 */
-	private _loopTimeout : any;
+	private _listInfoRenderersBackup : Array<InfoRenderer<any>>;
 
 	/**
 	 * Constructor.
@@ -52,8 +44,16 @@ class Behaviour {
 	constructor() {
 		this._zone = null;
 		this._listInfoRenderers = new Array<InfoRenderer<any>>();
-		this._currentInfoRendererId = null;
-		this._loopTimeout = null;
+		this._listInfoRenderersBackup = null;
+	}
+
+	/**
+	 * Get Zone.
+	 *
+	 * @method getZone
+	 */
+	getZone() {
+		return this._zone;
 	}
 
 	/**
@@ -67,6 +67,15 @@ class Behaviour {
 	}
 
 	/**
+	 * Get list InfoRenderer.
+	 *
+	 * @method getListInfoRenderers
+	 */
+	getListInfoRenderers() {
+		return this._listInfoRenderers;
+	}
+
+	/**
 	 * Set list InfoRenderer.
 	 *
 	 * @method setListInfoRenderers
@@ -74,7 +83,20 @@ class Behaviour {
 	 */
 	setListInfoRenderers(listInfoRenderers : Array<InfoRenderer<any>>) {
 		this._listInfoRenderers = listInfoRenderers;
-		this._currentInfoRendererId = null;
+	}
+
+	/**
+	 * Add some InfoRenderer to current InfoRenderer list.
+	 *
+	 * @method addToCurrentListInfoRenderers
+	 * @param {Array<InfoRenderer>} listInfoRenderers - The InfoRenderer list to add.
+	 */
+	addToCurrentListInfoRenderers(listInfoRenderers : Array<InfoRenderer<any>>) {
+		var self = this;
+
+		listInfoRenderers.forEach(function(infoR : InfoRenderer<any>) {
+			self._listInfoRenderers.push(infoR);
+		})
 	}
 
 	/**
@@ -83,39 +105,26 @@ class Behaviour {
 	 * @method start
 	 */
 	start() {
-		this._nextInfoRenderer();
+		Logger.error("Behaviour - start : Method need to be implemented.");
 	}
 
 	/**
-	 * Manage next InfoRenderer to display.
+	 * Pause.
 	 *
-	 * @method _nextInfoRenderer
-	 * @private
+	 * @method pause
 	 */
-	private _nextInfoRenderer() {
-		var self = this;
-
-		this._loopTimeout = null;
-
-		if(this._currentInfoRendererId == null) {
-			this._currentInfoRendererId = 0;
-		} else {
-			this._currentInfoRendererId = (this._currentInfoRendererId + 1) % (this._listInfoRenderers.length);
-		}
-
-		var currentInfoRenderer = this._listInfoRenderers[this._currentInfoRendererId];
-
-		var renderer = currentInfoRenderer.getRenderer();
-
-		renderer.render(currentInfoRenderer.getInfo(), this._zone.getZoneDiv());
-
-		currentInfoRenderer.getInfo().setCastingDate(new Date());
-
-		this._loopTimeout = setTimeout(function() {
-			self._nextInfoRenderer();
-		}, currentInfoRenderer.getInfo().getDurationToDisplay());
+	pause() {
+		Logger.error("Behaviour - pause : Method need to be implemented.");
 	}
 
+	/**
+	 * Resume.
+	 *
+	 * @method resume
+	 */
+	resume() {
+		Logger.error("Behaviour - resume : Method need to be implemented.");
+	}
 
 	/**
 	 * Stop.
@@ -123,7 +132,27 @@ class Behaviour {
 	 * @method stop
 	 */
 	stop() {
-		clearTimeout(this._loopTimeout);
-		this._loopTimeout = null;
+		Logger.error("Behaviour - stop : Method need to be implemented.");
+	}
+
+	/**
+	 * Save.
+	 *
+	 * @method save
+	 */
+	save() {
+		this._listInfoRenderersBackup = this._listInfoRenderers;
+	}
+
+	/**
+	 * Restore.
+	 *
+	 * @method restore
+	 */
+	restore() {
+		if(this._listInfoRenderersBackup != null) {
+			this._listInfoRenderers = this._listInfoRenderersBackup;
+			this._listInfoRenderersBackup = null;
+		}
 	}
 }
