@@ -57,7 +57,6 @@ class UserRenderer implements Renderer<User> {
 
 		userHTML.append(userContent);
 
-		$(domElem).empty();
 		$(domElem).append(userHTML);
 	}
 }

@@ -153,7 +153,6 @@ class TweetRenderer implements Renderer<Tweet> {
 		var clearFixFooter = $("<div class=\"clearfix\"></div>");
 		tweetFooter.append(clearFixFooter);
 
-		$(domElem).empty();
 		$(domElem).append(tweetHTML);
 	}
 }

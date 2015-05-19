@@ -119,7 +119,6 @@ class PictureAlbumRenderer implements Renderer<Picture> {
 		var clearFixFooter = $("<div class=\"clearfix\"></div>");
 		pictureFooter.append(clearFixFooter);
 
-        $(domElem).empty();
         $(domElem).append(pictureHTML);
 
 

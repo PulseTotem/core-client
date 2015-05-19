@@ -116,6 +116,7 @@ class AppearanceBehaviour extends Behaviour {
 	private _displayInfoRenderer(infoRenderer : InfoRenderer<any>) {
 		var renderer = infoRenderer.getRenderer();
 
+		$(this.getZone().getZoneDiv()).empty();
 		renderer.render(infoRenderer.getInfo(), this.getZone().getZoneDiv());
 
 		infoRenderer.getInfo().setCastingDate(new Date());

@@ -108,7 +108,6 @@ class FeedNodeRendererGeneric implements Renderer<FeedNode> {
             descriptionContent.html(info.getDescription());
         }
 
-        $(domElem).empty();
         $(domElem).append(feedNodeHTML);
     }
 }

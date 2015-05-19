@@ -51,7 +51,7 @@ class EventListRenderer implements Renderer<CityEvent> {
 		var eventHTML = $("<div>");
 
 	    eventHTML.append(info.name());
-        $(domElem).empty();
+
         $(domElem).append(eventHTML);
     }
 }

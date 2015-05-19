@@ -108,7 +108,6 @@ class DiscountRenderer implements Renderer<Discount> {
 
         info.setCastingDate(new Date());*/
 
-        $(domElem).empty();
         $(domElem).html(info.getProductName() + '<br/><br/>' + info.getProductDescription());
     }
 }
