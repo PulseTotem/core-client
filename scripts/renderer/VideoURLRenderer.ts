@@ -36,6 +36,7 @@ class VideoURLRenderer implements Renderer<VideoURL> {
 	 */
 	render(info : VideoURL, domElem : any) {
 		var videoHTML = $("<div>");
+		videoHTML.addClass("VideoURLRenderer_mainDiv");
 		videoHTML.html('<iframe src="'+info.getURL()+'?chromeless=1&html=1&related=0&logo=0&info=0&autoplay=1" allowfullscreen></iframe>');
 
 		$(domElem).append(videoHTML);
