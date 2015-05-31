@@ -3,11 +3,12 @@
  */
 
 /// <reference path="../../t6s-core/core/scripts/infotype/VideoURL.ts" />
+/// <reference path="../../t6s-core/core/scripts/infotype/VideoPlaylist.ts" />
 /// <reference path="./Renderer.ts" />
 
 declare var $: any; // Use of JQuery
 
-class VideoURLRenderer implements Renderer<VideoURL> {
+class VideoPlaylist implements Renderer<VideoPlaylist> {
 	/**
 	 * Transform the Info list to another Info list.
 	 *
@@ -15,14 +16,19 @@ class VideoURLRenderer implements Renderer<VideoURL> {
 	 * @param {ProcessInfo} info - The Info to transform.
 	 * @return {Array<RenderInfo>} listTransformedInfos - The Info list after transformation.
 	 */
-	transformInfo(info : VideoURL) : Array<VideoURL> {
+	transformInfo(info : VideoPlaylist) : Array<VideoURL> {
 		var videoList : Array<VideoURL> = new Array<VideoURL>();
-		try {
-			var newInfo = VideoURL.fromJSONObject(VideoURL);
-			videoList.push(newInfo);
-		} catch(e) {
-			Logger.error(e.message);
+
+		for (indexVideo in info.getVideos()) {
+			var videoUrl : VideoURL = info.getVideos()[indexVideo];
+			try {
+				var newInfo = VideoURL.fromJSONObject(videoUrl);
+				videoList.push(newInfo);
+			} catch(e) {
+				Logger.error(e.message);
+			}
 		}
+
 
 		return videoList;
 	}
@@ -36,7 +42,7 @@ class VideoURLRenderer implements Renderer<VideoURL> {
 	 */
 	render(info : VideoURL, domElem : any) {
 		var videoHTML = $("<div>");
-		videoHTML.addClass("VideoURLRenderer_mainDiv");
+		videoHTML.addClass("VideoPlaylistRenderer_mainDiv");
 
 		var html = "";
 
