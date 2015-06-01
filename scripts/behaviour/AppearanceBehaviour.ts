@@ -103,7 +103,7 @@ class AppearanceBehaviour extends Behaviour {
 
 		this._timer = new Timer(function() {
 			self._nextInfoRenderer();
-		}, currentInfoRenderer.getInfo().getDurationToDisplay()); //TODO: ADD * 1000 after Services Update !!!!
+		}, currentInfoRenderer.getInfo().getDurationToDisplay()*1000);
 	}
 
 	/**
