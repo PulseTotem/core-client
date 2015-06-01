@@ -61,14 +61,13 @@ class DefaultSystemTrigger extends SystemTrigger {
 		if(listInfoRenderers.length > 0) {
 			if(this._timer != null) {
 				this.relativeTimeline.addToCurrentDisplay(listInfoRenderers);
-				this._timer.addToDelay(totalTime);
-				//this._timer.addToDelay(totalTime * 1000);//TODO: Uncomment after Services Update !!!!
+				this._timer.addToDelay(totalTime * 1000);
 			} else {
 				this.relativeTimeline.pauseAndDisplay(listInfoRenderers);
 				this._timer = new Timer(function () {
 					self._timer = null;
 					self.relativeTimeline.resume();
-				}, totalTime); //TODO: Add * 1000 after Services Update !!!!
+				}, totalTime*1000);
 			}
 		}
 	}
