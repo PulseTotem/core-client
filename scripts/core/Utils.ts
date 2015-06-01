@@ -33,13 +33,13 @@ class Utils {
 
 	/**
 	 * Methods to help conversion of hexadecimal color into RGB color.
-	 */
+	 * /
 
 	/**
 	 * @method cutHex
 	 * @static
 	 * @param {string} h - The Hexadecimal color.
-	 */
+	 * /
 	static cutHex(h : string) {
 		return (h.charAt(0)=="#") ? h.substring(1,7):h
 	}
@@ -48,7 +48,7 @@ class Utils {
 	 * @method hexToR
 	 * @static
 	 * @param {string} h - The Hexadecimal color.
-	 */
+	 * /
 	static hexToR(h : string) {
 		return parseInt((Utils.cutHex(h)).substring(0,2),16)
 	}
@@ -57,7 +57,7 @@ class Utils {
 	 * @method hexToG
 	 * @static
 	 * @param {string} h - The Hexadecimal color.
-	 */
+	 * /
 	static hexToG(h : string) {
 		return parseInt((Utils.cutHex(h)).substring(2,4),16)
 	}
@@ -66,7 +66,7 @@ class Utils {
 	 * @method hexToB
 	 * @static
 	 * @param {string} h - The Hexadecimal color.
-	 */
+	 * /
 	static hexToB(h : string) {
 		return parseInt((Utils.cutHex(h)).substring(4,6),16)
 	}
@@ -78,8 +78,8 @@ class Utils {
 	 * @static
 	 * @param {string} h - The Hexadecimal color.
 	 * @param {string} opacity - The color's opacity.
-	 */
+	 * /
 	static toRGBA(h : string, opacity : string) {
 		return "rgba(" + Utils.hexToR(h) + "," + Utils.hexToG(h) + "," + Utils.hexToB(h) + "," + opacity + ")";
-	}
+	}*/
 }
