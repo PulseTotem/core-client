@@ -5,38 +5,48 @@
 
 /// <reference path="../../t6s-core/core/scripts/infotype/FeedContent.ts" />
 /// <reference path="../../t6s-core/core/scripts/infotype/FeedNode.ts" />
-/// <reference path="../../t6s-core/core/scripts/infotype/Info.ts" />
-/// <reference path="../policy/RenderPolicy.ts" />
 /// <reference path="./Renderer.ts" />
 
 declare var $: any; // Use of JQuery
 
 class FeedNodeRendererGeneric implements Renderer<FeedNode> {
-    transformForBehaviour(listInfos : Array<FeedContent>, renderPolicy : RenderPolicy<FeedContent>) : Array<FeedNode> {
+	/**
+	 * Transform the Info list to another Info list.
+	 *
+	 * @method transformInfo<ProcessInfo extends Info>
+	 * @param {ProcessInfo} info - The Info to transform.
+	 * @return {Array<RenderInfo>} listTransformedInfos - The Info list after transformation.
+	 */
+	transformInfo(info : FeedContent) : Array<FeedNode> {
 		var newListInfos : Array<FeedContent> = new Array<FeedContent>();
 		try {
-			newListInfos = Info.fromJSONArray(listInfos, FeedContent);
+			var newInfo = FeedContent.fromJSONObject(info);
+			newListInfos.push(newInfo);
 		} catch(e) {
 			Logger.error(e.message);
 		}
 
-        var feedContents : Array<FeedContent> = renderPolicy.process(newListInfos);
+		var result = new Array<FeedNode>();
 
-        var feedNodes : Array<FeedNode> = new Array<FeedNode>();
+		newListInfos.forEach(function(fc : FeedContent) {
+			var fcNodes : Array<FeedNode> = fc.getFeedNodes();
 
-        for(var iFC in feedContents) {
-            var fc : FeedContent = feedContents[iFC];
-            var fcNodes : Array<FeedNode> = fc.getFeedNodes();
-            for(var iFN in fcNodes) {
-                var fn : FeedNode = fcNodes[iFN];
-                feedNodes.push(fn);
-            }
-        }
+			fcNodes.forEach(function (fn : FeedNode) {
+				result.push(fn);
+			});
+		});
 
-        return feedNodes;
+		return result;
     }
 
-    render(info : FeedNode, domElem : any) {
+	/**
+	 * Render the Info in specified DOM Element.
+	 *
+	 * @method render
+	 * @param {RenderInfo} info - The Info to render.
+	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 */
+	render(info : FeedNode, domElem : any) {
         var feedNodeHTML = $("<div>");
         feedNodeHTML.addClass("FeedNodeRendererGeneric_feednode");
 
@@ -98,9 +108,6 @@ class FeedNodeRendererGeneric implements Renderer<FeedNode> {
             descriptionContent.html(info.getDescription());
         }
 
-        $(domElem).empty();
         $(domElem).append(feedNodeHTML);
-
-        info.setCastingDate(new Date());
     }
 }

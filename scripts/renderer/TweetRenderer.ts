@@ -1,26 +1,30 @@
 /**
  * @author Christian Brel <christian@the6thscreen.fr, ch.brel@gmail.com>
+ * @author Simon Urli <simon@the6thscreen.fr, simon.urli@gmail.com>
  */
 
 /// <reference path="../../t6s-core/core/scripts/infotype/TweetList.ts" />
 /// <reference path="../../t6s-core/core/scripts/infotype/Tweet.ts" />
-/// <reference path="../../t6s-core/core/scripts/infotype/Info.ts" />
-/// <reference path="../policy/RenderPolicy.ts" />
 /// <reference path="./Renderer.ts" />
 
 declare var $: any; // Use of JQuery
 
 class TweetRenderer implements Renderer<Tweet> {
-	transformForBehaviour(listInfos : Array<TweetList>, renderPolicy : RenderPolicy<any>) : Array<Tweet> {
-		var newListInfos : Array<TweetList> = new Array<TweetList>();
+	/**
+	 * Transform the Info list to another Info list.
+	 *
+	 * @method transformInfo<ProcessInfo extends Info>
+	 * @param {ProcessInfo} info - The Info to transform.
+	 * @return {Array<RenderInfo>} listTransformedInfos - The Info list after transformation.
+	 */
+	transformInfo(info : TweetList) : Array<Tweet> {
+		var tweetLists : Array<TweetList> = new Array<TweetList>();
 		try {
-			newListInfos = Info.fromJSONArray(listInfos, TweetList);
+			var newInfo = TweetList.fromJSONObject(info);
+			tweetLists.push(newInfo);
 		} catch(e) {
 			Logger.error(e.message);
 		}
-
-		//var discountsLists : Array<DiscountsList> = renderPolicy.process(newListInfos);
-		var tweetLists : Array<TweetList> = newListInfos;
 
 		var tweets : Array<Tweet> = new Array<Tweet>();
 
@@ -36,6 +40,13 @@ class TweetRenderer implements Renderer<Tweet> {
 		return tweets;
 	}
 
+	/**
+	 * Render the Info in specified DOM Element.
+	 *
+	 * @method render
+	 * @param {RenderInfo} info - The Info to render.
+	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 */
 	render(info : Tweet, domElem : any) {
 		var tweetHTML = $("<div>");
 		tweetHTML.addClass("TweetRenderer_tweet");
@@ -142,9 +153,6 @@ class TweetRenderer implements Renderer<Tweet> {
 		var clearFixFooter = $("<div class=\"clearfix\"></div>");
 		tweetFooter.append(clearFixFooter);
 
-		$(domElem).empty();
 		$(domElem).append(tweetHTML);
-
-		info.setCastingDate(new Date());
 	}
 }
