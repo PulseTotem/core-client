@@ -8,7 +8,7 @@
 
 declare var $: any; // Use of JQuery
 
-class VideoPlaylist implements Renderer<VideoPlaylist> {
+class VideoPlaylistRenderer implements Renderer<VideoURL> {
 	/**
 	 * Transform the Info list to another Info list.
 	 *
@@ -19,14 +19,14 @@ class VideoPlaylist implements Renderer<VideoPlaylist> {
 	transformInfo(info : VideoPlaylist) : Array<VideoURL> {
 		var videoList : Array<VideoURL> = new Array<VideoURL>();
 
-		for (indexVideo in info.getVideos()) {
-			var videoUrl : VideoURL = info.getVideos()[indexVideo];
-			try {
-				var newInfo = VideoURL.fromJSONObject(videoUrl);
-				videoList.push(newInfo);
-			} catch(e) {
-				Logger.error(e.message);
+		var newInfo = VideoPlaylist.fromJSONObject(info);
+		try {
+			for (var indexVideo in newInfo.getVideos()) {
+				var videoUrl : VideoURL = newInfo.getVideos()[indexVideo];
+				videoList.push(videoUrl);
 			}
+		} catch(e) {
+			Logger.error(e.message);
 		}
 
 
