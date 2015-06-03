@@ -7,15 +7,14 @@
 /// <reference path="../core/Timer.ts" />
 
 /**
- * Represents "Appearance" Behaviour of The6thScreen Client.
+ * Represents "FadeIn" Behaviour of The6thScreen Client.
  *
- * @class AppearanceBehaviour
- * @extends Behaviour
+ * @class FadeInBehaviour
  */
-class AppearanceBehaviour extends Behaviour {
+class FadeInBehaviour extends Behaviour {
 
 	/**
-	 * AppearanceBehaviour's current InfoRenderer id in _listInfoRenderers array.
+	 * FadeInBehaviour's current InfoRenderer id in _listInfoRenderers array.
 	 *
 	 * @property _currentInfoRendererId
 	 * @type number
@@ -23,7 +22,7 @@ class AppearanceBehaviour extends Behaviour {
 	private _currentInfoRendererId : number;
 
 	/**
-	 * AppearanceBehaviour's timer.
+	 * FadeInBehaviour's timer.
 	 *
 	 * @property _timer
 	 * @type Timer
@@ -31,7 +30,7 @@ class AppearanceBehaviour extends Behaviour {
 	private _timer : Timer;
 
 	/**
-	 * Backup of AppearanceBehaviour's current InfoRenderer id.
+	 * Backup of FadeInBehaviour's current InfoRenderer id.
 	 *
 	 * @property _currentInfoRendererIdBackup
 	 * @type number
@@ -39,7 +38,7 @@ class AppearanceBehaviour extends Behaviour {
 	private _currentInfoRendererIdBackup : number;
 
 	/**
-	 * Backup of AppearanceBehaviour's timer.
+	 * Backup of FadeInBehaviour's timer.
 	 *
 	 * @property _timerBackup
 	 * @type Timer
@@ -51,13 +50,13 @@ class AppearanceBehaviour extends Behaviour {
 	 *
 	 * @constructor
 	 */
-    constructor() {
-        super();
+	constructor() {
+		super();
 		this._currentInfoRendererId = null;
 		this._timer = null;
 		this._currentInfoRendererIdBackup = null;
 		this._timerBackup = null;
-    }
+	}
 
 	/**
 	 * Set list InfoRenderer.
@@ -104,7 +103,7 @@ class AppearanceBehaviour extends Behaviour {
 
 		this._timer = new Timer(function() {
 			self._nextInfoRenderer();
-		}, currentInfoRenderer.getInfo().getDurationToDisplay()*1000);
+		}, currentInfoRenderer.getInfo().getDurationToDisplay()*1000 + 2100);
 	}
 
 	/**
@@ -115,12 +114,25 @@ class AppearanceBehaviour extends Behaviour {
 	 * @param {InfoRenderer} infoRenderer - The InfoRenderer to display.
 	 */
 	private _displayInfoRenderer(infoRenderer : InfoRenderer<any>) {
+		var self = this;
+
 		var renderer = infoRenderer.getRenderer();
 
-		$(this.getZone().getZoneDiv()).empty();
-		renderer.render(infoRenderer.getInfo(), this.getZone().getZoneDiv());
+		$(self.getZone().getZoneDiv())
+			.find(".FadeInBehaviour_show")
+			.removeClass("FadeInBehaviour_show");
 
-		infoRenderer.getInfo().setCastingDate(new Date());
+		new Timer(function() {
+			$(self.getZone().getZoneDiv()).empty();
+			var content = $("<div>").addClass("FadeInBehaviour_fadein FadeInBehaviour_hide");
+			$(self.getZone().getZoneDiv()).append(content);
+			renderer.render(infoRenderer.getInfo(), content);
+			new Timer(function() {
+				$(self.getZone().getZoneDiv()).find(".FadeInBehaviour_hide").addClass("FadeInBehaviour_show");
+			}, 100);
+
+			infoRenderer.getInfo().setCastingDate(new Date());
+		}, 1000);
 	}
 
 	/**

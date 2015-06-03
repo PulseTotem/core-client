@@ -10,6 +10,7 @@
  * Represents "Appearance" Behaviour of The6thScreen Client.
  *
  * @class AppearanceBehaviour
+ *  @extends Behaviour
  */
 class SlickCarouselBehaviour extends Behaviour {
 
