@@ -78,20 +78,44 @@ class SlickCarouselBehaviour extends Behaviour {
 	start() {
 		$(this.getZone().getZoneDiv()).empty();
 
-		var divCarousel = $('<div style="width: 100%; height: 100%">');
+		var divSlick = $('<div style="height: 100%; width: 100%; position: relative;">');
+
 		for (var infoRendererKey in this.getListInfoRenderers()) {
 			var infoRenderer : InfoRenderer<any> = this.getListInfoRenderers()[infoRendererKey];
 			var renderer = infoRenderer.getRenderer();
+			var divCarousel = $('<div style="height: 100%; width: 100%; position: relative">');
 			renderer.render(infoRenderer.getInfo(), divCarousel);
+			divSlick.append(divCarousel);
 		}
-		$(this.getZone().getZoneDiv()).append(divCarousel);
 
-		divCarousel.slick({
+		$(this.getZone().getZoneDiv()).append(divSlick);
+		divSlick.slick({
 			centerMode: true,
 			centerPadding: '60px',
 			slidesToShow: 3,
 			infinite: true,
-			speed: 300
+			autoplay: true,
+			autoplaySpeed: 2000,
+			responsive: [
+				{
+					breakpoint: 768,
+					settings: {
+						arrows: false,
+						centerMode: true,
+						centerPadding: '40px',
+						slidesToShow: 3
+					}
+				},
+				{
+					breakpoint: 480,
+					settings: {
+						arrows: false,
+						centerMode: true,
+						centerPadding: '40px',
+						slidesToShow: 1
+					}
+				}
+			]
 		});
 	}
 	/**
