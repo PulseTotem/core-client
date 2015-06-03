@@ -103,7 +103,7 @@ class FadeInBehaviour extends Behaviour {
 
 		this._timer = new Timer(function() {
 			self._nextInfoRenderer();
-		}, currentInfoRenderer.getInfo().getDurationToDisplay()*1000 + 2000);
+		}, currentInfoRenderer.getInfo().getDurationToDisplay()*1000 + 2100);
 	}
 
 	/**
@@ -120,15 +120,16 @@ class FadeInBehaviour extends Behaviour {
 
 		$(self.getZone().getZoneDiv())
 			.find(".FadeInBehaviour_show")
-			.removeClass("FadeInBehaviour_show")
-			.addClass("FadeInBehaviour_hide");
+			.removeClass("FadeInBehaviour_show");
 
 		new Timer(function() {
 			$(self.getZone().getZoneDiv()).empty();
-			var content = $("<div>").addClass("FadeInBehaviour_hide FadeInBehaviour_fadein");
+			var content = $("<div>").addClass("FadeInBehaviour_fadein FadeInBehaviour_hide");
 			$(self.getZone().getZoneDiv()).append(content);
 			renderer.render(infoRenderer.getInfo(), content);
-			$(self.getZone().getZoneDiv()).find(".FadeInBehaviour_hide").removeClass("FadeInBehaviour_hide").addClass("FadeInBehaviour_show");
+			new Timer(function() {
+				$(self.getZone().getZoneDiv()).find(".FadeInBehaviour_hide").addClass("FadeInBehaviour_show");
+			}, 100);
 
 			infoRenderer.getInfo().setCastingDate(new Date());
 		}, 1000);
