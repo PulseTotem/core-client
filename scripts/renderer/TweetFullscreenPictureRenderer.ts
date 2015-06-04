@@ -66,7 +66,7 @@ class TweetFullscreenPictureRenderer implements Renderer<Tweet> {
 				picURL = picture.getThumb();
 			}
 
-			tweetHTMLWrapperBackground.css("backgroud-image", "url('" + picURL.getURL() + "')");
+			tweetHTMLWrapperBackground.css("background-image", "url('" + picURL.getURL() + "')");
 		}
 
 		tweetHTMLWrapper.append(tweetHTMLWrapperBackground);
