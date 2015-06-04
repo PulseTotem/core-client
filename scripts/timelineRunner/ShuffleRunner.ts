@@ -78,7 +78,20 @@ class ShuffleRunner extends TimelineRunner {
 
 				if (listInfoRenderers.length > 0) {
 					allInfoRenderers = allInfoRenderers.concat(listInfoRenderers);
-					totalTime += relativeEvent.getDuration();
+
+					//TODO: Manage boolean to force to use current.getDuration() or cumulated time of Info List...
+					//Default: we choose cumulated time of Info List
+
+					var totalDuration : number = 0;
+
+					listInfoRenderers.forEach(function(infoRenderer) {
+						totalDuration += infoRenderer.getInfo().getDurationToDisplay();
+					});
+
+					totalTime += totalDuration;
+
+					//else if we use relativeEvent.getDuration()
+					//totalTime += relativeEvent.getDuration();
 				}
 			}
 		});
