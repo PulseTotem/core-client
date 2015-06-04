@@ -95,7 +95,7 @@ class SlickCarouselBehaviour extends Behaviour {
 			slidesToShow: 3,
 			infinite: true,
 			autoplay: true,
-			autoplaySpeed: 2000,
+			autoplaySpeed: 5000,
 			responsive: [
 				{
 					breakpoint: 768,
