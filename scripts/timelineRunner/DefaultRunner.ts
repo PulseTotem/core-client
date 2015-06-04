@@ -88,10 +88,27 @@ class DefaultRunner extends TimelineRunner {
 			if (listInfoRenderers.length > 0) {
 				this.relativeTimeline.display(listInfoRenderers);
 
+				//TODO: Manage boolean to force to use current.getDuration() or cumulated time of Info List...
+				//Default: we choose cumulated time of Info List
+
+				var totalDuration : number = 0;
+
+				listInfoRenderers.forEach(function(infoRenderer) {
+					totalDuration += infoRenderer.getInfo().getDurationToDisplay();
+				});
+
 				this.stop();
 				this._timer = new Timer(function () {
 					self._nextEvent();
-				}, currentEvent.getDuration() * 1000);
+				}, totalDuration * 1000);
+
+				//If we use currentEvent.getDuration()
+				/*this.stop();
+				this._timer = new Timer(function () {
+					self._nextEvent();
+				}, currentEvent.getDuration() * 1000);*/
+
+
 			} else {
 				this.stop();
 				this._timer = new Timer(function() {
