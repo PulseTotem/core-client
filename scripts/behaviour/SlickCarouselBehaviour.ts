@@ -78,7 +78,7 @@ class SlickCarouselBehaviour extends Behaviour {
 	start() {
 		$(this.getZone().getZoneDiv()).empty();
 
-		var divSlick = $('<div style="height: 100%; width: 100%; position: relative;">');
+		var divSlick = $('<div style="height: 100%; width: 100%; position: relative; padding: 15px;">');
 
 		for (var infoRendererKey in this.getListInfoRenderers()) {
 			var infoRenderer : InfoRenderer<any> = this.getListInfoRenderers()[infoRendererKey];
