@@ -8,6 +8,7 @@
 /// <reference path="./Renderer.ts" />
 
 declare var $: any; // Use of JQuery
+declare var moment: any; // Use of MomentJS
 
 class TweetHalfPictureHalfUserRenderer implements Renderer<Tweet> {
 	/**
@@ -51,57 +52,44 @@ class TweetHalfPictureHalfUserRenderer implements Renderer<Tweet> {
 		var tweetHTMLWrapper = $("<div>");
 		tweetHTMLWrapper.addClass("TweetHalfPictureHalfUserRenderer_wrapper");
 
-		var tweetHTMLWrapperBackground = $("<div>");
-		tweetHTMLWrapperBackground.addClass("TweetHalfPictureHalfUserRenderer_wrapperbackground");
+		//Begin : Top
+		var tweetHTMLTop = $("<div>");
+		tweetHTMLTop.addClass("TweetHalfPictureHalfUserRenderer_top");
 
-		if(info.getPictures().length > 0) {
+		tweetHTMLWrapper.append(tweetHTMLTop);
+		//End : Top
 
-			var picture : Picture = info.getPictures()[0];
-			var picURL : PictureURL = null;
-			if(picture.getMedium() != null) {
-				picURL = picture.getMedium();
-			} else if(picture.getSmall() != null) {
-				picURL = picture.getSmall();
-			} else if(picture.getThumb() != null) {
-				picURL = picture.getThumb();
-			}
+		//Begin : Bottom
+		var tweetHTMLBottom = $("<div>");
+		tweetHTMLBottom.addClass("TweetHalfPictureHalfUserRenderer_bottom");
 
-			tweetHTMLWrapperBackground.css("background-image", "url('" + picURL.getURL() + "')");
-		}
+		tweetHTMLWrapper.append(tweetHTMLBottom);
 
-		tweetHTMLWrapper.append(tweetHTMLWrapperBackground);
+		var tweetProfilPictureDiv = $("<div>");
+		tweetProfilPictureDiv.addClass("TweetHalfPictureHalfUserRenderer_profil_picture");
 
-		var tweetHTML = $("<div>");
-		tweetHTML.addClass("TweetHalfPictureHalfUserRenderer_tweet");
+		tweetHTMLBottom.append(tweetProfilPictureDiv);
 
-		if(info.getPictures().length > 0) {
-			tweetHTML.css("background-color", "rgba(255, 255, 255, 0.6)");
-		}
+		var tweetProfilPictureImg = $("<img>");
+		tweetProfilPictureImg.addClass("img-circle");
+		tweetProfilPictureImg.attr("src", info.getOwner().getProfilPicture());
 
-		tweetHTMLWrapper.append(tweetHTML);
+		tweetProfilPictureDiv.append(tweetProfilPictureImg);
 
-		var tweetContent = $("<div>");
-		tweetContent.addClass("TweetHalfPictureHalfUserRenderer_content");
+		var tweetHTMLBottomContent = $("<div>");
+		tweetHTMLBottomContent.addClass("TweetHalfPictureHalfUserRenderer_bottom_content");
 
-		tweetHTML.append(tweetContent);
+		tweetHTMLBottom.append(tweetHTMLBottomContent);
+		//End : Bottom
 
-		var tweetContentWrapper = $("<div>");
-		tweetContentWrapper.addClass("TweetHalfPictureHalfUserRenderer_content_wrapper");
-
-		tweetContent.append(tweetContentWrapper);
-
-		tweetContentWrapper.html(info.getMessage());
-
+		//Begin : Footer
 		var tweetFooter = $("<div>");
 		tweetFooter.addClass("TweetHalfPictureHalfUserRenderer_footer");
 
-		tweetContent.append(tweetFooter);
-
 		var tweetCreateDate = $("<div>");
 		tweetCreateDate.addClass("TweetHalfPictureHalfUserRenderer_create_date");
-		var DateClass : any = <any>Date;
-		var creationDate : any = new DateClass(info.getCreationDate());
-		var displayCreationDate = creationDate.toString("dd/MM/yyyy ") + creationDate.toString("HH") + "h" + creationDate.toString("mm");
+		var creationDate : any = moment(info.getCreationDate());
+		var displayCreationDate = creationDate.fromNow();
 		tweetCreateDate.html(displayCreationDate);
 
 		tweetFooter.append(tweetCreateDate);
@@ -126,32 +114,11 @@ class TweetHalfPictureHalfUserRenderer implements Renderer<Tweet> {
 
 		var clearFixFooter = $("<div class=\"clearfix\"></div>");
 		tweetFooter.append(clearFixFooter);
+		//End : Footer
 
-		var tweetCard = $("<div>");
-		tweetCard.addClass("TweetHalfPictureHalfUserRenderer_card");
-
-		tweetHTML.append(tweetCard);
-
-		var tweetHeader = $("<div>");
-		tweetHeader.addClass("TweetHalfPictureHalfUserRenderer_header");
-
-		tweetCard.append(tweetHeader);
-
-		var tweetProfilPictureDiv = $("<div>");
-		tweetProfilPictureDiv.addClass("TweetHalfPictureHalfUserRenderer_profil_picture");
-
-		tweetHeader.append(tweetProfilPictureDiv);
-
-		var tweetProfilPictureImg = $("<img>");
-		tweetProfilPictureImg.addClass("img-circle");
-		tweetProfilPictureImg.attr("src", info.getOwner().getProfilPicture());
-
-		tweetProfilPictureDiv.append(tweetProfilPictureImg);
-
+		//Begin : ProfilInfo
 		var tweetProfilInfoDiv = $("<div>");
 		tweetProfilInfoDiv.addClass("TweetHalfPictureHalfUserRenderer_profil_info");
-
-		tweetHeader.append(tweetProfilInfoDiv);
 
 		var tweetProfilRealname = $("<div>");
 		tweetProfilRealname.addClass("TweetHalfPictureHalfUserRenderer_profil_realname");
@@ -165,15 +132,66 @@ class TweetHalfPictureHalfUserRenderer implements Renderer<Tweet> {
 
 		tweetProfilInfoDiv.append(tweetProfilUsername);
 
-		var tweetTwitterLogo = $("<div>");
-		tweetTwitterLogo.addClass("TweetHalfPictureHalfUserRenderer_twitter_logo");
+		var clearFixProfil = $("<div class=\"clearfix\"></div>");
+		tweetProfilInfoDiv.append(clearFixProfil);
+		//End : ProfilInfo
 
-		tweetHeader.append(tweetTwitterLogo);
+		if(info.getPictures().length > 0) {
 
+			var picture : Picture = info.getPictures()[0];
+			var picURL : PictureURL = null;
+			if(picture.getMedium() != null) {
+				picURL = picture.getMedium();
+			} else if(picture.getSmall() != null) {
+				picURL = picture.getSmall();
+			} else if(picture.getThumb() != null) {
+				picURL = picture.getThumb();
+			}
 
-		var clearFixHeader = $("<div class=\"clearfix\"></div>");
+			var tweetHTMLWrapperBackground = $("<div>");
+			tweetHTMLWrapperBackground.addClass("TweetHalfPictureHalfUserRenderer_wrapperbackground");
 
-		tweetHeader.append(clearFixHeader);
+			tweetHTMLWrapperBackground.css("background-image", "url('" + picURL.getURL() + "')");
+
+			tweetHTMLTop.append(tweetHTMLWrapperBackground);
+
+			var tweetHTMLContent = $("<div>");
+			tweetHTMLContent.addClass("TweetHalfPictureHalfUserRenderer_content");
+
+			tweetHTMLBottomContent.append(tweetHTMLContent);
+
+			var tweetHTMLHeader = $("<div>");
+			tweetHTMLHeader.addClass("TweetHalfPictureHalfUserRenderer_header");
+
+			tweetHTMLContent.append(tweetHTMLHeader);
+
+			tweetHTMLHeader.append(tweetProfilInfoDiv);
+
+			var tweetContentWrapper = $("<div>");
+			tweetContentWrapper.addClass("TweetHalfPictureHalfUserRenderer_content_wrapper");
+
+			tweetHTMLContent.append(tweetContentWrapper);
+
+			tweetContentWrapper.html(info.getMessage());
+
+			tweetHTMLContent.append(tweetFooter);
+		} else {
+			var tweetHTMLContent = $("<div>");
+			tweetHTMLContent.addClass("TweetHalfPictureHalfUserRenderer_content");
+
+			tweetHTMLTop.append(tweetHTMLContent);
+
+			var tweetContentWrapper = $("<div>");
+			tweetContentWrapper.addClass("TweetHalfPictureHalfUserRenderer_content_wrapper");
+
+			tweetHTMLContent.append(tweetContentWrapper);
+
+			tweetContentWrapper.html(info.getMessage());
+
+			tweetHTMLContent.append(tweetFooter);
+
+			tweetHTMLBottomContent.append(tweetProfilInfoDiv);
+		}
 
 		$(domElem).append(tweetHTMLWrapper);
 	}
