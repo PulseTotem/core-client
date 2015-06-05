@@ -1,0 +1,113 @@
+.TweetHalfPictureHalfUserRenderer_wrapper {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+
+  .TweetHalfPictureHalfUserRenderer_wrapperbackground {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    opacity: 1;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  .TweetHalfPictureHalfUserRenderer_tweet {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    .TweetHalfPictureHalfUserRenderer_content {
+      padding: 10px;
+      height: 60%;
+      width: 100%;
+      color: black;
+
+      .TweetHalfPictureHalfUserRenderer_content_wrapper {
+        height: 90%;
+        width: 100%;
+        font-family: sans-serif;
+        font-size: 1.6em;
+      }
+
+      .TweetHalfPictureHalfUserRenderer_footer {
+        height: 10%;
+        width: 100%;
+        font-weight: bold;
+
+        .TweetHalfPictureHalfUserRenderer_create_date {
+          float: left;
+          color: rgb(109, 109, 109);
+        }
+
+        .TweetHalfPictureHalfUserRenderer_favorite_count {
+          float: right;
+          margin-left: 10px;
+        }
+
+        .TweetHalfPictureHalfUserRenderer_retweet_count {
+          float: right;
+        }
+      }
+    }
+
+    .TweetHalfPictureHalfUserRenderer_card {
+      height: 40%;
+      width: 100%;
+      border-top: 1px solid grey;
+      color: black;
+
+      .TweetHalfPictureHalfUserRenderer_header {
+        height: 100%;
+        padding: 10px;
+
+        .TweetHalfPictureHalfUserRenderer_profil_picture {
+          float: left;
+          height: 100%;
+
+          img {
+            height: 100%;
+          }
+        }
+
+        .TweetHalfPictureHalfUserRenderer_profil_info {
+          float: left;
+          margin-left: 10px;
+          font-size: 1.7em;
+
+          .TweetHalfPictureHalfUserRenderer_profil_realname {
+            font-weight: bold;
+            font-size: 1.1em;
+          }
+
+          .TweetHalfPictureHalfUserRenderer_profil_username::before {
+            content: "@";
+          }
+
+          .TweetHalfPictureHalfUserRenderer_profil_username {
+
+          }
+        }
+
+        .TweetHalfPictureHalfUserRenderer_twitter_logo {
+          float: right;
+          background-image: url("../images/Twitter_logo_blue.png");
+          height: 50px;
+          width: 50px;
+          background-size: 100% 100%;
+          background-repeat: no-repeat;
+          margin: 10px;
+        }
+      }
+    }
+  }
+}
