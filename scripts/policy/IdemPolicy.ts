@@ -15,13 +15,25 @@
 class IdemPolicy implements Policy {
 
 	/**
-	 * Filter the Info list.
+	 * Filter the Info list during 'getListInfos' method on a Call.
 	 *
-	 * @method filterInfo
-	 * @param {Array<ProcessInfo>} listInfos - The Info list to filter.
-	 * @return {Array<ProcessInfo>} listFilteredInfos - The Info list after filter.
+	 * @method filterOnGet
+	 * @param {Array<Info>} listInfos - The Info list to filter.
+	 * @return {Array<Info>} listFilteredInfos - The Info list after filter.
 	 */
-	filterInfo(listInfos : Array<Info>) : Array<Info> {
+	filterOnGet(listInfos : Array<Info>) : Array<Info> {
 		return listInfos;
+	}
+
+	/**
+	 * Filter the Info list after new Infos reception in a Call.
+	 *
+	 * @method filterOnNew
+	 * @param {Array<Info>} listInfos - The Info list to filter.
+	 * @param {Array<Info>} newInfos - The Info list to filter.
+	 * @return {Array<Info>} listFilteredInfos - The Info list after filter.
+	 */
+	filterOnNew(listInfos : Array<Info>, newInfos : Array<Info>) : Array<Info> {
+		return listInfos.concat(newInfos);
 	}
 }

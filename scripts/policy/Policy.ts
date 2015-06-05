@@ -13,11 +13,21 @@
 interface Policy {
 
 	/**
-	 * Filter the Info list.
+	 * Filter the Info list during 'getListInfos' method on a Call.
 	 *
-	 * @method filterInfo
+	 * @method filterOnGet
 	 * @param {Array<Info>} listInfos - The Info list to filter.
 	 * @return {Array<Info>} listFilteredInfos - The Info list after filter.
 	 */
-	filterInfo(listInfos : Array<Info>) : Array<Info>;
+	filterOnGet(listInfos : Array<Info>) : Array<Info>;
+
+	/**
+	 * Filter the Info list after new Infos reception in a Call.
+	 *
+	 * @method filterOnNew
+	 * @param {Array<Info>} listInfos - The Info list to filter.
+	 * @param {Array<Info>} newInfos - The Info list to filter.
+	 * @return {Array<Info>} listFilteredInfos - The Info list after filter.
+	 */
+	filterOnNew(listInfos : Array<Info>, newInfos : Array<Info>) : Array<Info>;
 }
