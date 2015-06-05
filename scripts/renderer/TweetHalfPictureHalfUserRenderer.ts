@@ -52,6 +52,26 @@ class TweetHalfPictureHalfUserRenderer implements Renderer<Tweet> {
 		var tweetHTMLWrapper = $("<div>");
 		tweetHTMLWrapper.addClass("TweetHalfPictureHalfUserRenderer_wrapper");
 
+		var tweetHTMLLogoContainer = $("<div>");
+		tweetHTMLLogoContainer.addClass("TweetHalfPictureHalfUserRenderer_twitter_logo_container");
+
+		tweetHTMLWrapper.append(tweetHTMLLogoContainer);
+
+		var tweetHTMLLogoShadow = $("<div>");
+		tweetHTMLLogoShadow.addClass("TweetHalfPictureHalfUserRenderer_twitter_logo_shadow");
+
+		tweetHTMLLogoContainer.append(tweetHTMLLogoShadow);
+
+		var tweetHTMLLogoColor = $("<div>");
+		tweetHTMLLogoColor.addClass("TweetHalfPictureHalfUserRenderer_twitter_logo_color");
+
+		tweetHTMLLogoContainer.append(tweetHTMLLogoColor);
+
+		var tweetHTMLLogo = $("<div>");
+		tweetHTMLLogo.addClass("TweetHalfPictureHalfUserRenderer_twitter_logo");
+
+		tweetHTMLLogoContainer.append(tweetHTMLLogo);
+
 		//Begin : Top
 		var tweetHTMLTop = $("<div>");
 		tweetHTMLTop.addClass("TweetHalfPictureHalfUserRenderer_top");
@@ -193,6 +213,7 @@ class TweetHalfPictureHalfUserRenderer implements Renderer<Tweet> {
 			tweetHTMLBottomContent.append(tweetProfilInfoDiv);
 		}
 
+		$(domElem).css("overflow", "visible");
 		$(domElem).append(tweetHTMLWrapper);
 	}
 }
