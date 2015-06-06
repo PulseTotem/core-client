@@ -3,19 +3,17 @@
  * @author Simon Urli <simon@the6thscreen.fr, simon.urli@gmail.com>
  */
 
-/// <reference path="../../t6s-core/core/scripts/infotype/Info.ts" />
 /// <reference path="../timeline/RelativeTimelineItf.ts" />
-/// <reference path="../timeline/RelativeEventItf.ts" />
 
 /**
- * Represents a SystemTrigger of The6thScreen Client.
+ * Represents a UserTrigger of The6thScreen Client.
  *
- * @class SystemTrigger
+ * @class UserTrigger
  */
-class SystemTrigger {
+class UserTrigger {
 
 	/**
-	 * RelativeTimeline controlled by SystemTrigger.
+	 * RelativeTimeline controlled by UserTrigger.
 	 *
 	 * @property relativeTimeline
 	 * @type RelativeTimelineItf
@@ -32,23 +30,12 @@ class SystemTrigger {
 	}
 
 	/**
-	 * Set the SystemTrigger's RelativeTimeline.
+	 * Set the UserTrigger's RelativeTimeline.
 	 *
 	 * @method setRelativeTimeline
 	 * @param {RelativeTimelineItf} relativeTimeline - The RelativeTimeline to set.
 	 */
 	setRelativeTimeline(relativeTimeline : RelativeTimelineItf) {
 		this.relativeTimeline = relativeTimeline;
-	}
-
-	/**
-	 * Trigger.
-	 *
-	 * @method trigger
-	 * @param {Array<Info>} listInfos - New received Info list.
-	 * @param {RelativeEventItf} event - event associated to Infos in listInfos
-	 */
-	trigger(listInfos : Array<Info>, event : RelativeEventItf) {
-		Logger.error("SystemTrigger - trigger : Method need to be implemented.");
 	}
 }
