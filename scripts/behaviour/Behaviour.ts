@@ -136,6 +136,42 @@ class Behaviour {
 	}
 
 	/**
+	 * Display previous Info.
+	 *
+	 * @method displayPreviousInfo
+	 */
+	displayPreviousInfo() {
+		Logger.error("Behaviour - displayPreviousInfo : Method need to be implemented.");
+	}
+
+	/**
+	 * Display next Info.
+	 *
+	 * @method displayNextInfo
+	 */
+	displayNextInfo() {
+		Logger.error("Behaviour - displayNextInfo : Method need to be implemented.");
+	}
+
+	/**
+	 * Display last Info.
+	 *
+	 * @method displayLastInfo
+	 */
+	displayLastInfo() {
+		Logger.error("Behaviour - displayLastInfo : Method need to be implemented.");
+	}
+
+	/**
+	 * Display first Info.
+	 *
+	 * @method displayFirstInfo
+	 */
+	displayFirstInfo() {
+		Logger.error("Behaviour - displayFirstInfo : Method need to be implemented.");
+	}
+
+	/**
 	 * Save.
 	 *
 	 * @method save

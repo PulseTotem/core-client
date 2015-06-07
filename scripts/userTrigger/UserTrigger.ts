@@ -13,6 +13,14 @@
 class UserTrigger {
 
 	/**
+	 * UserTrigger's state.
+	 *
+	 * @property state
+	 * @type UserTriggerState
+	 */
+	state : UserTriggerState;
+
+	/**
 	 * RelativeTimeline controlled by UserTrigger.
 	 *
 	 * @property relativeTimeline
@@ -27,6 +35,16 @@ class UserTrigger {
 	 */
 	constructor() {
 		this.relativeTimeline = null;
+		this.state = UserTriggerState.WAITING;
+	}
+
+	/**
+	 * Return UserTriggerState of UserTrigger.
+	 *
+	 * @method getState
+	 */
+	getState() {
+		return this.state;
 	}
 
 	/**

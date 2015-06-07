@@ -14,12 +14,27 @@
 interface RelativeTimelineItf {
 
 	/**
+	 * Get the RelativeTimeline's behaviour.
+	 *
+	 * @method getBehaviour
+	 * @return {Behaviour} behaviour - The RelativeTimeline's behaviour.
+	 */
+	getBehaviour() : Behaviour;
+
+	/**
 	 * Return RelativeTimeline's relativeEvents.
 	 *
 	 * @method getRelativeEvents
 	 * @return {Array<RelativeEventItf>} relativeEvents - The RelativeTimeline's relativeEvents.
 	 */
 	getRelativeEvents() : Array<RelativeEventItf>;
+
+	/**
+	 * Pause timeline.
+	 *
+	 * @method pause
+	 */
+	pause();
 
 	/**
 	 * Display given InfoRenderer list.
@@ -51,4 +66,40 @@ interface RelativeTimelineItf {
 	 * @method resume
 	 */
 	resume();
+
+	/**
+	 * Restore and Resume.
+	 *
+	 * @method restoreAndResume
+	 */
+	restoreAndResume();
+
+	/**
+	 * Display previous Info.
+	 *
+	 * @method displayPreviousInfo
+	 */
+	displayPreviousInfo();
+
+	/**
+	 * Display next Info.
+	 *
+	 * @method displayNextInfo
+	 */
+	displayNextInfo();
+
+	/**
+	 * Display last Info.
+	 *
+	 * @method displayLastInfo
+	 */
+	displayLastInfo();
+
+	/**
+	 * Display first Info.
+	 *
+	 * @method displayFirstInfo
+	 */
+	displayFirstInfo();
+
 }

@@ -137,6 +137,8 @@ class SlickCarouselBehaviour extends Behaviour {
 	resume() {
 		if(this._timer != null) {
 			this._timer.resume();
+		} else {
+			this.start();
 		}
 	}
 
@@ -170,5 +172,47 @@ class SlickCarouselBehaviour extends Behaviour {
 	 */
 	restore() {
 		super.restore();
+	}
+
+
+
+	/**
+	 * Display previous Info.
+	 *
+	 * @method displayPreviousInfo
+	 */
+	displayPreviousInfo() {
+		//TODO
+		Logger.debug("TODO -> SlickCarouselBehaviour - displayPreviousInfo : Method need to be implemented.");
+	}
+
+	/**
+	 * Display next Info.
+	 *
+	 * @method displayNextInfo
+	 */
+	displayNextInfo() {
+		//TODO
+		Logger.debug("TODO -> SlickCarouselBehaviour - displayNextInfo : Method need to be implemented.");
+	}
+
+	/**
+	 * Display last Info.
+	 *
+	 * @method displayLastInfo
+	 */
+	displayLastInfo() {
+		//TODO
+		Logger.debug("TODO -> SlickCarouselBehaviour - displayLastInfo : Method need to be implemented.");
+	}
+
+	/**
+	 * Display first Info.
+	 *
+	 * @method displayFirstInfo
+	 */
+	displayFirstInfo() {
+		//TODO
+		Logger.debug("TODO -> SlickCarouselBehaviour - displayFirstInfo : Method need to be implemented.");
 	}
 }
