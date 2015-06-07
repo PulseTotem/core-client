@@ -158,4 +158,132 @@ class DefaultRunner extends TimelineRunner {
 			this._timer = null;
 		}
 	}
+
+	/**
+	 * Display last Info of Previous Event.
+	 *
+	 * @method displayLastInfoOfPreviousEvent
+	 */
+	displayLastInfoOfPreviousEvent() {
+		var self = this;
+
+		var relativeEvents : Array<RelativeEventItf> = this.relativeTimeline.getRelativeEvents();
+
+		if(this._currentEventId == null && this._currentEventId > 0) {
+			this._currentEventId = this._currentEventId - 1;
+		} else {
+			if(this._currentEventId == 0) {
+				this._currentEventId = relativeEvents.length - 1;
+			}
+		}
+
+		var currentEvent : RelativeEventItf = relativeEvents[this._currentEventId];
+
+		var renderer : Renderer<any> = currentEvent.getCall().getCallType().getRenderer();
+
+		var listInfos : Array<Info> = currentEvent.getCall().getListInfos();
+
+		if(listInfos.length > 0) {
+
+			var listInfoRenderers:Array<InfoRenderer<any>> = listInfos.map(function (e, i) {
+				return new InfoRenderer(e, renderer);
+			});
+
+			if (listInfoRenderers.length > 0) {
+				this.relativeTimeline.display(listInfoRenderers);
+
+				//TODO: Manage boolean to force to use current.getDuration() or cumulated time of Info List...
+				//Default: we choose cumulated time of Info List
+
+				var totalDuration : number = 0;
+
+				listInfoRenderers.forEach(function(infoRenderer) {
+					totalDuration += infoRenderer.getInfo().getDurationToDisplay();
+				});
+
+				this.stop();
+				this._timer = new Timer(function () {
+					self._nextEvent();
+				}, totalDuration * 1000);
+
+				this.relativeTimeline.pause();
+
+				this.relativeTimeline.displayLastInfo();
+			} else {
+				this.stop();
+				this._timer = new Timer(function() {
+					self.displayLastInfoOfPreviousEvent();
+				}, 1000);
+			}
+		} else {
+			this.stop();
+			this._timer = new Timer(function() {
+				self.displayLastInfoOfPreviousEvent();
+			}, 1000);
+		}
+	}
+
+	/**
+	 * Display first Info of Next Event.
+	 *
+	 * @method displayFirstInfoOfNextEvent
+	 */
+	displayFirstInfoOfNextEvent() {
+		var self = this;
+
+		var relativeEvents : Array<RelativeEventItf> = this.relativeTimeline.getRelativeEvents();
+
+		if(this._currentEventId == null && this._currentEventId < relativeEvents.length - 1) {
+			this._currentEventId = this._currentEventId + 1;
+		} else {
+			if(this._currentEventId == (relativeEvents.length - 1)) {
+				this._currentEventId = 0;
+			}
+		}
+
+		var currentEvent : RelativeEventItf = relativeEvents[this._currentEventId];
+
+		var renderer : Renderer<any> = currentEvent.getCall().getCallType().getRenderer();
+
+		var listInfos : Array<Info> = currentEvent.getCall().getListInfos();
+
+		if(listInfos.length > 0) {
+
+			var listInfoRenderers:Array<InfoRenderer<any>> = listInfos.map(function (e, i) {
+				return new InfoRenderer(e, renderer);
+			});
+
+			if (listInfoRenderers.length > 0) {
+				this.relativeTimeline.display(listInfoRenderers);
+
+				//TODO: Manage boolean to force to use current.getDuration() or cumulated time of Info List...
+				//Default: we choose cumulated time of Info List
+
+				var totalDuration : number = 0;
+
+				listInfoRenderers.forEach(function(infoRenderer) {
+					totalDuration += infoRenderer.getInfo().getDurationToDisplay();
+				});
+
+				this.stop();
+				this._timer = new Timer(function () {
+					self._nextEvent();
+				}, totalDuration * 1000);
+
+				this.relativeTimeline.pause();
+
+				this.relativeTimeline.displayFirstInfo();
+			} else {
+				this.stop();
+				this._timer = new Timer(function() {
+					self.displayFirstInfoOfNextEvent();
+				}, 1000);
+			}
+		} else {
+			this.stop();
+			this._timer = new Timer(function() {
+				self.displayFirstInfoOfNextEvent();
+			}, 1000);
+		}
+	}
 }

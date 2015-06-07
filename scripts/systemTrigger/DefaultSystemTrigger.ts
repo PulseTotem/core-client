@@ -63,11 +63,12 @@ class DefaultSystemTrigger extends SystemTrigger {
 				this.relativeTimeline.addToCurrentDisplay(listInfoRenderers);
 				this._timer.addToDelay(totalTime * 1000);
 			} else {
-				this.relativeTimeline.pauseAndDisplay(listInfoRenderers);
-				this._timer = new Timer(function () {
-					self._timer = null;
-					self.relativeTimeline.resume();
-				}, totalTime*1000);
+				if(this.relativeTimeline.pauseAndDisplay(listInfoRenderers)) {
+					this._timer = new Timer(function () {
+						self._timer = null;
+						self.relativeTimeline.restoreAndResume();
+					}, totalTime * 1000);
+				}
 			}
 		}
 	}

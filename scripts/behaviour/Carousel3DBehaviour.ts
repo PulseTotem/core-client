@@ -142,6 +142,8 @@ class Carousel3DBehaviour extends Behaviour {
 	resume() {
 		if(this._timer != null) {
 			this._timer.resume();
+		} else {
+			this.start();
 		}
 	}
 
@@ -189,5 +191,91 @@ class Carousel3DBehaviour extends Behaviour {
 			this._timer = this._timerBackup;
 			this._timerBackup = null;
 		}
+	}
+
+	/**
+	 * Display previous Info.
+	 *
+	 * @method displayPreviousInfo
+	 */
+	displayPreviousInfo() {
+		var listInfoRenderers = this.getListInfoRenderers();
+
+		if(this._currentInfoRendererId != null && this._currentInfoRendererId > 0) {
+			this._currentInfoRendererId = this._currentInfoRendererId - 1;
+			var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
+
+			this._displayInfoRenderer(currentInfoRenderer);
+			return true;
+		} else {
+			if(this._currentInfoRendererId == 0) {
+				return false;
+			}
+		}
+	}
+
+	/**
+	 * Display next Info.
+	 *
+	 * @method displayNextInfo
+	 */
+	displayNextInfo() {
+		var listInfoRenderers = this.getListInfoRenderers();
+
+		if(this._currentInfoRendererId != null && this._currentInfoRendererId < (listInfoRenderers.length - 1)) {
+			this._currentInfoRendererId = this._currentInfoRendererId + 1;
+			var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
+
+			this._displayInfoRenderer(currentInfoRenderer);
+			return true;
+		} else {
+			if(this._currentInfoRendererId == (listInfoRenderers.length - 1)) {
+				return false;
+			}
+		}
+	}
+
+	/**
+	 * Display last Info.
+	 *
+	 * @method displayLastInfo
+	 */
+	displayLastInfo() {
+		var self = this;
+
+		var listInfoRenderers = this.getListInfoRenderers();
+
+		this._currentInfoRendererId = listInfoRenderers.length - 1;
+		var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
+
+		this._displayInfoRenderer(currentInfoRenderer);
+
+		this._timer = new Timer(function() {
+			self._nextInfoRenderer();
+		}, currentInfoRenderer.getInfo().getDurationToDisplay()*1000 + 2100);
+
+		this.pause();
+	}
+
+	/**
+	 * Display first Info.
+	 *
+	 * @method displayFirstInfo
+	 */
+	displayFirstInfo() {
+		var self = this;
+
+		var listInfoRenderers = this.getListInfoRenderers();
+
+		this._currentInfoRendererId = 0;
+		var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
+
+		this._displayInfoRenderer(currentInfoRenderer);
+
+		this._timer = new Timer(function() {
+			self._nextInfoRenderer();
+		}, currentInfoRenderer.getInfo().getDurationToDisplay()*1000 + 2100);
+
+		this.pause();
 	}
 }
