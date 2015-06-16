@@ -15,7 +15,7 @@
 class SystemTrigger {
 
 	/**
-	 * RelativeTimeline controlled by TimelineRunner.
+	 * RelativeTimeline controlled by SystemTrigger.
 	 *
 	 * @property relativeTimeline
 	 * @type RelativeTimelineItf
@@ -32,7 +32,7 @@ class SystemTrigger {
 	}
 
 	/**
-	 * Set the TimelineRunner's RelativeTimeline.
+	 * Set the SystemTrigger's RelativeTimeline.
 	 *
 	 * @method setRelativeTimeline
 	 * @param {RelativeTimelineItf} relativeTimeline - The RelativeTimeline to set.

@@ -158,6 +158,9 @@ class TweetHalfPictureHalfUserRenderer implements Renderer<Tweet> {
 
 		if(info.getPictures().length > 0) {
 
+			tweetHTMLTop.addClass("TweetHalfPictureHalfUserRenderer_top_with_image");
+			tweetHTMLBottom.addClass("TweetHalfPictureHalfUserRenderer_bottom_with_image");
+
 			var picture : Picture = info.getPictures()[0];
 			var picURL : PictureURL = null;
 			if(picture.getMedium() != null) {

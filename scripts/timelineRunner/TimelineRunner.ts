@@ -74,4 +74,22 @@ class TimelineRunner {
 	stop() {
 		Logger.error("TimelineRunner - stop : Method need to be implemented.");
 	}
+
+	/**
+	 * Display last Info of Previous Event.
+	 *
+	 * @method displayLastInfoOfPreviousEvent
+	 */
+	displayLastInfoOfPreviousEvent() {
+		Logger.error("TimelineRunner - displayLastInfoOfPreviousEvent : Method need to be implemented.");
+	}
+
+	/**
+	 * Display first Info of Next Event.
+	 *
+	 * @method displayFirstInfoOfNextEvent
+	 */
+	displayFirstInfoOfNextEvent() {
+		Logger.error("TimelineRunner - displayFirstInfoOfNextEvent : Method need to be implemented.");
+	}
 }

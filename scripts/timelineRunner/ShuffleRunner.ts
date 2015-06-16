@@ -144,4 +144,22 @@ class ShuffleRunner extends TimelineRunner {
 			this._timer = null;
 		}
 	}
+
+	/**
+	 * Display last Info of Previous Event.
+	 *
+	 * @method displayLastInfoOfPreviousEvent
+	 */
+	displayLastInfoOfPreviousEvent() {
+		this.relativeTimeline.displayLastInfo();
+	}
+
+	/**
+	 * Display first Info of Next Event.
+	 *
+	 * @method displayFirstInfoOfNextEvent
+	 */
+	displayFirstInfoOfNextEvent() {
+		this.relativeTimeline.displayFirstInfo();
+	}
 }
