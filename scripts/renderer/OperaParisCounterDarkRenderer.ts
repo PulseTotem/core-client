@@ -53,10 +53,21 @@ class OperaParisCounterDarkRenderer implements Renderer<Counter> {
 		var counterHTMLWrapper = $("<div>");
 		counterHTMLWrapper.addClass("OperaParisCounterDarkRenderer_wrapper");
 
+		var hashtagDiv = $("<div>");
+		hashtagDiv.addClass("OperaParisCounterDarkRenderer_hashtag");
+		hashtagDiv.html("#OperaDeParis");
+
+		counterHTMLWrapper.append(hashtagDiv);
+
+		var counterMainzone = $("<div>");
+		counterMainzone.addClass("OperaParisCounterDarkRenderer_mainzone");
+
+		counterHTMLWrapper.append(counterMainzone);
+
 		var counterDiv = $("<div>");
 		counterDiv.addClass("OperaParisCounterDarkRenderer_counter");
 
-		counterHTMLWrapper.append(counterDiv);
+		counterMainzone.append(counterDiv);
 
 		for(var i = 0; i < 5; i++) {
 			if(i!=0) {
@@ -85,6 +96,18 @@ class OperaParisCounterDarkRenderer implements Renderer<Counter> {
 		clearDigitList.addClass("clearfix");
 
 		counterDiv.append(clearDigitList);
+
+		var nbTweetsTxtDiv = $("<div>");
+		nbTweetsTxtDiv.addClass("OperaParisCounterDarkRenderer_nbtweets");
+
+		nbTweetsTxtDiv.html("Nombre de Tweets aujourd'hui");
+
+		counterMainzone.append(nbTweetsTxtDiv);
+
+		var twitterLogo = $("<div>");
+		twitterLogo.addClass("OperaParisCounterDarkRenderer_twitter_logo");
+
+		counterHTMLWrapper.append(twitterLogo);
 
 		$(domElem).append(counterHTMLWrapper);
 
