@@ -9,6 +9,8 @@
 
 declare var $: any; // Use of JQuery
 declare var d3: any; // Use of D3JS
+declare var Snap: any; // Use of SnapSVG
+declare var mina: any; // Use of SnapSVG (mina function)
 
 class OperaParisTagListDarkRenderer implements Renderer<TagList> {
 	/**
@@ -79,13 +81,15 @@ class OperaParisTagListDarkRenderer implements Renderer<TagList> {
 		var layout = d3.layout.cloud();
 		layout.size([tagMainzone.width(), tagMainzone.height()]);
 		layout.words(info.getTags().map(function(d) {
-					return {text: "#" + d.getName(), size: 100 + d.getPopularity()/totalPopularity};
+					return {text: "#" + d.getName(), size: 100 + (d.getPopularity()*100/totalPopularity)};
 				}));
 		layout.padding(5);
 		layout.rotate(0);
 		layout.font("Impact");
 		layout.fontSize(function(d) { return d.size; });
 		layout.on("end", function(words) {
+
+			tagMainzone.hide();
 
 			d3.select(tagMainzone[0]).append("svg")
 				.attr("width", layout.size()[0])
@@ -100,21 +104,25 @@ class OperaParisTagListDarkRenderer implements Renderer<TagList> {
 				.style("fill", "black")
 				.attr("text-anchor", "middle")
 				.attr("transform", function(d) {
-					return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+					return "translate(" + [-2000, 0] + ")rotate(" + d.rotate + ")";
 				})
 				.text(function(d) { return d.text; });
 
-			function bouncing() {
-				tagMainzone.find("svg g text").animate({ 'font-size': '+=10px' }, 500, function() {
-					tagMainzone.find("svg g text").animate({ 'font-size': '-=10px' }, 500, function() {
-						setTimeout(function() {
-							bouncing();
-						}, 2000);
-					});
-				});
-			}
+			tagMainzone.find("svg g text").css({'font-size' : '+=150px'});
 
-			bouncing();
+			tagMainzone.show();
+
+			tagMainzone.find("svg g text").each(function(index) {
+				var self = this;
+
+				setTimeout(function() {
+					Snap(self).animate({'transform' : 'translate(' + [words[index].x, 0] + ')rotate(' + words[index].rotate + ')'}, 1000, mina.easeinout, function() {
+						$(self).transition({'font-size': '-=150px', 'easing': 'in-out', 'duration': 1000}, function() {
+							Snap(self).animate({'transform' : 'translate(' + [words[index].x, words[index].y] + ')rotate(' + words[index].rotate + ')'}, 500, mina.easeinout);
+						});
+					});
+				}, 2000*index + 500);
+			});
 		});
 
 		layout.start();
