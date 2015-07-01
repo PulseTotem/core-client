@@ -12,7 +12,7 @@ declare var d3: any; // Use of D3JS
 declare var Snap: any; // Use of SnapSVG
 declare var mina: any; // Use of SnapSVG (mina function)
 
-class OperaParisTagListDarkRenderer implements Renderer<TagList> {
+class OperaParisTagListWhiteRenderer implements Renderer<TagList> {
 	/**
 	 * Transform the Info list to another Info list.
 	 *
@@ -42,21 +42,21 @@ class OperaParisTagListDarkRenderer implements Renderer<TagList> {
 	render(info : TagList, domElem : any) {
 
 		var tagHTMLWrapper = $("<div>");
-		tagHTMLWrapper.addClass("OperaParisTagListDarkRenderer_wrapper");
+		tagHTMLWrapper.addClass("OperaParisTagListWhiteRenderer_wrapper");
 
 		var titleDiv = $("<div>");
-		titleDiv.addClass("OperaParisTagListDarkRenderer_title");
+		titleDiv.addClass("OperaParisTagListWhiteRenderer_title");
 
 		tagHTMLWrapper.append(titleDiv);
 
 		var titleText = $("<div>");
-		titleText.addClass("OperaParisTagListDarkRenderer_title_text");
+		titleText.addClass("OperaParisTagListWhiteRenderer_title_text");
 		titleText.html("Top 5 #Hashtags / ");
 
 		titleDiv.append(titleText);
 
 		var twitterLogo = $("<div>");
-		twitterLogo.addClass("OperaParisTagListDarkRenderer_title_twitter_logo");
+		twitterLogo.addClass("OperaParisTagListWhiteRenderer_title_twitter_logo");
 
 		titleDiv.append(twitterLogo);
 
@@ -66,7 +66,7 @@ class OperaParisTagListDarkRenderer implements Renderer<TagList> {
 		titleDiv.append(clearTitleDiv);
 
 		var tagMainzone = $("<div>");
-		tagMainzone.addClass("OperaParisTagListDarkRenderer_mainzone");
+		tagMainzone.addClass("OperaParisTagListWhiteRenderer_mainzone");
 
 		tagHTMLWrapper.append(tagMainzone);
 
@@ -101,7 +101,7 @@ class OperaParisTagListDarkRenderer implements Renderer<TagList> {
 				.enter().append("text")
 				.style("font-size", function(d) { return d.size + "px"; })
 				.style("font-family", "Impact")
-				.style("fill", "black")
+				.style("fill", "white")
 				.attr("text-anchor", "middle")
 				.attr("transform", function(d) {
 					return "translate(" + [-2000, 0] + ")rotate(" + d.rotate + ")";
