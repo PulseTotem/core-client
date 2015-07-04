@@ -162,4 +162,67 @@ class TweetFullscreenPictureRenderer implements Renderer<Tweet> {
 
 		$(domElem).append(tweetHTMLWrapper);
 	}
+
+	/**
+	 * Update rendering Info in specified DOM Element.
+	 *
+	 * @method updateRender
+	 * @param {RenderInfo} info - The Info to render.
+	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 */
+	updateRender(info : Tweet, domElem : any) {
+		var tweetHTMLWrapperBackground = $(domElem).find(".TweetFullscreenPictureRenderer_wrapperbackground").first();
+
+		if(info.getPictures().length > 0) {
+
+			var picture : Picture = info.getPictures()[0];
+			var picURL : PictureURL = null;
+			if(picture.getMedium() != null) {
+				picURL = picture.getMedium();
+			} else if(picture.getSmall() != null) {
+				picURL = picture.getSmall();
+			} else if(picture.getThumb() != null) {
+				picURL = picture.getThumb();
+			}
+
+			tweetHTMLWrapperBackground.css("background-image", "url('" + picURL.getURL() + "')");
+		}
+
+		var tweetProfilPictureDiv = $(domElem).find(".TweetFullscreenPictureRenderer_profil_picture").first();
+		tweetProfilPictureDiv.empty();
+		var tweetProfilPictureImg = $("<img>");
+		tweetProfilPictureImg.addClass("img-circle");
+		tweetProfilPictureImg.attr("src", info.getOwner().getProfilPicture());
+		tweetProfilPictureDiv.append(tweetProfilPictureImg);
+
+		var tweetProfilRealname = $(domElem).find(".TweetFullscreenPictureRenderer_profil_realname").first();
+		tweetProfilRealname.html(info.getOwner().getRealname());
+
+		var tweetProfilUsername = $(domElem).find(".TweetFullscreenPictureRenderer_profil_username").first();
+		tweetProfilUsername.html(info.getOwner().getUsername());
+
+		var tweetContent = $(domElem).find(".TweetFullscreenPictureRenderer_content").first();
+		tweetContent.html(info.getMessage());
+
+		var tweetCreateDate = $(domElem).find(".TweetFullscreenPictureRenderer_create_date").first();
+		var DateClass : any = <any>Date;
+		var creationDate : any = new DateClass(info.getCreationDate());
+		var displayCreationDate = creationDate.toString("dd/MM/yyyy ") + creationDate.toString("HH") + "h" + creationDate.toString("mm");
+		tweetCreateDate.html(displayCreationDate);
+
+		var tweetFavoriteDiv = $(domElem).find(".TweetFullscreenPictureRenderer_favorite_count").first();
+		tweetFavoriteDiv.empty();
+		var glyphiconStar = $("<span class=\"glyphicon glyphicon-star\" aria-hidden=\"true\">");
+		var tweetFavoriteContent = $("<span>&nbsp;" + info.getFavoriteCount() + "</span>");
+		tweetFavoriteDiv.append(glyphiconStar);
+		tweetFavoriteDiv.append(tweetFavoriteContent);
+
+		var tweetRetweetDiv = $(domElem).find(".TweetFullscreenPictureRenderer_retweet_count").first();
+		tweetRetweetDiv.empty();
+		tweetRetweetDiv.addClass("TweetFullscreenPictureRenderer_retweet_count");
+		var glyphiconRetweet = $("<span class=\"glyphicon glyphicon-retweet\" aria-hidden=\"true\">");
+		var tweetRetweetContent = $("<span>&nbsp;" + info.getRetweetCount() + "</span>");
+		tweetRetweetDiv.append(glyphiconRetweet);
+		tweetRetweetDiv.append(tweetRetweetContent);
+	}
 }

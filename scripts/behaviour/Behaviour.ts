@@ -172,6 +172,16 @@ class Behaviour {
 	}
 
 	/**
+	 * Update Info if it's currently display
+	 *
+	 * @method updateInfoIfCurrentlyDisplay
+	 * @param {Info} info - Info to update.
+	 */
+	updateInfoIfCurrentlyDisplay(info : Info) {
+		Logger.error("Behaviour - updateInfoIfCurrentlyDisplay : Method need to be implemented.");
+	}
+
+	/**
 	 * Save.
 	 *
 	 * @method save

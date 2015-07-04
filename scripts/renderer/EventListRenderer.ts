@@ -54,4 +54,21 @@ class EventListRenderer implements Renderer<CityEvent> {
 
         $(domElem).append(eventHTML);
     }
+
+	/**
+	 * Update rendering Info in specified DOM Element.
+	 *
+	 * @method updateRender
+	 * @param {RenderInfo} info - The Info to render.
+	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 */
+	updateRender(info : CityEvent, domElem : any) {
+		$(domElem).empty();
+
+		var eventHTML = $("<div>");
+
+		eventHTML.append(info.name());
+
+		$(domElem).append(eventHTML);
+	}
 }

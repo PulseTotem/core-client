@@ -28,4 +28,13 @@ interface Renderer<RenderInfo extends Info> {
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
 	 */
     render(info : RenderInfo, domElem : any);
+
+	/**
+	 * Update rendering Info in specified DOM Element.
+	 *
+	 * @method updateRender
+	 * @param {RenderInfo} info - The Info to render.
+	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 */
+	updateRender(info : RenderInfo, domElem : any);
 }

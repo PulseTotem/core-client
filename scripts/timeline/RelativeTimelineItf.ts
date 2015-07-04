@@ -5,6 +5,7 @@
 
 /// <reference path="./RelativeEventItf.ts" />
 /// <reference path="../core/InfoRenderer.ts" />
+/// <reference path="../../t6s-core/core/scripts/infotype/Info.ts" />
 
 /**
  * Represents RelativeTimeline Interface of The6thScreen Client.
@@ -101,5 +102,13 @@ interface RelativeTimelineItf {
 	 * @method displayFirstInfo
 	 */
 	displayFirstInfo();
+
+	/**
+	 * Update Info if it's currently display
+	 *
+	 * @method updateInfoIfCurrentlyDisplay
+	 * @param {Info} info - Info to update.
+	 */
+	updateInfoIfCurrentlyDisplay(info : Info);
 
 }

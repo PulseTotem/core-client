@@ -46,6 +46,16 @@ class InfoRenderer<T extends Info> {
 	}
 
 	/**
+	 * Set the InfoRenderer's info.
+	 *
+	 * @method setInfo
+	 * @param {T extends Info} info - The new InfoRenderer's info.
+	 */
+	setInfo(info : T) {
+		this._info = info;
+	}
+
+	/**
 	 * Get the InfoRenderer's renderer.
 	 *
 	 * @method getRenderer

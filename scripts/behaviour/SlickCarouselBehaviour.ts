@@ -215,4 +215,15 @@ class SlickCarouselBehaviour extends Behaviour {
 		//TODO
 		Logger.debug("TODO -> SlickCarouselBehaviour - displayFirstInfo : Method need to be implemented.");
 	}
+
+	/**
+	 * Update Info if it's currently display
+	 *
+	 * @method updateInfoIfCurrentlyDisplay
+	 * @param {Info} info - Info to update.
+	 */
+	updateInfoIfCurrentlyDisplay(info : Info) {
+		//TODO
+		Logger.debug("TODO -> SlickCarouselBehaviour - updateInfoIfCurrentlyDisplay : Method need to be implemented.");
+	}
 }

@@ -121,6 +121,69 @@ class PictureAlbumRenderer implements Renderer<Picture> {
 
         $(domElem).append(pictureHTML);
 
-
     }
+
+	/**
+	 * Update rendering Info in specified DOM Element.
+	 *
+	 * @method updateRender
+	 * @param {RenderInfo} info - The Info to render.
+	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 */
+	updateRender(info : Picture, domElem : any) {
+		var pictureHeader = $(domElem).find(".PictureAlbumRenderer_header").first();
+		pictureHeader.empty();
+
+		if(info.getTitle() != null && info.getTitle() != "") {
+			var pictureTitle = $("<div>");
+			pictureTitle.addClass("PictureAlbumRenderer_title");
+			pictureTitle.html(info.getTitle());
+
+			pictureHeader.append(pictureTitle);
+		}
+
+		var pictureContent = $(domElem).find(".PictureAlbumRenderer_content").first();
+		pictureContent.empty();
+
+		var pictureImg = $("<img>");
+		pictureImg.addClass("img-responsive center-block");
+		var picURL : PictureURL = null;
+		if(info.getMedium() != null) {
+			picURL = info.getMedium();
+		} else if(info.getSmall() != null) {
+			picURL = info.getSmall();
+		} else if(info.getThumb() != null) {
+			picURL = info.getThumb();
+		}
+
+		if(picURL != null) {
+			pictureImg.attr("src", picURL.getURL());
+		}
+
+		pictureContent.append(pictureImg);
+
+		var pictureFooter = $(domElem).find(".PictureAlbumRenderer_footer").first();
+		pictureFooter.empty();
+
+		if(info.getTags().length > 0) {
+			var pictureTags = $("<div>");
+			pictureTags.addClass("PictureAlbumRenderer_tags");
+
+			info.getTags().forEach(function(tag) {
+				var picTag = $("<span>");
+				picTag.addClass("PictureAlbumRenderer_tag");
+				picTag.html(tag.getName());
+			});
+
+			pictureFooter.append(pictureTags);
+		}
+
+		if(info.getOwner() != null && info.getOwner().getRealname() != null) {
+			var pictureOwner = $("<div>");
+			pictureOwner.addClass("PictureAlbumRenderer_owner");
+			pictureOwner.html(info.getOwner().getRealname());
+
+			pictureFooter.append(pictureOwner);
+		}
+	}
 }

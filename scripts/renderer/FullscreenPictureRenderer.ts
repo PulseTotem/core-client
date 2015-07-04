@@ -66,6 +66,29 @@ class FullscreenPictureRenderer implements Renderer<Picture> {
 		}
 
 		$(domElem).append(pictureHTML);
+	}
 
+	/**
+	 * Update rendering Info in specified DOM Element.
+	 *
+	 * @method updateRender
+	 * @param {RenderInfo} info - The Info to render.
+	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 */
+	updateRender(info : Picture, domElem : any) {
+		var pictureHTML = $(domElem).find(".FullscreenPictureRenderer_picture").first();
+
+		var picURL : PictureURL = null;
+		if(info.getMedium() != null) {
+			picURL = info.getMedium();
+		} else if(info.getSmall() != null) {
+			picURL = info.getSmall();
+		} else if(info.getThumb() != null) {
+			picURL = info.getThumb();
+		}
+
+		if(picURL != null) {
+			pictureHTML.css("background-image", "url('" + picURL.getURL() + "')");
+		}
 	}
 }

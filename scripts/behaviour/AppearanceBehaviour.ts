@@ -124,6 +124,23 @@ class AppearanceBehaviour extends Behaviour {
 	}
 
 	/**
+	 * Refresh view.
+	 *
+	 * @method _refreshView
+	 * @private
+	 */
+	private _refreshView() {
+		var self = this;
+
+		var listInfoRenderers = this.getListInfoRenderers();
+		var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
+
+		currentInfoRenderer.getRenderer().updateRender(currentInfoRenderer.getInfo(), this.getZone().getZoneDiv());
+
+		currentInfoRenderer.getInfo().setCastingDate(new Date());
+	}
+
+	/**
 	 * Pause.
 	 *
 	 * @method pause
@@ -277,5 +294,29 @@ class AppearanceBehaviour extends Behaviour {
 		}, currentInfoRenderer.getInfo().getDurationToDisplay()*1000 + 2100);
 
 		this.pause();
+	}
+
+	/**
+	 * Update Info if it's currently display
+	 *
+	 * @method updateInfoIfCurrentlyDisplay
+	 * @param {Info} info - Info to update.
+	 */
+	updateInfoIfCurrentlyDisplay(info : Info) {
+		var self = this;
+
+		var listInfoRenderers = this.getListInfoRenderers();
+
+		if(listInfoRenderers.length > 0) {
+
+			var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
+
+			if(typeof(currentInfoRenderer) != "undefined" && currentInfoRenderer != null) {
+				if (currentInfoRenderer.getInfo().getId() == info.getId() && ! currentInfoRenderer.getInfo().equals(info)) {
+					currentInfoRenderer.setInfo(info);
+					this._refreshView();
+				}
+			}
+		}
 	}
 }

@@ -49,4 +49,15 @@ class VideoURLRenderer implements Renderer<VideoURL> {
 
 		$(domElem).append(videoHTML);
 	}
+
+	/**
+	 * Update rendering Info in specified DOM Element.
+	 *
+	 * @method updateRender
+	 * @param {RenderInfo} info - The Info to render.
+	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 */
+	updateRender(info : VideoURL, domElem : any) {
+		//TODO
+	}
 }

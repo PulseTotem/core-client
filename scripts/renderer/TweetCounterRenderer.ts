@@ -56,4 +56,16 @@ class TweetCounterRenderer implements Renderer<Counter> {
 
 		$(domElem).append(counterHTMLWrapper);
 	}
+
+	/**
+	 * Update rendering Info in specified DOM Element.
+	 *
+	 * @method updateRender
+	 * @param {RenderInfo} info - The Info to render.
+	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 */
+	updateRender(info : Counter, domElem : any) {
+		var counterHTMLWrapper = $(domElem).find(".TweetCounterRenderer_wrapper").first();
+		counterHTMLWrapper.html(info.getValue());
+	}
 }

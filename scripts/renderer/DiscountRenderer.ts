@@ -110,4 +110,15 @@ class DiscountRenderer implements Renderer<Discount> {
 
         $(domElem).html(info.getProductName() + '<br/><br/>' + info.getProductDescription());
     }
+
+	/**
+	 * Update rendering Info in specified DOM Element.
+	 *
+	 * @method updateRender
+	 * @param {RenderInfo} info - The Info to render.
+	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 */
+	updateRender(info : Discount, domElem : any) {
+		$(domElem).html(info.getProductName() + '<br/><br/>' + info.getProductDescription());
+	}
 }

@@ -110,4 +110,34 @@ class FeedNodeRendererGeneric implements Renderer<FeedNode> {
 
         $(domElem).append(feedNodeHTML);
     }
+
+	/**
+	 * Update rendering Info in specified DOM Element.
+	 *
+	 * @method updateRender
+	 * @param {RenderInfo} info - The Info to render.
+	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 */
+	updateRender(info : FeedNode, domElem : any) {
+		$(domElem).find(".FeedNodeRendererGeneric_title").first().html(info.getTitle());
+
+		var summary = $(domElem).find(".FeedNodeRendererGeneric_summary").first();
+		summary.empty();
+		if(info.getMediaUrl() != null) {
+			var media = $("<div>");
+			media.addClass("FeedNodeRendererGeneric_feednode_media");
+			var mediaImg = $("<img>");
+			mediaImg.attr("src", info.getMediaUrl());
+			media.append(mediaImg);
+			summary.append(media);
+		}
+		summary.append(info.getSummary());
+
+
+		var descriptionContent = $(domElem).find(".FeedNodeRendererGeneric_description_content").first();
+		descriptionContent.empty();
+		if(info.getDescription() != info.getSummary()) {
+			descriptionContent.html(info.getDescription());
+		}
+	}
 }

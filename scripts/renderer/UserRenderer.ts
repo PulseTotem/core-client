@@ -59,4 +59,16 @@ class UserRenderer implements Renderer<User> {
 
 		$(domElem).append(userHTML);
 	}
+
+	/**
+	 * Update rendering Info in specified DOM Element.
+	 *
+	 * @method updateRender
+	 * @param {RenderInfo} info - The Info to render.
+	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 */
+	updateRender(info : User, domElem : any) {
+		var userContent = $(domElem).find(".UserRenderer_content").first();
+		userContent.html("Welcome " + info.getUsername() + " !!!");
+	}
 }

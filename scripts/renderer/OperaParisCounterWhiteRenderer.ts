@@ -123,4 +123,32 @@ class OperaParisCounterWhiteRenderer implements Renderer<Counter> {
 		}
 
 	}
+
+	/**
+	 * Update rendering Info in specified DOM Element.
+	 *
+	 * @method updateRender
+	 * @param {RenderInfo} info - The Info to render.
+	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 */
+	updateRender(info : Counter, domElem : any) {
+		var nbDigit = info.getValue().toString().length;
+		var infoValue = info.getValue();
+
+		if(nbDigit < 5) {
+			for(var i = 5; i > nbDigit; i--) {
+				var digitElemNumber = 5 - i;
+
+				$(domElem).find(".OperaParisCounterWhiteRenderer_digitList" + digitElemNumber.toString()).first().transition({ y: '0px' }, 2000);
+			}
+		}
+
+		for(var k = nbDigit; k > 0; k--) {
+			var digitElemNumber = 5 - k;
+			var digitElemValue = (infoValue-(infoValue%Math.pow(10, k-1)))/Math.pow(10, k-1);
+			infoValue = infoValue - (digitElemValue*Math.pow(10, k-1));
+
+			$(domElem).find(".OperaParisCounterWhiteRenderer_digitList" + digitElemNumber.toString()).first().transition({ y: '' + (-200*digitElemValue) + 'px' }, 2000);
+		}
+	}
 }

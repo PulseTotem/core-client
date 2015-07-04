@@ -10,7 +10,8 @@
 /// <reference path="../core/Timer.ts" />
 
 /**
- * Represents "Default" Runner of The6thScreen Client.
+ * Represents "Default" SystemTrigger of The6thScreen Client.
+ * This SystemTrigger displays directly info with high priority.
  *
  * @class DefaultSystemTrigger
  * @extends SystemTrigger
@@ -43,6 +44,37 @@ class DefaultSystemTrigger extends SystemTrigger {
 	 * @param {RelativeEventItf} event - event associated to Infos in listInfos
 	 */
 	trigger(listInfos : Array<Info>, event : RelativeEventItf) {
+
+		this._refreshCurrentView(listInfos, event);
+
+		this._managePriority(listInfos, event);
+	}
+
+	/**
+	 * Refresh Info if it's currently display.
+	 *
+	 * @method _refreshCurrentView
+	 * @private
+	 * @param {Array<Info>} listInfos - New received Info list.
+	 * @param {RelativeEventItf} event - event associated to Infos in listInfos
+	 */
+	private _refreshCurrentView(listInfos : Array<Info>, event : RelativeEventItf) {
+		var self = this;
+
+		listInfos.forEach(function(info : Info) {
+			self.relativeTimeline.updateInfoIfCurrentlyDisplay(info);
+		});
+	}
+
+	/**
+	 * Manage Info Priority and display immediatly Info with High priority.
+	 *
+	 * @method _managePriority
+	 * @private
+	 * @param {Array<Info>} listInfos - New received Info list.
+	 * @param {RelativeEventItf} event - event associated to Infos in listInfos
+	 */
+	private _managePriority(listInfos : Array<Info>, event : RelativeEventItf) {
 		var self = this;
 
 		var renderer : Renderer<any> = event.getCall().getCallType().getRenderer();
