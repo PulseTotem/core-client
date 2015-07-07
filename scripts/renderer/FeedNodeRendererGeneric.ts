@@ -45,8 +45,9 @@ class FeedNodeRendererGeneric implements Renderer<FeedNode> {
 	 * @method render
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {Function} endCallback - Callback function called at the end of render method.
 	 */
-	render(info : FeedNode, domElem : any) {
+	render(info : FeedNode, domElem : any, endCallback : Function) {
         var feedNodeHTML = $("<div>");
         feedNodeHTML.addClass("FeedNodeRendererGeneric_feednode");
 
@@ -109,6 +110,8 @@ class FeedNodeRendererGeneric implements Renderer<FeedNode> {
         }
 
         $(domElem).append(feedNodeHTML);
+
+		endCallback();
     }
 
 	/**
@@ -117,8 +120,9 @@ class FeedNodeRendererGeneric implements Renderer<FeedNode> {
 	 * @method updateRender
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
-	updateRender(info : FeedNode, domElem : any) {
+	updateRender(info : FeedNode, domElem : any, endCallback : Function) {
 		$(domElem).find(".FeedNodeRendererGeneric_title").first().html(info.getTitle());
 
 		var summary = $(domElem).find(".FeedNodeRendererGeneric_summary").first();
@@ -135,9 +139,28 @@ class FeedNodeRendererGeneric implements Renderer<FeedNode> {
 
 
 		var descriptionContent = $(domElem).find(".FeedNodeRendererGeneric_description_content").first();
+		descriptionContent.removeClass("FeedNodeRendererGeneric_description_content_animation");
 		descriptionContent.empty();
 		if(info.getDescription() != info.getSummary()) {
 			descriptionContent.html(info.getDescription());
 		}
+
+		endCallback();
+	}
+
+	/**
+	 * Animate rendering Info in specified DOM Element.
+	 *
+	 * @method animate
+	 * @param {RenderInfo} info - The Info to animate.
+	 * @param {DOM Element} domElem - The DOM Element where animate the info.
+	 * @param {Function} endCallback - Callback function called at the end of animation.
+	 */
+	animate(info : FeedNode, domElem : any, endCallback : Function) {
+		var descriptionContent = $(domElem).find(".FeedNodeRendererGeneric_description_content").first();
+		descriptionContent.removeClass("FeedNodeRendererGeneric_description_content_animation");
+		descriptionContent.addClass("FeedNodeRendererGeneric_description_content_animation");
+
+		endCallback();
 	}
 }
