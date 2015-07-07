@@ -14,5 +14,5 @@ interface StaticSource<SourceInfo extends Info> {
 	/**
 	 * Create and return a new list of information
 	 */
-	computeInfo() : Array<SourceInfo>;
+	computeInfo() : SourceInfo;
 }

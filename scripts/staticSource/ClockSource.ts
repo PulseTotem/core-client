@@ -8,13 +8,10 @@
 class ClockSource implements StaticSource<DateTime> {
 
 
-	computeInfo() : Array<DateTime> {
+	computeInfo() : DateTime {
 		var info = new DateTime();
 		info.setDate(new Date());
 		info.setDescription("");
-
-		var result = new Array<DateTime>();
-		result.push(info);
-		return result;
+		return info;
 	}
 }
