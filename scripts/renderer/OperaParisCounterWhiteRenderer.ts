@@ -47,8 +47,9 @@ class OperaParisCounterWhiteRenderer implements Renderer<Counter> {
 	 * @method render
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {Function} endCallback - Callback function called at the end of render method.
 	 */
-	render(info : Counter, domElem : any) {
+	render(info : Counter, domElem : any, endCallback : Function) {
 
 		var counterHTMLWrapper = $("<div>");
 		counterHTMLWrapper.addClass("OperaParisCounterWhiteRenderer_wrapper");
@@ -111,17 +112,7 @@ class OperaParisCounterWhiteRenderer implements Renderer<Counter> {
 
 		$(domElem).append(counterHTMLWrapper);
 
-		var nbDigit = info.getValue().toString().length;
-		var infoValue = info.getValue();
-
-		for(var k = nbDigit; k > 0; k--) {
-			var digitElemNumber = 5 - k;
-			var digitElemValue = (infoValue-(infoValue%Math.pow(10, k-1)))/Math.pow(10, k-1);
-			infoValue = infoValue - (digitElemValue*Math.pow(10, k-1));
-
-			$(domElem).find(".OperaParisCounterWhiteRenderer_digitList" + digitElemNumber.toString()).first().transition({ y: '' + (-200*digitElemValue) + 'px' }, 2000);
-		}
-
+		endCallback();
 	}
 
 	/**
@@ -130,8 +121,23 @@ class OperaParisCounterWhiteRenderer implements Renderer<Counter> {
 	 * @method updateRender
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
-	updateRender(info : Counter, domElem : any) {
+	updateRender(info : Counter, domElem : any, endCallback : Function) {
+		//Nothing to do. All is in animation.
+
+		endCallback();
+	}
+
+	/**
+	 * Animate rendering Info in specified DOM Element.
+	 *
+	 * @method animate
+	 * @param {RenderInfo} info - The Info to animate.
+	 * @param {DOM Element} domElem - The DOM Element where animate the info.
+	 * @param {Function} endCallback - Callback function called at the end of animation.
+	 */
+	animate(info : Counter, domElem : any, endCallback : Function) {
 		var nbDigit = info.getValue().toString().length;
 		var infoValue = info.getValue();
 
@@ -150,5 +156,9 @@ class OperaParisCounterWhiteRenderer implements Renderer<Counter> {
 
 			$(domElem).find(".OperaParisCounterWhiteRenderer_digitList" + digitElemNumber.toString()).first().transition({ y: '' + (-200*digitElemValue) + 'px' }, 2000);
 		}
+
+		setTimeout(function() {
+			endCallback();
+		}, 2000);
 	}
 }

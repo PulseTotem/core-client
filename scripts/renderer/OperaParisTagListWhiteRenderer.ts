@@ -13,6 +13,22 @@ declare var Snap: any; // Use of SnapSVG
 declare var mina: any; // Use of SnapSVG (mina function)
 
 class OperaParisTagListWhiteRenderer implements Renderer<TagList> {
+
+	/**
+	 * Words attached to each Info.
+	 *
+	 * @property _words
+	 * @type Object
+	 */
+	private _words : Object;
+
+	/**
+	 * Constructor.
+	 */
+	constructor() {
+		this._words = {};
+	}
+
 	/**
 	 * Transform the Info list to another Info list.
 	 *
@@ -38,8 +54,10 @@ class OperaParisTagListWhiteRenderer implements Renderer<TagList> {
 	 * @method render
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {Function} endCallback - Callback function called at the end of render method.
 	 */
-	render(info : TagList, domElem : any) {
+	render(info : TagList, domElem : any, endCallback : Function) {
+		var self = this;
 
 		var tagHTMLWrapper = $("<div>");
 		tagHTMLWrapper.addClass("OperaParisTagListWhiteRenderer_wrapper");
@@ -112,17 +130,9 @@ class OperaParisTagListWhiteRenderer implements Renderer<TagList> {
 
 			tagMainzone.show();
 
-			tagMainzone.find("svg g text").each(function(index) {
-				var self = this;
+			self._words[info.getId()] = words;
 
-				setTimeout(function() {
-					Snap(self).animate({'transform' : 'translate(' + [words[index].x, 0] + ')rotate(' + words[index].rotate + ')'}, 1000, mina.easeinout, function() {
-						$(self).transition({'font-size': '-=150px', 'easing': 'in-out', 'duration': 1000}, function() {
-							Snap(self).animate({'transform' : 'translate(' + [words[index].x, words[index].y] + ')rotate(' + words[index].rotate + ')'}, 500, mina.easeinout);
-						});
-					});
-				}, 2000*index + 500);
-			});
+			endCallback();
 		});
 
 		layout.start();
@@ -134,9 +144,12 @@ class OperaParisTagListWhiteRenderer implements Renderer<TagList> {
 	 * @method updateRender
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
-	updateRender(info : TagList, domElem : any) {
-		var tagMainzone = $(domElem).find(".OperaParisTagListDarkRenderer_mainzone").first();
+	updateRender(info : TagList, domElem : any, endCallback : Function) {
+		var self = this;
+
+		var tagMainzone = $(domElem).find(".OperaParisTagListWhiteRenderer_mainzone").first();
 
 		tagMainzone.fadeOut(500);
 
@@ -187,25 +200,46 @@ class OperaParisTagListWhiteRenderer implements Renderer<TagList> {
 
 			tagMainzone.show();
 
-			tagMainzone.find("svg g text").each(function (index) {
-				var self = this;
+			self._words[info.getId()] = words;
 
-				setTimeout(function () {
-					Snap(self).animate({'transform': 'translate(' + [words[index].x, 0] + ')rotate(' + words[index].rotate + ')'}, 1000, mina.easeinout, function () {
-						$(self).transition({
-							'font-size': '-=150px',
-							'easing': 'in-out',
-							'duration': 1000
-						}, function () {
-							Snap(self).animate({'transform': 'translate(' + [words[index].x, words[index].y] + ')rotate(' + words[index].rotate + ')'}, 500, mina.easeinout);
-						});
-					});
-				}, 2000 * index + 500);
-			});
+			endCallback();
 		});
 
 		setTimeout(function() {
 			layout.start();
 		}, 500);
+	}
+
+	/**
+	 * Animate rendering Info in specified DOM Element.
+	 *
+	 * @method animate
+	 * @param {RenderInfo} info - The Info to animate.
+	 * @param {DOM Element} domElem - The DOM Element where animate the info.
+	 * @param {Function} endCallback - Callback function called at the end of animation.
+	 */
+	animate(info : TagList, domElem : any, endCallback : Function) {
+		var tagMainzone = $(domElem).find(".OperaParisTagListWhiteRenderer_mainzone").first();
+		var words = this._words[info.getId()];
+
+		tagMainzone.find("svg g text").each(function (index) {
+			var self = this;
+
+			setTimeout(function () {
+				Snap(self).animate({'transform': 'translate(' + [words[index].x, 0] + ')rotate(' + words[index].rotate + ')'}, 1000, mina.easeinout, function () {
+					$(self).transition({
+						'font-size': '-=150px',
+						'easing': 'in-out',
+						'duration': 1000
+					}, function () {
+						Snap(self).animate({'transform': 'translate(' + [words[index].x, words[index].y] + ')rotate(' + words[index].rotate + ')'}, 500, mina.easeinout, function() {
+							if(index == (words.length - 1)) {
+								endCallback();
+							}
+						});
+					});
+				});
+			}, 2000 * index + 500);
+		});
 	}
 }

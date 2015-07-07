@@ -47,8 +47,9 @@ class TweetHalfPictureHalfUserRenderer implements Renderer<Tweet> {
 	 * @method render
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {Function} endCallback - Callback function called at the end of render method.
 	 */
-	render(info : Tweet, domElem : any) {
+	render(info : Tweet, domElem : any, endCallback : Function) {
 		var tweetHTMLWrapper = $("<div>");
 		tweetHTMLWrapper.addClass("TweetHalfPictureHalfUserRenderer_wrapper");
 
@@ -218,6 +219,8 @@ class TweetHalfPictureHalfUserRenderer implements Renderer<Tweet> {
 
 		$(domElem).css("overflow", "visible");
 		$(domElem).append(tweetHTMLWrapper);
+
+		endCallback();
 	}
 
 	/**
@@ -226,8 +229,9 @@ class TweetHalfPictureHalfUserRenderer implements Renderer<Tweet> {
 	 * @method updateRender
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
-	updateRender(info : Tweet, domElem : any) {
+	updateRender(info : Tweet, domElem : any, endCallback : Function) {
 		var tweetProfilPictureDiv = $(domElem).find(".TweetHalfPictureHalfUserRenderer_profil_picture").first();
 		tweetProfilPictureDiv.empty();
 		var tweetProfilPictureImg = $("<img>");
@@ -262,5 +266,21 @@ class TweetHalfPictureHalfUserRenderer implements Renderer<Tweet> {
 
 		var tweetContentWrapper = $(domElem).find(".TweetHalfPictureHalfUserRenderer_content_wrapper").first();
 		tweetContentWrapper.html(info.getMessage());
+
+		endCallback();
+	}
+
+	/**
+	 * Animate rendering Info in specified DOM Element.
+	 *
+	 * @method animate
+	 * @param {RenderInfo} info - The Info to animate.
+	 * @param {DOM Element} domElem - The DOM Element where animate the info.
+	 * @param {Function} endCallback - Callback function called at the end of animation.
+	 */
+	animate(info : Tweet, domElem : any, endCallback : Function) {
+		//Nothing to do.
+
+		endCallback();
 	}
 }

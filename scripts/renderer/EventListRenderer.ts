@@ -45,14 +45,17 @@ class EventListRenderer implements Renderer<CityEvent> {
 	 * @method render
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {Function} endCallback - Callback function called at the end of render method.
 	 */
-	render(info : CityEvent, domElem : any) {
+	render(info : CityEvent, domElem : any, endCallback : Function) {
 
 		var eventHTML = $("<div>");
 
 	    eventHTML.append(info.name());
 
         $(domElem).append(eventHTML);
+
+		endCallback();
     }
 
 	/**
@@ -61,8 +64,9 @@ class EventListRenderer implements Renderer<CityEvent> {
 	 * @method updateRender
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
-	updateRender(info : CityEvent, domElem : any) {
+	updateRender(info : CityEvent, domElem : any, endCallback : Function) {
 		$(domElem).empty();
 
 		var eventHTML = $("<div>");
@@ -70,5 +74,21 @@ class EventListRenderer implements Renderer<CityEvent> {
 		eventHTML.append(info.name());
 
 		$(domElem).append(eventHTML);
+
+		endCallback();
+	}
+
+	/**
+	 * Animate rendering Info in specified DOM Element.
+	 *
+	 * @method animate
+	 * @param {RenderInfo} info - The Info to animate.
+	 * @param {DOM Element} domElem - The DOM Element where animate the info.
+	 * @param {Function} endCallback - Callback function called at the end of animation.
+	 */
+	animate(info : CityEvent, domElem : any, endCallback : Function) {
+		//Nothing to do.
+
+		endCallback();
 	}
 }

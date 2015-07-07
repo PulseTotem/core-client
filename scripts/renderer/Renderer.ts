@@ -26,8 +26,9 @@ interface Renderer<RenderInfo extends Info> {
 	 * @method render
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {Function} endCallback - Callback function called at the end of render method.
 	 */
-    render(info : RenderInfo, domElem : any);
+    render(info : RenderInfo, domElem : any, endCallback : Function);
 
 	/**
 	 * Update rendering Info in specified DOM Element.
@@ -35,6 +36,17 @@ interface Renderer<RenderInfo extends Info> {
 	 * @method updateRender
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
-	updateRender(info : RenderInfo, domElem : any);
+	updateRender(info : RenderInfo, domElem : any, endCallback : Function);
+
+	/**
+	 * Animate rendering Info in specified DOM Element.
+	 *
+	 * @method animate
+	 * @param {RenderInfo} info - The Info to animate.
+	 * @param {DOM Element} domElem - The DOM Element where animate the info.
+	 * @param {Function} endCallback - Callback function called at the end of animation.
+	 */
+	animate(info : RenderInfo, domElem : any, endCallback : Function);
 }
