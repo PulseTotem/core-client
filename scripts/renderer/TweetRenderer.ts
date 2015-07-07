@@ -46,8 +46,9 @@ class TweetRenderer implements Renderer<Tweet> {
 	 * @method render
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {Function} endCallback - Callback function called at the end of render method.
 	 */
-	render(info : Tweet, domElem : any) {
+	render(info : Tweet, domElem : any, endCallback : Function) {
 		var tweetHTML = $("<div>");
 		tweetHTML.addClass("TweetRenderer_tweet");
 
@@ -154,6 +155,8 @@ class TweetRenderer implements Renderer<Tweet> {
 		tweetFooter.append(clearFixFooter);
 
 		$(domElem).append(tweetHTML);
+
+		endCallback();
 	}
 
 	/**
@@ -162,8 +165,9 @@ class TweetRenderer implements Renderer<Tweet> {
 	 * @method updateRender
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
-	updateRender(info : Tweet, domElem : any) {
+	updateRender(info : Tweet, domElem : any, endCallback : Function) {
 		var tweetProfilPictureDiv = $(domElem).find(".TweetRenderer_profil_picture").first();
 		tweetProfilPictureDiv.empty();
 		tweetProfilPictureDiv.addClass("TweetRenderer_profil_picture");
@@ -203,5 +207,21 @@ class TweetRenderer implements Renderer<Tweet> {
 		var tweetRetweetContent = $("<span>&nbsp;" + info.getRetweetCount() + "</span>");
 		tweetRetweetDiv.append(glyphiconRetweet);
 		tweetRetweetDiv.append(tweetRetweetContent);
+
+		endCallback();
+	}
+
+	/**
+	 * Animate rendering Info in specified DOM Element.
+	 *
+	 * @method animate
+	 * @param {RenderInfo} info - The Info to animate.
+	 * @param {DOM Element} domElem - The DOM Element where animate the info.
+	 * @param {Function} endCallback - Callback function called at the end of animation.
+	 */
+	animate(info : Tweet, domElem : any, endCallback : Function) {
+		//Nothing to do.
+
+		endCallback();
 	}
 }

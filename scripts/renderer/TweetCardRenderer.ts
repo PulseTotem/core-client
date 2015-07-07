@@ -46,8 +46,9 @@ class TweetCardRenderer implements Renderer<Tweet> {
 	 * @method render
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {Function} endCallback - Callback function called at the end of render method.
 	 */
-	render(info : Tweet, domElem : any) {
+	render(info : Tweet, domElem : any, endCallback : Function) {
 		var tweetHTMLWrapper = $("<div>");
 		tweetHTMLWrapper.addClass("TweetCardRenderer_wrapper");
 
@@ -176,6 +177,8 @@ class TweetCardRenderer implements Renderer<Tweet> {
 		tweetHeader.append(clearFixHeader);
 
 		$(domElem).append(tweetHTMLWrapper);
+
+		endCallback();
 	}
 
 	/**
@@ -184,8 +187,9 @@ class TweetCardRenderer implements Renderer<Tweet> {
 	 * @method updateRender
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
-	updateRender(info : Tweet, domElem : any) {
+	updateRender(info : Tweet, domElem : any, endCallback : Function) {
 		var tweetHTMLWrapperBackground = $(domElem).find(".TweetCardRenderer_wrapperbackground").first();
 		var tweetHTML = $(domElem).find(".TweetCardRenderer_tweet").first();
 
@@ -241,5 +245,21 @@ class TweetCardRenderer implements Renderer<Tweet> {
 
 		var tweetProfilUsername = $(domElem).find(".TweetCardRenderer_profil_username").first();
 		tweetProfilUsername.html(info.getOwner().getUsername());
+
+		endCallback();
+	}
+
+	/**
+	 * Animate rendering Info in specified DOM Element.
+	 *
+	 * @method animate
+	 * @param {RenderInfo} info - The Info to animate.
+	 * @param {DOM Element} domElem - The DOM Element where animate the info.
+	 * @param {Function} endCallback - Callback function called at the end of animation.
+	 */
+	animate(info : Tweet, domElem : any, endCallback : Function) {
+		//Nothing to do.
+
+		endCallback();
 	}
 }

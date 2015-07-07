@@ -84,8 +84,9 @@ class SlickCarouselBehaviour extends Behaviour {
 			var infoRenderer : InfoRenderer<any> = this.getListInfoRenderers()[infoRendererKey];
 			var renderer = infoRenderer.getRenderer();
 			var divCarousel = $('<div style="height: 100%; width: 100%; position: relative">');
-			renderer.render(infoRenderer.getInfo(), divCarousel);
-			divSlick.append(divCarousel);
+			renderer.render(infoRenderer.getInfo(), divCarousel, function() {
+				divSlick.append(divCarousel);
+			});
 		}
 
 		$(this.getZone().getZoneDiv()).append(divSlick);

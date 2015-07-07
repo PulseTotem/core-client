@@ -46,8 +46,9 @@ class FullsizePictureRenderer implements Renderer<Picture> {
 	 * @method render
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {Function} endCallback - Callback function called at the end of render method.
 	 */
-	render(info : Picture, domElem : any) {
+	render(info : Picture, domElem : any, endCallback : Function) {
 
 		var pictureHTML = $("<div>");
 		pictureHTML.addClass("FullsizePictureRenderer_picture");
@@ -67,6 +68,8 @@ class FullsizePictureRenderer implements Renderer<Picture> {
 
 		$(domElem).append(pictureHTML);
 
+		endCallback();
+
 	}
 
 	/**
@@ -75,8 +78,9 @@ class FullsizePictureRenderer implements Renderer<Picture> {
 	 * @method updateRender
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
-	updateRender(info : Picture, domElem : any) {
+	updateRender(info : Picture, domElem : any, endCallback : Function) {
 		var pictureHTML = $(domElem).find(".FullsizePictureRenderer_picture").first();
 
 		var picURL : PictureURL = null;
@@ -91,5 +95,21 @@ class FullsizePictureRenderer implements Renderer<Picture> {
 		if(picURL != null) {
 			pictureHTML.css("background-image", "url('" + picURL.getURL() + "')");
 		}
+
+		endCallback();
+	}
+
+	/**
+	 * Animate rendering Info in specified DOM Element.
+	 *
+	 * @method animate
+	 * @param {RenderInfo} info - The Info to animate.
+	 * @param {DOM Element} domElem - The DOM Element where animate the info.
+	 * @param {Function} endCallback - Callback function called at the end of animation.
+	 */
+	animate(info : Picture, domElem : any, endCallback : Function) {
+		//Nothing to do.
+
+		endCallback();
 	}
 }

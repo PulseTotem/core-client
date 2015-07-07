@@ -47,14 +47,17 @@ class TweetCounterRenderer implements Renderer<Counter> {
 	 * @method render
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {Function} endCallback - Callback function called at the end of render method.
 	 */
-	render(info : Counter, domElem : any) {
+	render(info : Counter, domElem : any, endCallback : Function) {
 
 		var counterHTMLWrapper = $("<div>");
 		counterHTMLWrapper.addClass("TweetCounterRenderer_wrapper");
 		counterHTMLWrapper.html(info.getValue());
 
 		$(domElem).append(counterHTMLWrapper);
+
+		endCallback();
 	}
 
 	/**
@@ -63,9 +66,26 @@ class TweetCounterRenderer implements Renderer<Counter> {
 	 * @method updateRender
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
-	updateRender(info : Counter, domElem : any) {
+	updateRender(info : Counter, domElem : any, endCallback : Function) {
 		var counterHTMLWrapper = $(domElem).find(".TweetCounterRenderer_wrapper").first();
 		counterHTMLWrapper.html(info.getValue());
+
+		endCallback();
+	}
+
+	/**
+	 * Animate rendering Info in specified DOM Element.
+	 *
+	 * @method animate
+	 * @param {RenderInfo} info - The Info to animate.
+	 * @param {DOM Element} domElem - The DOM Element where animate the info.
+	 * @param {Function} endCallback - Callback function called at the end of animation.
+	 */
+	animate(info : Counter, domElem : any, endCallback : Function) {
+		//Nothing to do.
+
+		endCallback();
 	}
 }

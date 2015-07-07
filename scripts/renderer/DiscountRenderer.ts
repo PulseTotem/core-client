@@ -46,8 +46,9 @@ class DiscountRenderer implements Renderer<Discount> {
 	 * @method render
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {Function} endCallback - Callback function called at the end of render method.
 	 */
-	render(info : Discount, domElem : any) {
+	render(info : Discount, domElem : any, endCallback : Function) {
         /*var feedNodeHTML = $("<div>");
         feedNodeHTML.addClass("feednode");
 
@@ -109,6 +110,8 @@ class DiscountRenderer implements Renderer<Discount> {
         info.setCastingDate(new Date());*/
 
         $(domElem).html(info.getProductName() + '<br/><br/>' + info.getProductDescription());
+
+		endCallback();
     }
 
 	/**
@@ -117,8 +120,25 @@ class DiscountRenderer implements Renderer<Discount> {
 	 * @method updateRender
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
-	updateRender(info : Discount, domElem : any) {
+	updateRender(info : Discount, domElem : any, endCallback : Function) {
 		$(domElem).html(info.getProductName() + '<br/><br/>' + info.getProductDescription());
+
+		endCallback();
+	}
+
+	/**
+	 * Animate rendering Info in specified DOM Element.
+	 *
+	 * @method animate
+	 * @param {RenderInfo} info - The Info to animate.
+	 * @param {DOM Element} domElem - The DOM Element where animate the info.
+	 * @param {Function} endCallback - Callback function called at the end of animation.
+	 */
+	animate(info : Discount, domElem : any, endCallback : Function) {
+		//Nothing to do.
+
+		endCallback();
 	}
 }
