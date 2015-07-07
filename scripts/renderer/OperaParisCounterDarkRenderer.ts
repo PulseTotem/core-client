@@ -157,7 +157,7 @@ class OperaParisCounterDarkRenderer implements Renderer<Counter> {
 			$(domElem).find(".OperaParisCounterDarkRenderer_digitList" + digitElemNumber.toString()).first().transition({ y: '' + (-200*digitElemValue) + 'px' }, 2000);
 		}
 
-		setTimeout(function() {
+		new Timer(function() {
 			endCallback();
 		}, 2000);
 	}

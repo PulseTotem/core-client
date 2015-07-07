@@ -205,7 +205,7 @@ class OperaParisTagListWhiteRenderer implements Renderer<TagList> {
 			endCallback();
 		});
 
-		setTimeout(function() {
+		new Timer(function() {
 			layout.start();
 		}, 500);
 	}
@@ -225,7 +225,7 @@ class OperaParisTagListWhiteRenderer implements Renderer<TagList> {
 		tagMainzone.find("svg g text").each(function (index) {
 			var self = this;
 
-			setTimeout(function () {
+			new Timer(function() {
 				Snap(self).animate({'transform': 'translate(' + [words[index].x, 0] + ')rotate(' + words[index].rotate + ')'}, 1000, mina.easeinout, function () {
 					$(self).transition({
 						'font-size': '-=150px',

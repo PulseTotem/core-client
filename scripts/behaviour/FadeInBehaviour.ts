@@ -126,12 +126,18 @@ class FadeInBehaviour extends Behaviour {
 			$(self.getZone().getZoneDiv()).empty();
 			var content = $("<div>").addClass("FadeInBehaviour_fadein FadeInBehaviour_hide");
 			$(self.getZone().getZoneDiv()).append(content);
-			renderer.render(infoRenderer.getInfo(), content);
-			new Timer(function() {
-				$(self.getZone().getZoneDiv()).find(".FadeInBehaviour_hide").addClass("FadeInBehaviour_show");
-			}, 100);
 
-			infoRenderer.getInfo().setCastingDate(new Date());
+			var endRender = function() {
+				infoRenderer.getInfo().setCastingDate(new Date());
+
+				new Timer(function() {
+					$(self.getZone().getZoneDiv()).find(".FadeInBehaviour_hide").addClass("FadeInBehaviour_show");
+
+					renderer.animate(infoRenderer.getInfo(), content, function() {});
+				}, 100);
+			};
+
+			renderer.render(infoRenderer.getInfo(), content, endRender);
 		}, 1000);
 	}
 
@@ -146,10 +152,16 @@ class FadeInBehaviour extends Behaviour {
 
 		var listInfoRenderers = this.getListInfoRenderers();
 		var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
+		var renderer = currentInfoRenderer.getRenderer();
 
-		currentInfoRenderer.getRenderer().updateRender(currentInfoRenderer.getInfo(), this.getZone().getZoneDiv());
+		var content = $(self.getZone().getZoneDiv()).find(".FadeInBehaviour_show").first();
 
-		currentInfoRenderer.getInfo().setCastingDate(new Date());
+		var endRender = function() {
+			renderer.animate(currentInfoRenderer.getInfo(), content, function() {});
+			currentInfoRenderer.getInfo().setCastingDate(new Date());
+		};
+
+		renderer.updateRender(currentInfoRenderer.getInfo(), content, endRender);
 	}
 
 	/**

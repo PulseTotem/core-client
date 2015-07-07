@@ -115,12 +115,18 @@ class AppearanceBehaviour extends Behaviour {
 	 * @param {InfoRenderer} infoRenderer - The InfoRenderer to display.
 	 */
 	private _displayInfoRenderer(infoRenderer : InfoRenderer<any>) {
+		var self = this;
+
 		var renderer = infoRenderer.getRenderer();
 
 		$(this.getZone().getZoneDiv()).empty();
-		renderer.render(infoRenderer.getInfo(), this.getZone().getZoneDiv());
 
-		infoRenderer.getInfo().setCastingDate(new Date());
+		var endRender = function() {
+			renderer.animate(infoRenderer.getInfo(), self.getZone().getZoneDiv(), function() {});
+			infoRenderer.getInfo().setCastingDate(new Date());
+		};
+
+		renderer.render(infoRenderer.getInfo(), this.getZone().getZoneDiv(), endRender);
 	}
 
 	/**
@@ -134,10 +140,14 @@ class AppearanceBehaviour extends Behaviour {
 
 		var listInfoRenderers = this.getListInfoRenderers();
 		var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
+		var renderer = currentInfoRenderer.getRenderer();
 
-		currentInfoRenderer.getRenderer().updateRender(currentInfoRenderer.getInfo(), this.getZone().getZoneDiv());
+		var endRender = function() {
+			renderer.animate(currentInfoRenderer.getInfo(), self.getZone().getZoneDiv(), function() {});
+			currentInfoRenderer.getInfo().setCastingDate(new Date());
+		};
 
-		currentInfoRenderer.getInfo().setCastingDate(new Date());
+		renderer.updateRender(currentInfoRenderer.getInfo(), this.getZone().getZoneDiv(), endRender);
 	}
 
 	/**
