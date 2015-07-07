@@ -27,4 +27,10 @@ interface CallItf {
 	 * @method getListInfos
 	 */
 	getListInfos() : Array<Info>;
+
+	/**
+	 * Method to call to inform the Call for a new information
+	 * @param info
+	 */
+	onNewInfo(info : any);
 }

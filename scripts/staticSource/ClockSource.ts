@@ -5,12 +5,20 @@
 /// <reference path="../../t6s-core/core/scripts/infotype/DateTime.ts" />
 /// <reference path="./StaticSource.ts" />
 
-class ClockSource implements StaticSource<DateTime> {
 
+/**
+ * Represent a static Clock Source in the client
+ */
+class ClockSource extends StaticSource<DateTime> {
+
+	constructor(refreshTime : number = 1) {
+		super(refreshTime);
+	}
 
 	computeInfo() : DateTime {
+		var d = new Date();
 		var info = new DateTime();
-		info.setDate(new Date());
+		info.setDate(d);
 		info.setDescription("");
 		return info;
 	}

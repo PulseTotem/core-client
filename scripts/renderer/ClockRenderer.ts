@@ -33,10 +33,11 @@ class ClockRenderer implements Renderer<DateTime> {
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
 	 */
 	render(info : DateTime, domElem : any) {
+		domElem.empty();
 		var dateTime = $("<div>");
 
 		var formatDate = new moment(info.getDate());
-		dateTime.html(formatDate.format());
+		dateTime.html(formatDate.format("HH:mm:ss"));
 
 		$(domElem).append(dateTime);
 	}
@@ -48,7 +49,7 @@ class ClockRenderer implements Renderer<DateTime> {
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
 	 */
-	updateRender(info : VideoURL, domElem : any) {
-		//TODO
+	updateRender(info : DateTime, domElem : any) {
+		this.render(info, domElem);
 	}
 }
