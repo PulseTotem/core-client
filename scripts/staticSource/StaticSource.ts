@@ -35,7 +35,7 @@ class StaticSource<SourceInfo extends Info> {
 	 * @property _params
 	 * @type any
 	 */
-	private _params : any;
+	params : any;
 
 	/**
 	 * Constructor.
@@ -46,7 +46,7 @@ class StaticSource<SourceInfo extends Info> {
 	 */
 	constructor(refreshTime : number = 60, params : any = []) {
 		this._refreshTime = refreshTime;
-		this._params = params;
+		this.params = params;
 	}
 
 	/**
@@ -75,11 +75,11 @@ class StaticSource<SourceInfo extends Info> {
 	public start() {
 		var self = this;
 
-		var info = self.computeInfo(self._params);
+		var info = self.computeInfo();
 		self.getCall().onNewInfo(info);
 
 		var intervalFunction = function () {
-			var info = self.computeInfo(self._params);
+			var info = self.computeInfo();
 			self.getCall().onNewInfo(info);
 		};
 
@@ -90,9 +90,8 @@ class StaticSource<SourceInfo extends Info> {
 	 * Create and return the information of the Static Source
 	 *
 	 * @method computeInfo
-	 * @param {Array<any>} params - StaticSource's params.
 	 */
-	computeInfo(params : any = []) : SourceInfo {
+	computeInfo() : SourceInfo {
 		Logger.debug("StaticSource - computeInfo - Method need to be implemented !");
 		return null;
 	}
