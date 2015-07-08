@@ -1,5 +1,6 @@
 /**
- * @author Simon Urli <simon@the6thscreen.fr>
+ * @author Christian Brel <christian@the6thscreen.fr, ch.brel@gmail.com>
+ * @author Simon Urli <simon@the6thscreen.fr, simon.urli@gmail.com>
  */
 
 /// <reference path="../../t6s-core/core/scripts/infotype/DateTime.ts" />
@@ -16,13 +17,27 @@ class ClockRenderer implements Renderer<DateTime> {
 	 * @param {ProcessInfo} info - The Info to transform.
 	 * @return {Array<RenderInfo>} listTransformedInfos - The Info list after transformation.
 	 */
-	transformInfo(info : DateTime) : Array<DateTime> {
-		var result : Array<DateTime> = new Array<DateTime>();
+	transformInfo(info : DateTimeList) : Array<DateTime> {
+		var dateTimeLists : Array<DateTimeList> = new Array<DateTimeList>();
+		try {
+			var newInfo = DateTimeList.fromJSONObject(info);
+			dateTimeLists.push(newInfo);
+		} catch(e) {
+			Logger.error(e.message);
+		}
 
-		var newInfo = DateTime.fromJSONObject(info);
-		result.push(newInfo);
+		var dateTimes : Array<DateTime> = new Array<DateTime>();
 
-		return result;
+		for(var iDTL in dateTimeLists) {
+			var dtl : DateTimeList = dateTimeLists[iDTL];
+			var dtlDateTimes : Array<DateTime> = dtl.getDateTimes();
+			for(var iTL in dtlDateTimes) {
+				var dt : DateTime = dtlDateTimes[iTL];
+				dateTimes.push(dt);
+			}
+		}
+
+		return dateTimes;
 	}
 
 	/**
@@ -31,15 +46,18 @@ class ClockRenderer implements Renderer<DateTime> {
 	 * @method render
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {Function} endCallback - Callback function called at the end of render method.
 	 */
-	render(info : DateTime, domElem : any) {
-		domElem.empty();
+	render(info : DateTime, domElem : any, endCallback : Function) {
+		$(domElem).empty();
 		var dateTime = $("<div>");
 
 		var formatDate = new moment(info.getDate());
 		dateTime.html(formatDate.format("HH:mm:ss"));
 
 		$(domElem).append(dateTime);
+
+		endCallback();
 	}
 
 	/**
@@ -48,8 +66,23 @@ class ClockRenderer implements Renderer<DateTime> {
 	 * @method updateRender
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
-	updateRender(info : DateTime, domElem : any) {
-		this.render(info, domElem);
+	updateRender(info : DateTime, domElem : any, endCallback : Function) {
+		this.render(info, domElem, endCallback);
+	}
+
+	/**
+	 * Animate rendering Info in specified DOM Element.
+	 *
+	 * @method animate
+	 * @param {RenderInfo} info - The Info to animate.
+	 * @param {DOM Element} domElem - The DOM Element where animate the info.
+	 * @param {Function} endCallback - Callback function called at the end of animation.
+	 */
+	animate(info : User, domElem : any, endCallback : Function) {
+		//Nothing to do.
+
+		endCallback();
 	}
 }
