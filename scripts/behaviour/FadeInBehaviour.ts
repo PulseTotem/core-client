@@ -150,18 +150,63 @@ class FadeInBehaviour extends Behaviour {
 	private _refreshView() {
 		var self = this;
 
+		if(this._haveEnoughTime()) {
+
+			var listInfoRenderers = this.getListInfoRenderers();
+			var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
+			var renderer = currentInfoRenderer.getRenderer();
+
+			var content = $(self.getZone().getZoneDiv()).find(".FadeInBehaviour_show").first();
+
+			var endRender = function () {
+				renderer.animate(currentInfoRenderer.getInfo(), content, function () {
+				});
+				currentInfoRenderer.getInfo().setCastingDate(new Date());
+			};
+
+			renderer.updateRender(currentInfoRenderer.getInfo(), content, endRender);
+		} else {
+			this._nextInfoRenderer();
+		}
+	}
+
+	/**
+	 * Test if updated current info have enough time to display.
+	 *
+	 * @method _haveEnoughTime
+	 * @private
+	 */
+	private _haveEnoughTime() {
+		var self = this;
+
 		var listInfoRenderers = this.getListInfoRenderers();
 		var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
-		var renderer = currentInfoRenderer.getRenderer();
+		var info = currentInfoRenderer.getInfo();
 
-		var content = $(self.getZone().getZoneDiv()).find(".FadeInBehaviour_show").first();
+		this._timer.pause();
 
-		var endRender = function() {
-			renderer.animate(currentInfoRenderer.getInfo(), content, function() {});
-			currentInfoRenderer.getInfo().setCastingDate(new Date());
-		};
+		var prevTime = this._timer.getDelay();
 
-		renderer.updateRender(currentInfoRenderer.getInfo(), content, endRender);
+		var diffDelay = info.getDurationToDisplay() - prevTime;
+
+		if(diffDelay >= 0) {
+			this._timer.addToDelay(diffDelay);
+			this._timer.resume();
+			return true;
+		} else {
+			var remainingTime = this._timer.getRemaining();
+
+			var diffRemaining = remainingTime - diffDelay;
+
+			if(diffRemaining > 0) {
+				this._timer.removeToDelay(diffDelay);
+				this._timer.resume();
+				return true;
+			} else {
+				this._timer.stop();
+				return false;
+			}
+		}
 	}
 
 	/**

@@ -80,7 +80,7 @@ class ClockRenderer implements Renderer<DateTime> {
 	 * @param {DOM Element} domElem - The DOM Element where animate the info.
 	 * @param {Function} endCallback - Callback function called at the end of animation.
 	 */
-	animate(info : User, domElem : any, endCallback : Function) {
+	animate(info : DateTime, domElem : any, endCallback : Function) {
 		//Nothing to do.
 
 		endCallback();
