@@ -81,7 +81,7 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
 	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
-	updateRender(info : CityEvent, domElem : any, endCallback : Function) {
+	updateRender(info : Cmd, domElem : any, endCallback : Function) {
 		// nothing to do
 		endCallback();
 	}
@@ -94,7 +94,7 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 	 * @param {DOM Element} domElem - The DOM Element where animate the info.
 	 * @param {Function} endCallback - Callback function called at the end of animation.
 	 */
-	animate(info : CityEvent, domElem : any, endCallback : Function) {
+	animate(info : Cmd, domElem : any, endCallback : Function) {
 		//Nothing to do.
 
 		endCallback();
