@@ -70,6 +70,30 @@ class Timer {
 	}
 
 	/**
+	 * Return Timer's delay.
+	 *
+	 * @method getDelay
+	 * @returns {number} Timer's delay.
+	 */
+	getDelay() : number {
+		return this._delay;
+	}
+
+	/**
+	 * Return Timer's remaining delay.
+	 *
+	 * @method getRemaining
+	 * @returns {number} Timer's remaining delay.
+	 */
+	getRemaining() : number {
+		this.pause();
+		var remaining = this._remaining;
+		this.resume();
+
+		return remaining;
+	}
+
+	/**
 	 * Start.
 	 *
 	 * @method start
@@ -142,5 +166,23 @@ class Timer {
 		this._delay += time;
 		this._remaining += time;
 		this.resume();
+	}
+
+	/**
+	 * Remove some time to delay.
+	 *
+	 * @method removeToDelay
+	 * @param {number} time - Time to add to delay (in milliseconds)
+	 */
+	removeToDelay(time : number) {
+		this.pause();
+		this._delay -= time;
+		this._remaining -= time;
+
+		if(this._remaining > 0) {
+			this.resume();
+		} else {
+			this.stop();
+		}
 	}
 }
