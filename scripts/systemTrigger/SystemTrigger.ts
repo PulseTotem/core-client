@@ -4,6 +4,7 @@
  */
 
 /// <reference path="../../t6s-core/core/scripts/infotype/Info.ts" />
+/// <reference path="../timelineRunner/TimelineRunner.ts" />
 /// <reference path="../timeline/RelativeTimelineItf.ts" />
 /// <reference path="../timeline/RelativeEventItf.ts" />
 
@@ -11,16 +12,9 @@
  * Represents a SystemTrigger of The6thScreen Client.
  *
  * @class SystemTrigger
+ * @extends TimelineRunner
  */
-class SystemTrigger {
-
-	/**
-	 * RelativeTimeline controlled by SystemTrigger.
-	 *
-	 * @property relativeTimeline
-	 * @type RelativeTimelineItf
-	 */
-	relativeTimeline : RelativeTimelineItf;
+class SystemTrigger extends TimelineRunner {
 
 	/**
 	 * Constructor.
@@ -28,17 +22,7 @@ class SystemTrigger {
 	 * @constructor
 	 */
 	constructor() {
-		this.relativeTimeline = null;
-	}
-
-	/**
-	 * Set the SystemTrigger's RelativeTimeline.
-	 *
-	 * @method setRelativeTimeline
-	 * @param {RelativeTimelineItf} relativeTimeline - The RelativeTimeline to set.
-	 */
-	setRelativeTimeline(relativeTimeline : RelativeTimelineItf) {
-		this.relativeTimeline = relativeTimeline;
+		super();
 	}
 
 	/**

@@ -37,6 +37,77 @@ class DefaultSystemTrigger extends SystemTrigger {
 	}
 
 	/**
+	 * Start.
+	 *
+	 * @method start
+	 */
+	start() {
+		//Nothing to do. Start is done by trigger method.
+	}
+
+	/**
+	 * Pause.
+	 *
+	 * @method pause
+	 */
+	pause() {
+		if(this._timer != null) {
+			this._timer.pause();
+		}
+	}
+
+	/**
+	 * Resume.
+	 *
+	 * @method resume
+	 */
+	resume() {
+		if(this._timer != null) {
+			this._timer.resume();
+		}
+	}
+
+
+	/**
+	 * Stop.
+	 *
+	 * @method stop
+	 */
+	stop() {
+		if(this._timer != null) {
+			this._timer.stop();
+			this._timer = null;
+		}
+	}
+
+	/**
+	 * Display last Info of Previous Event.
+	 *
+	 * @method displayLastInfoOfPreviousEvent
+	 */
+	displayLastInfoOfPreviousEvent() {
+		Logger.error("DefaultSystemTrigger - displayLastInfoOfPreviousEvent : Method need to be implemented.");
+	}
+
+	/**
+	 * Display first Info of Next Event.
+	 *
+	 * @method displayFirstInfoOfNextEvent
+	 */
+	displayFirstInfoOfNextEvent() {
+		Logger.error("DefaultSystemTrigger - displayFirstInfoOfNextEvent : Method need to be implemented.");
+	}
+
+	/**
+	 * Update current timer from list of current displayed Infos
+	 *
+	 * @method updateCurrentTimer
+	 */
+	updateCurrentTimer() {
+		Logger.error("DefaultSystemTrigger - updateCurrentTimer : Method need to be implemented.");
+	}
+
+	/**
 	 * Trigger.
 	 *
 	 * @method trigger
@@ -45,9 +116,11 @@ class DefaultSystemTrigger extends SystemTrigger {
 	 */
 	trigger(listInfos : Array<Info>, event : RelativeEventItf) {
 
-		this._refreshCurrentView(listInfos, event);
+		if(listInfos.length > 0) {
+			this._refreshCurrentView(listInfos, event);
 
-		this._managePriority(listInfos, event);
+			this._managePriority(listInfos, event);
+		}
 	}
 
 	/**
@@ -76,6 +149,36 @@ class DefaultSystemTrigger extends SystemTrigger {
 	 */
 	private _managePriority(listInfos : Array<Info>, event : RelativeEventItf) {
 		var self = this;
+
+		if(this._timer != null) {
+
+		} else {
+			var renderer : Renderer<any> = event.getCall().getCallType().getRenderer();
+
+			var listInfoRenderers:Array<InfoRenderer<any>> = new Array<InfoRenderer<any>>();
+
+			var totalTime : number = 0;
+
+			listInfos.forEach(function(info : Info) {
+				if(info.getPriority() == InfoPriority.HIGH) {
+					listInfoRenderers.push(new InfoRenderer(info, renderer));
+					totalTime += info.getDurationToDisplay();
+				}
+			});
+
+			if(listInfoRenderers.length > 0) {
+				if(this.relativeTimeline.pauseAndDisplay(listInfoRenderers)) {
+					this._timer = new Timer(function () {
+						self._timer = null;
+						self.relativeTimeline.restoreAndResume();
+					}, totalTime * 1000);
+				}
+			}
+		}
+
+
+
+
 
 		var renderer : Renderer<any> = event.getCall().getCallType().getRenderer();
 
