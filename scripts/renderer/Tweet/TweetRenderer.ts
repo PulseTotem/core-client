@@ -3,13 +3,13 @@
  * @author Simon Urli <simon@the6thscreen.fr, simon.urli@gmail.com>
  */
 
-/// <reference path="../../t6s-core/core/scripts/infotype/TweetList.ts" />
-/// <reference path="../../t6s-core/core/scripts/infotype/Tweet.ts" />
-/// <reference path="./Renderer.ts" />
+/// <reference path="../../../t6s-core/core/scripts/infotype/TweetList.ts" />
+/// <reference path="../../../t6s-core/core/scripts/infotype/Tweet.ts" />
+/// <reference path="../Renderer.ts" />
 
 declare var $: any; // Use of JQuery
 
-class TweetFullscreenPictureRenderer implements Renderer<Tweet> {
+class TweetRenderer implements Renderer<Tweet> {
 	/**
 	 * Transform the Info list to another Info list.
 	 *
@@ -49,41 +49,16 @@ class TweetFullscreenPictureRenderer implements Renderer<Tweet> {
 	 * @param {Function} endCallback - Callback function called at the end of render method.
 	 */
 	render(info : Tweet, domElem : any, endCallback : Function) {
-		var tweetHTMLWrapper = $("<div>");
-		tweetHTMLWrapper.addClass("TweetFullscreenPictureRenderer_wrapper");
-
-		var tweetHTMLWrapperBackground = $("<div>");
-		tweetHTMLWrapperBackground.addClass("TweetFullscreenPictureRenderer_wrapperbackground");
-
-		if(info.getPictures().length > 0) {
-
-			var picture : Picture = info.getPictures()[0];
-			var picURL : PictureURL = null;
-			if(picture.getMedium() != null) {
-				picURL = picture.getMedium();
-			} else if(picture.getSmall() != null) {
-				picURL = picture.getSmall();
-			} else if(picture.getThumb() != null) {
-				picURL = picture.getThumb();
-			}
-
-			tweetHTMLWrapperBackground.css("background-image", "url('" + picURL.getURL() + "')");
-		}
-
-		tweetHTMLWrapper.append(tweetHTMLWrapperBackground);
-
 		var tweetHTML = $("<div>");
-		tweetHTML.addClass("TweetFullscreenPictureRenderer_tweet");
-
-		tweetHTMLWrapper.append(tweetHTML);
+		tweetHTML.addClass("TweetRenderer_tweet");
 
 		var tweetHeader = $("<div>");
-		tweetHeader.addClass("TweetFullscreenPictureRenderer_header");
+		tweetHeader.addClass("TweetRenderer_header");
 
 		tweetHTML.append(tweetHeader);
 
 		var tweetProfilPictureDiv = $("<div>");
-		tweetProfilPictureDiv.addClass("TweetFullscreenPictureRenderer_profil_picture");
+		tweetProfilPictureDiv.addClass("TweetRenderer_profil_picture");
 
 		tweetHeader.append(tweetProfilPictureDiv);
 
@@ -94,24 +69,24 @@ class TweetFullscreenPictureRenderer implements Renderer<Tweet> {
 		tweetProfilPictureDiv.append(tweetProfilPictureImg);
 
 		var tweetProfilInfoDiv = $("<div>");
-		tweetProfilInfoDiv.addClass("TweetFullscreenPictureRenderer_profil_info");
+		tweetProfilInfoDiv.addClass("TweetRenderer_profil_info");
 
 		tweetHeader.append(tweetProfilInfoDiv);
 
 		var tweetProfilRealname = $("<div>");
-		tweetProfilRealname.addClass("TweetFullscreenPictureRenderer_profil_realname");
+		tweetProfilRealname.addClass("TweetRenderer_profil_realname");
 		tweetProfilRealname.html(info.getOwner().getRealname());
 
 		tweetProfilInfoDiv.append(tweetProfilRealname);
 
 		var tweetProfilUsername = $("<div>");
-		tweetProfilUsername.addClass("TweetFullscreenPictureRenderer_profil_username");
+		tweetProfilUsername.addClass("TweetRenderer_profil_username");
 		tweetProfilUsername.html(info.getOwner().getUsername());
 
 		tweetProfilInfoDiv.append(tweetProfilUsername);
 
 		var tweetTwitterLogo = $("<div>");
-		tweetTwitterLogo.addClass("TweetFullscreenPictureRenderer_twitter_logo");
+		tweetTwitterLogo.addClass("TweetRenderer_twitter_logo");
 
 		tweetHeader.append(tweetTwitterLogo);
 
@@ -121,18 +96,36 @@ class TweetFullscreenPictureRenderer implements Renderer<Tweet> {
 		tweetHeader.append(clearFixHeader);
 
 		var tweetContent = $("<div>");
-		tweetContent.addClass("TweetFullscreenPictureRenderer_content");
+		tweetContent.addClass("TweetRenderer_content");
 		tweetContent.html(info.getMessage());
 
 		tweetHTML.append(tweetContent);
 
+		if(info.getPictures().length > 0) {
+			var tweetPictures = $("<div>");
+			tweetPictures.addClass("TweetRenderer_pictures");
+
+			info.getPictures().forEach(function(picture : Picture) {
+				var tweetPicture = $("<img>");
+				tweetPicture.addClass("img-responsive img-thumbnail pull-left");
+				tweetPicture.attr("src", picture.getThumb().getURL());
+
+				tweetPictures.append(tweetPicture);
+			});
+
+			var clearFixPictures = $("<div class=\"clearfix\"></div>");
+			tweetPictures.append(clearFixPictures);
+
+			tweetHTML.append(tweetPictures);
+		}
+
 		var tweetFooter = $("<div>");
-		tweetFooter.addClass("TweetFullscreenPictureRenderer_footer");
+		tweetFooter.addClass("TweetRenderer_footer");
 
 		tweetHTML.append(tweetFooter);
 
 		var tweetCreateDate = $("<div>");
-		tweetCreateDate.addClass("TweetFullscreenPictureRenderer_create_date");
+		tweetCreateDate.addClass("TweetRenderer_create_date");
 		var DateClass : any = <any>Date;
 		var creationDate : any = new DateClass(info.getCreationDate());
 		var displayCreationDate = creationDate.toString("dd/MM/yyyy ") + creationDate.toString("HH") + "h" + creationDate.toString("mm");
@@ -141,7 +134,7 @@ class TweetFullscreenPictureRenderer implements Renderer<Tweet> {
 		tweetFooter.append(tweetCreateDate);
 
 		var tweetFavoriteDiv = $("<div>");
-		tweetFavoriteDiv.addClass("TweetFullscreenPictureRenderer_favorite_count");
+		tweetFavoriteDiv.addClass("TweetRenderer_favorite_count");
 		var glyphiconStar = $("<span class=\"glyphicon glyphicon-star\" aria-hidden=\"true\">");
 		var tweetFavoriteContent = $("<span>&nbsp;" + info.getFavoriteCount() + "</span>");
 		tweetFavoriteDiv.append(glyphiconStar);
@@ -150,7 +143,7 @@ class TweetFullscreenPictureRenderer implements Renderer<Tweet> {
 		tweetFooter.append(tweetFavoriteDiv);
 
 		var tweetRetweetDiv = $("<div>");
-		tweetRetweetDiv.addClass("TweetFullscreenPictureRenderer_retweet_count");
+		tweetRetweetDiv.addClass("TweetRenderer_retweet_count");
 		var glyphiconRetweet = $("<span class=\"glyphicon glyphicon-retweet\" aria-hidden=\"true\">");
 		var tweetRetweetContent = $("<span>&nbsp;" + info.getRetweetCount() + "</span>");
 		tweetRetweetDiv.append(glyphiconRetweet);
@@ -161,7 +154,7 @@ class TweetFullscreenPictureRenderer implements Renderer<Tweet> {
 		var clearFixFooter = $("<div class=\"clearfix\"></div>");
 		tweetFooter.append(clearFixFooter);
 
-		$(domElem).append(tweetHTMLWrapper);
+		$(domElem).append(tweetHTML);
 
 		endCallback();
 	}
@@ -175,55 +168,41 @@ class TweetFullscreenPictureRenderer implements Renderer<Tweet> {
 	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
 	updateRender(info : Tweet, domElem : any, endCallback : Function) {
-		var tweetHTMLWrapperBackground = $(domElem).find(".TweetFullscreenPictureRenderer_wrapperbackground").first();
-
-		if(info.getPictures().length > 0) {
-
-			var picture : Picture = info.getPictures()[0];
-			var picURL : PictureURL = null;
-			if(picture.getMedium() != null) {
-				picURL = picture.getMedium();
-			} else if(picture.getSmall() != null) {
-				picURL = picture.getSmall();
-			} else if(picture.getThumb() != null) {
-				picURL = picture.getThumb();
-			}
-
-			tweetHTMLWrapperBackground.css("background-image", "url('" + picURL.getURL() + "')");
-		}
-
-		var tweetProfilPictureDiv = $(domElem).find(".TweetFullscreenPictureRenderer_profil_picture").first();
+		var tweetProfilPictureDiv = $(domElem).find(".TweetRenderer_profil_picture").first();
 		tweetProfilPictureDiv.empty();
+		tweetProfilPictureDiv.addClass("TweetRenderer_profil_picture");
 		var tweetProfilPictureImg = $("<img>");
 		tweetProfilPictureImg.addClass("img-circle");
 		tweetProfilPictureImg.attr("src", info.getOwner().getProfilPicture());
 		tweetProfilPictureDiv.append(tweetProfilPictureImg);
 
-		var tweetProfilRealname = $(domElem).find(".TweetFullscreenPictureRenderer_profil_realname").first();
+		var tweetProfilRealname = $(domElem).find(".TweetRenderer_profil_realname").first();
 		tweetProfilRealname.html(info.getOwner().getRealname());
 
-		var tweetProfilUsername = $(domElem).find(".TweetFullscreenPictureRenderer_profil_username").first();
+		var tweetProfilUsername = $(domElem).find(".TweetRenderer_profil_username").first();
 		tweetProfilUsername.html(info.getOwner().getUsername());
 
-		var tweetContent = $(domElem).find(".TweetFullscreenPictureRenderer_content").first();
+		var tweetContent = $(domElem).find(".TweetRenderer_content").first();
 		tweetContent.html(info.getMessage());
 
-		var tweetCreateDate = $(domElem).find(".TweetFullscreenPictureRenderer_create_date").first();
+		var tweetCreateDate = $(domElem).find(".TweetRenderer_create_date").first();
+		tweetCreateDate.empty();
 		var DateClass : any = <any>Date;
 		var creationDate : any = new DateClass(info.getCreationDate());
 		var displayCreationDate = creationDate.toString("dd/MM/yyyy ") + creationDate.toString("HH") + "h" + creationDate.toString("mm");
 		tweetCreateDate.html(displayCreationDate);
 
-		var tweetFavoriteDiv = $(domElem).find(".TweetFullscreenPictureRenderer_favorite_count").first();
+		var tweetFavoriteDiv = $(domElem).find(".TweetRenderer_favorite_count").first();
 		tweetFavoriteDiv.empty();
+		tweetFavoriteDiv.addClass("TweetRenderer_favorite_count");
 		var glyphiconStar = $("<span class=\"glyphicon glyphicon-star\" aria-hidden=\"true\">");
 		var tweetFavoriteContent = $("<span>&nbsp;" + info.getFavoriteCount() + "</span>");
 		tweetFavoriteDiv.append(glyphiconStar);
 		tweetFavoriteDiv.append(tweetFavoriteContent);
 
-		var tweetRetweetDiv = $(domElem).find(".TweetFullscreenPictureRenderer_retweet_count").first();
+		var tweetRetweetDiv = $(domElem).find(".TweetRenderer_retweet_count").first();
 		tweetRetweetDiv.empty();
-		tweetRetweetDiv.addClass("TweetFullscreenPictureRenderer_retweet_count");
+		tweetRetweetDiv.addClass("TweetRenderer_retweet_count");
 		var glyphiconRetweet = $("<span class=\"glyphicon glyphicon-retweet\" aria-hidden=\"true\">");
 		var tweetRetweetContent = $("<span>&nbsp;" + info.getRetweetCount() + "</span>");
 		tweetRetweetDiv.append(glyphiconRetweet);

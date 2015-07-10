@@ -3,9 +3,9 @@
  * @author Simon Urli <simon@the6thscreen.fr, simon.urli@gmail.com>
  */
 
-/// <reference path="../../t6s-core/core/scripts/infotype/CounterList.ts" />
-/// <reference path="../../t6s-core/core/scripts/infotype/Counter.ts" />
-/// <reference path="./Renderer.ts" />
+/// <reference path="../../../../t6s-core/core/scripts/infotype/CounterList.ts" />
+/// <reference path="../../../../t6s-core/core/scripts/infotype/Counter.ts" />
+/// <reference path="../../Renderer.ts" />
 
 declare var $: any; // Use of JQuery
 declare var moment: any; // Use of MomentJS
