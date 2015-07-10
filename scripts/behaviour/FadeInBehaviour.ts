@@ -369,32 +369,40 @@ class FadeInBehaviour extends Behaviour {
 	}
 
 	/**
-	 * Update Info if it's currently display
+	 * Update Info if it's in current list to display (or currently displayed)
 	 *
-	 * @method updateInfoIfCurrentlyDisplay
+	 * @method updateInfo
 	 * @param {Info} info - Info to update.
 	 * @return {boolean} 'true' if done, else otherwise
 	 */
-	updateInfoIfCurrentlyDisplay(info : Info) : boolean {
+	updateInfo(info : Info) : boolean {
 		var self = this;
 
 		var listInfoRenderers = this.getListInfoRenderers();
 
 		if(listInfoRenderers.length > 0) {
 
-			var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
+			var updated = false;
 
-			if(typeof(currentInfoRenderer) != "undefined" && currentInfoRenderer != null) {
-				if (currentInfoRenderer.getInfo().getId() == info.getId() && ! currentInfoRenderer.getInfo().equals(info)) {
-					currentInfoRenderer.setInfo(info);
-					this._refreshView();
-					return true;
-				} else {
-					return false;
+			listInfoRenderers.forEach(function(infoRenderer : InfoRenderer<any>) {
+				if (infoRenderer.getInfo().getId() == info.getId()) {
+					var currentInfoRenderer = listInfoRenderers[self._currentInfoRendererId];
+					if(typeof(currentInfoRenderer) != "undefined"
+						&& currentInfoRenderer != null
+						&& currentInfoRenderer.getInfo().getId() == info.getId()
+						&& ! currentInfoRenderer.getInfo().equals(info)) {
+
+						currentInfoRenderer.setInfo(info);
+						self._refreshView();
+
+					} else {
+						infoRenderer.setInfo(info);
+					}
+					updated = true;
 				}
-			} else {
-				return false;
-			}
+			});
+
+			return updated;
 		} else {
 			return false;
 		}

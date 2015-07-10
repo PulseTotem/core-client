@@ -172,13 +172,13 @@ class Behaviour {
 	}
 
 	/**
-	 * Update Info if it's currently display
+	 * Update Info if it's in current list to display (or currently displayed)
 	 *
-	 * @method updateInfoIfCurrentlyDisplay
+	 * @method updateInfo
 	 * @param {Info} info - Info to update.
 	 * @return {boolean} 'true' if done, else otherwise
 	 */
-	updateInfoIfCurrentlyDisplay(info : Info) : boolean {
+	updateInfo(info : Info) : boolean {
 		Logger.error("Behaviour - updateInfoIfCurrentlyDisplay : Method need to be implemented.");
 		return false;
 	}

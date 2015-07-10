@@ -62,7 +62,7 @@ class DefaultSystemTrigger extends SystemTrigger {
 		var self = this;
 
 		listInfos.forEach(function(info : Info) {
-			self.relativeTimeline.updateInfoIfCurrentlyDisplay(info);
+			self.relativeTimeline.updateInfo(info);
 		});
 	}
 

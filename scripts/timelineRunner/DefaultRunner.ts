@@ -288,6 +288,59 @@ class DefaultRunner extends TimelineRunner {
 	}
 
 	/**
+	 * Update current timer from list of current displayed Infos
+	 *
+	 * @method updateCurrentTimer
+	 */
+	updateCurrentTimer() {
+		var self = this;
+
+		var relativeEvents : Array<RelativeEventItf> = this.relativeTimeline.getRelativeEvents();
+
+		var currentEvent : RelativeEventItf = relativeEvents[this._currentEventId];
+
+		if(typeof(currentEvent) != "undefined" && currentEvent != null) {
+			var listInfos : Array<Info> = currentEvent.getCall().getListInfos();
+
+			if(listInfos.length > 0) {
+				//TODO: Manage boolean to force to use current.getDuration() or cumulated time of Info List...
+				//Default: we choose cumulated time of Info List
+
+				var totalDuration : number = 0;
+
+				listInfos.forEach(function(info : Info) {
+					totalDuration += info.getDurationToDisplay();
+				});
+
+				this._timer.pause();
+
+				var prevTime = this._timer.getDelay();
+
+				var diffDelay = (totalDuration*1000) - prevTime;
+
+				if(diffDelay >= 0) {
+					this._timer.addToDelay(diffDelay);
+					this._timer.resume();
+				} else {
+					diffDelay = diffDelay*(-1); //because diffDelay is negative before this operation
+
+					var remainingTime = this._timer.getRemaining();
+
+					var diffRemaining = remainingTime - diffDelay;
+
+					if(diffRemaining > 0) {
+						this._timer.removeToDelay(diffDelay);
+						this._timer.resume();
+					} else {
+						this._timer.stop();
+						self._nextEvent();
+					}
+				}
+			}
+		}
+	}
+
+	/**
 	 * Update Info in current Event.
 	 * It would be just to manage new Info 'getDurationToDisplay'
 	 *

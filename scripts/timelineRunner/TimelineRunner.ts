@@ -95,14 +95,11 @@ class TimelineRunner {
 	}
 
 	/**
-	 * Update Info in current Event.
-	 * It would be just to manage new Info 'getDurationToDisplay'
+	 * Update current timer from list of current displayed Infos
 	 *
-	 * @method updateInfo
-	 * @param {Info} prevInfo - Info before update.
-	 * @param {Info} updatedInfo - Info after update.
+	 * @method updateCurrentTimer
 	 */
-	updateInfo(prevInfo : Info, updatedInfo : Info) {
-		Logger.error("TimelineRunner - updateInfo : Method need to be implemented.");
+	updateCurrentTimer() {
+		Logger.error("TimelineRunner - updateCurrentTimer : Method need to be implemented.");
 	}
 }

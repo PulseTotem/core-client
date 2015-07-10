@@ -104,11 +104,11 @@ interface RelativeTimelineItf {
 	displayFirstInfo();
 
 	/**
-	 * Update Info if it's currently display
+	 * Update Info
 	 *
-	 * @method updateInfoIfCurrentlyDisplay
+	 * @method updateInfo
 	 * @param {Info} info - Info to update.
 	 */
-	updateInfoIfCurrentlyDisplay(info : Info);
+	updateInfo(info : Info);
 
 }
