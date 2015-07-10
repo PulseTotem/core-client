@@ -51,26 +51,98 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 
 		if (info.getCmd() == "startSession") {
 			this.startSession(domElem);
+		} else if (info.getCmd() == "counter") {
+			if (info.getArgs().length != 2) {
+				this.startSession(domElem);
+			}
+
+			var counterTime = parseInt(info.getArgs()[0]);
+			var servicePostPic = info.getArgs()[1];
+			this.countAndSnap(domElem, counterTime, servicePostPic);
 		}
 
 		endCallback();
 	}
 
 	private startSession(domElem : any) {
-		var html = $('div');
-		var title = $('h3');
-		title.content("Cliquez sur le bouton pour démarrer le timer quand vous êtes prêts à prendre la photo !");
-		html.append(title);
+		var divCam = $('<div>');
+		divCam.attr("id","webCamview");
+		divCam.addClass("photobox_divcam");
 
-		var divCam = $('div');
-		divCam.id = "webCamview";
-		divCam.style.width = "100%";
-		divCam.style.height = "100%";
-
-		html.append(divCam);
 		domElem.append(divCam);
 
-		Webcam.attach(divCam);
+		Webcam.set({
+			image_format: 'jpeg',
+			jpeg_quality: 90,
+			force_flash: false,
+			flip_horiz: true,
+			fps: 45
+		});
+
+		Webcam.attach("#webCamview");
+	}
+
+	private countAndSnap(domElem : any, counterTime : number, servicePostPic : string) {
+		var counter = counterTime;
+
+		var html = $('<div>');
+		html.addClass("photobox_divcam");
+
+		var divCam = $('<div>');
+		divCam.attr("id","webCamview");
+		divCam.addClass("photobox_divcam");
+
+		html.append(divCam);
+
+		var divCounter = $('<div>');
+		divCounter.addClass("photobox_divcounter");
+		divCounter.text(counter+" ...");
+
+		html.append(divCounter);
+
+		domElem.append(html);
+
+		Webcam.set({
+			image_format: 'jpeg',
+			jpeg_quality: 90,
+			force_flash: false,
+			flip_horiz: true,
+			fps: 45
+		});
+
+		Webcam.attach("#webCamview");
+
+		var managePicture = function(data_uri) {
+
+			Webcam.on( 'uploadProgress', function(progress) {
+				divCounter.text("L'image est en cours de traitement, veuillez patienter...");
+				divCounter.show();
+			} );
+
+			Webcam.on( 'uploadComplete', function(code, text) {
+				if (code == 200) {
+					Webcam.reset();
+					divCam.html('<img src="'+data_uri+'"/>');
+					divCounter.text("L'image a été traitée avec succès ! Merci de valider la photo sur votre téléphone.");
+				}
+			} );
+
+			Webcam.upload(data_uri, servicePostPic);
+
+		};
+
+		var timeoutFunction = function () {
+			if (counter == 0) {
+				divCounter.hide();
+				Webcam.snap(managePicture);
+			} else {
+				counter--;
+				divCounter.text(counter+" ...");
+				setTimeout(timeoutFunction, 1000);
+			}
+		};
+
+		setTimeout(timeoutFunction, 1000);
 	}
 
 	/**
