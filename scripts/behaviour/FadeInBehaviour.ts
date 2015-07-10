@@ -187,13 +187,15 @@ class FadeInBehaviour extends Behaviour {
 
 		var prevTime = this._timer.getDelay();
 
-		var diffDelay = info.getDurationToDisplay() - prevTime;
+		var diffDelay = (info.getDurationToDisplay()*1000) - prevTime;
 
 		if(diffDelay >= 0) {
 			this._timer.addToDelay(diffDelay);
 			this._timer.resume();
 			return true;
 		} else {
+			diffDelay = diffDelay*(-1); //because diffDelay is negative before this operation
+
 			var remainingTime = this._timer.getRemaining();
 
 			var diffRemaining = remainingTime - diffDelay;
@@ -371,8 +373,9 @@ class FadeInBehaviour extends Behaviour {
 	 *
 	 * @method updateInfoIfCurrentlyDisplay
 	 * @param {Info} info - Info to update.
+	 * @return {boolean} 'true' if done, else otherwise
 	 */
-	updateInfoIfCurrentlyDisplay(info : Info) {
+	updateInfoIfCurrentlyDisplay(info : Info) : boolean {
 		var self = this;
 
 		var listInfoRenderers = this.getListInfoRenderers();
@@ -385,8 +388,15 @@ class FadeInBehaviour extends Behaviour {
 				if (currentInfoRenderer.getInfo().getId() == info.getId() && ! currentInfoRenderer.getInfo().equals(info)) {
 					currentInfoRenderer.setInfo(info);
 					this._refreshView();
+					return true;
+				} else {
+					return false;
 				}
+			} else {
+				return false;
 			}
+		} else {
+			return false;
 		}
 	}
 }

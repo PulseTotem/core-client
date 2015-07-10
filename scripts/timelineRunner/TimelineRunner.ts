@@ -4,6 +4,7 @@
  */
 
 /// <reference path="../timeline/RelativeTimelineItf.ts" />
+/// <reference path="../../t6s-core/core/scripts/infotype/Info.ts" />
 
 /**
  * Represents a TimelineRunner of The6thScreen Client.
@@ -91,5 +92,17 @@ class TimelineRunner {
 	 */
 	displayFirstInfoOfNextEvent() {
 		Logger.error("TimelineRunner - displayFirstInfoOfNextEvent : Method need to be implemented.");
+	}
+
+	/**
+	 * Update Info in current Event.
+	 * It would be just to manage new Info 'getDurationToDisplay'
+	 *
+	 * @method updateInfo
+	 * @param {Info} prevInfo - Info before update.
+	 * @param {Info} updatedInfo - Info after update.
+	 */
+	updateInfo(prevInfo : Info, updatedInfo : Info) {
+		Logger.error("TimelineRunner - updateInfo : Method need to be implemented.");
 	}
 }
