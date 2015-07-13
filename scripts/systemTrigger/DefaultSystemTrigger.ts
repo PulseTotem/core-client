@@ -104,7 +104,42 @@ class DefaultSystemTrigger extends SystemTrigger {
 	 * @method updateCurrentTimer
 	 */
 	updateCurrentTimer() {
-		Logger.error("DefaultSystemTrigger - updateCurrentTimer : Method need to be implemented.");
+		var listInfoRenderers:Array<InfoRenderer<any>> = this.relativeTimeline.getCurrentListInfoRenderers();
+
+		var totalTime : number = 0;
+
+		listInfoRenderers.forEach(function(infoRenderer : InfoRenderer) {
+			var info : Info = infoRenderer.getInfo();
+
+			totalTime += info.getDurationToDisplay();
+		});
+
+		this._timer.pause();
+
+		var prevTime = this._timer.getDelay();
+
+		var diffDelay = (totalTime*1000) - prevTime;
+
+		if(diffDelay >= 0) {
+			this._timer.addToDelay(diffDelay);
+			this._timer.resume();
+		} else {
+			diffDelay = diffDelay*(-1); //because diffDelay is negative before this operation
+
+			var remainingTime = this._timer.getRemaining();
+
+			var diffRemaining = remainingTime - diffDelay;
+
+			if(diffRemaining > 0) {
+				this._timer.removeToDelay(diffDelay);
+				this._timer.resume();
+			} else {
+				this._timer.stop();
+				this.relativeTimeline.restore();
+				this.relativeTimeline.switchToRunnerState();
+				this.relativeTimeline.resume();
+			}
+		}
 	}
 
 	/**
@@ -150,58 +185,65 @@ class DefaultSystemTrigger extends SystemTrigger {
 	private _managePriority(listInfos : Array<Info>, event : RelativeEventItf) {
 		var self = this;
 
+		var listCurrentInfos:Array<Info> = new Array<Info>();
+
 		if(this._timer != null) {
-
-		} else {
-			var renderer : Renderer<any> = event.getCall().getCallType().getRenderer();
-
-			var listInfoRenderers:Array<InfoRenderer<any>> = new Array<InfoRenderer<any>>();
-
-			var totalTime : number = 0;
-
-			listInfos.forEach(function(info : Info) {
-				if(info.getPriority() == InfoPriority.HIGH) {
-					listInfoRenderers.push(new InfoRenderer(info, renderer));
-					totalTime += info.getDurationToDisplay();
-				}
+			this.relativeTimeline.getCurrentListInfoRenderers().forEach(function (infoRenderer:InfoRenderer) {
+				listCurrentInfos.push(infoRenderer.getInfo());
 			});
-
-			if(listInfoRenderers.length > 0) {
-				if(this.relativeTimeline.pauseAndDisplay(listInfoRenderers)) {
-					this._timer = new Timer(function () {
-						self._timer = null;
-						self.relativeTimeline.restoreAndResume();
-					}, totalTime * 1000);
-				}
-			}
 		}
-
-
-
-
 
 		var renderer : Renderer<any> = event.getCall().getCallType().getRenderer();
 
-		var listInfoRenderers:Array<InfoRenderer<any>> = new Array<InfoRenderer<any>>();
+		var listInfoRenderersToAdd:Array<InfoRenderer<any>> = new Array<InfoRenderer<any>>();
+		var listInfosToRemove:Array<Info> = new Array<Info>();
 
 		var totalTime : number = 0;
 
 		listInfos.forEach(function(info : Info) {
-			if(info.getPriority() == InfoPriority.HIGH) {
-				listInfoRenderers.push(new InfoRenderer(info, renderer));
-				totalTime += info.getDurationToDisplay();
+			var alreadyDisplayed = false;
+			if(self._timer != null) {
+				listCurrentInfos.forEach(function(currentInfo : Info) {
+					if(info.getId() == currentInfo.getId()) {
+						alreadyDisplayed = true;
+					}
+				})
+			}
+
+			if(alreadyDisplayed) {
+				if (info.getPriority() != InfoPriority.HIGH) {
+					listInfosToRemove.push(info);
+				}
+			} else {
+				if (info.getPriority() == InfoPriority.HIGH) {
+					listInfoRenderersToAdd.push(new InfoRenderer(info, renderer));
+					totalTime += info.getDurationToDisplay();
+				}
 			}
 		});
 
-		if(listInfoRenderers.length > 0) {
+		if(this._timer != null && listInfosToRemove.length > 0) {
+			listInfosToRemove.forEach(function(info : Info) {
+				if(this._timer != null) {
+					info.setDurationToDisplay(0);
+					self.relativeTimeline.updateInfo(info);
+				}
+			});
+		}
+
+		if(listInfoRenderersToAdd.length > 0) {
 			if(this._timer != null) {
-				this.relativeTimeline.addToCurrentDisplay(listInfoRenderers);
+				this.relativeTimeline.addToCurrentDisplay(listInfoRenderersToAdd);
 				this._timer.addToDelay(totalTime * 1000);
 			} else {
-				if(this.relativeTimeline.pauseAndDisplay(listInfoRenderers)) {
+				this.relativeTimeline.pause();
+				if(this.relativeTimeline.switchToSystemTriggerState()) {
+					this.relativeTimeline.display(listInfoRenderersToAdd);
 					this._timer = new Timer(function () {
 						self._timer = null;
-						self.relativeTimeline.restoreAndResume();
+						self.relativeTimeline.restore();
+						self.relativeTimeline.switchToRunnerState();
+						self.relativeTimeline.resume();
 					}, totalTime * 1000);
 				}
 			}

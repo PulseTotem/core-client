@@ -96,7 +96,7 @@ class Behaviour {
 
 		listInfoRenderers.forEach(function(infoR : InfoRenderer<any>) {
 			self._listInfoRenderers.push(infoR);
-		})
+		});
 	}
 
 	/**

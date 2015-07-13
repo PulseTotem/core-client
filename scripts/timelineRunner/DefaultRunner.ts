@@ -146,7 +146,6 @@ class DefaultRunner extends TimelineRunner {
 		}
 	}
 
-
 	/**
 	 * Stop.
 	 *
