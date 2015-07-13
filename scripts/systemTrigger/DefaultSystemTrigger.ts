@@ -108,38 +108,41 @@ class DefaultSystemTrigger extends SystemTrigger {
 
 		var totalTime : number = 0;
 
-		listInfoRenderers.forEach(function(infoRenderer : InfoRenderer) {
+		listInfoRenderers.forEach(function(infoRenderer : InfoRenderer<any>) {
 			var info : Info = infoRenderer.getInfo();
 
 			totalTime += info.getDurationToDisplay();
 		});
 
-		this._timer.pause();
+		if(this._timer != null) {
 
-		var prevTime = this._timer.getDelay();
+			this._timer.pause();
 
-		var diffDelay = (totalTime*1000) - prevTime;
+			var prevTime = this._timer.getDelay();
 
-		if(diffDelay >= 0) {
-			this._timer.addToDelay(diffDelay);
-			this._timer.resume();
-		} else {
-			diffDelay = diffDelay*(-1); //because diffDelay is negative before this operation
+			var diffDelay = (totalTime * 1000) - prevTime;
 
-			var remainingTime = this._timer.getRemaining();
-
-			var diffRemaining = remainingTime - diffDelay;
-
-			if(diffRemaining > 0) {
-				this._timer.removeToDelay(diffDelay);
+			if (diffDelay >= 0) {
+				this._timer.addToDelay(diffDelay);
 				this._timer.resume();
 			} else {
-				this._timer.stop();
-				this.relativeTimeline.restore();
-				this.relativeTimeline.switchToRunnerState();
-				this.relativeTimeline.resume();
+				diffDelay = diffDelay * (-1); //because diffDelay is negative before this operation
+
+				var remainingTime = this._timer.getRemaining();
+
+				var diffRemaining = remainingTime - diffDelay;
+
+				if (diffRemaining > 0) {
+					this._timer.removeToDelay(diffDelay);
+					this._timer.resume();
+				} else {
+					this._timer.stop();
+					this.relativeTimeline.restore();
+					this.relativeTimeline.switchToRunnerState();
+					this.relativeTimeline.resume();
+				}
 			}
-		}
+		} // else // Nothing to do !!!???
 	}
 
 	/**
@@ -188,7 +191,7 @@ class DefaultSystemTrigger extends SystemTrigger {
 		var listCurrentInfos:Array<Info> = new Array<Info>();
 
 		if(this._timer != null) {
-			this.relativeTimeline.getCurrentListInfoRenderers().forEach(function (infoRenderer:InfoRenderer) {
+			this.relativeTimeline.getCurrentListInfoRenderers().forEach(function (infoRenderer:InfoRenderer<any>) {
 				listCurrentInfos.push(infoRenderer.getInfo());
 			});
 		}

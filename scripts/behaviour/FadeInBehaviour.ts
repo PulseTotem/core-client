@@ -91,19 +91,21 @@ class FadeInBehaviour extends Behaviour {
 
 		var listInfoRenderers = this.getListInfoRenderers();
 
-		if(this._currentInfoRendererId == null) {
-			this._currentInfoRendererId = 0;
-		} else {
-			this._currentInfoRendererId = (this._currentInfoRendererId + 1) % (listInfoRenderers.length);
+		if(listInfoRenderers.length > 0) {
+			if (this._currentInfoRendererId == null) {
+				this._currentInfoRendererId = 0;
+			} else {
+				this._currentInfoRendererId = (this._currentInfoRendererId + 1) % (listInfoRenderers.length);
+			}
+
+			var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
+
+			this._displayInfoRenderer(currentInfoRenderer);
+
+			this._timer = new Timer(function () {
+				self._nextInfoRenderer();
+			}, currentInfoRenderer.getInfo().getDurationToDisplay() * 1000 + 2100);
 		}
-
-		var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
-
-		this._displayInfoRenderer(currentInfoRenderer);
-
-		this._timer = new Timer(function() {
-			self._nextInfoRenderer();
-		}, currentInfoRenderer.getInfo().getDurationToDisplay()*1000 + 2100);
 	}
 
 	/**
@@ -179,35 +181,40 @@ class FadeInBehaviour extends Behaviour {
 	private _haveEnoughTime() {
 		var self = this;
 
-		var listInfoRenderers = this.getListInfoRenderers();
-		var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
-		var info = currentInfoRenderer.getInfo();
+		if(this._timer != null) {
 
-		this._timer.pause();
+			var listInfoRenderers = this.getListInfoRenderers();
+			var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
+			var info = currentInfoRenderer.getInfo();
 
-		var prevTime = this._timer.getDelay();
+			this._timer.pause();
 
-		var diffDelay = (info.getDurationToDisplay()*1000) - prevTime;
+			var prevTime = this._timer.getDelay();
 
-		if(diffDelay >= 0) {
-			this._timer.addToDelay(diffDelay);
-			this._timer.resume();
-			return true;
-		} else {
-			diffDelay = diffDelay*(-1); //because diffDelay is negative before this operation
+			var diffDelay = (info.getDurationToDisplay() * 1000) - prevTime;
 
-			var remainingTime = this._timer.getRemaining();
-
-			var diffRemaining = remainingTime - diffDelay;
-
-			if(diffRemaining > 0) {
-				this._timer.removeToDelay(diffDelay);
+			if (diffDelay >= 0) {
+				this._timer.addToDelay(diffDelay);
 				this._timer.resume();
 				return true;
 			} else {
-				this._timer.stop();
-				return false;
+				diffDelay = diffDelay * (-1); //because diffDelay is negative before this operation
+
+				var remainingTime = this._timer.getRemaining();
+
+				var diffRemaining = remainingTime - diffDelay;
+
+				if (diffRemaining > 0) {
+					this._timer.removeToDelay(diffDelay);
+					this._timer.resume();
+					return true;
+				} else {
+					this._timer.stop();
+					return false;
+				}
 			}
+		} else {
+			return false;
 		}
 	}
 
@@ -289,16 +296,24 @@ class FadeInBehaviour extends Behaviour {
 	displayPreviousInfo() {
 		var listInfoRenderers = this.getListInfoRenderers();
 
-		if(this._currentInfoRendererId != null && this._currentInfoRendererId > 0) {
-			this._currentInfoRendererId = this._currentInfoRendererId - 1;
-			var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
+		if(listInfoRenderers.length > 0) {
+			if(this._currentInfoRendererId != null) {
+				if (this._currentInfoRendererId > 0) {
+					this._currentInfoRendererId = this._currentInfoRendererId - 1;
+					var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
 
-			this._displayInfoRenderer(currentInfoRenderer);
-			return true;
-		} else {
-			if(this._currentInfoRendererId == 0) {
+					this._displayInfoRenderer(currentInfoRenderer);
+					return true;
+				} else {
+					if (this._currentInfoRendererId == 0) {
+						return false;
+					}
+				}
+			} else {
 				return false;
 			}
+		} else {
+			return false;
 		}
 	}
 
@@ -310,17 +325,24 @@ class FadeInBehaviour extends Behaviour {
 	displayNextInfo() {
 		var listInfoRenderers = this.getListInfoRenderers();
 
-		if(this._currentInfoRendererId != null && (this._currentInfoRendererId < (listInfoRenderers.length - 1))) {
-			this._currentInfoRendererId = (this._currentInfoRendererId + 1);
+		if(listInfoRenderers.length > 0) {
+			if (this._currentInfoRendererId != null) {
+				if (this._currentInfoRendererId < (listInfoRenderers.length - 1)) {
+					this._currentInfoRendererId = this._currentInfoRendererId + 1;
+					var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
 
-			var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
-
-			this._displayInfoRenderer(currentInfoRenderer);
-			return true;
-		} else {
-			if(this._currentInfoRendererId == (listInfoRenderers.length - 1)) {
+					this._displayInfoRenderer(currentInfoRenderer);
+					return true;
+				} else {
+					if (this._currentInfoRendererId == (listInfoRenderers.length - 1)) {
+						return false;
+					}
+				}
+			} else {
 				return false;
 			}
+		} else {
+			return false;
 		}
 	}
 
@@ -334,16 +356,21 @@ class FadeInBehaviour extends Behaviour {
 
 		var listInfoRenderers = this.getListInfoRenderers();
 
-		this._currentInfoRendererId = listInfoRenderers.length - 1;
-		var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
+		if(listInfoRenderers.length > 0) {
 
-		this._displayInfoRenderer(currentInfoRenderer);
+			this._currentInfoRendererId = listInfoRenderers.length - 1;
+			var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
 
-		this._timer = new Timer(function() {
-			self._nextInfoRenderer();
-		}, currentInfoRenderer.getInfo().getDurationToDisplay()*1000 + 2100);
+			this._displayInfoRenderer(currentInfoRenderer);
 
-		this.pause();
+			this._timer = new Timer(function () {
+				self._nextInfoRenderer();
+			}, currentInfoRenderer.getInfo().getDurationToDisplay() * 1000 + 2100);
+
+			this.pause();
+		} else {
+			this.stop();
+		}
 	}
 
 	/**
@@ -356,16 +383,21 @@ class FadeInBehaviour extends Behaviour {
 
 		var listInfoRenderers = this.getListInfoRenderers();
 
-		this._currentInfoRendererId = 0;
-		var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
+		if(listInfoRenderers.length > 0) {
 
-		this._displayInfoRenderer(currentInfoRenderer);
+			this._currentInfoRendererId = 0;
+			var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
 
-		this._timer = new Timer(function() {
-			self._nextInfoRenderer();
-		}, currentInfoRenderer.getInfo().getDurationToDisplay()*1000 + 2100);
+			this._displayInfoRenderer(currentInfoRenderer);
 
-		this.pause();
+			this._timer = new Timer(function () {
+				self._nextInfoRenderer();
+			}, currentInfoRenderer.getInfo().getDurationToDisplay() * 1000 + 2100);
+
+			this.pause();
+		} else {
+			this.stop();
+		}
 	}
 
 	/**

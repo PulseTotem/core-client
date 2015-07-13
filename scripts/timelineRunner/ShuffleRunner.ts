@@ -171,50 +171,53 @@ class ShuffleRunner extends TimelineRunner {
 	updateCurrentTimer() {
 		var self = this;
 
-		var relativeEvents : Array<RelativeEventItf> = this.relativeTimeline.getRelativeEvents();
+		if(this._timer != null) {
 
-		var totalTime : number = 0;
+			var relativeEvents:Array<RelativeEventItf> = this.relativeTimeline.getRelativeEvents();
 
-		relativeEvents.forEach(function(relativeEvent : RelativeEventItf) {
-			var listInfos : Array<Info> = relativeEvent.getCall().getListInfos();
+			var totalTime:number = 0;
 
-			if(listInfos.length > 0) {
+			relativeEvents.forEach(function (relativeEvent:RelativeEventItf) {
+				var listInfos:Array<Info> = relativeEvent.getCall().getListInfos();
 
-				//TODO: Manage boolean to force to use current.getDuration() or cumulated time of Info List...
-				//Default: we choose cumulated time of Info List
+				if (listInfos.length > 0) {
 
-				var totalDuration : number = 0;
+					//TODO: Manage boolean to force to use current.getDuration() or cumulated time of Info List...
+					//Default: we choose cumulated time of Info List
 
-				listInfos.forEach(function(info) {
-					totalDuration += info.getDurationToDisplay();
-				});
+					var totalDuration:number = 0;
 
-				totalTime += totalDuration;
-			}
-		});
+					listInfos.forEach(function (info) {
+						totalDuration += info.getDurationToDisplay();
+					});
 
-		this._timer.pause();
+					totalTime += totalDuration;
+				}
+			});
 
-		var prevTime = this._timer.getDelay();
+			this._timer.pause();
 
-		var diffDelay = (totalTime*1000) - prevTime;
+			var prevTime = this._timer.getDelay();
 
-		if(diffDelay >= 0) {
-			this._timer.addToDelay(diffDelay);
-			this._timer.resume();
-		} else {
-			diffDelay = diffDelay*(-1); //because diffDelay is negative before this operation
+			var diffDelay = (totalTime * 1000) - prevTime;
 
-			var remainingTime = this._timer.getRemaining();
-
-			var diffRemaining = remainingTime - diffDelay;
-
-			if(diffRemaining > 0) {
-				this._timer.removeToDelay(diffDelay);
+			if (diffDelay >= 0) {
+				this._timer.addToDelay(diffDelay);
 				this._timer.resume();
 			} else {
-				this._timer.stop();
-				self._shuffle();
+				diffDelay = diffDelay * (-1); //because diffDelay is negative before this operation
+
+				var remainingTime = this._timer.getRemaining();
+
+				var diffRemaining = remainingTime - diffDelay;
+
+				if (diffRemaining > 0) {
+					this._timer.removeToDelay(diffDelay);
+					this._timer.resume();
+				} else {
+					this._timer.stop();
+					self._shuffle();
+				}
 			}
 		}
 	}

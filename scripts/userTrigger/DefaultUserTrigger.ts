@@ -111,9 +111,13 @@ class DefaultUserTrigger extends UserTrigger {
 							break;
 						case UserTriggerState.CAPTURED :
 							self.state = UserTriggerState.WAITING;
+							if(self._timerBeforeWaiting != null) {
+								self._timerBeforeWaiting.stop();
+								self._timerBeforeWaiting = null;
+							}
 							self.relativeTimeline.unlockFromUserTriggerState();
 							self.relativeTimeline.resume();
-							validAction = true;
+							validAction = false;
 							self._displayPlayPanel();
 							break;
 					}
@@ -136,7 +140,7 @@ class DefaultUserTrigger extends UserTrigger {
 					self.relativeTimeline.resume();
 					self._displayPlayPanel();
 					self._timerBeforeWaiting = null;
-				}, 1000*60*2);
+				}, 1000*30);
 			}
 		}
 	}
@@ -154,7 +158,7 @@ class DefaultUserTrigger extends UserTrigger {
 		$(this.relativeTimeline.getBehaviour().getZone().getZoneDiv()).parent(".zone").append(playDiv);
 
 		new Timer(function() {
-			playDiv.fadeOut(500, function () {
+			playDiv.fadeOut(750, function () {
 				playDiv.remove();
 			});
 
@@ -174,7 +178,7 @@ class DefaultUserTrigger extends UserTrigger {
 		$(this.relativeTimeline.getBehaviour().getZone().getZoneDiv()).parent(".zone").append(pauseDiv);
 
 		new Timer(function() {
-			pauseDiv.fadeOut(500, function () {
+			pauseDiv.fadeOut(750, function () {
 				pauseDiv.remove();
 			});
 		}, 100);
@@ -193,7 +197,7 @@ class DefaultUserTrigger extends UserTrigger {
 		$(this.relativeTimeline.getBehaviour().getZone().getZoneDiv()).parent(".zone").append(leftDiv);
 
 		new Timer(function() {
-			leftDiv.fadeOut(500, function () {
+			leftDiv.fadeOut(750, function () {
 				leftDiv.remove();
 			});
 		}, 100);
@@ -212,7 +216,7 @@ class DefaultUserTrigger extends UserTrigger {
 		$(this.relativeTimeline.getBehaviour().getZone().getZoneDiv()).parent(".zone").append(rightDiv);
 
 		new Timer(function() {
-			rightDiv.fadeOut(500, function () {
+			rightDiv.fadeOut(750, function () {
 				rightDiv.remove();
 			});
 		}, 100);
