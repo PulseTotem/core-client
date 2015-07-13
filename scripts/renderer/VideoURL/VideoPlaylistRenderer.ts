@@ -2,12 +2,13 @@
  * @author Simon Urli <simon@the6thscreen.fr>
  */
 
-/// <reference path="../../t6s-core/core/scripts/infotype/VideoURL.ts" />
-/// <reference path="./Renderer.ts" />
+/// <reference path="../../../t6s-core/core/scripts/infotype/VideoURL.ts" />
+/// <reference path="../../../t6s-core/core/scripts/infotype/VideoPlaylist.ts" />
+/// <reference path="../Renderer.ts" />
 
 declare var $: any; // Use of JQuery
 
-class VideoURLRenderer implements Renderer<VideoURL> {
+class VideoPlaylistRenderer implements Renderer<VideoURL> {
 	/**
 	 * Transform the Info list to another Info list.
 	 *
@@ -15,14 +16,19 @@ class VideoURLRenderer implements Renderer<VideoURL> {
 	 * @param {ProcessInfo} info - The Info to transform.
 	 * @return {Array<RenderInfo>} listTransformedInfos - The Info list after transformation.
 	 */
-	transformInfo(info : VideoURL) : Array<VideoURL> {
+	transformInfo(info : VideoPlaylist) : Array<VideoURL> {
 		var videoList : Array<VideoURL> = new Array<VideoURL>();
+
+		var newInfo = VideoPlaylist.fromJSONObject(info);
 		try {
-			var newInfo = VideoURL.fromJSONObject(VideoURL);
-			videoList.push(newInfo);
+			for (var indexVideo in newInfo.getVideos()) {
+				var videoUrl : VideoURL = newInfo.getVideos()[indexVideo];
+				videoList.push(videoUrl);
+			}
 		} catch(e) {
 			Logger.error(e.message);
 		}
+
 
 		return videoList;
 	}
@@ -37,14 +43,14 @@ class VideoURLRenderer implements Renderer<VideoURL> {
 	 */
 	render(info : VideoURL, domElem : any, endCallback : Function) {
 		var videoHTML = $("<div>");
-		videoHTML.addClass("VideoURLRenderer_mainDiv");
+		videoHTML.addClass("VideoPlaylistRenderer_mainDiv");
 
 		var html = "";
 
 		if (info.getType() == VideoType.DAILYMOTION) {
 			html = '<iframe src="'+info.getURL()+'?chromeless=1&html=1&related=0&logo=0&info=0&autoplay=1" allowfullscreen></iframe>';
 		} else {
-			html = "<video autoplay class='VideoURLRenderer_videoHTML'><source src='"+info.getURL()+"'></video>";
+			html = "<video autoplay class='VideoPlaylistRenderer_videoHTML'><source src='"+info.getURL()+"'></video>";
 		}
 		videoHTML.html(html);
 

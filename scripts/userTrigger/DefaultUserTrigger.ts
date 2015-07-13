@@ -42,7 +42,6 @@ class DefaultUserTrigger extends UserTrigger {
 		super();
 		this._timer = null;
 		this._timerBeforeWaiting = null;
-		
 	}
 
 	/**
@@ -79,15 +78,10 @@ class DefaultUserTrigger extends UserTrigger {
 					switch(self.state) {
 						case UserTriggerState.WAITING :
 							self.relativeTimeline.pause();
+							self.relativeTimeline.lockInUserTriggerState();
 							self.state = UserTriggerState.CAPTURED;
-							validAction = true;
-							self.relativeTimeline.pause();
-							self.relativeTimeline.displayNextInfo();
-							self._displayRightPanel();
-							break;
 						case UserTriggerState.CAPTURED :
 							validAction = true;
-							self.relativeTimeline.pause();
 							self.relativeTimeline.displayNextInfo();
 							self._displayRightPanel();
 							break;
@@ -97,15 +91,10 @@ class DefaultUserTrigger extends UserTrigger {
 					switch(self.state) {
 						case UserTriggerState.WAITING :
 							self.relativeTimeline.pause();
+							self.relativeTimeline.lockInUserTriggerState();
 							self.state = UserTriggerState.CAPTURED;
-							validAction = true;
-							self.relativeTimeline.pause();
-							self.relativeTimeline.displayPreviousInfo();
-							self._displayLeftPanel();
-							break;
 						case UserTriggerState.CAPTURED :
 							validAction = true;
-							self.relativeTimeline.pause();
 							self.relativeTimeline.displayPreviousInfo();
 							self._displayLeftPanel();
 							break;
@@ -115,14 +104,20 @@ class DefaultUserTrigger extends UserTrigger {
 					switch(self.state) {
 						case UserTriggerState.WAITING :
 							self.relativeTimeline.pause();
+							self.relativeTimeline.lockInUserTriggerState();
 							self.state = UserTriggerState.CAPTURED;
 							validAction = true;
 							self._displayPausePanel();
 							break;
 						case UserTriggerState.CAPTURED :
-							self.relativeTimeline.resume();
 							self.state = UserTriggerState.WAITING;
-							validAction = true;
+							if(self._timerBeforeWaiting != null) {
+								self._timerBeforeWaiting.stop();
+								self._timerBeforeWaiting = null;
+							}
+							self.relativeTimeline.unlockFromUserTriggerState();
+							self.relativeTimeline.resume();
+							validAction = false;
 							self._displayPlayPanel();
 							break;
 					}
@@ -132,7 +127,7 @@ class DefaultUserTrigger extends UserTrigger {
 			if(validAction) {
 				this._timer = new Timer(function () {
 					self._timer = null;
-				}, 1000);
+				}, 500);
 
 				if(this._timerBeforeWaiting != null) {
 					this._timerBeforeWaiting.stop();
@@ -140,11 +135,12 @@ class DefaultUserTrigger extends UserTrigger {
 				}
 
 				this._timerBeforeWaiting = new Timer(function() {
-					self.relativeTimeline.resume();
 					self.state = UserTriggerState.WAITING;
+					self.relativeTimeline.unlockFromUserTriggerState();
+					self.relativeTimeline.resume();
 					self._displayPlayPanel();
 					self._timerBeforeWaiting = null;
-				}, 1000*60*2);
+				}, 1000*30);
 			}
 		}
 	}
@@ -162,11 +158,11 @@ class DefaultUserTrigger extends UserTrigger {
 		$(this.relativeTimeline.getBehaviour().getZone().getZoneDiv()).parent(".zone").append(playDiv);
 
 		new Timer(function() {
-			playDiv.fadeOut(1000, function () {
+			playDiv.fadeOut(750, function () {
 				playDiv.remove();
 			});
 
-		}, 1000);
+		}, 100);
 	}
 
 	/**
@@ -182,10 +178,10 @@ class DefaultUserTrigger extends UserTrigger {
 		$(this.relativeTimeline.getBehaviour().getZone().getZoneDiv()).parent(".zone").append(pauseDiv);
 
 		new Timer(function() {
-			pauseDiv.fadeOut(1000, function () {
+			pauseDiv.fadeOut(750, function () {
 				pauseDiv.remove();
 			});
-		}, 1000);
+		}, 100);
 	}
 
 	/**
@@ -201,10 +197,10 @@ class DefaultUserTrigger extends UserTrigger {
 		$(this.relativeTimeline.getBehaviour().getZone().getZoneDiv()).parent(".zone").append(leftDiv);
 
 		new Timer(function() {
-			leftDiv.fadeOut(1000, function () {
+			leftDiv.fadeOut(750, function () {
 				leftDiv.remove();
 			});
-		}, 1000);
+		}, 100);
 	}
 
 	/**
@@ -220,9 +216,9 @@ class DefaultUserTrigger extends UserTrigger {
 		$(this.relativeTimeline.getBehaviour().getZone().getZoneDiv()).parent(".zone").append(rightDiv);
 
 		new Timer(function() {
-			rightDiv.fadeOut(1000, function () {
+			rightDiv.fadeOut(750, function () {
 				rightDiv.remove();
 			});
-		}, 1000);
+		}, 100);
 	}
 }

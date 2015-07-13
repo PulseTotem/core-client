@@ -91,19 +91,21 @@ class FadeInBehaviour extends Behaviour {
 
 		var listInfoRenderers = this.getListInfoRenderers();
 
-		if(this._currentInfoRendererId == null) {
-			this._currentInfoRendererId = 0;
-		} else {
-			this._currentInfoRendererId = (this._currentInfoRendererId + 1) % (listInfoRenderers.length);
+		if(listInfoRenderers.length > 0) {
+			if (this._currentInfoRendererId == null) {
+				this._currentInfoRendererId = 0;
+			} else {
+				this._currentInfoRendererId = (this._currentInfoRendererId + 1) % (listInfoRenderers.length);
+			}
+
+			var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
+
+			this._displayInfoRenderer(currentInfoRenderer);
+
+			this._timer = new Timer(function () {
+				self._nextInfoRenderer();
+			}, currentInfoRenderer.getInfo().getDurationToDisplay() * 1000 + 2100);
 		}
-
-		var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
-
-		this._displayInfoRenderer(currentInfoRenderer);
-
-		this._timer = new Timer(function() {
-			self._nextInfoRenderer();
-		}, currentInfoRenderer.getInfo().getDurationToDisplay()*1000 + 2100);
 	}
 
 	/**
@@ -150,18 +152,70 @@ class FadeInBehaviour extends Behaviour {
 	private _refreshView() {
 		var self = this;
 
-		var listInfoRenderers = this.getListInfoRenderers();
-		var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
-		var renderer = currentInfoRenderer.getRenderer();
+		if(this._haveEnoughTime()) {
 
-		var content = $(self.getZone().getZoneDiv()).find(".FadeInBehaviour_show").first();
+			var listInfoRenderers = this.getListInfoRenderers();
+			var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
+			var renderer = currentInfoRenderer.getRenderer();
 
-		var endRender = function() {
-			renderer.animate(currentInfoRenderer.getInfo(), content, function() {});
-			currentInfoRenderer.getInfo().setCastingDate(new Date());
-		};
+			var content = $(self.getZone().getZoneDiv()).find(".FadeInBehaviour_show").first();
 
-		renderer.updateRender(currentInfoRenderer.getInfo(), content, endRender);
+			var endRender = function () {
+				renderer.animate(currentInfoRenderer.getInfo(), content, function () {
+				});
+				currentInfoRenderer.getInfo().setCastingDate(new Date());
+			};
+
+			renderer.updateRender(currentInfoRenderer.getInfo(), content, endRender);
+		} else {
+			this._nextInfoRenderer();
+		}
+	}
+
+	/**
+	 * Test if updated current info have enough time to display.
+	 *
+	 * @method _haveEnoughTime
+	 * @private
+	 */
+	private _haveEnoughTime() {
+		var self = this;
+
+		if(this._timer != null) {
+
+			var listInfoRenderers = this.getListInfoRenderers();
+			var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
+			var info = currentInfoRenderer.getInfo();
+
+			this._timer.pause();
+
+			var prevTime = this._timer.getDelay();
+
+			var diffDelay = (info.getDurationToDisplay() * 1000) - prevTime;
+
+			if (diffDelay >= 0) {
+				this._timer.addToDelay(diffDelay);
+				this._timer.resume();
+				return true;
+			} else {
+				diffDelay = diffDelay * (-1); //because diffDelay is negative before this operation
+
+				var remainingTime = this._timer.getRemaining();
+
+				var diffRemaining = remainingTime - diffDelay;
+
+				if (diffRemaining > 0) {
+					this._timer.removeToDelay(diffDelay);
+					this._timer.resume();
+					return true;
+				} else {
+					this._timer.stop();
+					return false;
+				}
+			}
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -242,16 +296,24 @@ class FadeInBehaviour extends Behaviour {
 	displayPreviousInfo() {
 		var listInfoRenderers = this.getListInfoRenderers();
 
-		if(this._currentInfoRendererId != null && this._currentInfoRendererId > 0) {
-			this._currentInfoRendererId = this._currentInfoRendererId - 1;
-			var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
+		if(listInfoRenderers.length > 0) {
+			if(this._currentInfoRendererId != null) {
+				if (this._currentInfoRendererId > 0) {
+					this._currentInfoRendererId = this._currentInfoRendererId - 1;
+					var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
 
-			this._displayInfoRenderer(currentInfoRenderer);
-			return true;
-		} else {
-			if(this._currentInfoRendererId == 0) {
+					this._displayInfoRenderer(currentInfoRenderer);
+					return true;
+				} else {
+					if (this._currentInfoRendererId == 0) {
+						return false;
+					}
+				}
+			} else {
 				return false;
 			}
+		} else {
+			return false;
 		}
 	}
 
@@ -263,17 +325,24 @@ class FadeInBehaviour extends Behaviour {
 	displayNextInfo() {
 		var listInfoRenderers = this.getListInfoRenderers();
 
-		if(this._currentInfoRendererId != null && (this._currentInfoRendererId < (listInfoRenderers.length - 1))) {
-			this._currentInfoRendererId = (this._currentInfoRendererId + 1);
+		if(listInfoRenderers.length > 0) {
+			if (this._currentInfoRendererId != null) {
+				if (this._currentInfoRendererId < (listInfoRenderers.length - 1)) {
+					this._currentInfoRendererId = this._currentInfoRendererId + 1;
+					var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
 
-			var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
-
-			this._displayInfoRenderer(currentInfoRenderer);
-			return true;
-		} else {
-			if(this._currentInfoRendererId == (listInfoRenderers.length - 1)) {
+					this._displayInfoRenderer(currentInfoRenderer);
+					return true;
+				} else {
+					if (this._currentInfoRendererId == (listInfoRenderers.length - 1)) {
+						return false;
+					}
+				}
+			} else {
 				return false;
 			}
+		} else {
+			return false;
 		}
 	}
 
@@ -287,16 +356,21 @@ class FadeInBehaviour extends Behaviour {
 
 		var listInfoRenderers = this.getListInfoRenderers();
 
-		this._currentInfoRendererId = listInfoRenderers.length - 1;
-		var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
+		if(listInfoRenderers.length > 0) {
 
-		this._displayInfoRenderer(currentInfoRenderer);
+			this._currentInfoRendererId = listInfoRenderers.length - 1;
+			var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
 
-		this._timer = new Timer(function() {
-			self._nextInfoRenderer();
-		}, currentInfoRenderer.getInfo().getDurationToDisplay()*1000 + 2100);
+			this._displayInfoRenderer(currentInfoRenderer);
 
-		this.pause();
+			this._timer = new Timer(function () {
+				self._nextInfoRenderer();
+			}, currentInfoRenderer.getInfo().getDurationToDisplay() * 1000 + 2100);
+
+			this.pause();
+		} else {
+			this.stop();
+		}
 	}
 
 	/**
@@ -309,39 +383,60 @@ class FadeInBehaviour extends Behaviour {
 
 		var listInfoRenderers = this.getListInfoRenderers();
 
-		this._currentInfoRendererId = 0;
-		var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
+		if(listInfoRenderers.length > 0) {
 
-		this._displayInfoRenderer(currentInfoRenderer);
+			this._currentInfoRendererId = 0;
+			var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
 
-		this._timer = new Timer(function() {
-			self._nextInfoRenderer();
-		}, currentInfoRenderer.getInfo().getDurationToDisplay()*1000 + 2100);
+			this._displayInfoRenderer(currentInfoRenderer);
 
-		this.pause();
+			this._timer = new Timer(function () {
+				self._nextInfoRenderer();
+			}, currentInfoRenderer.getInfo().getDurationToDisplay() * 1000 + 2100);
+
+			this.pause();
+		} else {
+			this.stop();
+		}
 	}
 
 	/**
-	 * Update Info if it's currently display
+	 * Update Info if it's in current list to display (or currently displayed)
 	 *
-	 * @method updateInfoIfCurrentlyDisplay
+	 * @method updateInfo
 	 * @param {Info} info - Info to update.
+	 * @return {boolean} 'true' if done, else otherwise
 	 */
-	updateInfoIfCurrentlyDisplay(info : Info) {
+	updateInfo(info : Info) : boolean {
 		var self = this;
 
 		var listInfoRenderers = this.getListInfoRenderers();
 
 		if(listInfoRenderers.length > 0) {
 
-			var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
+			var updated = false;
 
-			if(typeof(currentInfoRenderer) != "undefined" && currentInfoRenderer != null) {
-				if (currentInfoRenderer.getInfo().getId() == info.getId() && ! currentInfoRenderer.getInfo().equals(info)) {
-					currentInfoRenderer.setInfo(info);
-					this._refreshView();
+			listInfoRenderers.forEach(function(infoRenderer : InfoRenderer<any>) {
+				if (infoRenderer.getInfo().getId() == info.getId()) {
+					var currentInfoRenderer = listInfoRenderers[self._currentInfoRendererId];
+					if(typeof(currentInfoRenderer) != "undefined"
+						&& currentInfoRenderer != null
+						&& currentInfoRenderer.getInfo().getId() == info.getId()
+						&& ! currentInfoRenderer.getInfo().equals(info)) {
+
+						currentInfoRenderer.setInfo(info);
+						self._refreshView();
+
+					} else {
+						infoRenderer.setInfo(info);
+					}
+					updated = true;
 				}
-			}
+			});
+
+			return updated;
+		} else {
+			return false;
 		}
 	}
 }

@@ -1,4 +1,5 @@
 /**
+ * @author Christian Brel <christian@the6thscreen.fr, ch.brel@gmail.com>
  * @author Simon Urli <simon@the6thscreen.fr, simon.urli@gmail.com>
  */
 
@@ -28,8 +29,24 @@ class StaticSource<SourceInfo extends Info> {
 	 */
 	private _call : CallItf;
 
-	constructor(refreshTime : number = 60) {
+	/**
+	 * StaticSource's params.
+	 *
+	 * @property _params
+	 * @type any
+	 */
+	params : any;
+
+	/**
+	 * Constructor.
+	 *
+	 * @constructor
+	 * @param {number} refreshTime - interval time to refresh Source.
+	 * @param {Array<any>} params - StaticSource's params.
+	 */
+	constructor(refreshTime : number = 60, params : any = []) {
 		this._refreshTime = refreshTime;
+		this.params = params;
 	}
 
 	/**
@@ -58,6 +75,9 @@ class StaticSource<SourceInfo extends Info> {
 	public start() {
 		var self = this;
 
+		var info = self.computeInfo();
+		self.getCall().onNewInfo(info);
+
 		var intervalFunction = function () {
 			var info = self.computeInfo();
 			self.getCall().onNewInfo(info);
@@ -68,6 +88,8 @@ class StaticSource<SourceInfo extends Info> {
 
 	/**
 	 * Create and return the information of the Static Source
+	 *
+	 * @method computeInfo
 	 */
 	computeInfo() : SourceInfo {
 		Logger.debug("StaticSource - computeInfo - Method need to be implemented !");

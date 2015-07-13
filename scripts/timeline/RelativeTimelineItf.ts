@@ -31,6 +31,48 @@ interface RelativeTimelineItf {
 	getRelativeEvents() : Array<RelativeEventItf>;
 
 	/**
+	 * Return current list of displayed InfoRenderers.
+	 *
+	 * @method getCurrentListInfoRenderers
+	 * @returns {Array<InfoRenderer<any>>} current list of displayed InfoRenderers.
+	 */
+	getCurrentListInfoRenderers() : Array<InfoRenderer<any>>;
+
+///// BEGIN: MANAGE RELATIVE TIMELINE STATES /////
+
+	/**
+	 * Switch to RUNNER State if it's possible.
+	 *
+	 * @method switchToRunnerState
+	 * @return {boolean} 'true' if it's done, 'false' otherwise
+	 */
+	switchToRunnerState() : boolean;
+
+	/**
+	 * Switch to SYSTEMTRIGGER State if it's possible.
+	 *
+	 * @method switchToSystemTriggerState
+	 * @return {boolean} 'true' if it's done, 'false' otherwise
+	 */
+	switchToSystemTriggerState() : boolean;
+
+	/**
+	 * Lock to USERTRIGGER State and backup previous state.
+	 *
+	 * @method lockInUserTriggerState
+	 */
+	lockInUserTriggerState();
+
+	/**
+	 * Unlock from USERTRIGGER State and come back to previous state.
+	 *
+	 * @method unlockFromUserTriggerState
+	 */
+	unlockFromUserTriggerState();
+
+///// END: MANAGE RELATIVE TIMELINE STATES /////
+
+	/**
 	 * Pause timeline.
 	 *
 	 * @method pause
@@ -44,14 +86,6 @@ interface RelativeTimelineItf {
 	 * @param {Array<InfoRenderer<any>>>} listInfoRenderers - InfoRenderer list to display.
 	 */
 	display(listInfoRenderers : Array<InfoRenderer<any>>);
-
-	/**
-	 * Pause timeline and display InfoRenderer list in priority.
-	 *
-	 * @method pauseAndDisplay
-	 * @param {Array<InfoRenderer<any>>>} listInfoRenderers - InfoRenderer list to display.
-	 */
-	pauseAndDisplay(listInfoRenderers : Array<InfoRenderer<any>>);
 
 	/**
 	 * Add some InfoRenderer to current InfoRenderer list.
@@ -69,11 +103,11 @@ interface RelativeTimelineItf {
 	resume();
 
 	/**
-	 * Restore and Resume.
+	 * Restore.
 	 *
-	 * @method restoreAndResume
+	 * @method restore
 	 */
-	restoreAndResume();
+	restore();
 
 	/**
 	 * Display previous Info.
@@ -104,11 +138,11 @@ interface RelativeTimelineItf {
 	displayFirstInfo();
 
 	/**
-	 * Update Info if it's currently display
+	 * Update Info
 	 *
-	 * @method updateInfoIfCurrentlyDisplay
+	 * @method updateInfo
 	 * @param {Info} info - Info to update.
 	 */
-	updateInfoIfCurrentlyDisplay(info : Info);
+	updateInfo(info : Info);
 
 }

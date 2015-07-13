@@ -3,14 +3,13 @@
  * @author Simon Urli <simon@the6thscreen.fr, simon.urli@gmail.com>
  */
 
-/// <reference path="../../t6s-core/core/scripts/infotype/CounterList.ts" />
-/// <reference path="../../t6s-core/core/scripts/infotype/Counter.ts" />
-/// <reference path="./Renderer.ts" />
+/// <reference path="../../../t6s-core/core/scripts/infotype/CityEvent.ts" />
+/// <reference path="../../../t6s-core/core/scripts/infotype/EventList.ts" />
+/// <reference path="../Renderer.ts" />
 
 declare var $: any; // Use of JQuery
-declare var moment: any; // Use of MomentJS
 
-class TweetCounterRenderer implements Renderer<Counter> {
+class EventListRenderer implements Renderer<CityEvent> {
 	/**
 	 * Transform the Info list to another Info list.
 	 *
@@ -18,28 +17,27 @@ class TweetCounterRenderer implements Renderer<Counter> {
 	 * @param {ProcessInfo} info - The Info to transform.
 	 * @return {Array<RenderInfo>} listTransformedInfos - The Info list after transformation.
 	 */
-	transformInfo(info : CounterList) : Array<Counter> {
-		var counterLists : Array<CounterList> = new Array<CounterList>();
+	transformInfo(info : EventList) : Array<CityEvent> {
+		var newListInfos : Array<EventList> = new Array<EventList>();
 		try {
-			var newInfo = CounterList.fromJSONObject(info);
-			counterLists.push(newInfo);
+			var newInfo = EventList.fromJSONObject(info);
+			newListInfos.push(newInfo);
 		} catch(e) {
 			Logger.error(e.message);
 		}
 
-		var counters : Array<Counter> = new Array<Counter>();
+        var result = new Array<CityEvent>();
 
-		for(var iCL in counterLists) {
-			var cl : CounterList = counterLists[iCL];
-			var clCounters : Array<Counter> = cl.getCounters();
-			for(var iC in clCounters) {
-				var c : Counter = clCounters[iC];
-				counters.push(c);
-			}
-		}
+		newListInfos.forEach(function(eventList : EventList) {
+            var events : Array<CityEvent> = eventList.getEvents();
 
-		return counters;
-	}
+			events.forEach(function (event : CityEvent) {
+                result.push(event);
+            });
+        });
+
+        return result;
+    }
 
 	/**
 	 * Render the Info in specified DOM Element.
@@ -49,16 +47,16 @@ class TweetCounterRenderer implements Renderer<Counter> {
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
 	 * @param {Function} endCallback - Callback function called at the end of render method.
 	 */
-	render(info : Counter, domElem : any, endCallback : Function) {
+	render(info : CityEvent, domElem : any, endCallback : Function) {
 
-		var counterHTMLWrapper = $("<div>");
-		counterHTMLWrapper.addClass("TweetCounterRenderer_wrapper");
-		counterHTMLWrapper.html(info.getValue());
+		var eventHTML = $("<div>");
 
-		$(domElem).append(counterHTMLWrapper);
+	    eventHTML.append(info.name());
+
+        $(domElem).append(eventHTML);
 
 		endCallback();
-	}
+    }
 
 	/**
 	 * Update rendering Info in specified DOM Element.
@@ -68,9 +66,14 @@ class TweetCounterRenderer implements Renderer<Counter> {
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
 	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
-	updateRender(info : Counter, domElem : any, endCallback : Function) {
-		var counterHTMLWrapper = $(domElem).find(".TweetCounterRenderer_wrapper").first();
-		counterHTMLWrapper.html(info.getValue());
+	updateRender(info : CityEvent, domElem : any, endCallback : Function) {
+		$(domElem).empty();
+
+		var eventHTML = $("<div>");
+
+		eventHTML.append(info.name());
+
+		$(domElem).append(eventHTML);
 
 		endCallback();
 	}
@@ -83,7 +86,7 @@ class TweetCounterRenderer implements Renderer<Counter> {
 	 * @param {DOM Element} domElem - The DOM Element where animate the info.
 	 * @param {Function} endCallback - Callback function called at the end of animation.
 	 */
-	animate(info : Counter, domElem : any, endCallback : Function) {
+	animate(info : CityEvent, domElem : any, endCallback : Function) {
 		//Nothing to do.
 
 		endCallback();

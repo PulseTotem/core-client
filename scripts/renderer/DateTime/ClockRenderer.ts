@@ -1,14 +1,15 @@
 /**
- * @author Simon Urli <simon@the6thscreen.fr>
+ * @author Christian Brel <christian@the6thscreen.fr, ch.brel@gmail.com>
+ * @author Simon Urli <simon@the6thscreen.fr, simon.urli@gmail.com>
  */
 
-/// <reference path="../../t6s-core/core/scripts/infotype/VideoURL.ts" />
-/// <reference path="../../t6s-core/core/scripts/infotype/VideoPlaylist.ts" />
-/// <reference path="./Renderer.ts" />
+/// <reference path="../../../t6s-core/core/scripts/infotype/DateTime.ts" />
+/// <reference path="../Renderer.ts" />
 
 declare var $: any; // Use of JQuery
+declare var moment: any; // Use of MomentJS
 
-class VideoPlaylistRenderer implements Renderer<VideoURL> {
+class ClockRenderer implements Renderer<DateTime> {
 	/**
 	 * Transform the Info list to another Info list.
 	 *
@@ -16,21 +17,27 @@ class VideoPlaylistRenderer implements Renderer<VideoURL> {
 	 * @param {ProcessInfo} info - The Info to transform.
 	 * @return {Array<RenderInfo>} listTransformedInfos - The Info list after transformation.
 	 */
-	transformInfo(info : VideoPlaylist) : Array<VideoURL> {
-		var videoList : Array<VideoURL> = new Array<VideoURL>();
-
-		var newInfo = VideoPlaylist.fromJSONObject(info);
+	transformInfo(info : DateTimeList) : Array<DateTime> {
+		var dateTimeLists : Array<DateTimeList> = new Array<DateTimeList>();
 		try {
-			for (var indexVideo in newInfo.getVideos()) {
-				var videoUrl : VideoURL = newInfo.getVideos()[indexVideo];
-				videoList.push(videoUrl);
-			}
+			var newInfo = DateTimeList.fromJSONObject(info);
+			dateTimeLists.push(newInfo);
 		} catch(e) {
 			Logger.error(e.message);
 		}
 
+		var dateTimes : Array<DateTime> = new Array<DateTime>();
 
-		return videoList;
+		for(var iDTL in dateTimeLists) {
+			var dtl : DateTimeList = dateTimeLists[iDTL];
+			var dtlDateTimes : Array<DateTime> = dtl.getDateTimes();
+			for(var iTL in dtlDateTimes) {
+				var dt : DateTime = dtlDateTimes[iTL];
+				dateTimes.push(dt);
+			}
+		}
+
+		return dateTimes;
 	}
 
 	/**
@@ -41,20 +48,14 @@ class VideoPlaylistRenderer implements Renderer<VideoURL> {
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
 	 * @param {Function} endCallback - Callback function called at the end of render method.
 	 */
-	render(info : VideoURL, domElem : any, endCallback : Function) {
-		var videoHTML = $("<div>");
-		videoHTML.addClass("VideoPlaylistRenderer_mainDiv");
+	render(info : DateTime, domElem : any, endCallback : Function) {
+		$(domElem).empty();
+		var dateTime = $("<div>");
 
-		var html = "";
+		var formatDate = new moment(info.getDate());
+		dateTime.html(formatDate.format("HH:mm:ss"));
 
-		if (info.getType() == VideoType.DAILYMOTION) {
-			html = '<iframe src="'+info.getURL()+'?chromeless=1&html=1&related=0&logo=0&info=0&autoplay=1" allowfullscreen></iframe>';
-		} else {
-			html = "<video autoplay class='VideoPlaylistRenderer_videoHTML'><source src='"+info.getURL()+"'></video>";
-		}
-		videoHTML.html(html);
-
-		$(domElem).append(videoHTML);
+		$(domElem).append(dateTime);
 
 		endCallback();
 	}
@@ -67,10 +68,8 @@ class VideoPlaylistRenderer implements Renderer<VideoURL> {
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
 	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
-	updateRender(info : VideoURL, domElem : any, endCallback : Function) {
-		//TODO
-
-		endCallback();
+	updateRender(info : DateTime, domElem : any, endCallback : Function) {
+		this.render(info, domElem, endCallback);
 	}
 
 	/**
@@ -81,7 +80,7 @@ class VideoPlaylistRenderer implements Renderer<VideoURL> {
 	 * @param {DOM Element} domElem - The DOM Element where animate the info.
 	 * @param {Function} endCallback - Callback function called at the end of animation.
 	 */
-	animate(info : VideoURL, domElem : any, endCallback : Function) {
+	animate(info : DateTime, domElem : any, endCallback : Function) {
 		//Nothing to do.
 
 		endCallback();

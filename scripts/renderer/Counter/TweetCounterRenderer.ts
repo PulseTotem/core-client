@@ -3,13 +3,14 @@
  * @author Simon Urli <simon@the6thscreen.fr, simon.urli@gmail.com>
  */
 
-/// <reference path="../../t6s-core/core/scripts/infotype/UserList.ts" />
-/// <reference path="../../t6s-core/core/scripts/infotype/User.ts" />
-/// <reference path="./Renderer.ts" />
+/// <reference path="../../../t6s-core/core/scripts/infotype/CounterList.ts" />
+/// <reference path="../../../t6s-core/core/scripts/infotype/Counter.ts" />
+/// <reference path="../Renderer.ts" />
 
 declare var $: any; // Use of JQuery
+declare var moment: any; // Use of MomentJS
 
-class UserRenderer implements Renderer<User> {
+class TweetCounterRenderer implements Renderer<Counter> {
 	/**
 	 * Transform the Info list to another Info list.
 	 *
@@ -17,27 +18,27 @@ class UserRenderer implements Renderer<User> {
 	 * @param {ProcessInfo} info - The Info to transform.
 	 * @return {Array<RenderInfo>} listTransformedInfos - The Info list after transformation.
 	 */
-	transformInfo(info : UserList) : Array<User> {
-		var userLists : Array<UserList> = new Array<UserList>();
+	transformInfo(info : CounterList) : Array<Counter> {
+		var counterLists : Array<CounterList> = new Array<CounterList>();
 		try {
-			var newInfo = UserList.fromJSONObject(info);
-			userLists.push(newInfo);
+			var newInfo = CounterList.fromJSONObject(info);
+			counterLists.push(newInfo);
 		} catch(e) {
 			Logger.error(e.message);
 		}
 
-		var users : Array<User> = new Array<User>();
+		var counters : Array<Counter> = new Array<Counter>();
 
-		for(var iUL in userLists) {
-			var ul : UserList = userLists[iUL];
-			var ulUsers : Array<User> = ul.getUsers();
-			for(var iT in ulUsers) {
-				var t : User = ulUsers[iT];
-				users.push(t);
+		for(var iCL in counterLists) {
+			var cl : CounterList = counterLists[iCL];
+			var clCounters : Array<Counter> = cl.getCounters();
+			for(var iC in clCounters) {
+				var c : Counter = clCounters[iC];
+				counters.push(c);
 			}
 		}
 
-		return users;
+		return counters;
 	}
 
 	/**
@@ -48,17 +49,13 @@ class UserRenderer implements Renderer<User> {
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
 	 * @param {Function} endCallback - Callback function called at the end of render method.
 	 */
-	render(info : User, domElem : any, endCallback : Function) {
-		var userHTML = $("<div>");
-		userHTML.addClass("UserRenderer_user");
+	render(info : Counter, domElem : any, endCallback : Function) {
 
-		var userContent = $("<div>");
-		userContent.addClass("UserRenderer_content");
-		userContent.html("Welcome " + info.getUsername() + " !!!");
+		var counterHTMLWrapper = $("<div>");
+		counterHTMLWrapper.addClass("TweetCounterRenderer_wrapper");
+		counterHTMLWrapper.html(info.getValue());
 
-		userHTML.append(userContent);
-
-		$(domElem).append(userHTML);
+		$(domElem).append(counterHTMLWrapper);
 
 		endCallback();
 	}
@@ -71,9 +68,9 @@ class UserRenderer implements Renderer<User> {
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
 	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
-	updateRender(info : User, domElem : any, endCallback : Function) {
-		var userContent = $(domElem).find(".UserRenderer_content").first();
-		userContent.html("Welcome " + info.getUsername() + " !!!");
+	updateRender(info : Counter, domElem : any, endCallback : Function) {
+		var counterHTMLWrapper = $(domElem).find(".TweetCounterRenderer_wrapper").first();
+		counterHTMLWrapper.html(info.getValue());
 
 		endCallback();
 	}
@@ -86,7 +83,7 @@ class UserRenderer implements Renderer<User> {
 	 * @param {DOM Element} domElem - The DOM Element where animate the info.
 	 * @param {Function} endCallback - Callback function called at the end of animation.
 	 */
-	animate(info : User, domElem : any, endCallback : Function) {
+	animate(info : Counter, domElem : any, endCallback : Function) {
 		//Nothing to do.
 
 		endCallback();
