@@ -56,6 +56,20 @@ interface RelativeTimelineItf {
 	 */
 	switchToSystemTriggerState() : boolean;
 
+	/**
+	 * Lock to USERTRIGGER State and backup previous state.
+	 *
+	 * @method lockInUserTriggerState
+	 */
+	lockInUserTriggerState();
+
+	/**
+	 * Unlock from USERTRIGGER State and come back to previous state.
+	 *
+	 * @method unlockFromUserTriggerState
+	 */
+	unlockFromUserTriggerState();
+
 ///// END: MANAGE RELATIVE TIMELINE STATES /////
 
 	/**
