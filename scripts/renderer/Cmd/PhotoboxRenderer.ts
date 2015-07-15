@@ -2,9 +2,8 @@
  * @author Simon Urli <simon@the6thscreen.fr, simon.urli@gmail.com>
  */
 
-/// <reference path="../../t6s-core/core/scripts/infotype/CmdList.ts" />
-/// <reference path="../../t6s-core/core/scripts/infotype/EventList.ts" />
-/// <reference path="./Renderer.ts" />
+/// <reference path="../../../t6s-core/core/scripts/infotype/CmdList.ts" />
+/// <reference path="../Renderer.ts" />
 
 declare var $: any; // Use of JQuery
 declare var Webcam: any; // use of WebcamJS
@@ -76,7 +75,9 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 			jpeg_quality: 90,
 			force_flash: false,
 			flip_horiz: true,
-			fps: 45
+			fps: 45,
+			dest_width: 1280,
+			dest_height: 720
 		});
 
 		Webcam.attach("#webCamview");
@@ -131,7 +132,8 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 					divCounter.text("Une erreur a eu lieu durant le traitement de l'image. Nous vous invitons à prendre une nouvelle photo.");
 
 					var retry = function () {
-						domElem.empty();
+						$(domElem).empty();
+						Webcam.reset();
 						self.startSession(domElem);
 					};
 					setTimeout(retry, 3000);
@@ -165,8 +167,9 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
 	updateRender(info : Cmd, domElem : any, endCallback : Function) {
-		// nothing to do
-		endCallback();
+		$(domElem).empty();
+		Webcam.reset();
+		this.render(info, domElem, endCallback);
 	}
 
 	/**
