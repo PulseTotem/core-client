@@ -3,13 +3,13 @@
  * @author Simon Urli <simon@the6thscreen.fr, simon.urli@gmail.com>
  */
 
-/// <reference path="../../t6s-core/core/scripts/infotype/CityEvent.ts" />
-/// <reference path="../../t6s-core/core/scripts/infotype/EventList.ts" />
-/// <reference path="./Renderer.ts" />
+/// <reference path="../../../t6s-core/core/scripts/infotype/UserList.ts" />
+/// <reference path="../../../t6s-core/core/scripts/infotype/User.ts" />
+/// <reference path="../Renderer.ts" />
 
 declare var $: any; // Use of JQuery
 
-class EventListRenderer implements Renderer<CityEvent> {
+class UserRenderer implements Renderer<User> {
 	/**
 	 * Transform the Info list to another Info list.
 	 *
@@ -17,27 +17,28 @@ class EventListRenderer implements Renderer<CityEvent> {
 	 * @param {ProcessInfo} info - The Info to transform.
 	 * @return {Array<RenderInfo>} listTransformedInfos - The Info list after transformation.
 	 */
-	transformInfo(info : EventList) : Array<CityEvent> {
-		var newListInfos : Array<EventList> = new Array<EventList>();
+	transformInfo(info : UserList) : Array<User> {
+		var userLists : Array<UserList> = new Array<UserList>();
 		try {
-			var newInfo = EventList.fromJSONObject(info);
-			newListInfos.push(newInfo);
+			var newInfo = UserList.fromJSONObject(info);
+			userLists.push(newInfo);
 		} catch(e) {
 			Logger.error(e.message);
 		}
 
-        var result = new Array<CityEvent>();
+		var users : Array<User> = new Array<User>();
 
-		newListInfos.forEach(function(eventList : EventList) {
-            var events : Array<CityEvent> = eventList.getEvents();
+		for(var iUL in userLists) {
+			var ul : UserList = userLists[iUL];
+			var ulUsers : Array<User> = ul.getUsers();
+			for(var iT in ulUsers) {
+				var t : User = ulUsers[iT];
+				users.push(t);
+			}
+		}
 
-			events.forEach(function (event : CityEvent) {
-                result.push(event);
-            });
-        });
-
-        return result;
-    }
+		return users;
+	}
 
 	/**
 	 * Render the Info in specified DOM Element.
@@ -47,16 +48,20 @@ class EventListRenderer implements Renderer<CityEvent> {
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
 	 * @param {Function} endCallback - Callback function called at the end of render method.
 	 */
-	render(info : CityEvent, domElem : any, endCallback : Function) {
+	render(info : User, domElem : any, endCallback : Function) {
+		var userHTML = $("<div>");
+		userHTML.addClass("UserRenderer_user");
 
-		var eventHTML = $("<div>");
+		var userContent = $("<div>");
+		userContent.addClass("UserRenderer_content");
+		userContent.html("Welcome " + info.getUsername() + " !!!");
 
-	    eventHTML.append(info.name());
+		userHTML.append(userContent);
 
-        $(domElem).append(eventHTML);
+		$(domElem).append(userHTML);
 
 		endCallback();
-    }
+	}
 
 	/**
 	 * Update rendering Info in specified DOM Element.
@@ -66,14 +71,9 @@ class EventListRenderer implements Renderer<CityEvent> {
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
 	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
-	updateRender(info : CityEvent, domElem : any, endCallback : Function) {
-		$(domElem).empty();
-
-		var eventHTML = $("<div>");
-
-		eventHTML.append(info.name());
-
-		$(domElem).append(eventHTML);
+	updateRender(info : User, domElem : any, endCallback : Function) {
+		var userContent = $(domElem).find(".UserRenderer_content").first();
+		userContent.html("Welcome " + info.getUsername() + " !!!");
 
 		endCallback();
 	}
@@ -86,7 +86,7 @@ class EventListRenderer implements Renderer<CityEvent> {
 	 * @param {DOM Element} domElem - The DOM Element where animate the info.
 	 * @param {Function} endCallback - Callback function called at the end of animation.
 	 */
-	animate(info : CityEvent, domElem : any, endCallback : Function) {
+	animate(info : User, domElem : any, endCallback : Function) {
 		//Nothing to do.
 
 		endCallback();

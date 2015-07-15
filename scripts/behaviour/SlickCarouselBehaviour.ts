@@ -218,14 +218,16 @@ class SlickCarouselBehaviour extends Behaviour {
 	}
 
 	/**
-	 * Update Info if it's currently display
+	 * Update Info if it's in current list to display (or currently displayed)
 	 *
-	 * @method updateInfoIfCurrentlyDisplay
+	 * @method updateInfo
 	 * @param {Info} info - Info to update.
+	 * @return {boolean} 'true' if done, else otherwise
 	 */
-	updateInfoIfCurrentlyDisplay(info : Info) {
+	updateInfo(info : Info) : boolean {
 		//TODO
-		//TODO : Manage new Info 'getDurationToDisplay'...
-		Logger.debug("TODO -> SlickCarouselBehaviour - updateInfoIfCurrentlyDisplay : Method need to be implemented.");
+		//TODO : Manage update of new Info and update display if info is displayed and different than previous one
+		Logger.debug("TODO -> SlickCarouselBehaviour - updateInfo : Method need to be implemented.");
+		return false;
 	}
 }

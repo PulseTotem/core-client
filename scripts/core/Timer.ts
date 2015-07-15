@@ -133,12 +133,20 @@ class Timer {
 	 */
 	resume() {
 		var self = this;
-		if(this._timeout == null && this._remaining != this._delay) {
+
+		if(this._timeout != null) {
+			this.pause();
+		}
+
+		if(this._remaining > 0 && this._remaining <= this._delay) {
 			this._startDate = new Date();
 			this._timeout = setTimeout(function() {
 				self.stop();
 				self._callback();
 			}, this._remaining);
+		} else {
+			self.stop();
+			self._callback();
 		}
 	}
 
@@ -179,10 +187,6 @@ class Timer {
 		this._delay -= time;
 		this._remaining -= time;
 
-		if(this._remaining > 0) {
-			this.resume();
-		} else {
-			this.stop();
-		}
+		this.resume();
 	}
 }

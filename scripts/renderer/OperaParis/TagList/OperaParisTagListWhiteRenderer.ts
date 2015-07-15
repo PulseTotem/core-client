@@ -3,16 +3,16 @@
  * @author Simon Urli <simon@the6thscreen.fr, simon.urli@gmail.com>
  */
 
-/// <reference path="../../t6s-core/core/scripts/infotype/TagList.ts" />
-/// <reference path="../../t6s-core/core/scripts/infotype/Tag.ts" />
-/// <reference path="./Renderer.ts" />
+/// <reference path="../../../../t6s-core/core/scripts/infotype/TagList.ts" />
+/// <reference path="../../../../t6s-core/core/scripts/infotype/Tag.ts" />
+/// <reference path="../../Renderer.ts" />
 
 declare var $: any; // Use of JQuery
 declare var d3: any; // Use of D3JS
 declare var Snap: any; // Use of SnapSVG
 declare var mina: any; // Use of SnapSVG (mina function)
 
-class OperaParisTagListDarkRenderer implements Renderer<TagList> {
+class OperaParisTagListWhiteRenderer implements Renderer<TagList> {
 
 	/**
 	 * Words attached to each Info.
@@ -60,21 +60,21 @@ class OperaParisTagListDarkRenderer implements Renderer<TagList> {
 		var self = this;
 
 		var tagHTMLWrapper = $("<div>");
-		tagHTMLWrapper.addClass("OperaParisTagListDarkRenderer_wrapper");
+		tagHTMLWrapper.addClass("OperaParisTagListWhiteRenderer_wrapper");
 
 		var titleDiv = $("<div>");
-		titleDiv.addClass("OperaParisTagListDarkRenderer_title");
+		titleDiv.addClass("OperaParisTagListWhiteRenderer_title");
 
 		tagHTMLWrapper.append(titleDiv);
 
 		var titleText = $("<div>");
-		titleText.addClass("OperaParisTagListDarkRenderer_title_text");
+		titleText.addClass("OperaParisTagListWhiteRenderer_title_text");
 		titleText.html("Top 5 #Hashtags / ");
 
 		titleDiv.append(titleText);
 
 		var twitterLogo = $("<div>");
-		twitterLogo.addClass("OperaParisTagListDarkRenderer_title_twitter_logo");
+		twitterLogo.addClass("OperaParisTagListWhiteRenderer_title_twitter_logo");
 
 		titleDiv.append(twitterLogo);
 
@@ -84,7 +84,7 @@ class OperaParisTagListDarkRenderer implements Renderer<TagList> {
 		titleDiv.append(clearTitleDiv);
 
 		var tagMainzone = $("<div>");
-		tagMainzone.addClass("OperaParisTagListDarkRenderer_mainzone");
+		tagMainzone.addClass("OperaParisTagListWhiteRenderer_mainzone");
 
 		tagHTMLWrapper.append(tagMainzone);
 
@@ -119,7 +119,7 @@ class OperaParisTagListDarkRenderer implements Renderer<TagList> {
 				.enter().append("text")
 				.style("font-size", function(d) { return d.size + "px"; })
 				.style("font-family", "Impact")
-				.style("fill", "black")
+				.style("fill", "white")
 				.attr("text-anchor", "middle")
 				.attr("transform", function(d) {
 					return "translate(" + [-2000, 0] + ")rotate(" + d.rotate + ")";
@@ -149,7 +149,7 @@ class OperaParisTagListDarkRenderer implements Renderer<TagList> {
 	updateRender(info : TagList, domElem : any, endCallback : Function) {
 		var self = this;
 
-		var tagMainzone = $(domElem).find(".OperaParisTagListDarkRenderer_mainzone").first();
+		var tagMainzone = $(domElem).find(".OperaParisTagListWhiteRenderer_mainzone").first();
 
 		tagMainzone.fadeOut(500);
 
@@ -203,7 +203,6 @@ class OperaParisTagListDarkRenderer implements Renderer<TagList> {
 			self._words[info.getId()] = words;
 
 			endCallback();
-
 		});
 
 		new Timer(function() {
@@ -220,7 +219,7 @@ class OperaParisTagListDarkRenderer implements Renderer<TagList> {
 	 * @param {Function} endCallback - Callback function called at the end of animation.
 	 */
 	animate(info : TagList, domElem : any, endCallback : Function) {
-		var tagMainzone = $(domElem).find(".OperaParisTagListDarkRenderer_mainzone").first();
+		var tagMainzone = $(domElem).find(".OperaParisTagListWhiteRenderer_mainzone").first();
 		var words = this._words[info.getId()];
 
 		tagMainzone.find("svg g text").each(function (index) {

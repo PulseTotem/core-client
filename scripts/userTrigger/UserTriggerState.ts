@@ -3,6 +3,11 @@
  * @author Simon Urli <simon@the6thscreen.fr, simon.urli@gmail.com>
  */
 
+/**
+ * Represents State of UserTrigger.
+ *
+ * @enum UserTriggerState
+ */
 enum UserTriggerState {
 	WAITING,
 	CAPTURED

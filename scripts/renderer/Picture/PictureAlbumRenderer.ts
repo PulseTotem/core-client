@@ -3,10 +3,10 @@
  * @author Simon Urli <simon@the6thscreen.fr, simon.urli@gmail.com>
  */
 
-/// <reference path="../../t6s-core/core/scripts/infotype/PictureAlbum.ts" />
-/// <reference path="../../t6s-core/core/scripts/infotype/Picture.ts" />
-/// <reference path="../../t6s-core/core/scripts/infotype/PictureURL.ts" />
-/// <reference path="./Renderer.ts" />
+/// <reference path="../../../t6s-core/core/scripts/infotype/PictureAlbum.ts" />
+/// <reference path="../../../t6s-core/core/scripts/infotype/Picture.ts" />
+/// <reference path="../../../t6s-core/core/scripts/infotype/PictureURL.ts" />
+/// <reference path="../Renderer.ts" />
 
 declare var $: any; // Use of JQuery
 
