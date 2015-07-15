@@ -107,11 +107,14 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 			jpeg_quality: 90,
 			force_flash: false,
 			flip_horiz: true,
-			fps: 45
+			fps: 45,
+			dest_width: 1280,
+			dest_height: 720
 		});
 
 		Webcam.attach("#webCamview");
 
+		var self = this;
 		var managePicture = function(data_uri) {
 
 			Webcam.on( 'uploadProgress', function(progress) {
@@ -122,8 +125,16 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 			Webcam.on( 'uploadComplete', function(code, text) {
 				if (code == 200) {
 					Webcam.reset();
-					divCam.html('<img src="'+data_uri+'"/>');
-					divCounter.text("L'image a été traitée avec succès ! Merci de valider la photo sur votre téléphone.");
+					divCam.html('<img src="'+data_uri+'" class="photobox_webcamImage" />');
+					divCounter.text("L'image a été traitée avec succès ! Merci de valider la photo pour continuer.");
+				} else if (code == 500) {
+					divCounter.text("Une erreur a eu lieu durant le traitement de l'image. Nous vous invitons à prendre une nouvelle photo.");
+
+					var retry = function () {
+						domElem.empty();
+						self.startSession(domElem);
+					};
+					setTimeout(retry, 3000);
 				}
 			} );
 
