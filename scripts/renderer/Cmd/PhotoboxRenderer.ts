@@ -140,15 +140,19 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 
 			Webcam.on( 'uploadComplete', function(code, text) {
 				if (code == 200) {
-					Webcam.reset();
+					if (Webcam.container) {
+						Webcam.reset();
+					}
 					divCam.html('<img src="'+data_uri+'" class="photobox_webcamImage" />');
 					divCounter.text("L'image a été traitée avec succès ! Merci de valider la photo pour continuer.");
 				} else if (code == 500) {
 					divCounter.text("Une erreur a eu lieu durant le traitement de l'image. Nous vous invitons à prendre une nouvelle photo.");
 
 					var retry = function () {
+						if (Webcam.container) {
+							Webcam.reset();
+						}
 						$(domElem).empty();
-						Webcam.reset();
 						self.startSession(domElem);
 					};
 					setTimeout(retry, 3000);
@@ -182,8 +186,10 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
 	updateRender(info : Cmd, domElem : any, endCallback : Function) {
+		if (Webcam.container) {
+			Webcam.reset();
+		}
 		$(domElem).empty();
-		Webcam.reset();
 		this.render(info, domElem, endCallback);
 	}
 
