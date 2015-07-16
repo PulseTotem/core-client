@@ -9,6 +9,17 @@ declare var $: any; // Use of JQuery
 declare var Webcam: any; // use of WebcamJS
 
 class PhotoboxRenderer implements Renderer<Cmd> {
+
+	private webcam_settings = {
+		image_format: 'jpeg',
+		jpeg_quality: 90,
+		force_flash: false,
+		flip_horiz: true,
+		fps: 45,
+		dest_width: 1280,
+		dest_height: 720
+	};
+
 	/**
 	 * Transform the Info list to another Info list.
 	 *
@@ -63,22 +74,32 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 		endCallback();
 	}
 
+	private preventFallback() {
+		var self = this;
+		var firstError = true;
+		Webcam.on('error', function (err) {
+			if (firstError) {
+				self.webcam_settings.dest_width = 640;
+				self.webcam_settings.dest_height = 360;
+
+				Webcam.set(self.webcam_settings);
+				Webcam.attach("#webCamview");
+				firstError = false;
+			} else {
+				alert(err);
+			}
+		});
+	}
+
 	private startSession(domElem : any) {
 		var divCam = $('<div>');
 		divCam.attr("id","webCamview");
 		divCam.addClass("photobox_divcam");
 
 		domElem.append(divCam);
+		this.preventFallback();
 
-		Webcam.set({
-			image_format: 'jpeg',
-			jpeg_quality: 90,
-			force_flash: false,
-			flip_horiz: true,
-			fps: 45,
-			dest_width: 1280,
-			dest_height: 720
-		});
+		Webcam.set(this.webcam_settings);
 
 		Webcam.attach("#webCamview");
 	}
@@ -103,15 +124,9 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 
 		domElem.append(html);
 
-		Webcam.set({
-			image_format: 'jpeg',
-			jpeg_quality: 90,
-			force_flash: false,
-			flip_horiz: true,
-			fps: 45,
-			dest_width: 1280,
-			dest_height: 720
-		});
+		this.preventFallback();
+
+		Webcam.set(this.webcam_settings);
 
 		Webcam.attach("#webCamview");
 
