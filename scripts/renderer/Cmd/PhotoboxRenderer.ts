@@ -94,7 +94,7 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 
 		var content = $('<span>');
 		content.addClass("photobox_contentWait");
-		content.text("Flashez le QRCode ci-dessous et laissez vous guider : ");
+		content.text("Flashez le QRCode et laissez vous guider : ");
 		divText.append(content);
 
 		var qrCode = $('<img src="'+qrCodeUrl+'" />');
