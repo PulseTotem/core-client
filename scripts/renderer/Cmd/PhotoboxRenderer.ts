@@ -69,6 +69,10 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 			var counterTime = parseInt(info.getArgs()[0]);
 			var servicePostPic = info.getArgs()[1];
 			this.countAndSnap(domElem, counterTime, servicePostPic);
+		} else if (info.getCmd() == "validatedPicture") {
+			if (Webcam.container) {
+				Webcam.reset();
+			}
 		}
 
 		endCallback();
