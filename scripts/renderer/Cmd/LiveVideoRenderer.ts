@@ -13,14 +13,6 @@ declare var easyrtc: any; // Use of EasyRTC
 class LiveVideoRenderer implements Renderer<Cmd> {
 
 	/**
-	 * LiveVideoRenderer's connected clients.
-	 *
-	 * @property _connected
-	 * @type Array<boolean>
-	 */
-	private _connected : Array<boolean>;
-
-	/**
 	 * Transform the Info list to another Info list.
 	 *
 	 * @method transformInfo<ProcessInfo extends Info>
@@ -68,37 +60,36 @@ class LiveVideoRenderer implements Renderer<Cmd> {
 
 				$(domElem).append(liveWrapper);
 
-				self._connected = new Array<boolean>();
-
 				easyrtc.setSocketUrl("http://easyrtc.the6thscreen.fr");
 
 				easyrtc.setStreamAcceptor( function(callerEasyrtcid, stream) {
+
 					var callerVideo = $('<video muted="muted"></video>');
 					callerVideo.addClass('LiveVideoRenderer_callerVideo');
 					callerVideo.addClass('pull_left');
 					callerVideo.attr('id', 'caller_' + callerEasyrtcid);
 
-					easyrtc.setVideoObjectSrc(callerVideo[0], stream);
+					liveWrapper.append(callerVideo);
 
-					self._connected[callerEasyrtcid] = true;
+					easyrtc.setVideoObjectSrc(callerVideo[0], stream);
 				});
 
 				easyrtc.setOnStreamClosed( function (callerEasyrtcid) {
+
 					var callerVideo = $('#caller_' + callerEasyrtcid);
 
-					easyrtc.setVideoObjectSrc(callerVideo[0], "");
+					if(typeof(callerVideo[0]) != "undefined") {
+						easyrtc.setVideoObjectSrc(callerVideo[0], "");
 
-					callerVideo.remove();
-
-					if( typeof(self._connected[callerEasyrtcid]) != "undefined" ) {
-						delete self._connected[callerEasyrtcid];
+						callerVideo.remove();
 					}
 				});
 
 				easyrtc.setRoomOccupantListener(function roomListener(roomName, otherPeers) {
+
 					for(var peerId in otherPeers) {
 
-						if(typeof(self._connected[peerId]) == "undefined") {
+						if( easyrtc.getConnectStatus(peerId) == easyrtc.NOT_CONNECTED ){
 							easyrtc.call(
 								peerId,
 								function(easyrtcid) { Logger.debug("completed call to " + easyrtcid); },
@@ -111,12 +102,16 @@ class LiveVideoRenderer implements Renderer<Cmd> {
 
 					}
 				});
+
 				var connectSuccess = function(myId) {
 					Logger.debug("My easyrtcid is " + myId);
 				};
+
 				var connectFailure = function(errorCode, errText) {
+					Logger.error("connect failure : ");
 					Logger.error(errText);
 				};
+
 				easyrtc.initMediaSource(
 					function(){        // success callback
 						var roomName = "PulseTotem_VideoLive";
