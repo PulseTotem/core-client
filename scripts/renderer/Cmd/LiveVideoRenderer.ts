@@ -129,6 +129,10 @@ class LiveVideoRenderer implements Renderer<Cmd> {
 					connectFailure
 				);
 				break;
+			case "LiveOff" :
+				easyrtc.hangupAll();
+				easyrtc.disconnect();
+				break;
 		}
 		endCallback();
 	}
@@ -142,8 +146,7 @@ class LiveVideoRenderer implements Renderer<Cmd> {
 	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
 	updateRender(info : Cmd, domElem : any, endCallback : Function) {
-
-		endCallback();
+		this.render(info, domElem, endCallback);
 	}
 
 	/**
