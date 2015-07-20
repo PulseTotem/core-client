@@ -81,6 +81,7 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 
 	private waitMessage(domElem : any, qrCodeUrl : string, lastPicUrl : string) {
 		var divText = $('<div>');
+		divText.addClass("photobox_mainDiv");
 		var title = $('<h4>');
 		title.addClass("photobox_titleWait");
 		title.text("Prenez-vous en photo !");
