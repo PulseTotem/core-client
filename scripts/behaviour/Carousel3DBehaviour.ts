@@ -47,6 +47,14 @@ class Carousel3DBehaviour extends Behaviour {
 	private _rotateAngle : number;
 
 	/**
+	 * Carousel3DBehaviour's translationZ pixels.
+	 *
+	 * @property _translationZPixels
+	 * @type number
+	 */
+	private  _translationZPixels : number;
+
+	/**
 	 * Carousel3DBehaviour's started status.
 	 *
 	 * @property _behaviourStarted
@@ -93,6 +101,7 @@ class Carousel3DBehaviour extends Behaviour {
 		this._timerBackup = null;
 		this._behaviourStarted = false;
 		this._rotateAngle = 0;
+		this._translationZPixels = 0;
 	}
 
 	/**
@@ -131,7 +140,14 @@ class Carousel3DBehaviour extends Behaviour {
 
 		if(listInfoRenderers.length > 0) {
 
+			var currentInfoRenderer : InfoRenderer<any> = null;
+
 			if(this._behaviourStarted) {
+				this._currentInfoRendererId = this._nextInfoRendererId;
+				this._nextInfoRendererId = null;
+
+				currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
+
 				var carouselDiv = $(this.getZone().getZoneDiv()).find(".Carousel3DBehaviour_carousel").first();
 
 				carouselDiv.transition({
@@ -139,7 +155,7 @@ class Carousel3DBehaviour extends Behaviour {
 					'easing': 'in-out',
 					'duration': 300
 				}, function () {
-					self._rotateAngle -= 60;
+					self._rotateAngle = self._rotateAngle - 60;
 					carouselDiv.transition({
 						'rotateY': self._rotateAngle + 'deg',
 						'easing': 'in-out',
@@ -150,21 +166,26 @@ class Carousel3DBehaviour extends Behaviour {
 							'easing': 'in-out',
 							'duration': 300
 						}, function() {
-
+							var currentItemPanelNumber = (-1)*(self._rotateAngle % 360)/60;
+							var currentItemPanel = $(self.getZone().getZoneDiv()).find(".Carousel3DBehaviour_carousel_item_" + currentItemPanelNumber).first();
+							currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), currentItemPanel, function() {});
 						});
 					})
 				});
 
-				this._currentInfoRendererId = this._nextInfoRendererId;
-				this._nextInfoRendererId = null;
-
 			} else {
 				$(this.getZone().getZoneDiv()).empty();
+
+				this._translationZPixels = Math.round( ( $(this.getZone().getZoneDiv()).width() / 2 ) /
+					Math.tan( 360 / 6 ) );
+
+
 				var carouselContainer = $("<div>");
 				carouselContainer.addClass("Carousel3DBehaviour_container");
 
 				var carouselDiv = $("<div>");
 				carouselDiv.addClass("Carousel3DBehaviour_carousel");
+				carouselDiv.css("transform", "translateZ(" + (-1)*this._translationZPixels + "px) rotateY(0deg)");
 
 				carouselContainer.append(carouselDiv);
 
@@ -172,6 +193,15 @@ class Carousel3DBehaviour extends Behaviour {
 					var carouselItem = $("<div>");
 					carouselItem.addClass("Carousel3DBehaviour_carousel_item");
 					carouselItem.addClass("Carousel3DBehaviour_carousel_item_" + i);
+
+					carouselItem.css("background-image", $(this.getZone().getZoneDiv()).css("background-image"));
+					carouselItem.css("opacity", $(this.getZone().getZoneDiv()).css("opacity"));
+					carouselItem.css("background-color", $(this.getZone().getZoneDiv()).css("background-color"));
+					carouselItem.css("font", $(this.getZone().getZoneDiv()).css("font"));
+					carouselItem.css("color", $(this.getZone().getZoneDiv()).css("color"));
+					carouselItem.css("border", $(this.getZone().getZoneDiv()).css("border"));
+
+					carouselItem.css("transform", "translateZ(" + this._translationZPixels + "px) rotateY(" + i*60 + "deg)");
 
 					carouselDiv.append(carouselItem);
 				}
@@ -185,9 +215,13 @@ class Carousel3DBehaviour extends Behaviour {
 				this._rotateAngle = 0;
 
 				this._behaviourStarted = true;
-			}
 
-			var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
+				currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
+				var itemPanel = $(this.getZone().getZoneDiv()).find(".Carousel3DBehaviour_carousel_item_0").first();
+				this._displayInfoRenderer(currentInfoRenderer, itemPanel, function() {
+					currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), itemPanel, function() {});
+				});
+			}
 
 			//this._displayInfoRenderer(currentInfoRenderer);
 			this._updateCarousel();
@@ -211,8 +245,6 @@ class Carousel3DBehaviour extends Behaviour {
 
 		var listInfoRenderers = this.getListInfoRenderers();
 
-		var currentItemPanelNumber = (this._rotateAngle % 360)/60;
-
 		if(this._currentInfoRendererId > 0) {
 			this._previousInfoRendererId = this._currentInfoRendererId - 1;
 		} else {
@@ -225,7 +257,29 @@ class Carousel3DBehaviour extends Behaviour {
 			this._nextInfoRendererId = 0;
 		}
 
-		//TODO
+		var currentItemPanelNumber = (-1)*(this._rotateAngle % 360)/60;
+
+		var prevItemPanelNumber = -1;
+		var nextItemPanelNumber = 7;
+
+		if(currentItemPanelNumber > 0) {
+			prevItemPanelNumber = currentItemPanelNumber - 1;
+		} else {
+			prevItemPanelNumber = 5;
+		}
+
+		if(currentItemPanelNumber < 5) {
+			nextItemPanelNumber = currentItemPanelNumber + 1;
+		} else {
+			nextItemPanelNumber = 0;
+		}
+
+		var prevInfoRenderer = listInfoRenderers[this._previousInfoRendererId];
+		var prevItemPanel = $(this.getZone().getZoneDiv()).find(".Carousel3DBehaviour_carousel_item_" + prevItemPanelNumber).first();
+		this._displayInfoRenderer(prevInfoRenderer, prevItemPanel);
+		var nextInfoRenderer = listInfoRenderers[this._nextInfoRendererId];
+		var nextItemPanel = $(this.getZone().getZoneDiv()).find(".Carousel3DBehaviour_carousel_item_" + nextItemPanelNumber).first();
+		this._displayInfoRenderer(nextInfoRenderer, nextItemPanel);
 	}
 
 	/**
@@ -235,8 +289,9 @@ class Carousel3DBehaviour extends Behaviour {
 	 * @private
 	 * @param {InfoRenderer} infoRenderer - The InfoRenderer to display.
 	 * @param {any} itemSpace - The item space where render info.
+	 * @param {Function} optionalCallback - An optional callback called after rendering.
 	 */
-	private _displayInfoRenderer(infoRenderer : InfoRenderer<any>, itemSpace : any) {
+	private _displayInfoRenderer(infoRenderer : InfoRenderer<any>, itemSpace : any, optionalCallback : Function = null) {
 		var self = this;
 
 		var renderer = infoRenderer.getRenderer();
@@ -244,7 +299,9 @@ class Carousel3DBehaviour extends Behaviour {
 		$(itemSpace).empty();
 
 		var endRender = function() {
-			//Nothing to do.
+			if(optionalCallback != null) {
+				optionalCallback();
+			}
 		};
 
 		renderer.render(infoRenderer.getInfo(), $(itemSpace), endRender);
@@ -383,7 +440,7 @@ class Carousel3DBehaviour extends Behaviour {
 
 			var listInfoRenderers = this.getListInfoRenderers();
 			var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
-			this._displayInfoRenderer(currentInfoRenderer);
+			//this._displayInfoRenderer(currentInfoRenderer);
 		}
 
 		if(this._timerBackup != null) {
@@ -406,7 +463,7 @@ class Carousel3DBehaviour extends Behaviour {
 					this._currentInfoRendererId = this._currentInfoRendererId - 1;
 					var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
 
-					this._displayInfoRenderer(currentInfoRenderer);
+					//this._displayInfoRenderer(currentInfoRenderer);
 					return true;
 				} else {
 					if (this._currentInfoRendererId == 0) {
@@ -435,7 +492,7 @@ class Carousel3DBehaviour extends Behaviour {
 					this._currentInfoRendererId = this._currentInfoRendererId + 1;
 					var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
 
-					this._displayInfoRenderer(currentInfoRenderer);
+					//this._displayInfoRenderer(currentInfoRenderer);
 					return true;
 				} else {
 					if (this._currentInfoRendererId == (listInfoRenderers.length - 1)) {
@@ -465,7 +522,7 @@ class Carousel3DBehaviour extends Behaviour {
 			this._currentInfoRendererId = listInfoRenderers.length - 1;
 			var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
 
-			this._displayInfoRenderer(currentInfoRenderer);
+			//this._displayInfoRenderer(currentInfoRenderer);
 
 			this._timer = new Timer(function () {
 				self._nextInfoRenderer();
@@ -492,7 +549,7 @@ class Carousel3DBehaviour extends Behaviour {
 			this._currentInfoRendererId = 0;
 			var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
 
-			this._displayInfoRenderer(currentInfoRenderer);
+			//this._displayInfoRenderer(currentInfoRenderer);
 
 			this._timer = new Timer(function () {
 				self._nextInfoRenderer();
