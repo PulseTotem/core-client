@@ -71,12 +71,52 @@ class Carousel3DBehaviour extends Behaviour {
 	private _timer : Timer;
 
 	/**
-	 * Backup of Carousel3DBehaviour's current InfoRenderer id.
+	 * Backup of Carousel3DBehaviour's previous InfoRenderer id in _listInfoRenderers array.
+	 *
+	 * @property _previousInfoRendererIdBackup
+	 * @type number
+	 */
+	private _previousInfoRendererIdBackup : number;
+
+	/**
+	 * Backup of Carousel3DBehaviour's current InfoRenderer id in _listInfoRenderers array.
 	 *
 	 * @property _currentInfoRendererIdBackup
 	 * @type number
 	 */
 	private _currentInfoRendererIdBackup : number;
+
+	/**
+	 * Backup of Carousel3DBehaviour's next InfoRenderer id in _listInfoRenderers array.
+	 *
+	 * @property _nextInfoRendererIdBackup
+	 * @type number
+	 */
+	private _nextInfoRendererIdBackup : number;
+
+	/**
+	 * Backup of Carousel3DBehaviour's rotate angle.
+	 *
+	 * @property _rotateAngleBackup
+	 * @type number
+	 */
+	private _rotateAngleBackup : number;
+
+	/**
+	 * Backup of Carousel3DBehaviour's translationZ pixels.
+	 *
+	 * @property _translationZPixelsBackup
+	 * @type number
+	 */
+	private  _translationZPixelsBackup : number;
+
+	/**
+	 * Backup of Carousel3DBehaviour's started status.
+	 *
+	 * @property _behaviourStartedBackup
+	 * @type boolean
+	 */
+	private _behaviourStartedBackup : boolean;
 
 	/**
 	 * Backup of Carousel3DBehaviour's timer.
@@ -96,12 +136,19 @@ class Carousel3DBehaviour extends Behaviour {
 		this._previousInfoRendererId = null;
 		this._currentInfoRendererId = null;
 		this._nextInfoRendererId = null;
-		this._timer = null;
-		this._currentInfoRendererIdBackup = null;
-		this._timerBackup = null;
 		this._behaviourStarted = false;
 		this._rotateAngle = 0;
 		this._translationZPixels = 0;
+		this._timer = null;
+
+		this._previousInfoRendererIdBackup = null;
+		this._currentInfoRendererIdBackup = null;
+		this._nextInfoRendererIdBackup = null;
+		this._rotateAngleBackup = null;
+		this._translationZPixelsBackup = null;
+		this._behaviourStartedBackup = null;
+		this._timerBackup = null;
+
 	}
 
 	/**
@@ -148,10 +195,12 @@ class Carousel3DBehaviour extends Behaviour {
 
 				currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
 
+				$(this.getZone().getZoneDiv()).css("overflow", "hidden");
+
 				var carouselDiv = $(this.getZone().getZoneDiv()).find(".Carousel3DBehaviour_carousel").first();
 
 				carouselDiv.transition({
-					'z': '-=500px',
+					'transform': 'translateZ(' + ((-1)*self._translationZPixels-100) + 'px) rotateY(' + self._rotateAngle + 'deg)',
 					'easing': 'in-out',
 					'duration': 300
 				}, function () {
@@ -159,22 +208,27 @@ class Carousel3DBehaviour extends Behaviour {
 					carouselDiv.transition({
 						'rotateY': self._rotateAngle + 'deg',
 						'easing': 'in-out',
-						'duration': 300
+						'duration': 1100
 					}, function () {
 						carouselDiv.transition({
-							'z': '+=500px',
+							'transform': 'translateZ(' + (-1)*self._translationZPixels + 'px) rotateY(' + self._rotateAngle + 'deg)',
 							'easing': 'in-out',
 							'duration': 300
 						}, function() {
+							$(self.getZone().getZoneDiv()).css("overflow", "visible");
+
 							var currentItemPanelNumber = (-1)*(self._rotateAngle % 360)/60;
 							var currentItemPanel = $(self.getZone().getZoneDiv()).find(".Carousel3DBehaviour_carousel_item_" + currentItemPanelNumber).first();
 							currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), currentItemPanel, function() {});
+
+							self._updateCarousel();
 						});
-					})
+					});
 				});
 
 			} else {
 				$(this.getZone().getZoneDiv()).empty();
+				$(this.getZone().getZoneDiv()).css("overflow", "visible");
 
 				this._translationZPixels = Math.round( ( $(this.getZone().getZoneDiv()).width() / 2 ) /
 					Math.tan( 360 / 6 ) );
@@ -201,7 +255,7 @@ class Carousel3DBehaviour extends Behaviour {
 					carouselItem.css("color", $(this.getZone().getZoneDiv()).css("color"));
 					carouselItem.css("border", $(this.getZone().getZoneDiv()).css("border"));
 
-					carouselItem.css("transform", "translateZ(" + this._translationZPixels + "px) rotateY(" + i*60 + "deg)");
+					carouselItem.css("transform", "rotateY(" + i*60 + "deg) translateZ(" + this._translationZPixels + "px)");
 
 					carouselDiv.append(carouselItem);
 				}
@@ -219,12 +273,11 @@ class Carousel3DBehaviour extends Behaviour {
 				currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
 				var itemPanel = $(this.getZone().getZoneDiv()).find(".Carousel3DBehaviour_carousel_item_0").first();
 				this._displayInfoRenderer(currentInfoRenderer, itemPanel, function() {
-					currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), itemPanel, function() {});
+					currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), itemPanel, function() {
+						self._updateCarousel();
+					});
 				});
 			}
-
-			//this._displayInfoRenderer(currentInfoRenderer);
-			this._updateCarousel();
 
 			currentInfoRenderer.getInfo().setCastingDate(new Date());
 
@@ -422,7 +475,12 @@ class Carousel3DBehaviour extends Behaviour {
 	 */
 	save() {
 		super.save();
+		this._previousInfoRendererIdBackup = this._previousInfoRendererId;
 		this._currentInfoRendererIdBackup = this._currentInfoRendererId;
+		this._nextInfoRendererIdBackup = this._nextInfoRendererId;
+		this._rotateAngleBackup = this._rotateAngle;
+		this._translationZPixelsBackup = this._translationZPixels;
+		this._behaviourStartedBackup = this._behaviourStarted;
 		this._timerBackup = this._timer;
 	}
 
@@ -432,7 +490,39 @@ class Carousel3DBehaviour extends Behaviour {
 	 * @method restore
 	 */
 	restore() {
+		var self = this;
+
 		super.restore();
+
+		if(this._previousInfoRendererIdBackup != null) {
+			this._previousInfoRendererId = this._previousInfoRendererIdBackup;
+			this._previousInfoRendererIdBackup = null;
+		}
+
+		if(this._nextInfoRendererIdBackup != null) {
+			this._nextInfoRendererId = this._nextInfoRendererIdBackup;
+			this._nextInfoRendererIdBackup = null;
+		}
+
+		if(this._rotateAngleBackup != null) {
+			this._rotateAngle = this._rotateAngleBackup;
+			this._rotateAngleBackup = null;
+		}
+
+		if(this._translationZPixelsBackup != null) {
+			this._translationZPixels = this._translationZPixelsBackup;
+			this._translationZPixelsBackup = null;
+		}
+
+		if(this._behaviourStartedBackup != null) {
+			this._behaviourStarted = this._behaviourStartedBackup;
+			this._behaviourStartedBackup = null;
+		}
+
+		if(this._timerBackup != null) {
+			this._timer = this._timerBackup;
+			this._timerBackup = null;
+		}
 
 		if(this._currentInfoRendererIdBackup != null) {
 			this._currentInfoRendererId = this._currentInfoRendererIdBackup;
@@ -440,12 +530,15 @@ class Carousel3DBehaviour extends Behaviour {
 
 			var listInfoRenderers = this.getListInfoRenderers();
 			var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
-			//this._displayInfoRenderer(currentInfoRenderer);
-		}
 
-		if(this._timerBackup != null) {
-			this._timer = this._timerBackup;
-			this._timerBackup = null;
+			var currentItemPanelNumber = (-1)*(this._rotateAngle % 360)/60;
+			var currentItemPanel = $(this.getZone().getZoneDiv()).find(".Carousel3DBehaviour_carousel_item_" + currentItemPanelNumber).first();
+
+			this._displayInfoRenderer(currentInfoRenderer, currentItemPanel, function() {
+				currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), currentItemPanel, function() {
+					self._updateCarousel();
+				});
+			});
 		}
 	}
 
@@ -455,15 +548,54 @@ class Carousel3DBehaviour extends Behaviour {
 	 * @method displayPreviousInfo
 	 */
 	displayPreviousInfo() {
+		var self = this;
+
 		var listInfoRenderers = this.getListInfoRenderers();
 
 		if(listInfoRenderers.length > 0) {
 			if(this._currentInfoRendererId != null) {
 				if (this._currentInfoRendererId > 0) {
-					this._currentInfoRendererId = this._currentInfoRendererId - 1;
+
+					this._currentInfoRendererId = this._previousInfoRendererId;
+					this._previousInfoRendererId = null;
+
 					var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
 
-					//this._displayInfoRenderer(currentInfoRenderer);
+					$(this.getZone().getZoneDiv()).css("overflow", "hidden");
+
+					var carouselDiv = $(this.getZone().getZoneDiv()).find(".Carousel3DBehaviour_carousel").first();
+
+					carouselDiv.transition({
+						'transform': 'translateZ(' + ((-1)*self._translationZPixels-100) + 'px) rotateY(' + self._rotateAngle + 'deg)',
+						'easing': 'in-out',
+						'duration': 300
+					}, function () {
+						self._rotateAngle = self._rotateAngle + 60;
+						if(self._rotateAngle > 0) {
+							self._rotateAngle = self._rotateAngle - 360;
+						}
+						carouselDiv.transition({
+							'rotateY': self._rotateAngle + 'deg',
+							'easing': 'in-out',
+							'duration': 1100
+						}, function () {
+							carouselDiv.transition({
+								'transform': 'translateZ(' + (-1)*self._translationZPixels + 'px) rotateY(' + self._rotateAngle + 'deg)',
+								'easing': 'in-out',
+								'duration': 300
+							}, function() {
+								$(self.getZone().getZoneDiv()).css("overflow", "visible");
+
+								var currentItemPanelNumber = (-1)*(self._rotateAngle % 360)/60;
+								var currentItemPanel = $(self.getZone().getZoneDiv()).find(".Carousel3DBehaviour_carousel_item_" + currentItemPanelNumber).first();
+								currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), currentItemPanel, function() {});
+
+								self._updateCarousel();
+							});
+						});
+					});
+
+
 					return true;
 				} else {
 					if (this._currentInfoRendererId == 0) {
@@ -484,15 +616,51 @@ class Carousel3DBehaviour extends Behaviour {
 	 * @method displayNextInfo
 	 */
 	displayNextInfo() {
+		var self = this;
+
 		var listInfoRenderers = this.getListInfoRenderers();
 
 		if(listInfoRenderers.length > 0) {
 			if (this._currentInfoRendererId != null) {
 				if (this._currentInfoRendererId < (listInfoRenderers.length - 1)) {
-					this._currentInfoRendererId = this._currentInfoRendererId + 1;
+
+					this._currentInfoRendererId = this._nextInfoRendererId;
+					this._nextInfoRendererId = null;
+
 					var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
 
-					//this._displayInfoRenderer(currentInfoRenderer);
+					$(this.getZone().getZoneDiv()).css("overflow", "hidden");
+
+					var carouselDiv = $(this.getZone().getZoneDiv()).find(".Carousel3DBehaviour_carousel").first();
+
+					carouselDiv.transition({
+						'transform': 'translateZ(' + ((-1)*self._translationZPixels-100) + 'px) rotateY(' + self._rotateAngle + 'deg)',
+						'easing': 'in-out',
+						'duration': 300
+					}, function () {
+						self._rotateAngle = self._rotateAngle - 60;
+						carouselDiv.transition({
+							'rotateY': self._rotateAngle + 'deg',
+							'easing': 'in-out',
+							'duration': 1100
+						}, function () {
+							carouselDiv.transition({
+								'transform': 'translateZ(' + (-1)*self._translationZPixels + 'px) rotateY(' + self._rotateAngle + 'deg)',
+								'easing': 'in-out',
+								'duration': 300
+							}, function() {
+								$(self.getZone().getZoneDiv()).css("overflow", "visible");
+
+								var currentItemPanelNumber = (-1)*(self._rotateAngle % 360)/60;
+								var currentItemPanel = $(self.getZone().getZoneDiv()).find(".Carousel3DBehaviour_carousel_item_" + currentItemPanelNumber).first();
+								currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), currentItemPanel, function() {});
+
+								self._updateCarousel();
+							});
+						});
+					});
+
+
 					return true;
 				} else {
 					if (this._currentInfoRendererId == (listInfoRenderers.length - 1)) {
@@ -519,14 +687,27 @@ class Carousel3DBehaviour extends Behaviour {
 
 		if(listInfoRenderers.length > 0) {
 
-			this._currentInfoRendererId = listInfoRenderers.length - 1;
-			var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
+			this._currentInfoRendererId = 1;
+			this._previousInfoRendererId = listInfoRenderers.length - 1;
 
-			//this._displayInfoRenderer(currentInfoRenderer);
+			var previousInfoRenderer = listInfoRenderers[this._previousInfoRendererId];
+			var currentItemPanelNumber = (-1)*(this._rotateAngle % 360)/60;
+
+			var prevItemPanelNumber = -1;
+			if(currentItemPanelNumber > 0) {
+				prevItemPanelNumber = currentItemPanelNumber - 1;
+			} else {
+				prevItemPanelNumber = 5;
+			}
+
+			var prevItemPanel = $(this.getZone().getZoneDiv()).find(".Carousel3DBehaviour_carousel_item_" + prevItemPanelNumber).first();
+			this._displayInfoRenderer(previousInfoRenderer, prevItemPanel);
+
+			this.displayPreviousInfo();
 
 			this._timer = new Timer(function () {
 				self._nextInfoRenderer();
-			}, currentInfoRenderer.getInfo().getDurationToDisplay() * 1000 + 2100);
+			}, previousInfoRenderer.getInfo().getDurationToDisplay() * 1000);
 
 			this.pause();
 		} else {
@@ -546,14 +727,27 @@ class Carousel3DBehaviour extends Behaviour {
 
 		if(listInfoRenderers.length > 0) {
 
-			this._currentInfoRendererId = 0;
-			var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
+			this._currentInfoRendererId = - 1;
+			this._nextInfoRendererId = 0;
 
-			//this._displayInfoRenderer(currentInfoRenderer);
+			var currentItemPanelNumber = (-1)*(this._rotateAngle % 360)/60;
+
+			var nextItemPanelNumber = 7;
+			if(currentItemPanelNumber < 5) {
+				nextItemPanelNumber = currentItemPanelNumber + 1;
+			} else {
+				nextItemPanelNumber = 0;
+			}
+
+			var nextInfoRenderer = listInfoRenderers[this._nextInfoRendererId];
+			var nextItemPanel = $(this.getZone().getZoneDiv()).find(".Carousel3DBehaviour_carousel_item_" + nextItemPanelNumber).first();
+			this._displayInfoRenderer(nextInfoRenderer, nextItemPanel);
+
+			this.displayNextInfo();
 
 			this._timer = new Timer(function () {
 				self._nextInfoRenderer();
-			}, currentInfoRenderer.getInfo().getDurationToDisplay() * 1000 + 2100);
+			}, nextInfoRenderer.getInfo().getDurationToDisplay() * 1000);
 
 			this.pause();
 		} else {
