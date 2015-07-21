@@ -351,7 +351,7 @@ class AppearanceBehaviour extends Behaviour {
 
 			this._timer = new Timer(function () {
 				self._nextInfoRenderer();
-			}, currentInfoRenderer.getInfo().getDurationToDisplay() * 1000 + 2100);
+			}, currentInfoRenderer.getInfo().getDurationToDisplay() * 1000);
 
 			this.pause();
 		} else {
@@ -378,7 +378,7 @@ class AppearanceBehaviour extends Behaviour {
 
 			this._timer = new Timer(function () {
 				self._nextInfoRenderer();
-			}, currentInfoRenderer.getInfo().getDurationToDisplay() * 1000 + 2100);
+			}, currentInfoRenderer.getInfo().getDurationToDisplay() * 1000);
 
 			this.pause();
 		} else {
