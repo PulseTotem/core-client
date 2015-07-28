@@ -50,12 +50,20 @@ class ClockRenderer implements Renderer<DateTime> {
 	 */
 	render(info : DateTime, domElem : any, endCallback : Function) {
 		$(domElem).empty();
-		var dateTime = $("<div>");
+		var dateTimeWrapper = $("<div>");
+		dateTimeWrapper.addClass("ClockRenderer_wrapper");
+
+		var dateTime = $("<span>");
+		dateTime.addClass("ClockRenderer_time");
+
+		dateTimeWrapper.append(dateTime);
 
 		var formatDate = new moment(info.getDate());
 		dateTime.html(formatDate.format("HH:mm:ss"));
 
-		$(domElem).append(dateTime);
+		$(domElem).append(dateTimeWrapper);
+
+		dateTimeWrapper.bigtext();
 
 		endCallback();
 	}
@@ -69,7 +77,12 @@ class ClockRenderer implements Renderer<DateTime> {
 	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
 	updateRender(info : DateTime, domElem : any, endCallback : Function) {
-		this.render(info, domElem, endCallback);
+		var dateTime = $(domElem).find(".ClockRenderer_time").first();
+
+		var formatDate = new moment(info.getDate());
+		dateTime.html(formatDate.format("HH:mm:ss"));
+
+		endCallback();
 	}
 
 	/**

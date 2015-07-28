@@ -1,0 +1,301 @@
+@import "../../core.less";
+
+//Landscape
+.landscape {
+
+  //WIDTH
+  .width_xs {
+    @media @tablet { // < 256px
+
+    }
+
+    @media @desktop { // < 360px
+
+    }
+
+    @media @large { // < 320px
+
+    }
+
+    @media @extra-large { // < 480px
+
+    }
+  }
+
+  .width_sm {
+    @media @tablet { // >= 256px
+
+    }
+
+    @media @desktop { // >= 360px
+
+    }
+
+    @media @large { // >= 320px
+
+    }
+
+    @media @extra-large { // >= 480px
+
+    }
+  }
+
+  .width_md {
+    @media @tablet { // >= 512px
+
+    }
+
+    @media @desktop { // >= 720px
+
+    }
+
+    @media @large { // >= 640px
+
+    }
+
+    @media @extra-large { // >= 960px
+
+    }
+  }
+
+  .width_lg {
+    @media @tablet { // >= 768px
+
+    }
+
+    @media @desktop { // >= 1080px
+
+    }
+
+    @media @large { // >= 960px
+
+    }
+
+    @media @extra-large { // >= 1440px
+
+    }
+  }
+
+  //HEIGHT
+  .height_xs {
+    @media @tablet { // < 192px
+
+    }
+
+    @media @desktop { // < 270px
+
+    }
+
+    @media @large { // < 180px
+
+    }
+
+    @media @extra-large { // < 270px
+
+    }
+  }
+
+  .height_sm {
+    @media @tablet { // >= 192px
+
+    }
+
+    @media @desktop { // >= 270px
+
+    }
+
+    @media @large { // >= 180px
+
+    }
+
+    @media @extra-large { // >= 270px
+
+    }
+  }
+
+  .height_md {
+    @media @tablet { // >= 384px
+
+    }
+
+    @media @desktop { // >= 540px
+
+    }
+
+    @media @large { // >= 360px
+
+    }
+
+    @media @extra-large { // >= 540px
+
+    }
+  }
+
+  .height_lg {
+    @media @tablet { // >= 576px
+
+    }
+
+    @media @desktop { // >= 810px
+
+    }
+
+    @media @large { // >= 540px
+
+    }
+
+    @media @extra-large { // >= 810px
+
+    }
+  }
+}
+
+//Portrait
+ .portrait {
+
+ //WIDTH
+   .width_xs {
+     @media @tablet { // < 192px
+
+     }
+
+     @media @desktop { // < 270px
+
+     }
+
+     @media @large { // < 180px
+
+     }
+
+     @media @extra-large { // < 270px
+
+     }
+   }
+
+   .width_sm {
+     @media @tablet { // >= 192px
+
+     }
+
+     @media @desktop { // >= 270px
+
+     }
+
+     @media @large { // >= 180px
+
+     }
+
+     @media @extra-large { // >= 270px
+
+     }
+   }
+
+   .width_md {
+     @media @tablet { // >= 384px
+
+     }
+
+     @media @desktop { // >= 540px
+
+     }
+
+     @media @large { // >= 360px
+
+     }
+
+     @media @extra-large { // >= 540px
+
+     }
+   }
+
+   .width_lg {
+     @media @tablet { // >= 576px
+
+     }
+
+     @media @desktop { // >= 810px
+
+     }
+
+     @media @large { // >= 540px
+
+     }
+
+     @media @extra-large { // >= 810px
+
+     }
+   }
+
+   //HEIGHT
+   .height_xs {
+     @media @tablet { // < 256px
+
+     }
+
+     @media @desktop { // < 360px
+
+     }
+
+     @media @large { // < 320px
+
+     }
+
+     @media @extra-large { // < 480px
+
+     }
+   }
+
+   .height_sm {
+     @media @tablet { // >= 256px
+
+     }
+
+     @media @desktop { // >= 360px
+
+     }
+
+     @media @large { // >= 320px
+
+     }
+
+     @media @extra-large { // >= 480px
+
+     }
+   }
+
+   .height_md {
+     @media @tablet { // >= 512px
+
+     }
+
+     @media @desktop { // >= 720px
+
+     }
+
+     @media @large { // >= 640px
+
+     }
+
+     @media @extra-large { // >= 960px
+
+     }
+   }
+
+   .height_lg {
+     @media @tablet { // >= 768px
+
+     }
+
+     @media @desktop { // >= 1080px
+
+     }
+
+     @media @large { // >= 960px
+
+     }
+
+     @media @extra-large { // >= 1440px
+
+     }
+   }
+ }
