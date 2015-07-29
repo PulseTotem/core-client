@@ -137,6 +137,7 @@ class DefaultSystemTrigger extends SystemTrigger {
 					this._timer.resume();
 				} else {
 					this._timer.stop();
+					this._timer = null;
 					this.relativeTimeline.restore();
 					this.relativeTimeline.switchToRunnerState();
 					this.relativeTimeline.resume();

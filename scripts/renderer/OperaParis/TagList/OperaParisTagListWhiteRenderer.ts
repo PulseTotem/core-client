@@ -222,24 +222,30 @@ class OperaParisTagListWhiteRenderer implements Renderer<TagList> {
 		var tagMainzone = $(domElem).find(".OperaParisTagListWhiteRenderer_mainzone").first();
 		var words = this._words[info.getId()];
 
-		tagMainzone.find("svg g text").each(function (index) {
-			var self = this;
+		if(tagMainzone.find("svg g text").length > 0) {
 
-			new Timer(function() {
-				Snap(self).animate({'transform': 'translate(' + [words[index].x, 0] + ')rotate(' + words[index].rotate + ')'}, 1000, mina.easeinout, function () {
-					$(self).transition({
-						'font-size': '-=150px',
-						'easing': 'in-out',
-						'duration': 1000
-					}, function () {
-						Snap(self).animate({'transform': 'translate(' + [words[index].x, words[index].y] + ')rotate(' + words[index].rotate + ')'}, 500, mina.easeinout, function() {
-							if(index == (words.length - 1)) {
-								endCallback();
-							}
+			tagMainzone.find("svg g text").each(function (index) {
+				var self = this;
+
+				new Timer(function() {
+					Snap(self).animate({'transform': 'translate(' + [words[index].x, 0] + ')rotate(' + words[index].rotate + ')'}, 1000, mina.easeinout, function () {
+						$(self).transition({
+							'font-size': '-=150px',
+							'easing': 'in-out',
+							'duration': 1000
+						}, function () {
+							Snap(self).animate({'transform': 'translate(' + [words[index].x, words[index].y] + ')rotate(' + words[index].rotate + ')'}, 500, mina.easeinout, function() {
+								if(index == (words.length - 1)) {
+									endCallback();
+								}
+							});
 						});
 					});
-				});
-			}, 2000 * index + 500);
-		});
+				}, 2000 * index + 500);
+			});
+
+		} else {
+			endCallback();
+		}
 	}
 }

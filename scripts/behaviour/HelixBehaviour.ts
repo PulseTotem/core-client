@@ -199,9 +199,26 @@ class HelixBehaviour extends Behaviour {
 					$(self.getZone().getZoneDiv()).css("overflow", "visible");
 
 					var currentItemPanel = $(self.getZone().getZoneDiv()).find(".HelixBehaviour_helix_item_" + currentItemPanelNumber).first();
-					currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), currentItemPanel, function() {});
 
-					self._updateHelix();
+					var beginMoment = moment();
+					currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), currentItemPanel, function() {
+
+						self._updateHelix();
+
+						var diffWithBegin = moment().diff(beginMoment);
+
+						currentInfoRenderer.getInfo().setCastingDate(new Date());
+
+						var finalDuration =  currentInfoRenderer.getInfo().getDurationToDisplay() * 1000 - diffWithBegin - 1100;
+
+						if(finalDuration > 0) {
+							self._timer = new Timer(function () {
+								self._nextInfoRenderer();
+							}, finalDuration);
+						} else {
+							self._nextInfoRenderer();
+						}
+					});
 				});
 
 			} else {
@@ -250,18 +267,28 @@ class HelixBehaviour extends Behaviour {
 				currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
 				var itemPanel = $(this.getZone().getZoneDiv()).find(".HelixBehaviour_helix_item_0").first();
 				itemPanel.show();
+
+				var beginMoment = moment();
+
 				this._displayInfoRenderer(currentInfoRenderer, itemPanel, function() {
 					currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), itemPanel, function() {
 						self._updateHelix();
+						var diffWithBegin = moment().diff(beginMoment);
+
+						currentInfoRenderer.getInfo().setCastingDate(new Date());
+
+						var finalDuration =  currentInfoRenderer.getInfo().getDurationToDisplay() * 1000 - diffWithBegin;
+
+						if(finalDuration > 0) {
+							self._timer = new Timer(function () {
+								self._nextInfoRenderer();
+							}, finalDuration);
+						} else {
+							self._nextInfoRenderer();
+						}
 					});
 				});
 			}
-
-			currentInfoRenderer.getInfo().setCastingDate(new Date());
-
-			this._timer = new Timer(function () {
-				self._nextInfoRenderer();
-			}, currentInfoRenderer.getInfo().getDurationToDisplay() * 1000);
 		}
 	}
 
