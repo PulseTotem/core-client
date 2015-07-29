@@ -223,7 +223,7 @@ class OperaParisTagListWhiteRenderer implements Renderer<TagList> {
 		var words = this._words[info.getId()];
 
 		if(tagMainzone.find("svg g text").length > 0) {
-			
+
 			tagMainzone.find("svg g text").each(function (index) {
 				var self = this;
 
