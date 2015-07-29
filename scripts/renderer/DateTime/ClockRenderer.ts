@@ -63,7 +63,9 @@ class ClockRenderer implements Renderer<DateTime> {
 
 		$(domElem).append(dateTimeWrapper);
 
-		dateTimeWrapper.bigtext();
+		dateTimeWrapper.textfill({
+			maxFontPixels: 500
+		});
 
 		endCallback();
 	}
@@ -81,6 +83,11 @@ class ClockRenderer implements Renderer<DateTime> {
 
 		var formatDate = new moment(info.getDate());
 		dateTime.html(formatDate.format("HH:mm:ss"));
+
+		var dateTimeWrapper = $(domElem).find(".ClockRenderer_wrapper").first();
+		dateTimeWrapper.textfill({
+			maxFontPixels: 500
+		});
 
 		endCallback();
 	}

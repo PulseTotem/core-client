@@ -160,12 +160,10 @@ class TweetHalfPictureHalfUserRenderer implements Renderer<Tweet> {
 		var tweetContentWrapper = $("<div>");
 		tweetContentWrapper.addClass("TweetHalfPictureHalfUserRenderer_content_wrapper");
 
-		tweetContentWrapper.html(info.getMessage());
-
-		/*var tweetContentWrapperSpan = $("<span>");
+		var tweetContentWrapperSpan = $("<span>");
 		tweetContentWrapperSpan.html(info.getMessage());
 
-		tweetContentWrapper.append(tweetContentWrapperSpan);*/
+		tweetContentWrapper.append(tweetContentWrapperSpan);
 
 		if(info.getPictures().length > 0) {
 
@@ -222,9 +220,9 @@ class TweetHalfPictureHalfUserRenderer implements Renderer<Tweet> {
 		$(domElem).css("overflow", "visible");
 		$(domElem).append(tweetHTMLWrapper);
 
-		tweetContentWrapper.slabText();
-		/*tweetContentWrapper.bigtext();
-		tweetContentWrapperSpan.fitText();*/
+		tweetContentWrapper.textfill({
+			maxFontPixels: 500
+		});
 
 
 		endCallback();
@@ -272,18 +270,16 @@ class TweetHalfPictureHalfUserRenderer implements Renderer<Tweet> {
 		tweetProfilUsername.html(info.getOwner().getUsername());
 
 		var tweetContentWrapper = $(domElem).find(".TweetHalfPictureHalfUserRenderer_content_wrapper").first();
-		tweetContentWrapper.html(info.getMessage());
 
-		/*tweetContentWrapper.empty();
+		tweetContentWrapper.empty();
 		var tweetContentWrapperSpan = $("<span>");
 		tweetContentWrapperSpan.html(info.getMessage());
 		tweetContentWrapper.append(tweetContentWrapperSpan);
 
-		tweetContentWrapper.bigtext();
 
-		tweetContentWrapperSpan.fitText();*/
-
-		tweetContentWrapper.slabText();
+		tweetContentWrapper.textfill({
+			maxFontPixels: 500
+		});
 
 
 		endCallback();
