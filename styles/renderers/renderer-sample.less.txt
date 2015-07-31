@@ -1,301 +1,300 @@
 @import "../../core.less";
 
-//Landscape
-.landscape {
 
-  //WIDTH
-  .width_xs {
-    @media @tablet { // < 256px
+//In each below '@media @...' description, you can combine 'width_*' and 'height_*' with '.landscape' and '.portrait' classes that determine the orientation OF /!\ ZONE /!\ !!!
+
+
+//Landscape mode FOR SCREEN
+@media @phone-landscape { // width < 800px (max)
+
+		//WIDTH (min: 500px, max: 800px)
+		.width_xs { // xs - < 25% : min-width < 125px ; max-width < 200px ; average-width < 162,5px
+
+		}
+
+		.width_sm { // sm - >= 25%  : 125px <= min-width < 250px ; 200px <= max-width < 400px ; 162,5px <= average-width < 325px
+
+		}
+
+		.width_md { // md - >= 50% : 250px <= min-width < 375px ; 400px <= max-width < 600px ; 325px <= average-width < 487,5px
+
+		}
+
+		.width_lg { // lg - >= 75% : 375px <= min-width < 500px ; 600px <= max-width < 800px ; 487,5px <= average-width < 650px
+
+		}
+
+		//HEIGHT (min: 350px, max: 480px)
+		.height_xs { // xs - < 25% : min-height < 87,5px ; max-height < 120px ; average-height < 103,75px
+
+		}
+
+		.height_sm { // sm - >= 25%  : 87,5px <= min-height < 175px ; 120px <= max-height < 240px ; 103,75px <= average-height < 207,5px
+
+		}
+
+		.height_md { // md - >= 50% : 175px <= min-height < 262,5px ; 240px <= max-height < 360px ; 207,5px <= average-height < 311,25px
+
+		}
+
+		.height_lg { // lg - >= 75% : 262,5px <= min-height < 350px ; 360px <= max-height < 480px ; 311,25px <= average-height < 415px
+
+		}
+
+}
+
+@media @tablet-landscape { // 800px <= width < 1000px
+		//WIDTH (min: 800px, max: 1000px)
+    .width_xs { // xs - < 25% : min-width < 200px ; max-width < 250px ; average-width < 225px
 
     }
 
-    @media @desktop { // < 360px
+    .width_sm { // sm - >= 25%  : 200px <= min-width < 400px ; 250px <= max-width < 500px ; 225px <= average-width < 450px
 
     }
 
-    @media @large { // < 320px
+    .width_md { // md - >= 50% : 400px <= min-width < 600px ; 500px <= max-width < 750px ; 450px <= average-width < 675px
 
     }
 
-    @media @extra-large { // < 480px
+    .width_lg { // lg - >= 75% : 600px <= min-width < 800px ; 750px <= max-width < 1000px ; 675px <= average-width < 900px
 
     }
+
+    //HEIGHT (min: 480px, max: 600px)
+    .height_xs { // xs - < 25% : min-height < 120px ; max-height < 150px ; average-height < 135px
+
+    }
+
+    .height_sm { // sm - >= 25%  : 120px <= min-height < 240px ; 150px <= max-height < 300px ; 135px <= average-height < 270px
+
+    }
+
+    .height_md { // md - >= 50% : 240px <= min-height < 360px ; 300px <= max-height < 450px ; 270px <= average-height < 405px
+
+    }
+
+    .height_lg { // lg - >= 75% : 360px <= min-height < 480px ; 450px <= max-height < 600px ; 405px <= average-height < 540px
+
+    }
+}
+
+@media @desktop-landscape { // 1000px <= width < 1500px
+		//WIDTH (min: 1000px, max: 1500px)
+    .width_xs { // xs - < 25% : min-width < 250px ; max-width < 375px ; average-width < 312,5px
+
+    }
+
+    .width_sm { // sm - >= 25%  : 250px <= min-width < 500px ; 375px <= max-width < 750px ; 312,5px <= average-width < 625px
+
+    }
+
+    .width_md { // md - >= 50% : 500px <= min-width < 750px ; 750px <= max-width < 1125px ; 625px <= average-width < 937,5px
+
+    }
+
+    .width_lg { // lg - >= 75% : 750px <= min-width < 1000px ; 1125px <= max-width < 1500px ; 937,5px <= average-width < 1250px
+
+    }
+
+    //HEIGHT (min: 600px, max: 900px)
+    .height_xs { // xs - < 25% : min-height < 150px ; max-height < 225px ; average-height < 187,5px
+
+    }
+
+    .height_sm { // sm - >= 25%  : 150px <= min-height < 300px ; 225px <= max-height < 450px ; 187,5px <= average-height < 375px
+
+    }
+
+    .height_md { // md - >= 50% : 300px <= min-height < 450px ; 450px <= max-height < 675px ; 375px <= average-height < 562,5px
+
+    }
+
+    .height_lg { // lg - >= 75% : 450px <= min-height < 600px ; 675px <= max-height < 900px ; 562,5px <= average-height < 750px
+
+    }
+}
+
+@media @large-landscape { // 1500px <= width
+    //WIDTH (min: 1500px, max: 1920px ?)
+    .width_xs { // xs - < 25% : min-width < 375px ; max-width < 480px ; average-width < 427,5px
+
+    }
+
+    .width_sm { // sm - >= 25%  : 375px <= min-width < 750px ; 480px <= max-width < 960px ; 427,5px <= average-width < 855px
+
+    }
+
+    .width_md { // md - >= 50% : 750px <= min-width < 1125px ; 960px <= max-width < 1440px ; 855px <= average-width < 1282,5px
+
+    }
+
+    .width_lg { // lg - >= 75% : 1125px <= min-width < 1500px ; 1440px <= max-width < 1920px ; 1282,5px <= average-width < 1710px
+
+    }
+
+    //HEIGHT (min: 900px, max: 1080px ?)
+    .height_xs { // xs - < 25% : min-height < 225px ; max-height < 270px ; average-height < 247,5px
+
+    }
+
+    .height_sm { // sm - >= 25%  : 225px <= min-height < 450px ; 270px <= max-height < 540px ; 247,5px <= average-height < 495px
+
+    }
+
+    .height_md { // md - >= 50% : 450px <= min-height < 675px ; 540px <= max-height < 810px ; 495px <= average-height < 742,5px
+
+    }
+
+    .height_lg { // lg - >= 75% : 675px <= min-height < 900px ; 810px <= max-height < 1080px ; 742,5px <= average-height < 990px
+
+    }
+}
+
+//Portrait mode FOR SCREEN
+
+@media @phone-portrait { // width < 480px (max)
+
+  //WIDTH (min: 350px, max: 480px)
+  .width_xs { // xs - < 25% : min-width < 87,5px ; max-width < 120px ; average-width < 103,75px
+
   }
 
-  .width_sm {
-    @media @tablet { // >= 256px
+  .width_sm { // sm - >= 25%  : 87,5px <= min-width < 175px ; 120px <= max-width < 240px ; 103,75px <= average-width < 207,5px
 
-    }
-
-    @media @desktop { // >= 360px
-
-    }
-
-    @media @large { // >= 320px
-
-    }
-
-    @media @extra-large { // >= 480px
-
-    }
   }
 
-  .width_md {
-    @media @tablet { // >= 512px
+  .width_md { // md - >= 50% : 175px <= min-width < 262,5px ; 240px <= max-width < 360px ; 207,5px <= average-width < 311,25px
 
-    }
-
-    @media @desktop { // >= 720px
-
-    }
-
-    @media @large { // >= 640px
-
-    }
-
-    @media @extra-large { // >= 960px
-
-    }
   }
 
-  .width_lg {
-    @media @tablet { // >= 768px
+  .width_lg { // lg - >= 75% : 262,5px <= min-width < 350px ; 360px <= max-width < 480px ; 311,25px <= average-width < 415px
 
-    }
-
-    @media @desktop { // >= 1080px
-
-    }
-
-    @media @large { // >= 960px
-
-    }
-
-    @media @extra-large { // >= 1440px
-
-    }
   }
 
-  //HEIGHT
-  .height_xs {
-    @media @tablet { // < 192px
+  //HEIGHT (min: 500px, max: 800px)
+  .height_xs { // xs - < 25% : min-height < 125px ; max-height < 200px ; average-height < 162,5px
 
-    }
-
-    @media @desktop { // < 270px
-
-    }
-
-    @media @large { // < 180px
-
-    }
-
-    @media @extra-large { // < 270px
-
-    }
   }
 
-  .height_sm {
-    @media @tablet { // >= 192px
+  .height_sm { // sm - >= 25%  : 125px <= min-height < 250px ; 200px <= max-height < 400px ; 162,5px <= average-height < 325px
 
-    }
-
-    @media @desktop { // >= 270px
-
-    }
-
-    @media @large { // >= 180px
-
-    }
-
-    @media @extra-large { // >= 270px
-
-    }
   }
 
-  .height_md {
-    @media @tablet { // >= 384px
+  .height_md { // md - >= 50% : 250px <= min-height < 375px ; 400px <= max-height < 600px ; 325px <= average-height < 487,5px
 
-    }
-
-    @media @desktop { // >= 540px
-
-    }
-
-    @media @large { // >= 360px
-
-    }
-
-    @media @extra-large { // >= 540px
-
-    }
   }
 
-  .height_lg {
-    @media @tablet { // >= 576px
+  .height_lg { // lg - >= 75% : 375px <= min-height < 500px ; 600px <= max-height < 800px ; 487,5px <= average-height < 650px
 
-    }
+  }
 
-    @media @desktop { // >= 810px
+}
 
-    }
+@media @tablet-portrait { // 800px <= width < 1000px
+  //WIDTH (min: 480px, max: 600px)
+  .width_xs { // xs - < 25% : min-width < 120px ; max-width < 150px ; average-width < 135px
 
-    @media @large { // >= 540px
+  }
 
-    }
+  .width_sm { // sm - >= 25%  : 120px <= min-width < 240px ; 150px <= max-width < 300px ; 135px <= average-width < 270px
 
-    @media @extra-large { // >= 810px
+  }
 
-    }
+  .width_md { // md - >= 50% : 240px <= min-width < 360px ; 300px <= max-width < 450px ; 270px <= average-width < 405px
+
+  }
+
+  .width_lg { // lg - >= 75% : 360px <= min-width < 480px ; 450px <= max-width < 600px ; 405px <= average-width < 540px
+
+  }
+
+  //HEIGHT (min: 800px, max: 1000px)
+  .height_xs { // xs - < 25% : min-height < 200px ; max-height < 250px ; average-height < 225px
+
+  }
+
+  .height_sm { // sm - >= 25%  : 200px <= min-height < 400px ; 250px <= max-height < 500px ; 225px <= average-height < 450px
+
+  }
+
+  .height_md { // md - >= 50% : 400px <= min-height < 600px ; 500px <= max-height < 750px ; 450px <= average-height < 675px
+
+  }
+
+  .height_lg { // lg - >= 75% : 600px <= min-height < 800px ; 750px <= max-height < 1000px ; 675px <= average-height < 900px
+
   }
 }
 
-//Portrait
- .portrait {
+@media @desktop-portrait { // 600px <= width < 900px
+  //WIDTH (min: 600px, max: 900px)
+  .width_xs { // xs - < 25% : min-width < 150px ; max-width < 225px ; average-width < 187,5px
 
- //WIDTH
-   .width_xs {
-     @media @tablet { // < 192px
+  }
 
-     }
+  .width_sm { // sm - >= 25%  : 150px <= min-width < 300px ; 225px <= max-width < 450px ; 187,5px <= average-width < 375px
 
-     @media @desktop { // < 270px
+  }
 
-     }
+  .width_md { // md - >= 50% : 300px <= min-width < 450px ; 450px <= max-width < 675px ; 375px <= average-width < 562,5px
 
-     @media @large { // < 180px
+  }
 
-     }
+  .width_lg { // lg - >= 75% : 450px <= min-width < 600px ; 675px <= max-width < 900px ; 562,5px <= average-width < 750px
 
-     @media @extra-large { // < 270px
+  }
 
-     }
-   }
+  //HEIGHT (min: 1000px, max: 1500px)
+  .height_xs { // xs - < 25% : min-height < 250px ; max-height < 375px ; average-height < 312,5px
 
-   .width_sm {
-     @media @tablet { // >= 192px
+  }
 
-     }
+  .height_sm { // sm - >= 25%  : 250px <= min-height < 500px ; 375px <= max-height < 750px ; 312,5px <= average-height < 625px
 
-     @media @desktop { // >= 270px
+  }
 
-     }
+  .height_md { // md - >= 50% : 500px <= min-height < 750px ; 750px <= max-height < 1125px ; 625px <= average-height < 937,5px
 
-     @media @large { // >= 180px
+  }
 
-     }
+  .height_lg { // lg - >= 75% : 750px <= min-height < 1000px ; 1125px <= max-height < 1500px ; 937,5px <= average-height < 1250px
 
-     @media @extra-large { // >= 270px
+  }
+}
 
-     }
-   }
+@media @large-portrait { // 900px <= width
+  //WIDTH (min: 900px, max: 1080px ?)
+  .width_xs { // xs - < 25% : min-width < 225px ; max-width < 270px ; average-width < 247,5px
 
-   .width_md {
-     @media @tablet { // >= 384px
+  }
 
-     }
+  .width_sm { // sm - >= 25%  : 225px <= min-width < 450px ; 270px <= max-width < 540px ; 247,5px <= average-width < 495px
 
-     @media @desktop { // >= 540px
+  }
 
-     }
+  .width_md { // md - >= 50% : 450px <= min-width < 675px ; 540px <= max-width < 810px ; 495px <= average-width < 742,5px
 
-     @media @large { // >= 360px
+  }
 
-     }
+  .width_lg { // lg - >= 75% : 675px <= min-width < 900px ; 810px <= max-width < 1080px ; 742,5px <= average-width < 990px
 
-     @media @extra-large { // >= 540px
+  }
 
-     }
-   }
+  //HEIGHT (min: 1500px, max: 1920px ?)
+  .height_xs { // xs - < 25% : min-height < 375px ; max-height < 480px ; average-height < 427,5px
 
-   .width_lg {
-     @media @tablet { // >= 576px
+  }
 
-     }
+  .height_sm { // sm - >= 25%  : 375px <= min-height < 750px ; 480px <= max-height < 960px ; 427,5px <= average-height < 855px
 
-     @media @desktop { // >= 810px
+  }
 
-     }
+  .height_md { // md - >= 50% : 750px <= min-height < 1125px ; 960px <= max-height < 1440px ; 855px <= average-height < 1282,5px
 
-     @media @large { // >= 540px
+  }
 
-     }
+  .height_lg { // lg - >= 75% : 1125px <= min-height < 1500px ; 1440px <= max-height < 1920px ; 1282,5px <= average-height < 1710px
 
-     @media @extra-large { // >= 810px
-
-     }
-   }
-
-   //HEIGHT
-   .height_xs {
-     @media @tablet { // < 256px
-
-     }
-
-     @media @desktop { // < 360px
-
-     }
-
-     @media @large { // < 320px
-
-     }
-
-     @media @extra-large { // < 480px
-
-     }
-   }
-
-   .height_sm {
-     @media @tablet { // >= 256px
-
-     }
-
-     @media @desktop { // >= 360px
-
-     }
-
-     @media @large { // >= 320px
-
-     }
-
-     @media @extra-large { // >= 480px
-
-     }
-   }
-
-   .height_md {
-     @media @tablet { // >= 512px
-
-     }
-
-     @media @desktop { // >= 720px
-
-     }
-
-     @media @large { // >= 640px
-
-     }
-
-     @media @extra-large { // >= 960px
-
-     }
-   }
-
-   .height_lg {
-     @media @tablet { // >= 768px
-
-     }
-
-     @media @desktop { // >= 1080px
-
-     }
-
-     @media @large { // >= 960px
-
-     }
-
-     @media @extra-large { // >= 1440px
-
-     }
-   }
- }
+  }
+}

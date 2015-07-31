@@ -143,13 +143,17 @@ class TweetHalfPictureHalfUserRenderer implements Renderer<Tweet> {
 
 		var tweetProfilRealname = $("<div>");
 		tweetProfilRealname.addClass("TweetHalfPictureHalfUserRenderer_profil_realname");
-		tweetProfilRealname.html(info.getOwner().getRealname());
+		var tweetProfilRealnameSpan = $("<span>");
+		tweetProfilRealnameSpan.html(info.getOwner().getRealname());
+		tweetProfilRealname.append(tweetProfilRealnameSpan);
 
 		tweetProfilInfoDiv.append(tweetProfilRealname);
 
 		var tweetProfilUsername = $("<div>");
 		tweetProfilUsername.addClass("TweetHalfPictureHalfUserRenderer_profil_username");
-		tweetProfilUsername.html(info.getOwner().getUsername());
+		var tweetProfilUsernameSpan = $("<span>");
+		tweetProfilUsernameSpan.html(info.getOwner().getUsername());
+		tweetProfilUsername.append(tweetProfilUsernameSpan);
 
 		tweetProfilInfoDiv.append(tweetProfilUsername);
 
@@ -224,6 +228,14 @@ class TweetHalfPictureHalfUserRenderer implements Renderer<Tweet> {
 			maxFontPixels: 500
 		});
 
+		tweetProfilRealname.textfill({
+			maxFontPixels: 500
+		});
+
+		tweetProfilUsername.textfill({
+			maxFontPixels: 500
+		});
+
 
 		endCallback();
 	}
@@ -264,13 +276,26 @@ class TweetHalfPictureHalfUserRenderer implements Renderer<Tweet> {
 		tweetRetweetDiv.append(tweetRetweetContent);
 
 		var tweetProfilRealname = $(domElem).find(".TweetHalfPictureHalfUserRenderer_profil_realname").first();
-		tweetProfilRealname.html(info.getOwner().getRealname());
+		tweetProfilRealname.empty();
+		var tweetProfilRealnameSpan = $("<span>");
+		tweetProfilRealnameSpan.html(info.getOwner().getRealname());
+		tweetProfilRealname.append(tweetProfilRealnameSpan);
+
+		tweetProfilRealname.textfill({
+			maxFontPixels: 500
+		});
 
 		var tweetProfilUsername = $(domElem).find(".TweetHalfPictureHalfUserRenderer_profil_username").first();
-		tweetProfilUsername.html(info.getOwner().getUsername());
+		tweetProfilUsername.empty();
+		var tweetProfilUsernameSpan = $("<span>");
+		tweetProfilUsernameSpan.html(info.getOwner().getUsername());
+		tweetProfilUsername.append(tweetProfilUsernameSpan);
+
+		tweetProfilUsername.textfill({
+			maxFontPixels: 500
+		});
 
 		var tweetContentWrapper = $(domElem).find(".TweetHalfPictureHalfUserRenderer_content_wrapper").first();
-
 		tweetContentWrapper.empty();
 		var tweetContentWrapperSpan = $("<span>");
 		tweetContentWrapperSpan.html(info.getMessage());
