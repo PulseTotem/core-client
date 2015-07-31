@@ -176,15 +176,13 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 					}
 					divCam.html('<img src="'+data_uri+'" class="photobox_webcamImage" />');
 					divCounter.text("L'image a été traitée avec succès ! Merci de valider la photo pour continuer.");
-				} else if (code == 500) {
-					divCounter.text("Une erreur a eu lieu durant le traitement de l'image. Nous vous invitons à prendre une nouvelle photo.");
+				} else {
+					divCounter.text("Une erreur a eu lieu durant le traitement de l'image. Nous vous invitons à recommencer votre photo.");
 
 					var retry = function () {
 						if (Webcam.container) {
 							Webcam.reset();
 						}
-						$(domElem).empty();
-						self.startSession(domElem);
 					};
 					setTimeout(retry, 3000);
 				}
