@@ -1,3 +1,5 @@
+@import "../../core.less";
+
 .OperaParisTagListWhiteRenderer_wrapper {
   width: 100%;
   height: 100%;
@@ -7,25 +9,29 @@
 
   .OperaParisTagListWhiteRenderer_title {
     position: fixed;
-    right: 50%;
-    top: -15px;
-    margin-right: -720px;
+    right: 1%;
+    width: 45%;
+    height: 10%;
+    padding-top: 10px;
     
     .OperaParisTagListWhiteRenderer_title_text {
-      float: left;
       font-weight: bold;
-      font-size: 45px;
       color: black;
-      margin-top: 50px;
+      position: absolute;
+      right: 150px;
+      width: 95%;
+      height: 100%;
+      text-align: right;
     }
 
     .OperaParisTagListWhiteRenderer_title_twitter_logo {
-      float: left;
       width: 150px;
       height: 150px;
       background-image: url("../static/images/Twitter_logo_black.png");
       background-repeat: no-repeat;
       background-size: 100% 100%;
+      right: 0%;
+      position: absolute;
     }
   }
 

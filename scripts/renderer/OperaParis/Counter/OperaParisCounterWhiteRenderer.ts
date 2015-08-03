@@ -56,7 +56,9 @@ class OperaParisCounterWhiteRenderer implements Renderer<Counter> {
 
 		var hashtagDiv = $("<div>");
 		hashtagDiv.addClass("OperaParisCounterWhiteRenderer_hashtag");
-		hashtagDiv.html("#OperaDeParis");
+		var hashtagSpan = $("<span>");
+		hashtagSpan.html("#OperaDeParis");
+		hashtagDiv.append(hashtagSpan);
 
 		counterHTMLWrapper.append(hashtagDiv);
 
@@ -112,6 +114,16 @@ class OperaParisCounterWhiteRenderer implements Renderer<Counter> {
 
 		$(domElem).append(counterHTMLWrapper);
 
+		hashtagDiv.textfill({
+			maxFontPixels: 500
+		});
+
+		$(window).resize(function() {
+			hashtagDiv.textfill({
+				maxFontPixels: 500
+			});
+		});
+
 		endCallback();
 	}
 
@@ -138,6 +150,10 @@ class OperaParisCounterWhiteRenderer implements Renderer<Counter> {
 	 * @param {Function} endCallback - Callback function called at the end of animation.
 	 */
 	animate(info : Counter, domElem : any, endCallback : Function) {
+		$(".OperaParisCounterWhiteRenderer_hashtag").textfill({
+			maxFontPixels: 500
+		});
+
 		var nbDigit = info.getValue().toString().length;
 		var infoValue = info.getValue();
 
