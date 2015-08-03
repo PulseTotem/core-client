@@ -9,12 +9,12 @@
 
   .OperaParisCounterDarkRenderer_hashtag {
     position: fixed;
-    right: 50%;
+    right: 1%;
     top: 20px;
     font-weight: bold;
-    font-size: 90px;
-    margin-right: -820px;
     color: white;
+    width: 42%;
+    height: 10%;
   }
 
   .OperaParisCounterDarkRenderer_mainzone {
@@ -39,7 +39,7 @@
         float: left;
         width: 19%;
         list-style: none;
-        font-size: 200px;
+        font-size: 160px;
         color: black;
         text-align: center;
         font-weight: bold;
@@ -72,8 +72,22 @@
     top: 50%;
     right: 50%;
     margin-top: -100px;
-    margin-right: -35%;
+    margin-right: -42%;
   }
+}
 
+@media @large-landscape { // 1500px <= width
+  .OperaParisCounterDarkRenderer_wrapper {
+    .OperaParisCounterDarkRenderer_mainzone {
+      .OperaParisCounterDarkRenderer_counter {
+        .OperaParisCounterDarkRenderer_digitList {
+          font-size: 200px;
+        }
+      }
+    }
 
+    .OperaParisCounterDarkRenderer_twitter_logo {
+      margin-right: -35%;
+    }
+  }
 }

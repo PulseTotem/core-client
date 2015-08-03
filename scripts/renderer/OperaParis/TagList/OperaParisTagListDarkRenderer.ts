@@ -69,7 +69,9 @@ class OperaParisTagListDarkRenderer implements Renderer<TagList> {
 
 		var titleText = $("<div>");
 		titleText.addClass("OperaParisTagListDarkRenderer_title_text");
-		titleText.html("Top 5 #Hashtags / ");
+		var titleSpan = $("<span>");
+		titleSpan.html("Top 5 #Hashtags / ");
+		titleText.append(titleSpan);
 
 		titleDiv.append(titleText);
 
@@ -89,6 +91,16 @@ class OperaParisTagListDarkRenderer implements Renderer<TagList> {
 		tagHTMLWrapper.append(tagMainzone);
 
 		$(domElem).append(tagHTMLWrapper);
+
+		titleText.textfill({
+			maxFontPixels: 500
+		});
+
+		$(window).resize(function() {
+			titleText.textfill({
+				maxFontPixels: 500
+			});
+		});
 
 		var totalPopularity = 0;
 
@@ -220,6 +232,10 @@ class OperaParisTagListDarkRenderer implements Renderer<TagList> {
 	 * @param {Function} endCallback - Callback function called at the end of animation.
 	 */
 	animate(info : TagList, domElem : any, endCallback : Function) {
+		$(".OperaParisTagListDarkRenderer_title_text").textfill({
+			maxFontPixels: 500
+		});
+
 		var tagMainzone = $(domElem).find(".OperaParisTagListDarkRenderer_mainzone").first();
 		var words = this._words[info.getId()];
 
