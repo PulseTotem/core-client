@@ -14,7 +14,6 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 		image_format: 'jpeg',
 		jpeg_quality: 90,
 		force_flash: false,
-		flip_horiz: true,
 		fps: 45,
 		dest_width: 1280,
 		dest_height: 720
