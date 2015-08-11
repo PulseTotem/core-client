@@ -7,6 +7,7 @@
 /// <reference path="../../../t6s-core/core/scripts/infotype/Picture.ts" />
 /// <reference path="../../../t6s-core/core/scripts/infotype/PictureURL.ts" />
 /// <reference path="../Renderer.ts" />
+/// <reference path="./PictureHelper.ts" />
 
 declare var $: any; // Use of JQuery
 
@@ -33,6 +34,14 @@ class FullscreenPictureRenderer implements Renderer<Picture> {
 			var pictures : Array<Picture> = pictureAlbum.getPictures();
 
 			pictures.forEach(function (picture : Picture) {
+				if(picture.getMedium() != null) {
+					PictureHelper.preloadImage(picture, "medium");
+				} else if(picture.getSmall() != null) {
+					PictureHelper.preloadImage(picture, "small");
+				} else if(picture.getThumb() != null) {
+					PictureHelper.preloadImage(picture, "thumb");
+				}
+
 				result.push(picture);
 			});
 		});
