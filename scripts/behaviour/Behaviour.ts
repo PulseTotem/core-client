@@ -203,4 +203,22 @@ class Behaviour {
 			this._listInfoRenderersBackup = null;
 		}
 	}
+
+	/**
+	 * Enable fullscreen on zone.
+	 *
+	 * @method enableFullscreenZone
+	 */
+	enableFullscreenZone() {
+		this._zone.enableFullscreen();
+	}
+
+	/**
+	 * Disable fullscreen on zone.
+	 *
+	 * @method disableFullscreenZone
+	 */
+	disableFullscreenZone() {
+		this._zone.disableFullscreen();
+	}
 }

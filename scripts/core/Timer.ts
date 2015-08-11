@@ -94,6 +94,26 @@ class Timer {
 	}
 
 	/**
+	 * Return Timer's callback.
+	 *
+	 * @method getCallback
+	 * @returns {Function} Timer's callback.
+	 */
+	getCallback() : Function {
+		return this._callback;
+	}
+
+	/**
+	 * Set Timer's callback.
+	 *
+	 * @method setCallback
+	 * @param {Function} newCallback - The new Timer's callback.
+	 */
+	setCallback(newCallback : Function) {
+		this._callback = newCallback;
+	}
+
+	/**
 	 * Start.
 	 *
 	 * @method start

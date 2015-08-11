@@ -21,10 +21,10 @@ class DefaultSystemTrigger extends SystemTrigger {
 	/**
 	 * DefaultSystemTrigger's timer.
 	 *
-	 * @property _timer
+	 * @property timer
 	 * @type Timer
 	 */
-	private _timer : Timer;
+	timer : Timer;
 
 	/**
 	 * Constructor.
@@ -33,7 +33,7 @@ class DefaultSystemTrigger extends SystemTrigger {
 	 */
 	constructor() {
 		super();
-		this._timer = null;
+		this.timer = null;
 	}
 
 	/**
@@ -51,8 +51,8 @@ class DefaultSystemTrigger extends SystemTrigger {
 	 * @method pause
 	 */
 	pause() {
-		if(this._timer != null) {
-			this._timer.pause();
+		if(this.timer != null) {
+			this.timer.pause();
 		}
 	}
 
@@ -62,8 +62,8 @@ class DefaultSystemTrigger extends SystemTrigger {
 	 * @method resume
 	 */
 	resume() {
-		if(this._timer != null) {
-			this._timer.resume();
+		if(this.timer != null) {
+			this.timer.resume();
 		}
 	}
 
@@ -74,9 +74,9 @@ class DefaultSystemTrigger extends SystemTrigger {
 	 * @method stop
 	 */
 	stop() {
-		if(this._timer != null) {
-			this._timer.stop();
-			this._timer = null;
+		if(this.timer != null) {
+			this.timer.stop();
+			this.timer = null;
 		}
 	}
 
@@ -114,30 +114,30 @@ class DefaultSystemTrigger extends SystemTrigger {
 			totalTime += info.getDurationToDisplay();
 		});
 
-		if(this._timer != null) {
+		if(this.timer != null) {
 
-			this._timer.pause();
+			this.timer.pause();
 
-			var prevTime = this._timer.getDelay();
+			var prevTime = this.timer.getDelay();
 
 			var diffDelay = (totalTime * 1000) - prevTime;
 
 			if (diffDelay >= 0) {
-				this._timer.addToDelay(diffDelay);
-				this._timer.resume();
+				this.timer.addToDelay(diffDelay);
+				this.timer.resume();
 			} else {
 				diffDelay = diffDelay * (-1); //because diffDelay is negative before this operation
 
-				var remainingTime = this._timer.getRemaining();
+				var remainingTime = this.timer.getRemaining();
 
 				var diffRemaining = remainingTime - diffDelay;
 
 				if (diffRemaining > 0) {
-					this._timer.removeToDelay(diffDelay);
-					this._timer.resume();
+					this.timer.removeToDelay(diffDelay);
+					this.timer.resume();
 				} else {
-					this._timer.stop();
-					this._timer = null;
+					this.timer.stop();
+					this.timer = null;
 					this.relativeTimeline.restore();
 					this.relativeTimeline.switchToRunnerState();
 					this.relativeTimeline.resume();
@@ -158,7 +158,7 @@ class DefaultSystemTrigger extends SystemTrigger {
 		if(listInfos.length > 0) {
 			this._refreshCurrentView(listInfos, event);
 
-			this._managePriority(listInfos, event);
+			this.managePriority(listInfos, event);
 		}
 	}
 
@@ -181,17 +181,16 @@ class DefaultSystemTrigger extends SystemTrigger {
 	/**
 	 * Manage Info Priority and display immediatly Info with High priority.
 	 *
-	 * @method _managePriority
-	 * @private
+	 * @method managePriority
 	 * @param {Array<Info>} listInfos - New received Info list.
 	 * @param {RelativeEventItf} event - event associated to Infos in listInfos
 	 */
-	private _managePriority(listInfos : Array<Info>, event : RelativeEventItf) {
+	managePriority(listInfos : Array<Info>, event : RelativeEventItf) {
 		var self = this;
 
 		var listCurrentInfos:Array<Info> = new Array<Info>();
 
-		if(this._timer != null) {
+		if(this.timer != null) {
 			this.relativeTimeline.getCurrentListInfoRenderers().forEach(function (infoRenderer:InfoRenderer<any>) {
 				listCurrentInfos.push(infoRenderer.getInfo());
 			});
@@ -206,7 +205,7 @@ class DefaultSystemTrigger extends SystemTrigger {
 
 		listInfos.forEach(function(info : Info) {
 			var alreadyDisplayed = false;
-			if(self._timer != null) {
+			if(self.timer != null) {
 				listCurrentInfos.forEach(function(currentInfo : Info) {
 					if(info.getId() == currentInfo.getId()) {
 						alreadyDisplayed = true;
@@ -226,9 +225,9 @@ class DefaultSystemTrigger extends SystemTrigger {
 			}
 		});
 
-		if(this._timer != null && listInfosToRemove.length > 0) {
+		if(this.timer != null && listInfosToRemove.length > 0) {
 			listInfosToRemove.forEach(function(info : Info) {
-				if(this._timer != null) {
+				if(this.timer != null) {
 					info.setDurationToDisplay(0);
 					self.relativeTimeline.updateInfo(info);
 				}
@@ -236,15 +235,15 @@ class DefaultSystemTrigger extends SystemTrigger {
 		}
 
 		if(listInfoRenderersToAdd.length > 0) {
-			if(this._timer != null) {
+			if(this.timer != null) {
 				this.relativeTimeline.addToCurrentDisplay(listInfoRenderersToAdd);
-				this._timer.addToDelay(totalTime * 1000);
+				this.timer.addToDelay(totalTime * 1000);
 			} else {
 				this.relativeTimeline.pause();
 				if(this.relativeTimeline.switchToSystemTriggerState()) {
 					this.relativeTimeline.display(listInfoRenderersToAdd);
-					this._timer = new Timer(function () {
-						self._timer = null;
+					this.timer = new Timer(function () {
+						self.timer = null;
 						self.relativeTimeline.restore();
 						self.relativeTimeline.switchToRunnerState();
 						self.relativeTimeline.resume();

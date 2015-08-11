@@ -145,4 +145,17 @@ interface RelativeTimelineItf {
 	 */
 	updateInfo(info : Info);
 
+	/**
+	 * Enable fullscreen on zone.
+	 *
+	 * @method enableFullscreenZone
+	 */
+	enableFullscreenZone();
+
+	/**
+	 * Disable fullscreen on zone.
+	 *
+	 * @method disableFullscreenZone
+	 */
+	disableFullscreenZone();
 }
