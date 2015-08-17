@@ -61,7 +61,12 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 	render(info : Cmd, domElem : any, endCallback : Function) {
 
 		if (info.getCmd() == "Wait") {
-			this.waitMessage(domElem, info.getArgs()[0], info.getArgs()[1]);
+
+			var qrCodeUrl = info.getArgs()[0];
+			var appliURL = info.getArgs()[1];
+			var lastPic = info.getArgs()[2];
+
+			this.waitMessage(domElem, qrCodeUrl, appliURL, lastPic);
 		} else	if (info.getCmd() == "startSession") {
 			this.startSession(domElem);
 		} else if (info.getCmd() == "counter") {
@@ -80,7 +85,7 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 		endCallback();
 	}
 
-	private waitMessage(domElem : any, qrCodeUrl : string, lastPicUrl : string) {
+	private waitMessage(domElem : any, qrCodeUrl : string, appliURL : string, lastPicUrl : string) {
 		var divText = $('<div>');
 		divText.addClass("photobox_mainDiv");
 		var title = $('<h4>');
@@ -96,12 +101,15 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 
 		var content = $('<span>');
 		content.addClass("photobox_contentWait");
-		content.text("Flashez le QRCode et laissez vous guider : ");
+		content.text("Envie d'un selfie ? Flashez le QRCode !");
 		divText.append(content);
 
 		var qrCode = $('<img src="'+qrCodeUrl+'" />');
 		qrCode.addClass("photobox_qrcode");
 		divText.append(qrCode);
+
+		var appli = $('<a href="'+appliURL+'">'+appliURL+'</a>');
+		divText.append(appliURL);
 
 		domElem.append(divText);
 	}
