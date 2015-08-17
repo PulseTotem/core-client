@@ -43,6 +43,7 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 			var cmds : Array<Cmd> = cmdList.getCmds();
 
 			cmds.forEach(function (cmd : Cmd) {
+				/** On Going **/ //				cmd.setDurationToDisplay(61000);
 				result.push(cmd);
 			});
 		});
@@ -157,8 +158,13 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 		var audio = $('<audio src="http://www.soundjay.com/mechanical/camera-shutter-click-08.mp3">');
 		html.append(audio);
 
-		var divShutter = $('<div id="shutter">');
-		html.append(divShutter);
+		/** On Going **/ //		var divShutter = $('<div>');
+		/** On Going **/ //		divShutter.addClass("PhotoboxRenderer_shutter");
+		/** On Going **/ //		var divShutterContainer = $('<div>');
+		/** On Going **/ //		divShutterContainer.addClass("PhotoboxRenderer_shutter_container");
+		/** On Going **/ //		divShutter.append(divShutterContainer);
+		/** On Going **/ //
+		/** On Going **/ //		html.append(divShutter);
 
 
 		domElem.append(html);
@@ -169,20 +175,19 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 
 		Webcam.attach("#webCamview");
 
-		var container = $('#webCamview');
 
-
-		// Using the tzShutter plugin. We are giving the path
-		// to he shutter.png image (located in the plugin folder), and two
-		// callback functions.
-
-		/*container.tzShutter({
-			imgSrc: 'http://cdn.the6thscreen.fr/jquery.shutter/shutter.png',
-			closeCallback: function(){
-				// Scheduling a shutter open in 0.1 seconds:
-				setTimeout(function(){container.trigger('shutterOpen')},1000);
-			}
-		});*/
+		/** On Going **/ //		divShutterContainer.tzShutter({
+		/** On Going **/ //			imgSrc: 'http://cdn.the6thscreen.fr/jquery.shutter/shutter.png',
+		/** On Going **/ //			closeCallback: function(){
+		/** On Going **/ //
+		/** On Going **/ //				/*setTimeout(function(){
+		/** On Going **/ //					divShutterContainer.trigger('shutterOpen')
+		/** On Going **/ //				},100);*/
+		/** On Going **/ //			},
+		/** On Going **/ //			loadCompleteCallback:function(){
+		/** On Going **/ //
+		/** On Going **/ //			}
+		/** On Going **/ //		});
 
 		var self = this;
 		var managePicture = function(data_uri) {
@@ -218,15 +223,16 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 		var timeoutFunction = function () {
 			if (counter == 0) {
 				divCounter.hide();
+
+				/** On Going **/ //				divShutterContainer.trigger('shutterClose');
+
 				Webcam.freeze();
-				// To launch tzShutter
-				//container.trigger('shutterClose');
-				divShutter.addClass('on');
+
 				audio[0].play();
-				setTimeout(function() {
-					divShutter.removeClass('on');
-				}, 30*2+45);/* Shutter speed (double & add 45) */
+
 				Webcam.snap(managePicture);
+
+
 			} else {
 				counter--;
 				divCounter.text(counter+" ...");
@@ -246,11 +252,15 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
 	updateRender(info : Cmd, domElem : any, endCallback : Function) {
-		if (Webcam.container) {
-			Webcam.reset();
-		}
-		$(domElem).empty();
-		this.render(info, domElem, endCallback);
+
+		/** On Going **/ //		if (info.getCmd() != "validatedPicture") {
+
+			if (Webcam.container) {
+				Webcam.reset();
+			}
+			$(domElem).empty();
+			this.render(info, domElem, endCallback);
+		/** On Going **/ //		}
 	}
 
 	/**

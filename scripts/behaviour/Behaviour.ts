@@ -210,7 +210,20 @@ class Behaviour {
 	 * @method enableFullscreenZone
 	 */
 	enableFullscreenZone() {
-		this._zone.enableFullscreen();
+		var self = this;
+
+		this._zone.enableFullscreen(function() {
+			self.afterEnableFullscreenZone();
+		});
+	}
+
+	/**
+	 * Method called after enabling fullscreen on zone.
+	 *
+	 * @method afterEnableFullscreenZone
+	 */
+	afterEnableFullscreenZone() {
+		Logger.warn("Behaviour - afterEnableFullscreenZone : Method should be implemented by all Behaviours.");
 	}
 
 	/**
@@ -219,6 +232,19 @@ class Behaviour {
 	 * @method disableFullscreenZone
 	 */
 	disableFullscreenZone() {
-		this._zone.disableFullscreen();
+		var self = this;
+
+		this._zone.disableFullscreen(function() {
+			self.afterDisableFullscreenZone();
+		});
+	}
+
+	/**
+	 * Method called after disabling fullscreen on zone.
+	 *
+	 * @method afterDisableFullscreenZone
+	 */
+	afterDisableFullscreenZone() {
+		Logger.warn("Behaviour - afterDisableFullscreenZone : Method should be implemented by all Behaviours.");
 	}
 }

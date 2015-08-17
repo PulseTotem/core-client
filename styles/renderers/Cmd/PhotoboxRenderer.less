@@ -38,23 +38,13 @@
   height: 50%;
 }
 
-#shutter {
-  opacity: 0;
-  transition: all 30ms ease-in;/* Shutter speed */
-  position: fixed;
-  height: 0%;
-  width: 0%;
-  pointer-events: none;
-
-  background-color: white;/* Shutter Color */
-
-  left:50%;
-  top:50%;
-  transform: translate(-50%, -50%);
-  -webkit-transform: translate(-50%, -50%)
-}
-#shutter.on {
-  opacity: 1;/* Shutter Transparency */
-  height: 100%;
+.PhotoboxRenderer_shutter {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
+  height: 100%;
+
+  border: 1px solid red;
+  background-color: rgba(0, 0, 0, 0.5);
 }
