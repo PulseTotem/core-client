@@ -211,7 +211,7 @@ class Behaviour {
 	 */
 	enableFullscreenZone() {
 		var self = this;
-		
+
 		this._zone.enableFullscreen(function() {
 			self.afterEnableFullscreenZone();
 		});
@@ -237,7 +237,6 @@ class Behaviour {
 		this._zone.disableFullscreen(function() {
 			self.afterDisableFullscreenZone();
 		});
-		Logger.warn("Behaviour - disableFullscreenZone : Method should be implemented by all Behaviours.");
 	}
 
 	/**
@@ -246,6 +245,6 @@ class Behaviour {
 	 * @method afterDisableFullscreenZone
 	 */
 	afterDisableFullscreenZone() {
-		Logger.warn("Behaviour - afterEnableFullscreenZone : Method should be implemented by all Behaviours.");
+		Logger.warn("Behaviour - afterDisableFullscreenZone : Method should be implemented by all Behaviours.");
 	}
 }
