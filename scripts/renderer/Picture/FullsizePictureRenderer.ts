@@ -33,6 +33,14 @@ class FullsizePictureRenderer implements Renderer<Picture> {
 			var pictures : Array<Picture> = pictureAlbum.getPictures();
 
 			pictures.forEach(function (picture : Picture) {
+				if(picture.getMedium() != null) {
+					PictureHelper.preloadImage(picture, "medium");
+				} else if(picture.getSmall() != null) {
+					PictureHelper.preloadImage(picture, "small");
+				} else if(picture.getThumb() != null) {
+					PictureHelper.preloadImage(picture, "thumb");
+				}
+
 				result.push(picture);
 			});
 		});

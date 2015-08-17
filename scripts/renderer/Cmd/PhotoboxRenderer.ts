@@ -14,10 +14,11 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 		image_format: 'jpeg',
 		jpeg_quality: 90,
 		force_flash: false,
-		flip_horiz: true,
 		fps: 45,
 		dest_width: 1280,
-		dest_height: 720
+		dest_height: 720,
+		width: 0,
+		height: 0
 	};
 
 	/**
@@ -136,6 +137,7 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 	}
 
 	private countAndSnap(domElem : any, counterTime : number, servicePostPic : string) {
+
 		var counter = counterTime;
 
 		var html = $('<div>');
@@ -152,6 +154,12 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 		divCounter.text(counter+" ...");
 
 		html.append(divCounter);
+		var audio = $('<audio src="http://www.soundjay.com/mechanical/camera-shutter-click-08.mp3">');
+		html.append(audio);
+
+		var divShutter = $('<div id="shutter">');
+		html.append(divShutter);
+
 
 		domElem.append(html);
 
@@ -160,6 +168,21 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 		Webcam.set(this.webcam_settings);
 
 		Webcam.attach("#webCamview");
+
+		var container = $('#webCamview');
+
+
+		// Using the tzShutter plugin. We are giving the path
+		// to he shutter.png image (located in the plugin folder), and two
+		// callback functions.
+
+		/*container.tzShutter({
+			imgSrc: 'http://cdn.the6thscreen.fr/jquery.shutter/shutter.png',
+			closeCallback: function(){
+				// Scheduling a shutter open in 0.1 seconds:
+				setTimeout(function(){container.trigger('shutterOpen')},1000);
+			}
+		});*/
 
 		var self = this;
 		var managePicture = function(data_uri) {
@@ -195,6 +218,14 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 		var timeoutFunction = function () {
 			if (counter == 0) {
 				divCounter.hide();
+				Webcam.freeze();
+				// To launch tzShutter
+				//container.trigger('shutterClose');
+				divShutter.addClass('on');
+				audio[0].play();
+				setTimeout(function() {
+					divShutter.removeClass('on');
+				}, 30*2+45);/* Shutter speed (double & add 45) */
 				Webcam.snap(managePicture);
 			} else {
 				counter--;
