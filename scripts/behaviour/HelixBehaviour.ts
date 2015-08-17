@@ -787,4 +787,22 @@ class HelixBehaviour extends Behaviour {
 			return false;
 		}
 	}
+
+	/**
+	 * Method called after enabling fullscreen on zone.
+	 *
+	 * @method afterEnableFullscreenZone
+	 */
+	afterEnableFullscreenZone() {
+		this._refreshView();
+	}
+
+	/**
+	 * Method called after disabling fullscreen on zone.
+	 *
+	 * @method afterDisableFullscreenZone
+	 */
+	afterDisableFullscreenZone() {
+		this._refreshView();
+	}
 }
