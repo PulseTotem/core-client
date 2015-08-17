@@ -94,12 +94,6 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 		title.text("Prenez-vous en photo !");
 		divText.append(title);
 
-		if (lastPicUrl) {
-			var lastPic = $('<img src="'+lastPicUrl+'" />');
-			lastPic.addClass("photobox_lastpic");
-			divText.append(lastPic);
-		}
-
 		var content = $('<span>');
 		content.addClass("photobox_contentWait");
 		content.text("Envie d'un selfie ? Flashez le QRCode !");
@@ -110,7 +104,14 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 		divText.append(qrCode);
 
 		var appli = $('<a href="'+appliURL+'">'+appliURL+'</a>');
+		appli.addClass("photobox_appliurl");
 		divText.append(appliURL);
+
+		if (lastPicUrl) {
+			var lastPic = $('<img src="'+lastPicUrl+'" />');
+			lastPic.addClass("photobox_lastpic");
+			divText.append(lastPic);
+		}
 
 		domElem.append(divText);
 	}
