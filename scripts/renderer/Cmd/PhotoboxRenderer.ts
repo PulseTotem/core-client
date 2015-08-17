@@ -16,7 +16,9 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 		force_flash: false,
 		fps: 45,
 		dest_width: 1280,
-		dest_height: 720
+		dest_height: 720,
+		width: 0,
+		height: 0
 	};
 
 	/**
