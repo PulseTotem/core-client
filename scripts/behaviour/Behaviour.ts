@@ -210,6 +210,8 @@ class Behaviour {
 	 * @method enableFullscreenZone
 	 */
 	enableFullscreenZone() {
+		var self = this;
+		
 		this._zone.enableFullscreen(function() {
 			self.afterEnableFullscreenZone();
 		});
