@@ -50,7 +50,7 @@ class VideoPlaylistRenderer implements Renderer<VideoURL> {
 		if (info.getType() == VideoType.DAILYMOTION) {
 			html = '<iframe src="'+info.getURL()+'?chromeless=1&html=1&related=0&logo=0&info=0&autoplay=1" allowfullscreen></iframe>';
 		} else {
-			html = "<video autoplay class='VideoPlaylistRenderer_videoHTML'><source src='"+info.getURL()+"'></video>";
+			html = "<video autoplay loop class='VideoPlaylistRenderer_videoHTML'><source src='"+info.getURL()+"'></video>";
 		}
 		videoHTML.html(html);
 
