@@ -31,55 +31,18 @@ class Utils {
         }
     }
 
-	/**
-	 * Methods to help conversion of hexadecimal color into RGB color.
-	 * /
 
 	/**
-	 * @method cutHex
-	 * @static
-	 * @param {string} h - The Hexadecimal color.
-	 * /
-	static cutHex(h : string) {
-		return (h.charAt(0)=="#") ? h.substring(1,7):h
-	}
-
-	/**
-	 * @method hexToR
-	 * @static
-	 * @param {string} h - The Hexadecimal color.
-	 * /
-	static hexToR(h : string) {
-		return parseInt((Utils.cutHex(h)).substring(0,2),16)
-	}
-
-	/**
-	 * @method hexToG
-	 * @static
-	 * @param {string} h - The Hexadecimal color.
-	 * /
-	static hexToG(h : string) {
-		return parseInt((Utils.cutHex(h)).substring(2,4),16)
-	}
-
-	/**
-	 * @method hexToB
-	 * @static
-	 * @param {string} h - The Hexadecimal color.
-	 * /
-	static hexToB(h : string) {
-		return parseInt((Utils.cutHex(h)).substring(4,6),16)
-	}
-
-	/**
-	 * Method to return RGBA color from hexadecimal color and opacity
+	 * Method to check if string begins with http, https or ftp
 	 *
-	 * @method toRGBA
+	 * @method beginsWithHttp
 	 * @static
-	 * @param {string} h - The Hexadecimal color.
-	 * @param {string} opacity - The color's opacity.
-	 * /
-	static toRGBA(h : string, opacity : string) {
-		return "rgba(" + Utils.hexToR(h) + "," + Utils.hexToG(h) + "," + Utils.hexToB(h) + "," + opacity + ")";
-	}*/
+	 * @param {string} value - The string value to test
+	 * @returns {boolean} true if value begins with 'http', 'https', or 'ftp', false otherwise
+	 */
+	static beginsWithHttp = function(value : string) : boolean {
+		var pattern = new RegExp('^((http|https|ftp):\/\/)', 'i');
+
+		return pattern.test(value);
+	};
 }
