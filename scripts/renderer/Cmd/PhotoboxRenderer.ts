@@ -90,13 +90,6 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 		var wrapperDiv = $('<div>');
 		wrapperDiv.addClass("PhotoboxRenderer_wrapper");
 
-		var mainTitleDiv = $('<div>');
-		mainTitleDiv.addClass("PhotoboxRenderer_maintitle");
-		var mainTitleSpan = $('<span>');
-		mainTitleSpan.html("Prenez-vous en photo !");
-		mainTitleDiv.append(mainTitleSpan);
-		wrapperDiv.append(mainTitleDiv);
-
 		var contentDiv = $('<div>');
 		contentDiv.addClass("PhotoboxRenderer_content");
 		wrapperDiv.append(contentDiv);
@@ -159,10 +152,6 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 		rightPanelDiv.append(urlDiv);
 
 		$(domElem).append(wrapperDiv);
-
-		mainTitleDiv.textfill({
-			maxFontPixels: 500
-		});
 
 		leftTitleDiv.textfill({
 			maxFontPixels: 500
