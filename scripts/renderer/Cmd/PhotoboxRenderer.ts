@@ -87,33 +87,83 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 	}
 
 	private waitMessage(domElem : any, qrCodeUrl : string, appliURL : string, lastPicUrl : string) {
-		var divText = $('<div>');
-		divText.addClass("photobox_mainDiv");
-		var title = $('<h4>');
-		title.addClass("photobox_titleWait");
-		title.text("Prenez-vous en photo !");
-		divText.append(title);
+		var wrapperDiv = $('<div>');
+		wrapperDiv.addClass("PhotoboxRenderer_wrapper");
 
-		var content = $('<span>');
-		content.addClass("photobox_contentWait");
-		content.text("Envie d'un selfie ? Flashez le QRCode !");
-		divText.append(content);
+		var contentDiv = $('<div>');
+		contentDiv.addClass("PhotoboxRenderer_content");
+		wrapperDiv.append(contentDiv);
 
-		var qrCode = $('<img src="'+qrCodeUrl+'" />');
-		qrCode.addClass("photobox_qrcode");
-		divText.append(qrCode);
+		var leftPanelDiv = $('<div>');
+		leftPanelDiv.addClass("PhotoboxRenderer_leftpanel");
+		leftPanelDiv.addClass("pull-left");
+		contentDiv.append(leftPanelDiv);
 
-		var appli = $('<a href="'+appliURL+'">'+appliURL+'</a>');
-		appli.addClass("photobox_appliurl");
-		divText.append(appliURL);
+		var leftTitleDiv = $('<div>');
+		leftTitleDiv.addClass("PhotoboxRenderer_leftpanel_title");
+		var leftTitleSpan = $('<span>');
+		leftTitleSpan.html("Envie d'un selfie ?");
+		leftTitleDiv.append(leftTitleSpan);
+		leftPanelDiv.append(leftTitleDiv);
 
+		var lastPicDiv = $('<div>');
+		lastPicDiv.addClass("PhotoboxRenderer_leftpanel_lastpic");
+		leftPanelDiv.append(lastPicDiv);
+
+		var helperImg = $('<span>');
+		helperImg.addClass("PhotoboxRenderer_helper");
+		lastPicDiv.append(helperImg);
+
+		var lastPicImg = $('<img>');
+		lastPicImg.addClass("PhotoboxRenderer_leftpanel_lastpic_img");
 		if (lastPicUrl) {
-			var lastPic = $('<img src="'+lastPicUrl+'" />');
-			lastPic.addClass("photobox_lastpic");
-			divText.append(lastPic);
+			lastPicImg.attr('src', lastPicUrl);
+		} else {
+			lastPicImg.attr('src', "http://cdn.the6thscreen.fr/selfie/selfie_default.png");
 		}
+		lastPicDiv.append(lastPicImg);
 
-		domElem.append(divText);
+		var rightPanelDiv = $('<div>');
+		rightPanelDiv.addClass("PhotoboxRenderer_rightpanel");
+		rightPanelDiv.addClass("pull-left");
+		contentDiv.append(rightPanelDiv);
+
+		var rightTitleDiv = $('<div>');
+		rightTitleDiv.addClass("PhotoboxRenderer_rightpanel_title");
+		var rightTitleSpan = $('<span>');
+		rightTitleSpan.html("Flashez le QRCode !");
+		rightTitleDiv.append(rightTitleSpan);
+		rightPanelDiv.append(rightTitleDiv);
+
+		var qrCodeDiv = $('<div>');
+		qrCodeDiv.addClass("PhotoboxRenderer_rightpanel_qrcode");
+		rightPanelDiv.append(qrCodeDiv);
+
+		var qrCodeImg = $('<img>');
+		qrCodeImg.addClass("PhotoboxRenderer_rightpanel_qrcode_img");
+		qrCodeImg.attr('src', qrCodeUrl);
+		qrCodeDiv.append(qrCodeImg);
+
+		var urlDiv = $('<div>');
+		urlDiv.addClass("PhotoboxRenderer_rightpanel_url");
+		var urlSpan = $('<span>');
+		urlSpan.html(appliURL);
+		urlDiv.append(urlSpan);
+		rightPanelDiv.append(urlDiv);
+
+		$(domElem).append(wrapperDiv);
+
+		leftTitleDiv.textfill({
+			maxFontPixels: 500
+		});
+
+		rightTitleDiv.textfill({
+			maxFontPixels: 500
+		});
+
+		urlDiv.textfill({
+			maxFontPixels: 500
+		});
 	}
 
 	private preventFallback() {
