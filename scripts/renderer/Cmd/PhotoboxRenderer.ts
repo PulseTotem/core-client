@@ -238,13 +238,19 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 
 		var divCounter = $('<div>');
 		divCounter.addClass("PhotoboxRenderer_counter");
-		divCounter.html(counter);
+		var spanCounter = $('<span>');
+		spanCounter.html(counter);
+		divCounter.append(spanCounter);
 
 		html.append(divCounter);
 		var audio = $('<audio src="http://www.soundjay.com/mechanical/camera-shutter-click-08.mp3">');
 		html.append(audio);
 
 		domElem.append(html);
+
+		divCounter.textfill({
+			maxFontPixels: 500
+		});
 
 		this.preventFallback();
 
@@ -323,7 +329,9 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 			divCounter.empty();
 
 			var progressTextDiv = $('<div>');
-			progressTextDiv.html("Traitement en cours...");
+			var progressTextSpan = $('<span>');
+			progressTextSpan.html("Traitement en cours...");
+			progressTextDiv.append(progressTextSpan);
 
 			divCounter.append(progressTextDiv);
 
@@ -338,6 +346,10 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 			progressDiv.append(progressBar);
 
 			divCounter.append(progressDiv);
+
+			progressTextDiv.textfill({
+				maxFontPixels: 500
+			});
 
 			divCounter.show();
 
@@ -355,9 +367,19 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 						Webcam.reset();
 					}
 
-					divCounter.html("L'image a été traitée avec succès ! Merci de valider la photo sur votre téléphone pour continuer.");
+					var spanCounter = $('<span>');
+					spanCounter.html("L'image a été traitée avec succès ! Merci de valider la photo sur votre téléphone pour continuer.");
+					divCounter.append(spanCounter);
+					divCounter.textfill({
+						maxFontPixels: 500
+					});
 				} else {
-					divCounter.html("Une erreur a eu lieu durant le traitement de l'image. Nous vous invitons à recommencer votre photo.");
+					var spanCounter = $('<span>');
+					spanCounter.html("Une erreur a eu lieu durant le traitement de l'image. Nous vous invitons à recommencer votre photo.");
+					divCounter.append(spanCounter);
+					divCounter.textfill({
+						maxFontPixels: 500
+					});
 
 					var retry = function () {
 						if (Webcam.container) {
@@ -378,7 +400,10 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 				Webcam.snap(managePicture);
 			} else {
 
-				divCounter.html(counter);
+				spanCounter.html(counter);
+				divCounter.textfill({
+					maxFontPixels: 500
+				});
 				setTimeout(timeoutFunction, 1000);
 			}
 		};
