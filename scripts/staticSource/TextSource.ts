@@ -4,7 +4,7 @@
  */
 
 /// <reference path="../../t6s-core/core/scripts/infotype/TextList.ts" />
-/// <reference path="../../t6s-core/core/scripts/infotype/Text.ts" />
+/// <reference path="../../t6s-core/core/scripts/infotype/Textinfo.ts" />
 /// <reference path="./StaticSource.ts" />
 
 /**
@@ -19,7 +19,7 @@ class TextSource extends StaticSource<TextList> {
 	 */
 	computeInfo() : TextList {
 
-		var text : Text = new Text();
+		var text : Textinfo = new Textinfo();
 		text.setId(this.params.TextValue);
 		text.setValue(this.params.TextValue);
 
