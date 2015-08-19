@@ -131,7 +131,7 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 		var rightTitleDiv = $('<div>');
 		rightTitleDiv.addClass("PhotoboxRenderer_rightpanel_title");
 		var rightTitleSpan = $('<span>');
-		rightTitleSpan.html("Flashez le QRCode !");
+		rightTitleSpan.html("Flashez le QR Code !");
 		rightTitleDiv.append(rightTitleSpan);
 		rightPanelDiv.append(rightTitleDiv);
 
@@ -209,22 +209,40 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 
 		html.append(divCam);
 
+		var divResultPhoto = $('<div>');
+		divResultPhoto.addClass('PhotoboxRenderer_result_photo');
+		divResultPhoto.hide();
+
+		html.append(divResultPhoto);
+
+		var divShutter = $('<div>');
+		divShutter.addClass("PhotoboxRenderer_shutter");
+
+		var topLeftShutter = $('<div>');
+		topLeftShutter.addClass("PhotoboxRenderer_shutter_top_left");
+		divShutter.append(topLeftShutter);
+
+		var topRightShutter = $('<div>');
+		topRightShutter.addClass("PhotoboxRenderer_shutter_top_right");
+		divShutter.append(topRightShutter);
+
+		var bottomLeftShutter = $('<div>');
+		bottomLeftShutter.addClass("PhotoboxRenderer_shutter_bottom_left");
+		divShutter.append(bottomLeftShutter);
+
+		var bottomRightShutter = $('<div>');
+		bottomRightShutter.addClass("PhotoboxRenderer_shutter_bottom_right");
+		divShutter.append(bottomRightShutter);
+
+		html.append(divShutter);
+
 		var divCounter = $('<div>');
-		divCounter.addClass("photobox_divcounter");
-		divCounter.text(counter+" ...");
+		divCounter.addClass("PhotoboxRenderer_counter");
+		divCounter.html(counter);
 
 		html.append(divCounter);
 		var audio = $('<audio src="http://www.soundjay.com/mechanical/camera-shutter-click-08.mp3">');
 		html.append(audio);
-
-		/** On Going **/ //		var divShutter = $('<div>');
-		/** On Going **/ //		divShutter.addClass("PhotoboxRenderer_shutter");
-		/** On Going **/ //		var divShutterContainer = $('<div>');
-		/** On Going **/ //		divShutterContainer.addClass("PhotoboxRenderer_shutter_container");
-		/** On Going **/ //		divShutter.append(divShutterContainer);
-		/** On Going **/ //
-		/** On Going **/ //		html.append(divShutter);
-
 
 		domElem.append(html);
 
@@ -234,37 +252,112 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 
 		Webcam.attach("#webCamview");
 
-
-		/** On Going **/ //		divShutterContainer.tzShutter({
-		/** On Going **/ //			imgSrc: 'http://cdn.the6thscreen.fr/jquery.shutter/shutter.png',
-		/** On Going **/ //			closeCallback: function(){
-		/** On Going **/ //
-		/** On Going **/ //				/*setTimeout(function(){
-		/** On Going **/ //					divShutterContainer.trigger('shutterOpen')
-		/** On Going **/ //				},100);*/
-		/** On Going **/ //			},
-		/** On Going **/ //			loadCompleteCallback:function(){
-		/** On Going **/ //
-		/** On Going **/ //			}
-		/** On Going **/ //		});
-
 		var self = this;
 		var managePicture = function(data_uri) {
+			topLeftShutter.transition({
+				'top': '0',
+				'left': '0',
+				'easing': 'in-out',
+				'duration': 1000
+			});
+
+			topRightShutter.transition({
+				'top': '0',
+				'right': '0',
+				'easing': 'in-out',
+				'duration': 1000
+			});
+
+			bottomLeftShutter.transition({
+				'bottom': '0',
+				'left': '0',
+				'easing': 'in-out',
+				'duration': 1000
+			});
+
+			bottomRightShutter.transition({
+				'bottom': '0',
+				'right': '0',
+				'easing': 'in-out',
+				'duration': 1000
+			}, function() {
+				audio[0].play();
+				Webcam.freeze();
+
+				var divResultPhotoImg = $('<img>');
+				divResultPhotoImg.addClass("PhotoboxRenderer_result_photo_img");
+				divResultPhotoImg.attr('src', data_uri);
+
+				divResultPhoto.append(divResultPhotoImg);
+				divResultPhoto.show();
+
+				topLeftShutter.transition({
+					'top': '-100%',
+					'left': '-100%',
+					'easing': 'in-out',
+					'duration': 1000
+				});
+
+				topRightShutter.transition({
+					'top': '-100%',
+					'right': '-100%',
+					'easing': 'in-out',
+					'duration': 1000
+				});
+
+				bottomLeftShutter.transition({
+					'bottom': '-100%',
+					'left': '-100%',
+					'easing': 'in-out',
+					'duration': 1000
+				});
+
+				bottomRightShutter.transition({
+					'bottom': '-100%',
+					'right': '-100%',
+					'easing': 'in-out',
+					'duration': 1000
+				});
+			});
+
+			divCounter.empty();
+
+			var progressTextDiv = $('<div>');
+			progressTextDiv.html("Traitement en cours...");
+
+			divCounter.append(progressTextDiv);
+
+			var progressDiv = $('<div>');
+			progressDiv.addClass("progress");
+
+			var progressBar = $('<div>');
+			progressBar.addClass("progress-bar");
+			progressBar.addClass("progress-bar-info");
+			progressBar.addClass("progress-bar-striped");
+			progressBar.css('width', '0%');
+			progressDiv.append(progressBar);
+
+			divCounter.append(progressDiv);
+
+			divCounter.show();
 
 			Webcam.on( 'uploadProgress', function(progress) {
-				divCounter.text("L'image est en cours de traitement, veuillez patienter...");
-				divCounter.show();
-			} );
+
+				var progressPercent = Math.round(progress*100);
+
+				progressBar.css('width', progressPercent + '%');
+			});
 
 			Webcam.on( 'uploadComplete', function(code, text) {
+				divCounter.empty();
 				if (code == 200) {
 					if (Webcam.container) {
 						Webcam.reset();
 					}
-					divCam.html('<img src="'+data_uri+'" class="photobox_webcamImage" />');
-					divCounter.text("L'image a été traitée avec succès ! Merci de valider la photo pour continuer.");
+
+					divCounter.html("L'image a été traitée avec succès ! Merci de valider la photo sur votre téléphone pour continuer.");
 				} else {
-					divCounter.text("Une erreur a eu lieu durant le traitement de l'image. Nous vous invitons à recommencer votre photo.");
+					divCounter.html("Une erreur a eu lieu durant le traitement de l'image. Nous vous invitons à recommencer votre photo.");
 
 					var retry = function () {
 						if (Webcam.container) {
@@ -273,28 +366,19 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 					};
 					setTimeout(retry, 3000);
 				}
-			} );
+			});
 
 			Webcam.upload(data_uri, servicePostPic);
-
 		};
 
 		var timeoutFunction = function () {
+			counter--;
 			if (counter == 0) {
 				divCounter.hide();
-
-				/** On Going **/ //				divShutterContainer.trigger('shutterClose');
-
-				Webcam.freeze();
-
-				audio[0].play();
-
 				Webcam.snap(managePicture);
-
-
 			} else {
-				counter--;
-				divCounter.text(counter+" ...");
+
+				divCounter.html(counter);
 				setTimeout(timeoutFunction, 1000);
 			}
 		};
