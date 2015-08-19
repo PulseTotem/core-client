@@ -76,11 +76,16 @@ class StaticSource<SourceInfo extends Info> {
 		var self = this;
 
 		var info = self.computeInfo();
-		self.getCall().onNewInfo(info);
+
+		if (info != null) {
+			self.getCall().onNewInfo(info);
+		}
 
 		var intervalFunction = function () {
 			var info = self.computeInfo();
-			self.getCall().onNewInfo(info);
+			if (info != null) {
+				self.getCall().onNewInfo(info);
+			}
 		};
 
 		setInterval(intervalFunction, this._refreshTime*1000);
