@@ -6,6 +6,7 @@
 /// <reference path="../../../t6s-core/core/scripts/infotype/CounterList.ts" />
 /// <reference path="../../../t6s-core/core/scripts/infotype/Counter.ts" />
 /// <reference path="../Renderer.ts" />
+/// <reference path="../../core/Timer.ts" />
 
 declare var $: any; // Use of JQuery
 declare var moment: any; // Use of MomentJS
@@ -53,9 +54,95 @@ class TweetCounterRenderer implements Renderer<Counter> {
 
 		var counterHTMLWrapper = $("<div>");
 		counterHTMLWrapper.addClass("TweetCounterRenderer_wrapper");
-		counterHTMLWrapper.html(info.getValue());
+
+		var hashtagDiv = $("<div>");
+		hashtagDiv.addClass("TweetCounterRenderer_hashtag");
+		var hashtagSpan = $("<span>");
+		hashtagSpan.html("#OperaDeParis");
+		hashtagDiv.append(hashtagSpan);
+
+		counterHTMLWrapper.append(hashtagDiv);
+
+		var counterMainzone = $("<div>");
+		counterMainzone.addClass("TweetCounterRenderer_mainzone");
+
+		counterHTMLWrapper.append(counterMainzone);
+
+		var counterDiv = $("<div>");
+		counterDiv.addClass("TweetCounterRenderer_counter");
+
+		counterMainzone.append(counterDiv);
+
+		for(var i = 0; i < 5; i++) {
+			if(i!=0) {
+				var digitListInter = $("<ul>");
+				digitListInter.addClass("TweetCounterRenderer_digitList_inter");
+
+				counterDiv.append(digitListInter);
+			}
+
+			var digitList = $("<ul>");
+			digitList.addClass("TweetCounterRenderer_digitList");
+			digitList.addClass("TweetCounterRenderer_digitList" + i.toString());
+
+			counterDiv.append(digitList);
+		}
+
+		var clearDigitList = $("<div>");
+		clearDigitList.addClass("clearfix");
+
+		counterDiv.append(clearDigitList);
+
+		var twitterLogo = $("<div>");
+		twitterLogo.addClass("TweetCounterRenderer_twitter_logo");
+
+		counterMainzone.append(twitterLogo);
+
+
+		var nbTweetsTxtDiv = $("<div>");
+		nbTweetsTxtDiv.addClass("TweetCounterRenderer_nbtweets");
+
+		var nbTweetsTxtSpan = $("<span>");
+		nbTweetsTxtSpan.html("Nombre de Tweets aujourd'hui");
+
+		nbTweetsTxtDiv.append(nbTweetsTxtSpan);
+
+		counterHTMLWrapper.append(nbTweetsTxtDiv);
 
 		$(domElem).append(counterHTMLWrapper);
+
+		for(var i = 0; i < 5; i++) {
+			var digitList = $(domElem).find(".TweetCounterRenderer_digitList" + i.toString()).first();
+			digitList.css("height", digitList.css( "height" ));
+
+			for(var j = 0; j < 11; j++) {
+				var digitElem = $("<li>");
+				digitElem.addClass("TweetCounterRenderer_digit" + j.toString());
+				digitElem.css("line-height", digitList.css( "height" ));
+				var digitElemSpan = $("<span>");
+				digitElemSpan.html((j%10).toString());
+				digitElem.append(digitElemSpan);
+
+				digitList.append(digitElem);
+				digitElem.textfill({
+					maxFontPixels: 500
+				});
+			}
+		}
+
+		hashtagDiv.textfill({
+			maxFontPixels: 500
+		});
+
+		nbTweetsTxtDiv.textfill({
+			maxFontPixels: 500
+		});
+
+		$(window).resize(function() {
+			hashtagDiv.textfill({
+				maxFontPixels: 500
+			});
+		});
 
 		endCallback();
 	}
@@ -69,10 +156,8 @@ class TweetCounterRenderer implements Renderer<Counter> {
 	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
 	updateRender(info : Counter, domElem : any, endCallback : Function) {
-		var counterHTMLWrapper = $(domElem).find(".TweetCounterRenderer_wrapper").first();
-		counterHTMLWrapper.html(info.getValue());
-
-		endCallback();
+		$(domElem).empty();
+		this.render(info, domElem, endCallback);
 	}
 
 	/**
@@ -84,8 +169,36 @@ class TweetCounterRenderer implements Renderer<Counter> {
 	 * @param {Function} endCallback - Callback function called at the end of animation.
 	 */
 	animate(info : Counter, domElem : any, endCallback : Function) {
-		//Nothing to do.
+		$(".TweetCounterRenderer_hashtag").textfill({
+			maxFontPixels: 500
+		});
 
-		endCallback();
+		$(".TweetCounterRenderer_nbtweets").textfill({
+			maxFontPixels: 500
+		});
+
+		var nbDigit = info.getValue().toString().length;
+		var infoValue = info.getValue();
+
+		if(nbDigit < 5) {
+			for(var i = 5; i > nbDigit; i--) {
+				var digitElemNumber = 5 - i;
+
+				$(domElem).find(".TweetCounterRenderer_digitList" + digitElemNumber.toString()).first().transition({ y: '0px' }, 2000);
+			}
+		}
+
+		for(var k = nbDigit; k > 0; k--) {
+			var digitElemNumber = 5 - k;
+			var digitElemValue = (infoValue-(infoValue%Math.pow(10, k-1)))/Math.pow(10, k-1);
+			infoValue = infoValue - (digitElemValue*Math.pow(10, k-1));
+
+			var digitList = $(domElem).find(".TweetCounterRenderer_digitList" + digitElemNumber.toString()).first();
+			digitList.transition({ y: '' + (-digitList.height()*digitElemValue) + 'px' }, 2000);
+		}
+
+		new Timer(function() {
+			endCallback();
+		}, 2000);
 	}
 }
