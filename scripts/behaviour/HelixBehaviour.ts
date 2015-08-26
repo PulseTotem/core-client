@@ -140,9 +140,11 @@ class HelixBehaviour extends Behaviour {
 	 * @param {Array<InfoRenderer>} listInfoRenderers - The InfoRenderer list to set.
 	 */
 	setListInfoRenderers(listInfoRenderers : Array<InfoRenderer<any>>) {
+		this.stop();
 		super.setListInfoRenderers(listInfoRenderers);
 		this._currentInfoRendererId = null;
 		this._behaviourStarted = false;
+		Logger.debug(listInfoRenderers);
 	}
 
 	/**
@@ -163,7 +165,7 @@ class HelixBehaviour extends Behaviour {
 	private _nextInfoRenderer() {
 		var self = this;
 
-		this._timer = null;
+		this.stop();
 
 		var listInfoRenderers = this.getListInfoRenderers();
 
@@ -201,23 +203,26 @@ class HelixBehaviour extends Behaviour {
 					var currentItemPanel = $(self.getZone().getZoneDiv()).find(".HelixBehaviour_helix_item_" + currentItemPanelNumber).first();
 
 					var beginMoment = moment();
-					currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), currentItemPanel, function() {
 
+					currentInfoRenderer.getRenderer().updateRender(currentInfoRenderer.getInfo(), currentItemPanel, function() {
 						self._updateHelix();
 
-						var diffWithBegin = moment().diff(beginMoment);
+						currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), currentItemPanel, function() {
 
-						currentInfoRenderer.getInfo().setCastingDate(new Date());
+							var diffWithBegin = moment().diff(beginMoment);
 
-						var finalDuration =  currentInfoRenderer.getInfo().getDurationToDisplay() * 1000 - diffWithBegin - 1100;
+							currentInfoRenderer.getInfo().setCastingDate(new Date());
 
-						if(finalDuration > 0) {
-							self._timer = new Timer(function () {
+							var finalDuration =  currentInfoRenderer.getInfo().getDurationToDisplay() * 1000 - diffWithBegin;
+
+							if(finalDuration > 0) {
+								self._timer = new Timer(function () {
+									self._nextInfoRenderer();
+								}, finalDuration);
+							} else {
 								self._nextInfoRenderer();
-							}, finalDuration);
-						} else {
-							self._nextInfoRenderer();
-						}
+							}
+						});
 					});
 				});
 
@@ -271,8 +276,8 @@ class HelixBehaviour extends Behaviour {
 				var beginMoment = moment();
 
 				this._displayInfoRenderer(currentInfoRenderer, itemPanel, function() {
+					self._updateHelix();
 					currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), itemPanel, function() {
-						self._updateHelix();
 						var diffWithBegin = moment().diff(beginMoment);
 
 						currentInfoRenderer.getInfo().setCastingDate(new Date());
