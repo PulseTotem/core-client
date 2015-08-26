@@ -6,6 +6,7 @@
 /// <reference path="../../../../t6s-core/core/scripts/infotype/CounterList.ts" />
 /// <reference path="../../../../t6s-core/core/scripts/infotype/Counter.ts" />
 /// <reference path="../../Renderer.ts" />
+/// <reference path="../../../core/Timer.ts" />
 
 declare var $: any; // Use of JQuery
 declare var moment: any; // Use of MomentJS
