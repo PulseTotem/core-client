@@ -8,7 +8,6 @@
 /// <reference path="../../Renderer.ts" />
 
 declare var $: any; // Use of JQuery
-declare var moment: any; // Use of MomentJS
 
 class OperaParisCounterWhiteRenderer implements Renderer<Counter> {
 	/**

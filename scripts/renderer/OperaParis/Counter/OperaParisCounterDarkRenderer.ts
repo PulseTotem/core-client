@@ -9,7 +9,6 @@
 /// <reference path="../../../core/Timer.ts" />
 
 declare var $: any; // Use of JQuery
-declare var moment: any; // Use of MomentJS
 
 class OperaParisCounterDarkRenderer implements Renderer<Counter> {
 	/**
