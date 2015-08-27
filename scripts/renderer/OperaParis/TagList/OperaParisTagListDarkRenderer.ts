@@ -69,9 +69,9 @@ class OperaParisTagListDarkRenderer implements Renderer<TagList> {
 
 		var titleText = $("<div>");
 		titleText.addClass("OperaParisTagListDarkRenderer_title_text");
-		var titleSpan = $("<span>");
-		titleSpan.html("Top 5 #Hashtags / ");
-		titleText.append(titleSpan);
+		var titleTextSpan = $("<span>");
+		titleTextSpan.html("Top " + info.getTags().length + " #Hashtags / ");
+		titleText.append(titleTextSpan);
 
 		titleDiv.append(titleText);
 
@@ -79,11 +79,6 @@ class OperaParisTagListDarkRenderer implements Renderer<TagList> {
 		twitterLogo.addClass("OperaParisTagListDarkRenderer_title_twitter_logo");
 
 		titleDiv.append(twitterLogo);
-
-		var clearTitleDiv = $("<div>");
-		clearTitleDiv.addClass("clearfix");
-
-		titleDiv.append(clearTitleDiv);
 
 		var tagMainzone = $("<div>");
 		tagMainzone.addClass("OperaParisTagListDarkRenderer_mainzone");
@@ -111,12 +106,12 @@ class OperaParisTagListDarkRenderer implements Renderer<TagList> {
 		var layout = d3.layout.cloud();
 		layout.size([tagMainzone.width(), tagMainzone.height()]);
 		layout.words(info.getTags().map(function(d) {
-					return {text: "#" + d.getName(), size: 100 + (d.getPopularity()*100/totalPopularity)};
+					return {text: "#" + d.getName(), value: (d.getPopularity()*100/totalPopularity)};
 				}));
 		layout.padding(5);
 		layout.rotate(0);
 		layout.font("Impact");
-		layout.fontSize(function(d) { return d.size; });
+		layout.fontSize(function(d) { return d.value*tagMainzone.height()/100; });
 		layout.on("end", function(words) {
 
 			tagMainzone.hide();
@@ -174,14 +169,12 @@ class OperaParisTagListDarkRenderer implements Renderer<TagList> {
 		var layout = d3.layout.cloud();
 		layout.size([tagMainzone.width(), tagMainzone.height()]);
 		layout.words(info.getTags().map(function (d) {
-			return {text: "#" + d.getName(), size: 100 + (d.getPopularity() * 100 / totalPopularity)};
+			return {text: "#" + d.getName(), value: (d.getPopularity()*100/totalPopularity)};
 		}));
 		layout.padding(5);
 		layout.rotate(0);
 		layout.font("Impact");
-		layout.fontSize(function (d) {
-			return d.size;
-		});
+		layout.fontSize(function(d) { return d.value*tagMainzone.height()/100; });
 		layout.on("end", function (words) {
 
 			tagMainzone.hide();

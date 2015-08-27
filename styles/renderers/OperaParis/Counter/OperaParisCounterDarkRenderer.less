@@ -1,93 +1,95 @@
-@import "../../../core.less";
+@import "../../core.less";
 
 .OperaParisCounterDarkRenderer_wrapper {
   width: 100%;
   height: 100%;
+  color: black;
   background-image: url("../static/images/OperaDeParisBackground_white.png");
   background-repeat: no-repeat;
   background-size: 100% 100%;
 
   .OperaParisCounterDarkRenderer_hashtag {
-    position: fixed;
+    position: absolute;
     right: 1%;
-    top: 20px;
+    top: 1%;
     font-weight: bold;
-    color: white;
     width: 42%;
     height: 10%;
+    color: white;
   }
 
   .OperaParisCounterDarkRenderer_mainzone {
-    width: 50%;
+    width: 75%;
+    height: 60%;
     margin-left: auto;
     margin-right: auto;
-    position: fixed;
-    top: 50%;
+    position: absolute;
+    bottom: 10%;
     left: 0;
     right: 0;
-    margin-top: -100px;
 
 
     .OperaParisCounterDarkRenderer_counter {
+      position: absolute;
+      left: 0;
       overflow: hidden;
-      height: 200px;
-      line-height: 200px;
-      width: 100%;
+      height: 100%;
+      line-height: 100%;
+      width: 80%;
       vertical-align: middle;
 
       .OperaParisCounterDarkRenderer_digitList {
         float: left;
-        width: 19%;
+        width: 18%;
         list-style: none;
-        font-size: 160px;
-        color: black;
         text-align: center;
         font-weight: bold;
+        height: 100%;
+        margin-top: 0;
+        margin-bottom: 0;
+
+        li {
+          height: 100%;
+        }
       }
 
       .OperaParisCounterDarkRenderer_digitList_inter {
-        width: 3px;
+        width: 1%;
         background-color: black;
-        height: 160px;
+        height: 70%;
         float: left;
-        margin-top: 20px;
-      }
-    }
-
-    .OperaParisCounterDarkRenderer_nbtweets {
-      font-size: 50px;
-      color: black;
-      text-align: center;
-    }
-
-  }
-
-  .OperaParisCounterDarkRenderer_twitter_logo {
-    width: 200px;
-    height: 200px;
-    background-image: url("../static/images/Twitter_logo_black.png");
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-    position: fixed;
-    top: 50%;
-    right: 50%;
-    margin-top: -100px;
-    margin-right: -42%;
-  }
-}
-
-@media @large-landscape { // 1500px <= width
-  .OperaParisCounterDarkRenderer_wrapper {
-    .OperaParisCounterDarkRenderer_mainzone {
-      .OperaParisCounterDarkRenderer_counter {
-        .OperaParisCounterDarkRenderer_digitList {
-          font-size: 200px;
-        }
+        margin-top: 7.5%;
+        margin-bottom: 0;
       }
     }
 
     .OperaParisCounterDarkRenderer_twitter_logo {
-      margin-right: -35%;
+      width: 19%;
+      height: 100%;
+      background-image: url("../static/images/Twitter_logo_black.png");
+      background-repeat: no-repeat;
+      background-size: 100%;
+      position: absolute;
+      top: 0;
+      left: 80%;
+      bottom: 0;
+      margin-top: auto;
+      margin-bottom: auto;
+      background-position-y: 50%;
     }
+
+  }
+
+  .OperaParisCounterDarkRenderer_nbtweets {
+    width: 75%;
+    height: 10%;
+    margin-left: auto;
+    margin-right: auto;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    margin-bottom: 1%;
   }
 }
