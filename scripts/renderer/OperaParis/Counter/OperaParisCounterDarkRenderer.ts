@@ -85,14 +85,6 @@ class OperaParisCounterDarkRenderer implements Renderer<Counter> {
 			digitList.addClass("OperaParisCounterDarkRenderer_digitList");
 			digitList.addClass("OperaParisCounterDarkRenderer_digitList" + i.toString());
 
-			for(var j = 0; j < 11; j++) {
-				var digitElem = $("<li>");
-				digitElem.addClass("OperaParisCounterDarkRenderer_digit" + j.toString());
-				digitElem.html((j%10).toString());
-
-				digitList.append(digitElem);
-			}
-
 			counterDiv.append(digitList);
 		}
 
@@ -101,21 +93,48 @@ class OperaParisCounterDarkRenderer implements Renderer<Counter> {
 
 		counterDiv.append(clearDigitList);
 
-		var nbTweetsTxtDiv = $("<div>");
-		nbTweetsTxtDiv.addClass("OperaParisCounterDarkRenderer_nbtweets");
-
-		nbTweetsTxtDiv.html("Nombre de Tweets aujourd'hui");
-
-		counterMainzone.append(nbTweetsTxtDiv);
-
 		var twitterLogo = $("<div>");
 		twitterLogo.addClass("OperaParisCounterDarkRenderer_twitter_logo");
 
-		counterHTMLWrapper.append(twitterLogo);
+		counterMainzone.append(twitterLogo);
+
+
+		var nbTweetsTxtDiv = $("<div>");
+		nbTweetsTxtDiv.addClass("OperaParisCounterDarkRenderer_nbtweets");
+
+		var nbTweetsTxtSpan = $("<span>");
+		nbTweetsTxtSpan.html("Nombre de Tweets aujourd'hui");
+
+		nbTweetsTxtDiv.append(nbTweetsTxtSpan);
+
+		counterHTMLWrapper.append(nbTweetsTxtDiv);
 
 		$(domElem).append(counterHTMLWrapper);
 
+		for(var i = 0; i < 5; i++) {
+			var digitList = $(domElem).find(".OperaParisCounterDarkRenderer_digitList" + i.toString()).first();
+			digitList.css("height", digitList.css( "height" ));
+
+			for(var j = 0; j < 11; j++) {
+				var digitElem = $("<li>");
+				digitElem.addClass("OperaParisCounterDarkRenderer_digit" + j.toString());
+				digitElem.css("line-height", digitList.css( "height" ));
+				var digitElemSpan = $("<span>");
+				digitElemSpan.html((j%10).toString());
+				digitElem.append(digitElemSpan);
+
+				digitList.append(digitElem);
+				digitElem.textfill({
+					maxFontPixels: 500
+				});
+			}
+		}
+
 		hashtagDiv.textfill({
+			maxFontPixels: 500
+		});
+
+		nbTweetsTxtDiv.textfill({
 			maxFontPixels: 500
 		});
 
@@ -137,9 +156,8 @@ class OperaParisCounterDarkRenderer implements Renderer<Counter> {
 	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
 	updateRender(info : Counter, domElem : any, endCallback : Function) {
-		//Nothing to do. All is in animation.
-
-		endCallback();
+		$(domElem).empty();
+		this.render(info, domElem, endCallback);
 	}
 
 	/**
@@ -152,6 +170,10 @@ class OperaParisCounterDarkRenderer implements Renderer<Counter> {
 	 */
 	animate(info : Counter, domElem : any, endCallback : Function) {
 		$(".OperaParisCounterDarkRenderer_hashtag").textfill({
+			maxFontPixels: 500
+		});
+
+		$(".OperaParisCounterDarkRenderer_nbtweets").textfill({
 			maxFontPixels: 500
 		});
 
@@ -171,7 +193,8 @@ class OperaParisCounterDarkRenderer implements Renderer<Counter> {
 			var digitElemValue = (infoValue-(infoValue%Math.pow(10, k-1)))/Math.pow(10, k-1);
 			infoValue = infoValue - (digitElemValue*Math.pow(10, k-1));
 
-			$(domElem).find(".OperaParisCounterDarkRenderer_digitList" + digitElemNumber.toString()).first().transition({ y: '' + (-200*digitElemValue) + 'px' }, 2000);
+			var digitList = $(domElem).find(".OperaParisCounterDarkRenderer_digitList" + digitElemNumber.toString()).first();
+			digitList.transition({ y: '' + (-digitList.height()*digitElemValue) + 'px' }, 2000);
 		}
 
 		new Timer(function() {
