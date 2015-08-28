@@ -1,0 +1,55 @@
+@import "../../core.less";
+
+.CounterRenderer_wrapper {
+  width: 100%;
+  height: 100%;
+  color: black;
+
+  .CounterRenderer_mainzone {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+
+    .CounterRenderer_counter {
+      position: absolute;
+      overflow: hidden;
+      height: 100%;
+      line-height: 100%;
+      width: 100%;
+      vertical-align: middle;
+
+      .CounterRenderer_digitList {
+        float: left;
+        width: 80% / 6;
+        list-style: none;
+        text-align: center;
+        font-weight: bold;
+        height: 100%;
+        margin-top: 0;
+        margin-bottom: 0;
+
+        li {
+          height: 100%;
+        }
+      }
+
+      .CounterRenderer_digitList_inter {
+        width: 20% / 5;
+        height: 75%;
+        float: left;
+        margin-top: 0;
+        margin-bottom: 0;
+
+        .CounterRenderer_digiList_inter_content {
+          width: 20%;
+          height: 100%;
+          background-color: black;
+          list-style: none;
+          text-align: center;
+          margin-left: auto;
+          margin-right: auto;
+        }
+      }
+    }
+  }
+}
