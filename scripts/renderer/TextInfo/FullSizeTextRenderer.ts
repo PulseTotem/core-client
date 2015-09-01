@@ -4,7 +4,7 @@
  */
 
 /// <reference path="../../../t6s-core/core/scripts/infotype/TextList.ts" />
-/// <reference path="../../../t6s-core/core/scripts/infotype/Textinfo.ts" />
+/// <reference path="../../../t6s-core/core/scripts/infotype/TextInfo.ts" />
 /// <reference path="../Renderer.ts" />
 
 declare var $: any; // Use of JQuery
