@@ -67,7 +67,7 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 			var appliURL = info.getArgs()[1];
 			var lastPic = info.getArgs()[2];
 
-			this.waitMessage(domElem, qrCodeUrl, appliURL, lastPic);
+			//this.waitMessage(domElem, qrCodeUrl, appliURL, lastPic);
 		} else	if (info.getCmd() == "startSession") {
 			this.startSession(domElem);
 		} else if (info.getCmd() == "counter") {
