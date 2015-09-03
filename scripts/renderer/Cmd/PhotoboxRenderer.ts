@@ -81,6 +81,7 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 			if (Webcam.container) {
 				Webcam.reset();
 			}
+			this.resetZone(domElem);
 		}
 
 		endCallback();
@@ -410,6 +411,20 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 		setTimeout(timeoutFunction, 1000);
 	}
 
+	private resetZone(domElem : any) {
+		var divMessage = $('<div>');
+		divMessage.addClass("PhotoboxRenderer_messageFin");
+
+		var messageSpan = $('<span>');
+		messageSpan.html("Merci pour votre participation !");
+		divMessage.append(messageSpan);
+		domElem.append(divMessage);
+
+		divMessage.textfill({
+			maxFontPixels: 500
+		});
+	}
+
 	/**
 	 * Update rendering Info in specified DOM Element.
 	 *
@@ -443,4 +458,6 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 
 		endCallback();
 	}
+
+
 }
