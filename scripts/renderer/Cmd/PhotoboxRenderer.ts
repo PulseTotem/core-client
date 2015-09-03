@@ -69,8 +69,10 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 
 			//this.waitMessage(domElem, qrCodeUrl, appliURL, lastPic);
 		} else	if (info.getCmd() == "startSession") {
+			$(domElem).empty();
 			this.startSession(domElem);
 		} else if (info.getCmd() == "counter") {
+			$(domElem).empty();
 			if (info.getArgs().length != 2) {
 				this.startSession(domElem);
 			}
@@ -440,7 +442,7 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 			if (Webcam.container) {
 				Webcam.reset();
 			}
-			$(domElem).empty();
+
 			this.render(info, domElem, endCallback);
 		/** On Going **/ //		}
 	}
