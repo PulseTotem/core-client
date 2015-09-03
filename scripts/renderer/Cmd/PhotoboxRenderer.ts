@@ -260,70 +260,41 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 
 		var self = this;
 		var managePicture = function(data_uri) {
+			Webcam.freeze();
+
+			var divResultPhotoImg = $('<img>');
+			divResultPhotoImg.addClass("PhotoboxRenderer_result_photo_img");
+			divResultPhotoImg.attr('src', data_uri);
+
+			divResultPhoto.append(divResultPhotoImg);
+			divResultPhoto.show();
+
 			topLeftShutter.transition({
-				'top': '0',
-				'left': '0',
+				'top': '-100%',
+				'left': '-100%',
 				'easing': 'in-out',
 				'duration': 1000
 			});
 
 			topRightShutter.transition({
-				'top': '0',
-				'right': '0',
+				'top': '-100%',
+				'right': '-100%',
 				'easing': 'in-out',
 				'duration': 1000
 			});
 
 			bottomLeftShutter.transition({
-				'bottom': '0',
-				'left': '0',
+				'bottom': '-100%',
+				'left': '-100%',
 				'easing': 'in-out',
 				'duration': 1000
 			});
 
 			bottomRightShutter.transition({
-				'bottom': '0',
-				'right': '0',
+				'bottom': '-100%',
+				'right': '-100%',
 				'easing': 'in-out',
 				'duration': 1000
-			}, function() {
-				audio[0].play();
-				Webcam.freeze();
-
-				var divResultPhotoImg = $('<img>');
-				divResultPhotoImg.addClass("PhotoboxRenderer_result_photo_img");
-				divResultPhotoImg.attr('src', data_uri);
-
-				divResultPhoto.append(divResultPhotoImg);
-				divResultPhoto.show();
-
-				topLeftShutter.transition({
-					'top': '-100%',
-					'left': '-100%',
-					'easing': 'in-out',
-					'duration': 1000
-				});
-
-				topRightShutter.transition({
-					'top': '-100%',
-					'right': '-100%',
-					'easing': 'in-out',
-					'duration': 1000
-				});
-
-				bottomLeftShutter.transition({
-					'bottom': '-100%',
-					'left': '-100%',
-					'easing': 'in-out',
-					'duration': 1000
-				});
-
-				bottomRightShutter.transition({
-					'bottom': '-100%',
-					'right': '-100%',
-					'easing': 'in-out',
-					'duration': 1000
-				});
 			});
 
 			divCounter.empty();
@@ -397,9 +368,37 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 			counter--;
 			if (counter == 0) {
 				divCounter.hide();
-				Webcam.snap(managePicture);
-			} else {
+				audio[0].play();
+				topLeftShutter.transition({
+					'top': '0',
+					'left': '0',
+					'easing': 'in-out',
+					'duration': 1000
+				});
 
+				topRightShutter.transition({
+					'top': '0',
+					'right': '0',
+					'easing': 'in-out',
+					'duration': 1000
+				});
+
+				bottomLeftShutter.transition({
+					'bottom': '0',
+					'left': '0',
+					'easing': 'in-out',
+					'duration': 1000
+				});
+
+				bottomRightShutter.transition({
+					'bottom': '0',
+					'right': '0',
+					'easing': 'in-out',
+					'duration': 1000
+				}, function() {
+					Webcam.snap(managePicture);
+				});
+			} else {
 				spanCounter.html(counter);
 				divCounter.textfill({
 					maxFontPixels: 500
