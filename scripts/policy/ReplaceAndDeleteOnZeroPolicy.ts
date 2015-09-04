@@ -37,10 +37,15 @@ class ReplaceAndDeleteOnZeroPolicy implements Policy {
 		var newInfosWithoutZero : Array<Info> = new Array<Info>();
 
 		newInfos.forEach(function(info : Info) {
+			Logger.debug(info);
 			if(info.getDurationToDisplay() != 0) {
 				newInfosWithoutZero.push(info);
+			} else {
+				Logger.debug("OOOOOO");
 			}
 		});
+
+		Logger.debug(newInfosWithoutZero);
 
 		return newInfosWithoutZero;
 	}
