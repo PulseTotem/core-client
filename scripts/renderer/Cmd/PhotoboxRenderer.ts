@@ -22,6 +22,14 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 	};
 
 	/**
+	 * Last photo.
+	 *
+	 * @property _lastPhoto
+	 * @type string
+	 */
+	private _lastPhoto : String;
+
+	/**
 	 * Transform the Info list to another Info list.
 	 *
 	 * @method transformInfo<ProcessInfo extends Info>
@@ -62,7 +70,7 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 	render(info : Cmd, domElem : any, endCallback : Function) {
 
 		if (info.getCmd() == "Wait") {
-
+			$(domElem).empty();
 			var qrCodeUrl = info.getArgs()[0];
 			var appliURL = info.getArgs()[1];
 			var lastPic = info.getArgs()[2];
@@ -80,6 +88,7 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 			var servicePostPic = info.getArgs()[1];
 			this.countAndSnap(domElem, counterTime, servicePostPic);
 		} else if (info.getCmd() == "validatedPicture") {
+			$(domElem).empty();
 			if (Webcam.container) {
 				Webcam.reset();
 			}
@@ -265,6 +274,8 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 		var managePicture = function(data_uri) {
 			Webcam.freeze();
 
+			self._lastPhoto = data_uri;
+
 			var divResultPhotoImg = $('<img>');
 			divResultPhotoImg.addClass("PhotoboxRenderer_result_photo_img");
 			divResultPhotoImg.attr('src', data_uri);
@@ -414,13 +425,24 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 	}
 
 	private resetZone(domElem : any) {
+		var divResultPhoto = $('<div>');
+		divResultPhoto.addClass('PhotoboxRenderer_result_photo');
+
+		var divResultPhotoImg = $('<img>');
+		divResultPhotoImg.addClass("PhotoboxRenderer_result_photo_img");
+		divResultPhotoImg.attr('src', this._lastPhoto);
+
+		divResultPhoto.append(divResultPhotoImg);
+
+		$(domElem).append(divResultPhoto);
+
 		var divMessage = $('<div>');
 		divMessage.addClass("PhotoboxRenderer_messageFin");
 
 		var messageSpan = $('<span>');
 		messageSpan.html("Merci pour votre participation !");
 		divMessage.append(messageSpan);
-		domElem.append(divMessage);
+		$(domElem).append(divMessage);
 
 		divMessage.textfill({
 			maxFontPixels: 500
