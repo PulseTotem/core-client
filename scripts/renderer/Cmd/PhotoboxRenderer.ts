@@ -439,9 +439,13 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 		var divMessage = $('<div>');
 		divMessage.addClass("PhotoboxRenderer_messageFin");
 
+		var divMessageContent = $('<div>');
+		divMessageContent.addClass("PhotoboxRenderer_messageFin_content");
+
 		var messageSpan = $('<span>');
 		messageSpan.html("Merci pour votre participation !");
-		divMessage.append(messageSpan);
+		divMessageContent.append(messageSpan);
+		divMessage.append(divMessageContent);
 		$(domElem).append(divMessage);
 
 		divMessage.textfill({
