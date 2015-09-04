@@ -136,7 +136,9 @@ class DefaultSystemTrigger extends SystemTrigger {
 					this.timer.removeToDelay(diffDelay);
 					this.timer.resume();
 				} else {
-					this.timer.stop();
+					if(this.timer != null) {
+						this.timer.stop();
+					}
 					this.timer = null;
 					this.relativeTimeline.restore();
 					this.relativeTimeline.switchToRunnerState();

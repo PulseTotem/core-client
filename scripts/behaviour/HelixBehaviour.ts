@@ -433,7 +433,7 @@ class HelixBehaviour extends Behaviour {
 					this._timer.resume();
 					return true;
 				} else {
-					this._timer.stop();
+					this.stop();
 					return false;
 				}
 			}
