@@ -7,6 +7,7 @@
 /// <reference path="../Renderer.ts" />
 
 declare var $: any; // Use of JQuery
+declare var QRCode: any; // Use of QRCode.js
 
 class GuestBookRenderer implements Renderer<Cmd> {
 
@@ -49,93 +50,181 @@ class GuestBookRenderer implements Renderer<Cmd> {
 	 */
 	render(info : Cmd, domElem : any, endCallback : Function) {
 
-		if (info.getCmd() == "Wait") {
-			$(domElem).empty();
-			var socketId = info.getArgs()[0];
+		switch(info.getCmd()) {
+			case "Wait" :
+				$(domElem).empty();
+				var socketId = info.getArgs()[0];
 
-			Logger.debug(socketId);
+				this._renderWait(domElem, socketId);
+
+				break;
+			case "StartSession" :
+				$(domElem).empty();
+				var socketId = info.getArgs()[0];
+				var sessionDesc = JSON.parse(info.getArgs()[1]);
+
+				this._renderStartSession(domElem);
+
+				break;
+			default :
+				// Nothing to do ?
 		}
 
 		endCallback();
 	}
 
-	private waitMessage(domElem : any, qrCodeUrl : string, appliURL : string, lastPicUrl : string) {
+	/**
+	 * Render "Wait" command in specified DOM Element.
+	 *
+	 * @method _renderWait
+	 * @private
+	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {string} socketId - call socket's Id.
+	 */
+	private _renderWait(domElem : any, socketId : string) {
+		//var client_guestbook_url = "http://client-guestbook.pulsetotem.fr/session/" + socketId;
+		var client_guestbook_url = "http://localhost:9002/session/" + socketId;
+
 		var wrapperDiv = $('<div>');
-		wrapperDiv.addClass("PhotoboxRenderer_wrapper");
+		wrapperDiv.addClass("GuestBookRenderer_wrapper");
 
-		var contentDiv = $('<div>');
-		contentDiv.addClass("PhotoboxRenderer_content");
-		wrapperDiv.append(contentDiv);
+		var qrcodeDiv = $('<div>');
+		qrcodeDiv.addClass("GuestBookRenderer_qrcode");
+		wrapperDiv.append(qrcodeDiv);
 
-		var leftPanelDiv = $('<div>');
-		leftPanelDiv.addClass("PhotoboxRenderer_leftpanel");
-		leftPanelDiv.addClass("pull-left");
-		contentDiv.append(leftPanelDiv);
-
-		var leftTitleDiv = $('<div>');
-		leftTitleDiv.addClass("PhotoboxRenderer_leftpanel_title");
-		var leftTitleSpan = $('<span>');
-		leftTitleSpan.html("Envie d'un selfie ?");
-		leftTitleDiv.append(leftTitleSpan);
-		leftPanelDiv.append(leftTitleDiv);
-
-		var lastPicDiv = $('<div>');
-		lastPicDiv.addClass("PhotoboxRenderer_leftpanel_lastpic");
-		leftPanelDiv.append(lastPicDiv);
-
-		var helperImg = $('<span>');
-		helperImg.addClass("PhotoboxRenderer_helper");
-		lastPicDiv.append(helperImg);
-
-		var lastPicImg = $('<img>');
-		lastPicImg.addClass("PhotoboxRenderer_leftpanel_lastpic_img");
-		if (lastPicUrl) {
-			lastPicImg.attr('src', lastPicUrl);
-		} else {
-			lastPicImg.attr('src', "http://cdn.the6thscreen.fr/selfie/selfie_default.png");
-		}
-		lastPicDiv.append(lastPicImg);
-
-		var rightPanelDiv = $('<div>');
-		rightPanelDiv.addClass("PhotoboxRenderer_rightpanel");
-		rightPanelDiv.addClass("pull-left");
-		contentDiv.append(rightPanelDiv);
-
-		var rightTitleDiv = $('<div>');
-		rightTitleDiv.addClass("PhotoboxRenderer_rightpanel_title");
-		var rightTitleSpan = $('<span>');
-		rightTitleSpan.html("Flashez le QR Code !");
-		rightTitleDiv.append(rightTitleSpan);
-		rightPanelDiv.append(rightTitleDiv);
-
-		var qrCodeDiv = $('<div>');
-		qrCodeDiv.addClass("PhotoboxRenderer_rightpanel_qrcode");
-		rightPanelDiv.append(qrCodeDiv);
-
-		var qrCodeImg = $('<img>');
-		qrCodeImg.addClass("PhotoboxRenderer_rightpanel_qrcode_img");
-		qrCodeImg.attr('src', qrCodeUrl);
-		qrCodeDiv.append(qrCodeImg);
-
-		var urlDiv = $('<div>');
-		urlDiv.addClass("PhotoboxRenderer_rightpanel_url");
-		var urlSpan = $('<span>');
-		urlSpan.html(appliURL);
-		urlDiv.append(urlSpan);
-		rightPanelDiv.append(urlDiv);
+		var qrcodeUrlDiv = $('<div>');
+		qrcodeUrlDiv.addClass("GuestBookRenderer_qrcode_url");
+		var qrcodeUrlSpan = $('<span>');
+		qrcodeUrlSpan.html(client_guestbook_url);
+		qrcodeUrlDiv.append(qrcodeUrlSpan);
+		wrapperDiv.append(qrcodeUrlDiv);
 
 		$(domElem).append(wrapperDiv);
 
-		leftTitleDiv.textfill({
+		new QRCode(qrcodeDiv[0], client_guestbook_url);
+
+		qrcodeUrlDiv.textfill({
 			maxFontPixels: 500
 		});
+	}
 
-		rightTitleDiv.textfill({
-			maxFontPixels: 500
+	/**
+	 * Render "StartSession" command in specified DOM Element.
+	 *
+	 * @method _renderStartSession
+	 * @private
+	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 */
+	private _renderStartSession(domElem : any) {
+		var wrapperDiv = $('<div>');
+		wrapperDiv.addClass("GuestBookRenderer_wrapper");
+
+		var drawCanvasDiv = $('<div>');
+		drawCanvasDiv.addClass("GuestBookRenderer_canvas_container");
+		wrapperDiv.append(drawCanvasDiv);
+
+		var drawCanvas = $('<canvas>');
+		drawCanvas.addClass("GuestBookRenderer_canvas");
+		drawCanvasDiv.append(drawCanvas);
+
+		$(domElem).append(wrapperDiv);
+
+		var context = drawCanvas.getContext('2d');
+		var started = false;
+		var previousPos;
+		var currentPos;
+
+		var getMousePos = function(canvas, evt) {
+			// get canvas position
+			var obj = canvas;
+			var top = 0;
+			var left = 0;
+			while (obj && obj.tagName != 'BODY') {
+				top += obj.offsetTop;
+				left += obj.offsetLeft;
+				obj = obj.offsetParent;
+			}
+
+			// return relative mouse position
+			var mouseX = evt.clientX - left + window.pageXOffset;
+			var mouseY = evt.clientY - top + window.pageYOffset;
+			return {
+				x:mouseX,
+				y:mouseY
+			};
+		}
+
+		var getTouchPos = function(canvas, evt) {
+			// get canvas position
+			var obj = canvas;
+			var top = 0;
+			var left = 0;
+			while (obj && obj.tagName != 'BODY') {
+				top += obj.offsetTop;
+				left += obj.offsetLeft;
+				obj = obj.offsetParent;
+			}
+
+			// return relative touch position
+			var touchX = evt.touches[0].clientX - left + window.pageXOffset;
+			var touchY = evt.touches[0].clientY - top + window.pageYOffset;
+			return {
+				x:touchX,
+				y:touchY
+			};
+		}
+
+		var clicked = function(evt) {
+			previousPos = getMousePos(drawCanvas, evt);
+			started = true;
+		}
+
+		var released = function(evt) {
+			started = false;
+		}
+
+		var drawLine = function(previousPos, currentPos) {
+			context.beginPath();
+			context.moveTo(previousPos.x, previousPos.y);
+			context.lineTo(currentPos.x, currentPos.y);
+			context.stroke();
+		}
+
+		drawCanvas.on('mousedown', clicked);
+		drawCanvas.on('mouseup', released);
+		drawCanvas.on('mouseout', released);
+
+		drawCanvas.addEventListener('mousemove', function (evt) {
+			currentPos = getMousePos(drawCanvas, evt);
+
+			// Let's draw some lines that follow the mouse pos
+			if (started) {
+				drawLine(previousPos, currentPos);
+
+				previousPos = currentPos;
+			}
+		}, false);
+
+
+		drawCanvas.on("touchstart", function(event) {
+			previousPos = getTouchPos(drawCanvas, event);
+			started = true;
 		});
 
-		urlDiv.textfill({
-			maxFontPixels: 500
+		drawCanvas.on("touchend", function(event) {
+			released(event);
+			console.log("touchend");
+		});
+
+		drawCanvas.on("touchmove", function(event) {
+			event.preventDefault()
+			currentPos = getTouchPos(drawCanvas, event);
+			console.log("touchmove");
+
+			if (started) {
+				drawLine(previousPos, currentPos);
+				previousPos = currentPos;
+			}
 		});
 	}
 
