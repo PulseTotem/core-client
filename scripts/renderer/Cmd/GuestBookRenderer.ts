@@ -73,6 +73,9 @@ class GuestBookRenderer implements Renderer<Cmd> {
 
 				this._updateCanvasContent(domElem, drawContent);
 				break;
+			case "FinishSession" :
+				this._renderFinishSession(domElem);
+				break;
 			default :
 				// Nothing to do ?
 		}
@@ -170,6 +173,31 @@ class GuestBookRenderer implements Renderer<Cmd> {
 			//ctx.drawImage(img, 0, 0);
 			//ctx.drawImage(img, 0, 0, drawCanvas[0].width, drawCanvas[0].height);
 		}
+	}
+
+	/**
+	 * Render "FinishSession" command in specified DOM Element.
+	 *
+	 * @method _renderFinishSession
+	 * @private
+	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 */
+	private _renderFinishSession(domElem : any) {
+		var divMessage = $('<div>');
+		divMessage.addClass("GuestBookRenderer_messageFin");
+
+		var divMessageContent = $('<div>');
+		divMessageContent.addClass("GuestBookRenderer_messageFin_content");
+
+		var messageSpan = $('<span>');
+		messageSpan.html("Merci pour votre participation !");
+		divMessageContent.append(messageSpan);
+		divMessage.append(divMessageContent);
+		$(domElem).append(divMessage);
+
+		divMessage.textfill({
+			maxFontPixels: 500
+		});
 	}
 
 	/**
