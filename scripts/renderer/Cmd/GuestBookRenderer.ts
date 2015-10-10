@@ -92,8 +92,8 @@ class GuestBookRenderer implements Renderer<Cmd> {
 	 * @param {string} socketId - call socket's Id.
 	 */
 	private _renderWait(domElem : any, socketId : string) {
-		//var client_guestbook_url = "http://client-guestbook.pulsetotem.fr/session/" + socketId;
-		var client_guestbook_url = "http://localhost:9002/session/" + socketId;
+		var client_guestbook_url = "http://client-guestbook.pulsetotem.fr/session/" + socketId;
+		//var client_guestbook_url = "http://localhost:9002/session/" + socketId;
 
 		var wrapperDiv = $('<div>');
 		wrapperDiv.addClass("GuestBookRenderer_wrapper");
@@ -105,7 +105,8 @@ class GuestBookRenderer implements Renderer<Cmd> {
 		var qrcodeUrlDiv = $('<div>');
 		qrcodeUrlDiv.addClass("GuestBookRenderer_qrcode_url");
 		var qrcodeUrlSpan = $('<span>');
-		qrcodeUrlSpan.html(client_guestbook_url);
+		//qrcodeUrlSpan.html(client_guestbook_url);
+		qrcodeUrlSpan.html("Laissez nous un message dans notre livre d'or interactif !");
 		qrcodeUrlDiv.append(qrcodeUrlSpan);
 		wrapperDiv.append(qrcodeUrlDiv);
 
