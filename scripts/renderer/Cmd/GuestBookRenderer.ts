@@ -66,6 +66,13 @@ class GuestBookRenderer implements Renderer<Cmd> {
 				this._renderStartSession(domElem);
 
 				break;
+			case "NewDrawContent" :
+				var socketId = info.getArgs()[0];
+				var sessionDesc = JSON.parse(info.getArgs()[1]);
+				var drawContent = info.getArgs()[2];
+
+				this._updateCanvasContent(domElem, drawContent);
+				break;
 			default :
 				// Nothing to do ?
 		}
@@ -128,6 +135,41 @@ class GuestBookRenderer implements Renderer<Cmd> {
 		drawCanvasDiv.append(drawCanvas);
 
 		$(domElem).append(wrapperDiv);
+
+		var width = drawCanvasDiv.width();
+		var height = drawCanvasDiv.height();
+
+		drawCanvas.attr("width",  width + "px");
+		drawCanvas.attr("height", height + "px");
+	}
+
+	/**
+	 * Render "NewDrawContent" command in specified DOM Element.
+	 *
+	 * @method _updateCanvasContent
+	 * @private
+	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {any} drawContent - The new drawContent to display.
+	 */
+	private _updateCanvasContent(domElem : any, drawContent : any) {
+		var img = new Image();
+		img.onload = loadDrawContent;
+		img.src = drawContent;
+		function loadDrawContent() {
+			var drawCanvas = $(domElem).find(".GuestBookRenderer_canvas").first();
+			var ctx = drawCanvas[0].getContext('2d');
+			ctx.clearRect(0, 0, drawCanvas[0].width, drawCanvas[0].height);
+
+			var imgWidth = img.width;
+			var imgHeight = img.height;
+
+			var left = (drawCanvas[0].width - imgWidth) / 2;
+			var top = (drawCanvas[0].height - imgHeight) / 2;
+
+			ctx.drawImage(img, left, top);
+			//ctx.drawImage(img, 0, 0);
+			//ctx.drawImage(img, 0, 0, drawCanvas[0].width, drawCanvas[0].height);
+		}
 	}
 
 	/**
