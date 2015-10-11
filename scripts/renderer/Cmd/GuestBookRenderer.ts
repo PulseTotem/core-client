@@ -112,7 +112,10 @@ class GuestBookRenderer implements Renderer<Cmd> {
 
 		$(domElem).append(wrapperDiv);
 
-		new QRCode(qrcodeDiv[0], client_guestbook_url);
+		new QRCode(qrcodeDiv[0], {
+			text: client_guestbook_url,
+			width: 128,
+			height: 128});
 
 		qrcodeUrlDiv.textfill({
 			maxFontPixels: 500
