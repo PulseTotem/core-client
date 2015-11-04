@@ -20,19 +20,23 @@ class VideoSource extends StaticSource<VideoPlaylist> {
 
 		this.isURLValid = false;
 
-		var request = $.ajax({
-			url: this.params.URL,
-			method: "HEAD"
-		});
+		if(this.params.CheckExist == "true") {
+			var request = $.ajax({
+				url: this.params.URL,
+				method: "HEAD"
+			});
 
-		var self = this;
-		request.done(function( msg ) {
-			self.isURLValid = true;
-		});
+			var self = this;
+			request.done(function (msg) {
+				self.isURLValid = true;
+			});
 
-		request.fail(function( jqXHR, textStatus ) {
-			Logger.error( "Request failed: " + textStatus );
-		});
+			request.fail(function (jqXHR, textStatus) {
+				Logger.error("Request failed: " + textStatus);
+			});
+		} else {
+			this.isURLValid = true;
+		}
 	}
 
 	/**
