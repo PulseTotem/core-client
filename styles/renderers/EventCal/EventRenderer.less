@@ -1,44 +1,58 @@
 @import "../../core.less";
 
-.eventRenderer_title {
-  text-align: center;
+.EventRenderer_wrapper {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   width: 100%;
-}
+  height: 100%;
 
-.eventRenderer_description {
-  border: 1px solid black;
-  margin: auto;
-  padding: 10px;
-}
+  .EventRenderer_headerContainer {
+    background-color: #E21A66;
+    color: white;
+    padding: 1%;
+    font-weight: bold;
 
-.eventRenderer_started {
-  color: red;
-}
+    .EventRenderer_eventTimeLogo {
+      width: 32%;
+      margin-right: 2%;
+    }
 
-.eventRenderer_debutDiv {
+    .EventRenderer_eventTime {
+      text-align: center;
+      width: 32%;
+    }
 
-}
+    .EventRenderer_headerContainerArrow {
+      width: 15px;
+      height: 15px;
+      position: absolute;
+      left: 50%;
+      background-color: inherit;
+      transform: rotate(45deg);
+      margin-top: -1px;
+    }
+  }
 
-.eventRenderer_debutText {
+  .EventRenderer_titleContainer {
+    padding: 1%;
+    padding-top: 2%;
+    text-align: center;
+  }
 
-}
+  .EventRenderer_footerContainer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background-color: rgba(226, 26, 102, 0.1);
+    padding: 1%;
 
-.eventRenderer_debutHour {
-
-}
-
-.eventRenderer_finDiv {
-
-}
-.eventRenderer_finText {
-
-}
-.eventRenderer_finHour {
-
-}
-.eventRenderer_locationDiv {
-  padding-right: 1em;
-}
-.eventRenderer_locationText {
-
+    .EventRenderer_eventTimeHumanEnd {
+      
+    }
+  }
 }

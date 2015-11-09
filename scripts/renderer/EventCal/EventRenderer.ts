@@ -1,6 +1,6 @@
 /**
- * @author Christian Brel <christian@the6thscreen.fr, ch.brel@gmail.com>
- * @author Simon Urli <simon@the6thscreen.fr, simon.urli@gmail.com>
+ * @author Christian Brel <christian@pulsetotem.fr, ch.brel@gmail.com>
+ * @author Simon Urli <simon@pulsetotem.fr, simon.urli@gmail.com>
  */
 
 /// <reference path="../../../t6s-core/core/scripts/infotype/EventCal.ts" />
@@ -9,8 +9,6 @@
 
 declare var $: any; // Use of JQuery
 declare var moment: any; // Use of MomentJS
-
-moment.locale("fr");
 
 class EventRenderer implements Renderer<EventCal> {
 	/**
@@ -35,7 +33,6 @@ class EventRenderer implements Renderer<EventCal> {
             var events : Array<EventCal> = eventList.getEvents();
 
 			events.forEach(function (event : EventCal) {
-				event.setName(eventList.getName()+" : "+event.getName());
                 result.push(event);
             });
         });
@@ -52,104 +49,69 @@ class EventRenderer implements Renderer<EventCal> {
 	 * @param {Function} endCallback - Callback function called at the end of render method.
 	 */
 	render(info : EventCal, domElem : any, endCallback : Function) {
-
-		var now = moment();
-		var start = moment(info.getStart());
-		var end = moment(info.getEnd());
-
-		var eventHTML = $("<div>");
-		eventHTML.addClass("eventRenderer_mainDiv");
-
-		var title = $("<h2>");
-		title.addClass("eventRenderer_title");
-		title.text(info.getName());
-
-		eventHTML.append(title);
-
-		if (info.getDescription()) {
-			var description = $("<div>");
-			description.addClass("eventRenderer_description");
-			description.text(info.getDescription());
-			eventHTML.append(description);
-		}
-
-		var debutDiv = $("<div>");
-		debutDiv.addClass("eventRenderer_debutDiv");
-
-		var debutText = $("<div>");
-		debutText.addClass("eventRenderer_debutText");
-
-		var debutHour = $("<div>");
-		debutHour.addClass("eventRenderer_debutHour");
-
-		if (start.isBefore(now)) {
-			debutText.addClass("eventRenderer_started");
-			debutHour.addClass("eventRenderer_started");
-		}
-
-		var representStart;
-
-		if (start.isSame(now, "day")) {
-			representStart = start.format("LTS");
-		} else {
-			representStart = start.format("L LTS");
-		}
-		debutText.text("Begin: "+start.from(now));
-		debutHour.text(representStart);
-
-		debutDiv.append(debutText);
-		debutDiv.append(debutHour);
-
-		eventHTML.append(debutDiv);
+		var eventStart = moment(info.getStart());
+		eventStart.locale("fr");
+		var eventEnd = moment(info.getEnd());
+		eventEnd.locale("fr");
 
 
+		var wrapperHTML = $("<div>");
+		wrapperHTML.addClass("EventRenderer_wrapper");
 
-		var finDiv = $("<div>");
-		finDiv.addClass("eventRenderer_finDiv");
 
-		var finText = $("<div>");
-		finText.addClass("eventRenderer_finText");
+		var headerContainer = $("<div>");
+		headerContainer.addClass("EventRenderer_headerContainer");
 
-		var finHour = $("<div>");
-		finHour.addClass("eventRenderer_finHour");
+		var calendarLogoContainer = $("<div>");
+		calendarLogoContainer.addClass("EventRenderer_eventTimeLogo");
+		calendarLogoContainer.addClass("pull-left");
+		var calendarLogo = $('<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>');
+		calendarLogoContainer.append(calendarLogo);
 
-		var representEnd;
+		headerContainer.append(calendarLogoContainer);
 
-		if (end.isSame(now, "day")) {
-			representEnd = end.format("LTS");
-		} else {
-			representEnd = end.format("L LTS");
-		}
+		var eventTime = $("<div>");
+		eventTime.addClass("EventRenderer_eventTime");
+		eventTime.addClass("pull-left");
+		eventTime.html(eventStart.format("HH:mm") + " - " + eventEnd.format("HH:mm"));
 
-		finText.text("End: "+end.from(now));
-		finHour.text(representEnd);
+		headerContainer.append(eventTime);
 
-		finDiv.append(finText);
-		finDiv.append(finHour);
+		var clearFixDiv = $("<div>");
+		clearFixDiv.addClass("clearfix");
+		headerContainer.append(clearFixDiv);
 
-		eventHTML.append(finDiv);
+		var headerContainerArrow = $("<div>");
+		headerContainerArrow.addClass("EventRenderer_headerContainerArrow");
+		headerContainer.append(headerContainerArrow);
 
-		var maintenant = $("<div>");
-		maintenant.addClass("eventRenderer_maintenant");
-		maintenant.text(now.format("ll LTS"));
+		wrapperHTML.append(headerContainer);
 
-		if (info.getLocation()) {
-			var locationDiv = $("<div>");
-			locationDiv.addClass("eventRenderer_locationDiv");
+		var titleContainer = $("<div>");
+		titleContainer.addClass("EventRenderer_titleContainer");
+		var titleContainerSpan = $("<span>");
+		titleContainerSpan.html(info.getName());
+		titleContainer.append(titleContainerSpan);
 
-			var locationText = $("<span>");
-			locationText.addClass("eventRenderer_locationText");
-			locationText.text("Location: "+info.getLocation());
+		wrapperHTML.append(titleContainer);
 
-			var locationIcon = $("<span>");
-			locationIcon.addClass("glyphicon glyphicon-pushpin");
+		var footerContainer = $("<div>");
+		footerContainer.addClass("EventRenderer_footerContainer");
 
-			locationDiv.append(locationIcon);
-			locationDiv.append(locationText);
-			eventHTML.append(locationDiv);
-		}
+		var eventTimeHumanEnd = $("<div>");
+		eventTimeHumanEnd.addClass("EventRenderer_eventTimeHumanEnd");
+		eventTimeHumanEnd.addClass("pull-right");
+		eventTimeHumanEnd.html('<span class="glyphicon glyphicon-time" aria-hidden="true"></span> Termine ' + eventEnd.fromNow());
 
-	    $(domElem).append(eventHTML);
+		footerContainer.append(eventTimeHumanEnd);
+
+		wrapperHTML.append(footerContainer);
+
+	    $(domElem).append(wrapperHTML);
+
+		titleContainer.textfill({
+			maxFontPixels: 500
+		});
 
 		endCallback();
     }
