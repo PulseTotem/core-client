@@ -39,8 +39,6 @@ class EventListRenderer implements Renderer<EventList> {
 	 * @param {Function} endCallback - Callback function called at the end of render method.
 	 */
 	render(info : EventList, domElem : any, endCallback : Function) {
-		moment.locale("fr");
-
 		var wrapperHTML = $("<div>");
 		wrapperHTML.addClass("EventListRenderer_wrapper");
 
@@ -48,7 +46,9 @@ class EventListRenderer implements Renderer<EventList> {
 
 		info.getEvents().forEach(function(eventCal : EventCal) {
 			var eventStart = moment(eventCal.getStart());
+			eventStart.locale("fr");
 			var eventEnd = moment(eventCal.getEnd());
+			eventEnd.locale("fr");
 
 			var eventDiv = $("<div>");
 			eventDiv.addClass("EventListRenderer_eventContainer");
@@ -64,15 +64,26 @@ class EventListRenderer implements Renderer<EventList> {
 			var eventTimeContainer = $("<div>");
 			eventTimeContainer.addClass("EventListRenderer_eventTimeContainer");
 
+			var calendarLogoContainer = $("<div>");
+			calendarLogoContainer.addClass("EventListRenderer_eventTimeLogo");
+			calendarLogoContainer.addClass("pull-left");
+
 			var calendarLogo = $('<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>');
-			calendarLogo.addClass("pull-left");
-			eventTimeContainer.append(calendarLogo);
+			calendarLogoContainer.append(calendarLogo)
+
+			eventTimeContainer.append(calendarLogoContainer);
 
 			var eventTime = $("<div>");
 			eventTime.addClass("EventListRenderer_eventTime");
 			eventTime.addClass("pull-left");
-			eventTime.html(eventStart.format("HH:mm") + "-" + eventEnd.format("HH:mm") + " (Fin " + eventEnd.toNow() + ")");
+			eventTime.html(eventStart.format("HH:mm") + " - " + eventEnd.format("HH:mm"));
 			eventTimeContainer.append(eventTime);
+
+			var eventTimeHumanEnd = $("<div>");
+			eventTimeHumanEnd.addClass("EventListRenderer_eventTimeHumanEnd");
+			eventTimeHumanEnd.addClass("pull-left");
+			eventTimeHumanEnd.html("Fin " + eventEnd.fromNow());
+			eventTimeContainer.append(eventTimeHumanEnd);
 
 			var clearFixDiv = $("<div>");
 			clearFixDiv.addClass("clearfix");
