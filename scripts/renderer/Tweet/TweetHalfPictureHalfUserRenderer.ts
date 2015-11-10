@@ -88,14 +88,15 @@ class TweetHalfPictureHalfUserRenderer implements Renderer<Tweet> {
 
 		var tweetProfilPictureDiv = $("<div>");
 		tweetProfilPictureDiv.addClass("TweetHalfPictureHalfUserRenderer_profil_picture");
+		tweetProfilPictureDiv.css("background-image", "url('" + info.getOwner().getProfilPicture() + "')")
 
 		tweetHTMLBottom.append(tweetProfilPictureDiv);
 
-		var tweetProfilPictureImg = $("<img>");
+		/*var tweetProfilPictureImg = $("<img>");
 		tweetProfilPictureImg.addClass("img-circle");
 		tweetProfilPictureImg.attr("src", info.getOwner().getProfilPicture());
 
-		tweetProfilPictureDiv.append(tweetProfilPictureImg);
+		tweetProfilPictureDiv.append(tweetProfilPictureImg);*/
 
 		var tweetHTMLBottomContent = $("<div>");
 		tweetHTMLBottomContent.addClass("TweetHalfPictureHalfUserRenderer_bottom_content");
