@@ -1,0 +1,78 @@
+@import "../../core.less";
+
+.JM2LEventRenderer_wrapper {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+
+  .JM2LEventRenderer_headerContainer {
+    background-color: #E21A66;
+    color: white;
+    padding: 1%;
+    font-weight: bold;
+
+    .JM2LEventRenderer_titleContainer {
+      text-align: center;
+      width: 77%;
+    }
+
+    .JM2LEventRenderer_eventTimeContainer {
+      text-align: right;
+      width: 22%;
+      border-left: 2px solid white;
+
+      .JM2LEventRenderer_eventTimeLogo {
+        margin-right: 2%;
+      }
+
+      .JM2LEventRenderer_eventTime {
+
+      }
+    }
+
+    .JM2LEventRenderer_headerContainerArrow {
+      width: 15px;
+      height: 15px;
+      position: absolute;
+      left: 50%;
+      background-color: inherit;
+      transform: rotate(45deg);
+      margin-top: -1px;
+    }
+  }
+
+  .JM2LEventRenderer_videoContainer {
+    height: 40%;
+    text-align: center;
+
+    .JM2LEventRenderer_video {
+      height: 100%;
+      width: 100%;
+    }
+  }
+
+  .JM2LEventRenderer_locationContainer {
+    height: 45%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+  }
+
+  .JM2LEventRenderer_footerContainer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background-color: rgba(226, 26, 102, 0.1);
+    padding: 1%;
+
+    .JM2LEventRenderer_eventTimeHumanEnd {
+
+    }
+  }
+}
