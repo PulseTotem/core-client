@@ -152,6 +152,7 @@ class JM2LEventRenderer implements Renderer<EventCal> {
 	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
 	updateRender(info : EventCal, domElem : any, endCallback : Function) {
+		$(domElem).empty();
 		this.render(info, domElem, endCallback);
 	}
 

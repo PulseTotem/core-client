@@ -114,6 +114,7 @@ class EventListRenderer implements Renderer<EventList> {
 	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
 	updateRender(info : EventList, domElem : any, endCallback : Function) {
+		$(domElem).empty();
 		this.render(info, domElem, endCallback);
 	}
 
