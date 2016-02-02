@@ -4,20 +4,24 @@
  */
 
 /// <reference path="../../t6s-core/core/scripts/infotype/VideoPlaylist.ts" />
-/// <reference path="./StaticSource.ts" />
+/// <reference path="./SlaveStaticSource.ts" />
 
 /**
- * Represent a static Youtube Source in the client
+ * Represent a static Slave VideoPlaylist Source in the client
+ *
+ * @class SlaveVideoPlaylistSource
+ * @extends SlaveStaticSource<VideoPlaylist>
  */
-class YoutubeSource extends StaticSource<VideoPlaylist> {
+class SlaveVideoPlaylistSource extends SlaveStaticSource<VideoPlaylist> {
 
 	/**
 	 * Create and return the information of the Static Source
 	 *
-	 * @method computeInfo
+	 * @method computeIncomingMessage
+	 * @param {Array<InfoRenderer<any>>} listInfoRenderers - The ListInfoRenders to compute as Incoming Message.
 	 */
-	computeInfo() : VideoPlaylist {
-		var video : VideoURL = new VideoURL();
+	computeIncomingMessage(listInfoRenderers : Array<InfoRenderer<any>>) : VideoPlaylist {
+		/*var video : VideoURL = new VideoURL();
 		video.setId(this.params.YoutubeID);
 		video.setURL("http://www.youtube.com/embed/" + this.params.YoutubeID + "?autoplay=1&controls=0&modestbranding=1");
 		video.setType(VideoType.HTML5);
@@ -28,6 +32,10 @@ class YoutubeSource extends StaticSource<VideoPlaylist> {
 		playlist.addVideo(video);
 		playlist.setDurationToDisplay(this.params.InfoDuration);
 
-		return playlist;
+		return playlist;*/
+
+		Logger.debug(listInfoRenderers);
+
+		return null;
 	}
 }

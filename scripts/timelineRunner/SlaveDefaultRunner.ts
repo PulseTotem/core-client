@@ -31,7 +31,9 @@ class SlaveDefaultRunner extends DefaultRunner {
 	 */
 	start() {
 		super.start();
-		MessageBus.subscribe("global", this.fromMessageBus)
+		var self = this;
+
+		MessageBus.subscribe("global", function(data : any) { self.fromMessageBus(data); });
 	}
 
 	/**
@@ -46,7 +48,7 @@ class SlaveDefaultRunner extends DefaultRunner {
 			self.stop();
 			self._timer = new Timer(function() {
 				self._nextEvent();
-			}, 1000);
+			}, 800);
 		}
 	}
 }
