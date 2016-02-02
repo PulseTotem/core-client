@@ -5,6 +5,8 @@
 
 /// <reference path="./StaticSource.ts" />
 /// <reference path="../core/MessageBus.ts" />
+/// <reference path="../core/MessageBusChannel.ts" />
+/// <reference path="../core/MessageBusAction.ts" />
 
 /**
  * Represents a SlaveStaticSource of PulseTotem Client.
@@ -31,9 +33,9 @@ class SlaveStaticSource<SourceInfo extends Info> extends StaticSource<SourceInfo
 	public start() {
 		var self = this;
 
-		MessageBus.subscribe("global", function(data : any) {
-			if(typeof(data.action) != "undefined" && data.action == "relativeTimeline.display") {
-				var info = self.computeIncomingMessage(data.data);
+		MessageBus.subscribe(MessageBusChannel.TIMELINE, function(channel : any, data : any) {
+			if(typeof(data.action) != "undefined" && data.action == MessageBusAction.DISPLAY) {
+				var info = self.computeIncomingMessage(data.message);
 
 				if (info != null) {
 					self.getCall().onNewInfo(info);

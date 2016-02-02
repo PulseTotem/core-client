@@ -5,6 +5,8 @@
 
 /// <reference path="./DefaultRunner.ts" />
 /// <reference path="../core/MessageBus.ts" />
+/// <reference path="../core/MessageBusChannel.ts" />
+/// <reference path="../core/MessageBusAction.ts" />
 /// <reference path="../core/Timer.ts" />
 
 /**
@@ -33,7 +35,7 @@ class SlaveDefaultRunner extends DefaultRunner {
 		super.start();
 		var self = this;
 
-		MessageBus.subscribe("global", function(data : any) { self.fromMessageBus(data); });
+		MessageBus.subscribe(MessageBusChannel.TIMELINE, function(channel : any, data : any) { self.fromMessageBus(data); });
 	}
 
 	/**
@@ -44,7 +46,7 @@ class SlaveDefaultRunner extends DefaultRunner {
 	 */
 	fromMessageBus(data : any) {
 		var self = this;
-		if(typeof(data.action) != "undefined" && data.action == "relativeTimeline.display") {
+		if(typeof(data.action) != "undefined" && data.action == MessageBusAction.DISPLAY) {
 			self.stop();
 			self._timer = new Timer(function() {
 				self._nextEvent();

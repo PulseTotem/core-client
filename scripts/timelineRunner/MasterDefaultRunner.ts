@@ -5,6 +5,8 @@
 
 /// <reference path="./DefaultRunner.ts" />
 /// <reference path="../core/MessageBus.ts" />
+/// <reference path="../core/MessageBusChannel.ts" />
+/// <reference path="../core/MessageBusAction.ts" />
 
 /**
  * Represents "Default" Runner in Master mode of PulseTotem Client.
@@ -21,22 +23,30 @@ class MasterDefaultRunner extends DefaultRunner {
 	 */
 	constructor() {
 		super();
+	}
+
+	/**
+	 * Set the TimelineRunner's RelativeTimeline.
+	 *
+	 * @method setRelativeTimeline
+	 * @param {RelativeTimelineItf} relativeTimeline - The RelativeTimeline to set.
+	 */
+	setRelativeTimeline(relativeTimeline : RelativeTimelineItf) {
+		super.setRelativeTimeline(relativeTimeline);
+
+		var self = this;
 
 		var formerDisplay = this.relativeTimeline.display;
 
 		this.relativeTimeline.display = function(listInfoRenderers : Array<InfoRenderer<any>>) {
-			formerDisplay(listInfoRenderers);
+
+			formerDisplay.call(self.relativeTimeline, listInfoRenderers);
+
 			var data = {
-				action : "relativeTimeline.display",
-				data : listInfoRenderers
+				action : MessageBusAction.DISPLAY,
+				message : listInfoRenderers
 			};
-			MessageBus.publish("global", data);
+			MessageBus.publish(MessageBusChannel.TIMELINE, data);
 		};
-		/*
-//TODO : Put that on a static source to check Info Type.
-
-		 infoRenderer.getInfo().__proto__.constructor.name
-
-		 */
 	}
 }

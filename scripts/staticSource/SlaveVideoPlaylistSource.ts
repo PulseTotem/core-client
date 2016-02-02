@@ -21,21 +21,16 @@ class SlaveVideoPlaylistSource extends SlaveStaticSource<VideoPlaylist> {
 	 * @param {Array<InfoRenderer<any>>} listInfoRenderers - The ListInfoRenders to compute as Incoming Message.
 	 */
 	computeIncomingMessage(listInfoRenderers : Array<InfoRenderer<any>>) : VideoPlaylist {
-		/*var video : VideoURL = new VideoURL();
-		video.setId(this.params.YoutubeID);
-		video.setURL("http://www.youtube.com/embed/" + this.params.YoutubeID + "?autoplay=1&controls=0&modestbranding=1");
-		video.setType(VideoType.HTML5);
-		video.setDurationToDisplay(this.params.InfoDuration);
+		if(listInfoRenderers.length > 1 || listInfoRenderers.length == 0) {
+			return null;
+		} else {
+			var infoRenderer : InfoRenderer<any> = listInfoRenderers[0];
 
-		var playlist : VideoPlaylist = new VideoPlaylist();
-		playlist.setId(this.params.YoutubeID);
-		playlist.addVideo(video);
-		playlist.setDurationToDisplay(this.params.InfoDuration);
-
-		return playlist;*/
-
-		Logger.debug(listInfoRenderers);
-
-		return null;
+			if(infoRenderer.getInfo().__proto__.constructor.name == "VideoPlaylist") {
+				return infoRenderer.getInfo();
+			} else {
+				return null;
+			}
+		}
 	}
 }
