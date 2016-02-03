@@ -1,10 +1,13 @@
 /**
- * @author Christian Brel <christian@the6thscreen.fr, ch.brel@gmail.com>
- * @author Simon Urli <simon@the6thscreen.fr, simon.urli@gmail.com>
+ * @author Christian Brel <christian@pulsetotem.fr, ch.brel@gmail.com>
+ * @author Simon Urli <simon@pulsetotem.fr, simon.urli@gmail.com>
  */
 
 /// <reference path="./Behaviour.ts" />
 /// <reference path="../core/Timer.ts" />
+/// <reference path="../core/MessageBus.ts" />
+/// <reference path="../core/MessageBusChannel.ts" />
+/// <reference path="../core/MessageBusAction.ts" />
 
 /**
  * Represents "Helix" Behaviour of The6thScreen Client.
@@ -144,7 +147,6 @@ class HelixBehaviour extends Behaviour {
 		super.setListInfoRenderers(listInfoRenderers);
 		this._currentInfoRendererId = null;
 		this._behaviourStarted = false;
-		Logger.debug(listInfoRenderers);
 	}
 
 	/**
@@ -223,6 +225,12 @@ class HelixBehaviour extends Behaviour {
 								self._nextInfoRenderer();
 							}
 						});
+
+						var data = {
+							action : MessageBusAction.DISPLAY,
+							message: currentInfoRenderer.getInfo()
+						};
+						MessageBus.publish(MessageBusChannel.RENDERER, data);
 					});
 				});
 
@@ -292,6 +300,12 @@ class HelixBehaviour extends Behaviour {
 							self._nextInfoRenderer();
 						}
 					});
+
+					var data = {
+						action : MessageBusAction.DISPLAY,
+						message: currentInfoRenderer.getInfo()
+					};
+					MessageBus.publish(MessageBusChannel.RENDERER, data);
 				});
 			}
 		}

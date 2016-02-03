@@ -35,7 +35,17 @@ class SlaveStaticSource<SourceInfo extends Info> extends StaticSource<SourceInfo
 
 		MessageBus.subscribe(MessageBusChannel.TIMELINE, function(channel : any, data : any) {
 			if(typeof(data.action) != "undefined" && data.action == MessageBusAction.DISPLAY) {
-				var info = self.computeIncomingMessage(data.message);
+				var info = self.computeIncomingMessageFromTimeline(data.message);
+
+				if (info != null) {
+					self.getCall().onNewInfo(info);
+				}
+			}
+		});
+
+		MessageBus.subscribe(MessageBusChannel.RENDERER, function(channel : any, data : any) {
+			if(typeof(data.action) != "undefined" && data.action == MessageBusAction.SELECT) {
+				var info = self.computeSelectionFromRenderer(data.message);
 
 				if (info != null) {
 					self.getCall().onNewInfo(info);
@@ -57,12 +67,22 @@ class SlaveStaticSource<SourceInfo extends Info> extends StaticSource<SourceInfo
 	/**
 	 * Create and return the information of the Static Source
 	 *
-	 * @method computeIncomingMessage
+	 * @method computeIncomingMessageFromTimeline
 	 * @param {Array<InfoRenderer<any>>} listInfoRenderers - The ListInfoRenders to compute as Incoming Message.
 	 */
-	computeIncomingMessage(listInfoRenderers : Array<InfoRenderer<any>>) : SourceInfo {
-		Logger.debug("SlaveStaticSource - computeIncomingMessage - Method need to be implemented !");
+	computeIncomingMessageFromTimeline(listInfoRenderers : Array<InfoRenderer<any>>) : SourceInfo {
+		Logger.debug("SlaveStaticSource - computeIncomingMessageFromTimeline - Method need to be implemented !");
 		return null;
 	}
 
+	/**
+	 * Create and return the information of the Static Source
+	 *
+	 * @method computeIncomingMessageFromTimeline
+	 * @param {any} selectionMessage - The selection message.
+	 */
+	computeSelectionFromRenderer(selectionMessage : any) : SourceInfo {
+		Logger.debug("SlaveStaticSource - computeSelectionFromRenderer - Method need to be implemented !");
+		return null;
+	}
 }

@@ -4,6 +4,7 @@
  */
 
 /// <reference path="../../t6s-core/core/scripts/infotype/VideoPlaylist.ts" />
+/// <reference path="../../t6s-core/core/scripts/infotype/priorities/InfoPriority.ts" />
 /// <reference path="./SlaveStaticSource.ts" />
 
 /**
@@ -17,10 +18,10 @@ class SlaveVideoPlaylistSource extends SlaveStaticSource<VideoPlaylist> {
 	/**
 	 * Create and return the information of the Static Source
 	 *
-	 * @method computeIncomingMessage
+	 * @method computeIncomingMessageFromTimeline
 	 * @param {Array<InfoRenderer<any>>} listInfoRenderers - The ListInfoRenders to compute as Incoming Message.
 	 */
-	computeIncomingMessage(listInfoRenderers : Array<InfoRenderer<any>>) : VideoPlaylist {
+	computeIncomingMessageFromTimeline(listInfoRenderers : Array<InfoRenderer<any>>) : VideoPlaylist {
 		if(listInfoRenderers.length > 1 || listInfoRenderers.length == 0) {
 			return null;
 		} else {
@@ -31,6 +32,34 @@ class SlaveVideoPlaylistSource extends SlaveStaticSource<VideoPlaylist> {
 			} else {
 				return null;
 			}
+		}
+	}
+
+	/**
+	 * Create and return the information of the Static Source
+	 *
+	 * @method computeIncomingMessageFromTimeline
+	 * @param {any} selectionMessage - The selection message.
+	 */
+	computeSelectionFromRenderer(selectionMessage : any) : VideoPlaylist {
+		if(selectionMessage.originalInfo.__proto__.constructor.name == "VideoPlaylist"
+			&& selectionMessage.selectedInfo.__proto__.constructor.name == "VideoURL") {
+
+			var playlist : VideoPlaylist = selectionMessage.originalInfo;
+			var selected : VideoURL = selectionMessage.selectedInfo;
+
+			playlist.getVideos().forEach(function(video : VideoURL) {
+				if(video.getId() != selected.getId()) {
+					video.setPriority(InfoPriority.LOW);
+				} else {
+					video.setPriority(InfoPriority.HIGH);
+				}
+			});
+
+			return playlist;
+
+		} else {
+			return null;
 		}
 	}
 }

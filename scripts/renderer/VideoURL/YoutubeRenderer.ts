@@ -42,14 +42,37 @@ class YoutubeRenderer implements Renderer<VideoURL> {
 		var videoHTMLWrapper = $("<div>");
 		videoHTMLWrapper.addClass("YoutubeRenderer_wrapper");
 
-		/*
-		 <iframe id="ytplayer" type="text/html" width="640" height="390"
-		 src="http://www.youtube.com/embed/M7lc1UVf-VE?autoplay=1&origin=http://example.com"
-		 frameborder="0"/>
+		var videoTitle = $("<div>");
+		videoTitle.addClass("YoutubeRenderer_title");
+		var videoTitleSpan = $("<span>");
+		videoTitleSpan.html(info.getTitle());
+		videoTitle.append(videoTitleSpan);
 
-		 */
+		videoHTMLWrapper.append(videoTitle);
+
+
+		var youtubeIFrameContainer = $("<div>");
+		youtubeIFrameContainer.addClass("YoutubeRenderer_iframe_container");
+
+		videoHTMLWrapper.append(youtubeIFrameContainer);
+
+		var videoDescription = $("<div>");
+		videoDescription.addClass("YoutubeRenderer_description");
+		var videoDescriptionSpan = $("<span>");
+		videoDescriptionSpan.html(info.getDescription());
+		videoDescription.append(videoDescriptionSpan);
+
+		videoHTMLWrapper.append(videoDescription);
 
 		$(domElem).append(videoHTMLWrapper);
+
+		videoTitle.textfill({
+			maxFontPixels: 500
+		});
+
+		videoDescription.textfill({
+			maxFontPixels: 500
+		});
 
 		var videoIFrame = $("<iframe>");
 		videoIFrame.addClass("YoutubeRenderer_iframe");
@@ -57,11 +80,11 @@ class YoutubeRenderer implements Renderer<VideoURL> {
 		videoIFrame.attr("type", "text/html");
 		videoIFrame.attr("frameborder", "0");
 
-		videoIFrame.attr("width", videoHTMLWrapper.width() - 20);
-		videoIFrame.attr("height", videoHTMLWrapper.height() - 20);
+		videoIFrame.attr("width", youtubeIFrameContainer.width() - 20);
+		videoIFrame.attr("height", youtubeIFrameContainer.height() - 20);
 		videoIFrame.attr("src", info.getURL());
 
-		videoHTMLWrapper.append(videoIFrame);
+		youtubeIFrameContainer.append(videoIFrame);
 
 		endCallback();
 	}

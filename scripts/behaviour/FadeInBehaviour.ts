@@ -1,10 +1,13 @@
 /**
- * @author Christian Brel <christian@the6thscreen.fr, ch.brel@gmail.com>
- * @author Simon Urli <simon@the6thscreen.fr, simon.urli@gmail.com>
+ * @author Christian Brel <christian@pulsetotem.fr, ch.brel@gmail.com>
+ * @author Simon Urli <simon@pulsetotem.fr, simon.urli@gmail.com>
  */
 
 /// <reference path="./Behaviour.ts" />
 /// <reference path="../core/Timer.ts" />
+/// <reference path="../core/MessageBus.ts" />
+/// <reference path="../core/MessageBusChannel.ts" />
+/// <reference path="../core/MessageBusAction.ts" />
 
 /**
  * Represents "FadeIn" Behaviour of The6thScreen Client.
@@ -136,6 +139,13 @@ class FadeInBehaviour extends Behaviour {
 					$(self.getZone().getZoneDiv()).find(".FadeInBehaviour_hide").addClass("FadeInBehaviour_show");
 
 					renderer.animate(infoRenderer.getInfo(), content, function() {});
+
+					var data = {
+						action : MessageBusAction.DISPLAY,
+						message: infoRenderer.getInfo()
+					};
+					MessageBus.publish(MessageBusChannel.RENDERER, data);
+
 				}, 100);
 			};
 

@@ -14,16 +14,6 @@ declare var $: any; // Use of JQuery
 
 class VideoListingRenderer implements Renderer<VideoPlaylist> {
 
-
-	/*
-
-//TODO: Abonnement à au message sur le bus
-
-	 $(domElem).find(".VideoListingRenderer_video").removeClass("VideoListingRenderer_video_selected");
-	 videoDiv.addClass("VideoListingRenderer_video_selected");
-
-	 */
-
 	/**
 	 * Transform the Info list to another Info list.
 	 *
@@ -65,7 +55,10 @@ class VideoListingRenderer implements Renderer<VideoPlaylist> {
 			videoDiv.hammer().bind("tap", function(evt) {
 				var data = {
 					action : MessageBusAction.SELECT,
-					message: video
+					message: {
+						originalInfo : info,
+						selectedInfo : video
+					}
 				};
 				MessageBus.publish(MessageBusChannel.RENDERER, data);
 			});
@@ -89,7 +82,8 @@ class VideoListingRenderer implements Renderer<VideoPlaylist> {
 
 				var videoThumbnailSelected = $("<span>");
 				videoThumbnailSelected.addClass("glyphicon glyphicon-play VideoListingRenderer_video_thumbnail_selected");
-				videoThumbnailSelected.css("margin-left", (video.getThumbnail().getThumb().getWidth() + 40)*(-1));
+				//videoThumbnailSelected.css("margin-left", (video.getThumbnail().getThumb().getWidth() + 40)*(-1));
+				videoThumbnailSelected.css("margin-left", "-30px");
 				videoThumbnailSelected.css("margin-top", (video.getThumbnail().getThumb().getHeight() / 2) - 10);
 
 				videoThumbnail.append(videoThumbnailSelected);
@@ -98,6 +92,19 @@ class VideoListingRenderer implements Renderer<VideoPlaylist> {
 			}
 
 			listingHTML.append(videoDiv);
+
+			MessageBus.subscribe(MessageBusChannel.RENDERER, function(channel : any, data : any) {
+				if(typeof(data.action) != "undefined" && data.action == MessageBusAction.DISPLAY) {
+					if(data.message.__proto__.constructor.name == "VideoURL") {
+						var displayedVideo : VideoURL = data.message;
+
+						if(displayedVideo.getId() == video.getId()) {
+							$(domElem).find(".VideoListingRenderer_video").removeClass("VideoListingRenderer_video_selected");
+							videoDiv.addClass("VideoListingRenderer_video_selected");
+						}
+					}
+				}
+			});
 		});
 
 		$(domElem).append(listingHTML);

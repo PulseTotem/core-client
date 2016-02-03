@@ -1,10 +1,13 @@
 /**
- * @author Christian Brel <christian@the6thscreen.fr, ch.brel@gmail.com>
- * @author Simon Urli <simon@the6thscreen.fr, simon.urli@gmail.com>
+ * @author Christian Brel <christian@pulsetotem.fr, ch.brel@gmail.com>
+ * @author Simon Urli <simon@pulsetotem.fr, simon.urli@gmail.com>
  */
 
 /// <reference path="./Behaviour.ts" />
 /// <reference path="../core/Timer.ts" />
+/// <reference path="../core/MessageBus.ts" />
+/// <reference path="../core/MessageBusChannel.ts" />
+/// <reference path="../core/MessageBusAction.ts" />
 
 /**
  * Represents "Appearance" Behaviour of The6thScreen Client.
@@ -127,6 +130,12 @@ class AppearanceBehaviour extends Behaviour {
 		var endRender = function() {
 			renderer.animate(infoRenderer.getInfo(), self.getZone().getZoneDiv(), function() {});
 			infoRenderer.getInfo().setCastingDate(new Date());
+
+			var data = {
+				action : MessageBusAction.DISPLAY,
+				message: infoRenderer.getInfo()
+			};
+			MessageBus.publish(MessageBusChannel.RENDERER, data);
 		};
 
 		renderer.render(infoRenderer.getInfo(), this.getZone().getZoneDiv(), endRender);

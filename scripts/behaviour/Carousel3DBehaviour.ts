@@ -1,10 +1,13 @@
 /**
- * @author Christian Brel <christian@the6thscreen.fr, ch.brel@gmail.com>
- * @author Simon Urli <simon@the6thscreen.fr, simon.urli@gmail.com>
+ * @author Christian Brel <christian@pulsetotem.fr, ch.brel@gmail.com>
+ * @author Simon Urli <simon@pulsetotem.fr, simon.urli@gmail.com>
  */
 
 /// <reference path="./Behaviour.ts" />
 /// <reference path="../core/Timer.ts" />
+/// <reference path="../core/MessageBus.ts" />
+/// <reference path="../core/MessageBusChannel.ts" />
+/// <reference path="../core/MessageBusAction.ts" />
 
 /**
  * Represents "Carousel3D" Behaviour of The6thScreen Client.
@@ -221,6 +224,12 @@ class Carousel3DBehaviour extends Behaviour {
 							var currentItemPanel = $(self.getZone().getZoneDiv()).find(".Carousel3DBehaviour_carousel_item_" + currentItemPanelNumber).first();
 							currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), currentItemPanel, function() {});
 
+							var data = {
+								action : MessageBusAction.DISPLAY,
+								message: currentInfoRenderer.getInfo()
+							};
+							MessageBus.publish(MessageBusChannel.RENDERER, data);
+
 							self._updateCarousel();
 						});
 					});
@@ -273,9 +282,15 @@ class Carousel3DBehaviour extends Behaviour {
 				currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
 				var itemPanel = $(this.getZone().getZoneDiv()).find(".Carousel3DBehaviour_carousel_item_0").first();
 				this._displayInfoRenderer(currentInfoRenderer, itemPanel, function() {
-					currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), itemPanel, function() {
-						self._updateCarousel();
-					});
+					currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), itemPanel, function() {});
+
+					var data = {
+						action : MessageBusAction.DISPLAY,
+						message: currentInfoRenderer.getInfo()
+					};
+					MessageBus.publish(MessageBusChannel.RENDERER, data);
+
+					self._updateCarousel();
 				});
 			}
 
