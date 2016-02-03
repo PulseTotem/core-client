@@ -6,10 +6,23 @@
 /// <reference path="../../../t6s-core/core/scripts/infotype/VideoURL.ts" />
 /// <reference path="../../../t6s-core/core/scripts/infotype/VideoPlaylist.ts" />
 /// <reference path="../Renderer.ts" />
+/// <reference path="../../core/MessageBus.ts" />
+/// <reference path="../../core/MessageBusChannel.ts" />
+/// <reference path="../../core/MessageBusAction.ts" />
 
 declare var $: any; // Use of JQuery
 
 class VideoListingRenderer implements Renderer<VideoPlaylist> {
+
+
+	/*
+
+//TODO: Abonnement à au message sur le bus
+
+	 $(domElem).find(".VideoListingRenderer_video").removeClass("VideoListingRenderer_video_selected");
+	 videoDiv.addClass("VideoListingRenderer_video_selected");
+
+	 */
 
 	/**
 	 * Transform the Info list to another Info list.
@@ -46,6 +59,16 @@ class VideoListingRenderer implements Renderer<VideoPlaylist> {
 		info.getVideos().forEach(function(video : VideoURL) {
 			var videoDiv = $("<div>");
 			videoDiv.addClass("VideoListingRenderer_video");
+			videoDiv.addClass("VideoListingRenderer_video_" + video.getId());
+
+			videoDiv.hammer();
+			videoDiv.hammer().bind("tap", function(evt) {
+				var data = {
+					action : MessageBusAction.SELECT,
+					message: video
+				};
+				MessageBus.publish(MessageBusChannel.RENDERER, data);
+			});
 
 			if(video.getTitle() != "") {
 				var videoTitle = $("<div>");
@@ -63,6 +86,14 @@ class VideoListingRenderer implements Renderer<VideoPlaylist> {
 				videoThumbnail.css("width", video.getThumbnail().getThumb().getWidth());
 				videoThumbnail.css("height", video.getThumbnail().getThumb().getHeight());
 				videoThumbnail.css("background-image", "url('" + video.getThumbnail().getThumb().getURL() + "')");
+
+				var videoThumbnailSelected = $("<span>");
+				videoThumbnailSelected.addClass("glyphicon glyphicon-play VideoListingRenderer_video_thumbnail_selected");
+				videoThumbnailSelected.css("margin-left", (video.getThumbnail().getThumb().getWidth() + 40)*(-1));
+				videoThumbnailSelected.css("margin-top", (video.getThumbnail().getThumb().getHeight() / 2) - 10);
+
+				videoThumbnail.append(videoThumbnailSelected);
+
 				videoDiv.append(videoThumbnail);
 			}
 
