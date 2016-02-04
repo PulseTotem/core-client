@@ -9,7 +9,7 @@
 
 declare var $: any; // Use of JQuery
 
-class FullSizeTextRenderer implements Renderer<Textinfo> {
+class FullSizeTextRenderer implements Renderer<TextInfo> {
 
 	/**
 	 * Transform the Info list to another Info list.
@@ -18,7 +18,7 @@ class FullSizeTextRenderer implements Renderer<Textinfo> {
 	 * @param {ProcessInfo} info - The Info to transform.
 	 * @return {Array<RenderInfo>} listTransformedInfos - The Info list after transformation.
 	 */
-	transformInfo(info : TextList) : Array<Textinfo> {
+	transformInfo(info : TextList) : Array<TextInfo> {
 		var textLists : Array<TextList> = new Array<TextList>();
 		try {
 			var newInfo = TextList.fromJSONObject(info);
@@ -27,13 +27,13 @@ class FullSizeTextRenderer implements Renderer<Textinfo> {
 			Logger.error(e.message);
 		}
 
-		var texts : Array<Textinfo> = new Array<Textinfo>();
+		var texts : Array<TextInfo> = new Array<TextInfo>();
 
 		for(var iTL in textLists) {
 			var tl : TextList = textLists[iTL];
-			var tlTexts : Array<Textinfo> = tl.getTexts();
+			var tlTexts : Array<TextInfo> = tl.getTexts();
 			for(var iT in tlTexts) {
-				var t : Textinfo = tlTexts[iT];
+				var t : TextInfo = tlTexts[iT];
 				texts.push(t);
 			}
 		}
@@ -49,7 +49,7 @@ class FullSizeTextRenderer implements Renderer<Textinfo> {
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
 	 * @param {Function} endCallback - Callback function called at the end of render method.
 	 */
-	render(info : Textinfo, domElem : any, endCallback : Function) {
+	render(info : TextInfo, domElem : any, endCallback : Function) {
 		var self = this;
 
 		var textWrapper = $("<div>");
@@ -77,7 +77,7 @@ class FullSizeTextRenderer implements Renderer<Textinfo> {
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
 	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
-	updateRender(info : Textinfo, domElem : any, endCallback : Function) {
+	updateRender(info : TextInfo, domElem : any, endCallback : Function) {
 		this.render(info, domElem, endCallback);
 	}
 
@@ -89,7 +89,7 @@ class FullSizeTextRenderer implements Renderer<Textinfo> {
 	 * @param {DOM Element} domElem - The DOM Element where animate the info.
 	 * @param {Function} endCallback - Callback function called at the end of animation.
 	 */
-	animate(info : Textinfo, domElem : any, endCallback : Function) {
+	animate(info : TextInfo, domElem : any, endCallback : Function) {
 		//Nothing to do.
 
 		endCallback();
