@@ -19,7 +19,7 @@ class TextSource extends StaticSource<TextList> {
 	 */
 	computeInfo() : TextList {
 
-		var text : Textinfo = new Textinfo();
+		var text : TextInfo = new TextInfo();
 		text.setId(this.params.TextValue);
 		text.setValue(this.params.TextValue);
 
