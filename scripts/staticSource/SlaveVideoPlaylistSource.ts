@@ -27,7 +27,7 @@ class SlaveVideoPlaylistSource extends SlaveStaticSource<VideoPlaylist> {
 		} else {
 			var infoRenderer : InfoRenderer<any> = listInfoRenderers[0];
 
-			if(infoRenderer.getInfo().__proto__.constructor.name == "VideoPlaylist") {
+			if(infoRenderer.getInfo().getClassName() == "VideoPlaylist") {
 				return infoRenderer.getInfo();
 			} else {
 				return null;
@@ -42,8 +42,8 @@ class SlaveVideoPlaylistSource extends SlaveStaticSource<VideoPlaylist> {
 	 * @param {any} selectionMessage - The selection message.
 	 */
 	computeSelectionFromRenderer(selectionMessage : any) : VideoPlaylist {
-		if(selectionMessage.originalInfo.__proto__.constructor.name == "VideoPlaylist"
-			&& selectionMessage.selectedInfo.__proto__.constructor.name == "VideoURL") {
+		if(selectionMessage.originalInfo.getClassName() == "VideoPlaylist"
+			&& selectionMessage.selectedInfo.getClassName() == "VideoURL") {
 
 			var playlist : VideoPlaylist = selectionMessage.originalInfo;
 			var selected : VideoURL = selectionMessage.selectedInfo;
