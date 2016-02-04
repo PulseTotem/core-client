@@ -228,7 +228,7 @@ class Carousel3DBehaviour extends Behaviour {
 								action : MessageBusAction.DISPLAY,
 								message: currentInfoRenderer.getInfo()
 							};
-							MessageBus.publish(MessageBusChannel.RENDERER, data);
+							MessageBus.publish(MessageBusChannel.BEHAVIOUR, data);
 
 							self._updateCarousel();
 						});
@@ -288,7 +288,7 @@ class Carousel3DBehaviour extends Behaviour {
 						action : MessageBusAction.DISPLAY,
 						message: currentInfoRenderer.getInfo()
 					};
-					MessageBus.publish(MessageBusChannel.RENDERER, data);
+					MessageBus.publish(MessageBusChannel.BEHAVIOUR, data);
 
 					self._updateCarousel();
 				});

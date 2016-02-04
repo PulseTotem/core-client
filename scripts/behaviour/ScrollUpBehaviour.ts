@@ -150,7 +150,7 @@ class ScrollUpBehaviour extends Behaviour {
 					action : MessageBusAction.DISPLAY,
 					message: currentInfoRenderer.getInfo()
 				};
-				MessageBus.publish(MessageBusChannel.RENDERER, data);
+				MessageBus.publish(MessageBusChannel.BEHAVIOUR, data);
 
 				var iRContainer = $(self.getZone().getZoneDiv()).find(".ScrollUpBehaviour_info_" + self._currentInfoRendererId).first();
 

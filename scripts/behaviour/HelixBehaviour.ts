@@ -230,7 +230,7 @@ class HelixBehaviour extends Behaviour {
 							action : MessageBusAction.DISPLAY,
 							message: currentInfoRenderer.getInfo()
 						};
-						MessageBus.publish(MessageBusChannel.RENDERER, data);
+						MessageBus.publish(MessageBusChannel.BEHAVIOUR, data);
 					});
 				});
 
@@ -305,7 +305,7 @@ class HelixBehaviour extends Behaviour {
 						action : MessageBusAction.DISPLAY,
 						message: currentInfoRenderer.getInfo()
 					};
-					MessageBus.publish(MessageBusChannel.RENDERER, data);
+					MessageBus.publish(MessageBusChannel.BEHAVIOUR, data);
 				});
 			}
 		}

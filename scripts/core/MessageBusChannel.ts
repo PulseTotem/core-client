@@ -6,4 +6,5 @@
 class MessageBusChannel {
 	static TIMELINE : string = "relativeTimeline";
 	static RENDERER : string = "renderer";
+	static BEHAVIOUR : string = "behaviour";
 }

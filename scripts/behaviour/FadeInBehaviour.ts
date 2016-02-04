@@ -144,7 +144,7 @@ class FadeInBehaviour extends Behaviour {
 						action : MessageBusAction.DISPLAY,
 						message: infoRenderer.getInfo()
 					};
-					MessageBus.publish(MessageBusChannel.RENDERER, data);
+					MessageBus.publish(MessageBusChannel.BEHAVIOUR, data);
 
 				}, 100);
 			};

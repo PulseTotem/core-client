@@ -93,7 +93,7 @@ class VideoListingRenderer implements Renderer<VideoPlaylist> {
 
 			listingHTML.append(videoDiv);
 
-			MessageBus.subscribe(MessageBusChannel.RENDERER, function(channel : any, data : any) {
+			MessageBus.subscribe(MessageBusChannel.BEHAVIOUR, function(channel : any, data : any) {
 				if(typeof(data.action) != "undefined" && data.action == MessageBusAction.DISPLAY) {
 					if(data.message.__proto__.constructor.name == "VideoURL") {
 						var displayedVideo : VideoURL = data.message;

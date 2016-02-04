@@ -135,7 +135,7 @@ class AppearanceBehaviour extends Behaviour {
 				action : MessageBusAction.DISPLAY,
 				message: infoRenderer.getInfo()
 			};
-			MessageBus.publish(MessageBusChannel.RENDERER, data);
+			MessageBus.publish(MessageBusChannel.BEHAVIOUR, data);
 		};
 
 		renderer.render(infoRenderer.getInfo(), this.getZone().getZoneDiv(), endRender);
