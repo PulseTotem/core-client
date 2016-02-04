@@ -32,7 +32,7 @@ class DefaultRunner extends TimelineRunner {
 	 * @property _timer
 	 * @type Timer
 	 */
-	private _timer : Timer;
+	_timer : Timer;
 
 	/**
 	 * Constructor.
@@ -58,9 +58,8 @@ class DefaultRunner extends TimelineRunner {
 	 * Manage next event in Timeline.
 	 *
 	 * @method _nextEvent
-	 * @private
 	 */
-	private _nextEvent() {
+	_nextEvent() {
 		var self = this;
 
 		var relativeEvents : Array<RelativeEventItf> = this.relativeTimeline.getRelativeEvents();

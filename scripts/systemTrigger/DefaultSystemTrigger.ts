@@ -229,7 +229,7 @@ class DefaultSystemTrigger extends SystemTrigger {
 
 		if(this.timer != null && listInfosToRemove.length > 0) {
 			listInfosToRemove.forEach(function(info : Info) {
-				if(this.timer != null) {
+				if(self.timer != null) {
 					info.setDurationToDisplay(0);
 					self.relativeTimeline.updateInfo(info);
 				}

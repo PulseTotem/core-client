@@ -1,10 +1,13 @@
 /**
- * @author Christian Brel <christian@the6thscreen.fr, ch.brel@gmail.com>
- * @author Simon Urli <simon@the6thscreen.fr, simon.urli@gmail.com>
+ * @author Christian Brel <christian@pulsetotem.fr, ch.brel@gmail.com>
+ * @author Simon Urli <simon@pulsetotem.fr, simon.urli@gmail.com>
  */
 
 /// <reference path="./Behaviour.ts" />
 /// <reference path="../core/Timer.ts" />
+/// <reference path="../core/MessageBus.ts" />
+/// <reference path="../core/MessageBusChannel.ts" />
+/// <reference path="../core/MessageBusAction.ts" />
 
 /**
  * Represents "ScrollUp" Behaviour of PulseTotem Client.
@@ -142,6 +145,12 @@ class ScrollUpBehaviour extends Behaviour {
 
 				var currentInfoRenderer = listInfoRenderers[self._currentInfoRendererId];
 				currentInfoRenderer.getInfo().setCastingDate(new Date());
+
+				var data = {
+					action : MessageBusAction.DISPLAY,
+					message: currentInfoRenderer.getInfo()
+				};
+				MessageBus.publish(MessageBusChannel.BEHAVIOUR, data);
 
 				var iRContainer = $(self.getZone().getZoneDiv()).find(".ScrollUpBehaviour_info_" + self._currentInfoRendererId).first();
 
