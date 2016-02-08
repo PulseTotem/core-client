@@ -71,11 +71,10 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 
 		if (info.getCmd() == "Wait") {
 			$(domElem).empty();
-			var qrCodeUrl = info.getArgs()[0];
-			var appliURL = info.getArgs()[1];
-			var lastPic = info.getArgs()[2];
+			var socketId = info.getArgs()[0];
+			var lastPic = info.getArgs()[1];
 
-			//this.waitMessage(domElem, qrCodeUrl, appliURL, lastPic);
+			this.waitMessage(domElem, socketId, lastPic);
 		} else	if (info.getCmd() == "startSession") {
 			$(domElem).empty();
 			this.startSession(domElem);
@@ -98,7 +97,9 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 		endCallback();
 	}
 
-	private waitMessage(domElem : any, qrCodeUrl : string, appliURL : string, lastPicUrl : string) {
+	private waitMessage(domElem : any, socketId : string, lastPicUrl : string) {
+		var client_photobox_url = "http://localhost:9002/session/" + socketId;
+
 		var wrapperDiv = $('<div>');
 		wrapperDiv.addClass("PhotoboxRenderer_wrapper");
 
@@ -151,15 +152,15 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 		qrCodeDiv.addClass("PhotoboxRenderer_rightpanel_qrcode");
 		rightPanelDiv.append(qrCodeDiv);
 
-		var qrCodeImg = $('<img>');
+		/*var qrCodeImg = $('<img>');
 		qrCodeImg.addClass("PhotoboxRenderer_rightpanel_qrcode_img");
 		qrCodeImg.attr('src', qrCodeUrl);
 		qrCodeDiv.append(qrCodeImg);
-
+		*/
 		var urlDiv = $('<div>');
 		urlDiv.addClass("PhotoboxRenderer_rightpanel_url");
 		var urlSpan = $('<span>');
-		urlSpan.html(appliURL);
+		urlSpan.html(client_photobox_url);
 		urlDiv.append(urlSpan);
 		rightPanelDiv.append(urlDiv);
 
