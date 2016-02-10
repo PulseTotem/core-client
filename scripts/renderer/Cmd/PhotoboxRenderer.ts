@@ -80,12 +80,12 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 			this.startSession(domElem);
 		} else if (info.getCmd() == "counter") {
 			$(domElem).empty();
-			if (info.getArgs().length != 2) {
+			if (info.getArgs().length != 1) {
 				this.startSession(domElem);
 			}
 			var counterTime = parseInt(info.getArgs()[0]);
-			var servicePostPic = info.getArgs()[1];
-			this.countAndSnap(domElem, counterTime, servicePostPic);
+
+			this.countAndSnap(domElem, counterTime, info.getCallChannel());
 		} else if (info.getCmd() == "validatedPicture") {
 			$(domElem).empty();
 			if (Webcam.container) {
@@ -98,7 +98,7 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 	}
 
 	private waitMessage(domElem : any, socketId : string, lastPicUrl : string) {
-		var client_photobox_url = "http://localhost:9002/session/" + socketId;
+		var client_photobox_url = "http://localhost:9001/session/" + socketId;
 
 		var wrapperDiv = $('<div>');
 		wrapperDiv.addClass("PhotoboxRenderer_wrapper");
@@ -209,7 +209,7 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 		Webcam.attach("#webCamview");
 	}
 
-	private countAndSnap(domElem : any, counterTime : number, servicePostPic : string) {
+	private countAndSnap(domElem : any, counterTime : number, callChannel : string) {
 
 		var counter = counterTime;
 
@@ -256,6 +256,8 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 		divCounter.append(spanCounter);
 
 		html.append(divCounter);
+
+		// TODO move to CDN
 		var audio = $('<audio src="http://www.soundjay.com/mechanical/camera-shutter-click-08.mp3">');
 		html.append(audio);
 
@@ -339,7 +341,7 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 
 			divCounter.show();
 
-			Webcam.on( 'uploadProgress', function(progress) {
+			/*Webcam.on( 'uploadProgress', function(progress) {
 
 				var progressPercent = Math.round(progress*100);
 
@@ -377,6 +379,8 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 			});
 
 			Webcam.upload(data_uri, servicePostPic);
+			*/
+			MessageBus.publishToCall(callChannel, "PostPicture", data_uri);
 		};
 
 		var timeoutFunction = function () {
