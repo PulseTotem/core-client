@@ -22,10 +22,12 @@ class TextSource extends StaticSource<TextList> {
 		var text : TextInfo = new TextInfo();
 		text.setId(this.params.TextValue);
 		text.setValue(this.params.TextValue);
+		text.setDurationToDisplay(this.params.InfoDuration);
 
 		var textList : TextList = new TextList();
 		textList.setId(this.params.TextValue);
 		textList.addText(text);
+		textList.setDurationToDisplay(this.params.InfoDuration);
 
 		return textList;
 	}
