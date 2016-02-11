@@ -1,0 +1,102 @@
+@import "../../core.less";
+
+.SideBySideTweetRenderer_wrapper {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+
+  .SideBySideTweetRenderer_profil {
+    width: 20%;
+    height: 100%;
+    padding-top: 5%;
+    padding-bottom: 5%;
+
+
+    .SideBySideTweetRenderer_profil_picture {
+      width: 100%;
+      height: 70%;
+      border-radius: 100%;
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-size: contain;
+    }
+
+    .SideBySideTweetRenderer_profil_realname {
+      width: 100%;
+      height: 12%;
+      font-weight: bold;
+    }
+
+    .SideBySideTweetRenderer_profil_username > span::before {
+      content: "@";
+    }
+
+    .SideBySideTweetRenderer_profil_username {
+      width: 100%;
+      height: 8%;
+    }
+  }
+
+  .SideBySideTweetRenderer_content {
+    width: 80%;
+    height: 100%;
+    border-left: 5px #000000 solid;
+
+    .SideBySideTweetRenderer_content_message {
+      width: 100%;
+      height: 100%;
+      line-height: initial;
+
+      .SideBySideTweetRenderer_content_message_header {
+        width: 96%;
+        height: 8%;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 1%;
+      }
+
+      .SideBySideTweetRenderer_content_message_main {
+        width: 90%;
+        height: 78%;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 1%;
+        margin-bottom: 1%;
+
+        span::before {
+          content: "\00ab";
+        }
+
+        span::after {
+          content: "\00bb";
+        }
+      }
+
+      .SideBySideTweetRenderer_content_message_footer {
+        width: 100%;
+        height: 10%;
+        padding-right: 1%;
+
+        .SideBySideTweetRenderer_content_message_footer_favorite {
+
+        }
+
+        .SideBySideTweetRenderer_content_message_footer_retweet {
+          margin-left: 10px;
+        }
+      }
+    }
+
+    .SideBySideTweetRenderer_content_picture {
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+  }
+}
