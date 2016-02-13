@@ -92,6 +92,12 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 				Webcam.reset();
 			}
 			this.resetZone(domElem);
+		} else if (info.getCmd() == "removeInfo") {
+			$(domElem).empty();
+			if (Webcam.container) {
+				Webcam.reset();
+			}
+			this.resetZone(domElem);
 		}
 
 		endCallback();
