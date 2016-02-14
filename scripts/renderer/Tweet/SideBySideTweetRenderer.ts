@@ -81,7 +81,11 @@ class SideBySideTweetRenderer implements Renderer<Tweet> {
 
 		var tweetProfilPictureDiv = $("<div>");
 		tweetProfilPictureDiv.addClass("SideBySideTweetRenderer_profil_picture");
-		tweetProfilPictureDiv.css("background-image", "url('" + info.getOwner().getProfilPicture() + "')");
+		//tweetProfilPictureDiv.css("background-image", "url('" + info.getOwner().getProfilPicture() + "')");
+
+		var tweetProfilPictureImg = $("<img>");
+		tweetProfilPictureImg.attr("src", info.getOwner().getProfilPicture());
+		tweetProfilPictureDiv.append(tweetProfilPictureImg);
 
 		tweetProfil.append(tweetProfilPictureDiv);
 
@@ -107,6 +111,12 @@ class SideBySideTweetRenderer implements Renderer<Tweet> {
 		tweetContent.addClass("pull-left");
 
 		tweetHTMLWrapper.append(tweetContent);
+
+		//Content -> Arrow
+		var tweetContentArrow = $("<div>");
+		tweetContentArrow.addClass("SideBySideTweetRenderer_content_arrow");
+		tweetContentArrow.html("&#9664;");
+		tweetContent.append(tweetContentArrow);
 
 		//Content -> Message
 		var tweetContentMessage = $("<div>");
@@ -148,12 +158,14 @@ class SideBySideTweetRenderer implements Renderer<Tweet> {
 		var favoriteSpan = $("<span>");
 		favoriteSpan.addClass("SideBySideTweetRenderer_content_message_footer_favorite");
 		favoriteSpan.addClass("pull-right");
+		var favoriteContent = $("<span>");
+		favoriteContent.addClass("badge");
 		var glyphiconStar = $("<span>");
 		glyphiconStar.addClass("glyphicon");
 		glyphiconStar.addClass("glyphicon-star");
-		var favoriteContent = $("<span>");
-		favoriteContent.html(info.getFavoriteCount());
-		favoriteSpan.append(glyphiconStar);
+
+		favoriteContent.append(glyphiconStar);
+		favoriteContent.append("&nbsp;" + info.getFavoriteCount());
 		favoriteSpan.append(favoriteContent);
 
 		tweetContentMessageFooter.append(favoriteSpan);
@@ -162,12 +174,14 @@ class SideBySideTweetRenderer implements Renderer<Tweet> {
 		var retweetSpan = $("<span>");
 		retweetSpan.addClass("SideBySideTweetRenderer_content_message_footer_retweet");
 		retweetSpan.addClass("pull-right");
+		var retweetContent = $("<span>");
+		retweetContent.addClass("badge");
 		var glyphiconRetweet = $("<span>");
 		glyphiconRetweet.addClass("glyphicon");
 		glyphiconRetweet.addClass("glyphicon-retweet");
-		var retweetContent = $("<span>");
-		retweetContent.html(info.getRetweetCount());
-		retweetSpan.append(glyphiconRetweet);
+
+		retweetContent.append(glyphiconRetweet);
+		retweetContent.append("&nbsp;" + info.getRetweetCount());
 		retweetSpan.append(retweetContent);
 
 		tweetContentMessageFooter.append(retweetSpan);
@@ -220,6 +234,14 @@ class SideBySideTweetRenderer implements Renderer<Tweet> {
 		});
 
 		tweetContentMessageMain.textfill({
+			maxFontPixels: 500
+		});
+
+		favoriteSpan.textfill({
+			maxFontPixels: 500
+		});
+
+		retweetSpan.textfill({
 			maxFontPixels: 500
 		});
 

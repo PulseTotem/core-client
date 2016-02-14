@@ -18,17 +18,22 @@
 
     .SideBySideTweetRenderer_profil_picture {
       width: 100%;
-      height: 70%;
+      height: 60%;
       border-radius: 100%;
-      background-position: center center;
-      background-repeat: no-repeat;
-      background-size: contain;
+      text-align: center;
+
+      img {
+        max-width: 100%;
+        max-height: 100%;
+        border-radius: 100%;
+      }
     }
 
     .SideBySideTweetRenderer_profil_realname {
       width: 100%;
-      height: 12%;
+      height: 17%;
       font-weight: bold;
+      text-align: center;
     }
 
     .SideBySideTweetRenderer_profil_username > span::before {
@@ -37,14 +42,22 @@
 
     .SideBySideTweetRenderer_profil_username {
       width: 100%;
-      height: 8%;
+      height: 13%;
+      text-align: center;
     }
   }
 
   .SideBySideTweetRenderer_content {
-    width: 80%;
+    width: 78%;
     height: 100%;
-    border-left: 5px #000000 solid;
+    border-left: 5px solid;
+    margin-left: 1%;
+
+    .SideBySideTweetRenderer_content_arrow {
+      position: absolute;
+      top: 50%;
+      margin-left: -21px;
+    }
 
     .SideBySideTweetRenderer_content_message {
       width: 100%;
@@ -53,40 +66,60 @@
 
       .SideBySideTweetRenderer_content_message_header {
         width: 96%;
-        height: 8%;
+        height: 12%;
         margin-left: auto;
         margin-right: auto;
-        margin-top: 1%;
+        text-align: right;
       }
 
       .SideBySideTweetRenderer_content_message_main {
         width: 90%;
-        height: 78%;
+        height: 74%;
         margin-left: auto;
         margin-right: auto;
         margin-top: 1%;
         margin-bottom: 1%;
+        position: relative;
+        text-align: justify;
+        font-family: 'Roboto', sans-serif;
 
         span::before {
           content: "\00ab";
+          transform: rotate(30deg);
+          position: absolute;
+          top: -40px;
+          left: -25px;
+          font-size: 1.5em;
         }
 
         span::after {
           content: "\00bb";
+          transform: rotate(27deg);
+          position: absolute;
+          bottom: -32px;
+          right: -42px;
+          font-size: 1.5em;
         }
       }
 
       .SideBySideTweetRenderer_content_message_footer {
-        width: 100%;
+        width: 96%;
         height: 10%;
-        padding-right: 1%;
+        margin-left: auto;
+        margin-right: auto;
 
         .SideBySideTweetRenderer_content_message_footer_favorite {
 
+          .badge {
+            background-color: transparent;
+          }
         }
 
         .SideBySideTweetRenderer_content_message_footer_retweet {
-          margin-left: 10px;
+
+          .badge {
+            background-color: transparent;
+          }
         }
       }
     }
