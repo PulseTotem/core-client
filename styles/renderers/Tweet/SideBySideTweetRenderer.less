@@ -17,23 +17,28 @@
 
 
     .SideBySideTweetRenderer_profil_picture {
-      width: 100%;
+      width: 90%;
       height: 60%;
-      border-radius: 100%;
       text-align: center;
+      margin-left: auto;
+      margin-right: auto;
 
-      img {
+      .SideBySideTweetRenderer_profil_picture_img {
         max-width: 100%;
         max-height: 100%;
         border-radius: 100%;
+        border-style: solid;
+        border-width: 5px;
       }
     }
 
     .SideBySideTweetRenderer_profil_realname {
-      width: 100%;
+      width: 90%;
       height: 17%;
       font-weight: bold;
       text-align: center;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .SideBySideTweetRenderer_profil_username > span::before {
@@ -41,17 +46,20 @@
     }
 
     .SideBySideTweetRenderer_profil_username {
-      width: 100%;
+      width: 90%;
       height: 13%;
       text-align: center;
+      margin-left: auto;
+      margin-right: auto;
     }
   }
 
   .SideBySideTweetRenderer_content {
-    width: 78%;
+    width: 79%;
     height: 100%;
     border-left: 5px solid;
     margin-left: 1%;
+    position: relative;
 
     .SideBySideTweetRenderer_content_arrow {
       position: absolute;
@@ -60,15 +68,19 @@
     }
 
     .SideBySideTweetRenderer_content_message {
-      width: 100%;
-      height: 100%;
       line-height: initial;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
 
       .SideBySideTweetRenderer_content_message_header {
         width: 96%;
-        height: 12%;
+        height: 8%;
         margin-left: auto;
         margin-right: auto;
+        margin-top: 1%;
         text-align: right;
       }
 
@@ -77,27 +89,33 @@
         height: 74%;
         margin-left: auto;
         margin-right: auto;
-        margin-top: 1%;
+        margin-top: 2%;
         margin-bottom: 1%;
         position: relative;
         text-align: justify;
         font-family: 'Roboto', sans-serif;
 
         span::before {
-          content: "\00ab";
-          transform: rotate(30deg);
+          //content: "\00ab";
+          content: "\201C";
+          //transform: rotate(30deg);
           position: absolute;
-          top: -40px;
-          left: -25px;
+          /*top: -40px;
+          left: -30px;*/
+          top: -10%;
+          left: -5%;
           font-size: 1.5em;
         }
 
         span::after {
-          content: "\00bb";
-          transform: rotate(27deg);
+          //content: "\00bb";
+          content: "\201D";
+          //transform: rotate(27deg);
           position: absolute;
-          bottom: -32px;
-          right: -42px;
+          /*bottom: -30px;
+          right: -40px;*/
+          bottom: -10%;
+          right: -5%;
           font-size: 1.5em;
         }
       }
@@ -125,11 +143,15 @@
     }
 
     .SideBySideTweetRenderer_content_picture {
-      width: 100%;
-      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       background-size: cover;
       background-repeat: no-repeat;
       background-position: center;
+      border: 10px solid;
     }
   }
 }

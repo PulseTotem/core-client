@@ -84,6 +84,7 @@ class SideBySideTweetRenderer implements Renderer<Tweet> {
 		//tweetProfilPictureDiv.css("background-image", "url('" + info.getOwner().getProfilPicture() + "')");
 
 		var tweetProfilPictureImg = $("<img>");
+		tweetProfilPictureImg.addClass("SideBySideTweetRenderer_profil_picture_img");
 		tweetProfilPictureImg.attr("src", info.getOwner().getProfilPicture());
 		tweetProfilPictureDiv.append(tweetProfilPictureImg);
 
@@ -191,9 +192,11 @@ class SideBySideTweetRenderer implements Renderer<Tweet> {
 		tweetContentMessageFooter.append(clearFixtweetContentMessageFooter);
 
 		//Content -> Pictures
-		/*info.getPictures().forEach(function(picture : Picture) {
+		var picturesHTMLElems = [];
+		info.getPictures().forEach(function(picture : Picture) {
 			var tweetContentPicture = $("<div>");
 			tweetContentPicture.addClass("SideBySideTweetRenderer_content_picture");
+			tweetContentPicture.addClass("SideBySideTweetRenderer_content_picture_" + picture.getId());
 
 			tweetContent.append(tweetContentPicture);
 
@@ -211,7 +214,9 @@ class SideBySideTweetRenderer implements Renderer<Tweet> {
 			}
 
 			tweetContentPicture.css("background-image", "url('" + picURL.getURL() + "')");
-		});*/
+
+			picturesHTMLElems.push(tweetContentPicture);
+		});
 
 
 		//Clearfix for Wrapper
@@ -220,6 +225,11 @@ class SideBySideTweetRenderer implements Renderer<Tweet> {
 		tweetHTMLWrapper.append(clearFixtweetHTMLWrapper);
 
 		$(domElem).append(tweetHTMLWrapper);
+
+		var contentWidth = tweetContent.width() + 10;
+		picturesHTMLElems.forEach(function(elem : any) {
+			elem.css("transform", "translateX(" + contentWidth + "px)");
+		});
 
 		tweetProfilRealname.textfill({
 			maxFontPixels: 500
@@ -258,6 +268,99 @@ class SideBySideTweetRenderer implements Renderer<Tweet> {
 	 */
 	updateRender(info : Tweet, domElem : any, endCallback : Function) {
 
+		var tweetProfilPictureImg = $(domElem).find(".SideBySideTweetRenderer_profil_picture_img").first();
+		tweetProfilPictureImg.attr("src", info.getOwner().getProfilPicture());
+
+		var tweetProfilRealname = $(domElem).find(".SideBySideTweetRenderer_profil_realname").first();
+		tweetProfilRealname.empty();
+		var tweetProfilRealnameSpan = $("<span>");
+		tweetProfilRealnameSpan.html(info.getOwner().getRealname());
+		tweetProfilRealname.append(tweetProfilRealnameSpan);
+
+		tweetProfilRealname.textfill({
+			maxFontPixels: 500
+		});
+
+		var tweetProfilUsername = $(domElem).find(".SideBySideTweetRenderer_profil_username").first();
+		tweetProfilUsername.empty();
+		var tweetProfilUsernameSpan = $("<span>");
+		tweetProfilUsernameSpan.html(info.getOwner().getUsername());
+		tweetProfilUsername.append(tweetProfilUsernameSpan);
+
+		tweetProfilUsername.textfill({
+			maxFontPixels: 500
+		});
+
+		var tweetContentMessageHeader = $(domElem).find(".SideBySideTweetRenderer_content_message_header").first();
+		tweetContentMessageHeader.empty();
+		var creationDate : any = moment(info.getCreationDate());
+		var displayCreationDate = creationDate.fromNow();
+		var tweetContentMessageHeaderSpan = $("<span>");
+		tweetContentMessageHeaderSpan.html(displayCreationDate);
+		tweetContentMessageHeader.append(tweetContentMessageHeaderSpan);
+
+		tweetContentMessageHeader.textfill({
+			maxFontPixels: 500
+		});
+
+		var tweetContentMessageMain = $(domElem).find(".SideBySideTweetRenderer_content_message_main").first();
+		tweetContentMessageMain.empty();
+		var tweetContentMessageSpan = $("<span>");
+		tweetContentMessageSpan.html(info.getMessage());
+
+		tweetContentMessageMain.textfill({
+			maxFontPixels: 500
+		});
+
+		var favoriteSpan = $(domElem).find(".SideBySideTweetRenderer_content_message_footer_favorite").first();
+		favoriteSpan.empty();
+		var favoriteContent = $("<span>");
+		favoriteContent.addClass("badge");
+		var glyphiconStar = $("<span>");
+		glyphiconStar.addClass("glyphicon");
+		glyphiconStar.addClass("glyphicon-star");
+		favoriteContent.append(glyphiconStar);
+		favoriteContent.append("&nbsp;" + info.getFavoriteCount());
+		favoriteSpan.append(favoriteContent);
+
+		favoriteSpan.textfill({
+			maxFontPixels: 500
+		});
+
+		var retweetSpan = $(domElem).find(".SideBySideTweetRenderer_content_message_footer_retweet");
+		retweetSpan.empty();
+		var retweetContent = $("<span>");
+		retweetContent.addClass("badge");
+		var glyphiconRetweet = $("<span>");
+		glyphiconRetweet.addClass("glyphicon");
+		glyphiconRetweet.addClass("glyphicon-retweet");
+		retweetContent.append(glyphiconRetweet);
+		retweetContent.append("&nbsp;" + info.getRetweetCount());
+		retweetSpan.append(retweetContent);
+
+		retweetSpan.textfill({
+			maxFontPixels: 500
+		});
+
+		info.getPictures().forEach(function(picture : Picture) {
+			var tweetContentPicture = $(domElem).find(".SideBySideTweetRenderer_content_picture_" + picture.getId()).first();
+
+			var picURL : PictureURL = null;
+			if(picture.getOriginal() != null) {
+				picURL = picture.getOriginal();
+			} else if(picture.getLarge() != null) {
+				picURL = picture.getLarge();
+			} else if(picture.getMedium() != null) {
+				picURL = picture.getMedium();
+			} else if(picture.getSmall() != null) {
+				picURL = picture.getSmall();
+			} else if(picture.getThumb() != null) {
+				picURL = picture.getThumb();
+			}
+
+			tweetContentPicture.css("background-image", "url('" + picURL.getURL() + "')");
+		});
+
 		endCallback();
 	}
 
@@ -270,7 +373,18 @@ class SideBySideTweetRenderer implements Renderer<Tweet> {
 	 * @param {Function} endCallback - Callback function called at the end of animation.
 	 */
 	animate(info : Tweet, domElem : any, endCallback : Function) {
-		//Nothing to do.
+		var totalDuration = info.getDurationToDisplay()*1000;
+		var nbItems = info.getPictures().length + 1;
+		var itemDuration = totalDuration/nbItems;
+
+		$(domElem).find(".SideBySideTweetRenderer_content_picture").each(function(index : any, elem : any) {
+			$(elem).transition({
+				'transform': 'translateX(0px)',
+				'easing': 'easeInOutBack',
+				'duration': 1000,
+				'delay' : itemDuration*(index+1)
+			});
+		});
 
 		endCallback();
 	}
