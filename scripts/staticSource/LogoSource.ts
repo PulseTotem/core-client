@@ -21,16 +21,19 @@ class LogoSource extends StaticSource<PictureAlbum> {
 		picture.setId(this.params.LogoName);
 		picture.setTitle(this.params.LogoName);
 		picture.setDescription(this.params.LogoName);
+		picture.setDurationToDisplay(this.params.InfoDuration);
 
 		var pictureURL : PictureURL = new PictureURL();
 		pictureURL.setId(this.params.LogoName + " URL");
 		pictureURL.setURL(this.params.URL);
+		pictureURL.setDurationToDisplay(this.params.InfoDuration);
 
 		picture.setOriginal(pictureURL);
 		picture.setMedium(pictureURL);
 
 		var pictureAlbum : PictureAlbum = new PictureAlbum();
 		pictureAlbum.setId(this.params.LogoName);
+		pictureAlbum.setDurationToDisplay(this.params.InfoDuration);
 		pictureAlbum.addPicture(picture);
 
 		return pictureAlbum;

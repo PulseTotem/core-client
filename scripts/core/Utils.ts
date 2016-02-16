@@ -20,8 +20,8 @@ class Utils {
      * @param {Function} failCB - The callback function for fail response.
      */
     static manageServerResponse(response : any, successCB : Function, failCB : Function) {
-        if(!!response.success && response.response !== undefined) {
-            if(response.success) {
+        if(typeof(response.success) != "undefined" && response.success != null && typeof(response.response) != "undefined" && response.response != null) {
+            if(response.success == true) {
                 successCB(response.response);
             } else {
                 failCB(response.response);
