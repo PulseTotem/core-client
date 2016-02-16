@@ -72,12 +72,15 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 		if (info.getCmd() == "Wait") {
 			$(domElem).empty();
 			var socketId = info.getArgs()[0];
-			var lastPic = info.getArgs()[1];
+			var baseAppliUrl = info.getArgs()[1];
+			var lastPic = info.getArgs()[2];
 
-			this.waitMessage(domElem, socketId, lastPic);
+			this.waitMessage(domElem, socketId, baseAppliUrl, lastPic);
+
 		} else	if (info.getCmd() == "startSession") {
 			$(domElem).empty();
 			this.startSession(domElem);
+
 		} else if (info.getCmd() == "counter") {
 			$(domElem).empty();
 			if (info.getArgs().length != 1) {
@@ -86,12 +89,18 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 			var counterTime = parseInt(info.getArgs()[0]);
 
 			this.countAndSnap(domElem, counterTime, info.getCallChannel());
+
+		} else if (info.getCmd() == "postedPicture") {
+
+			this.postedPicture(domElem);
+
 		} else if (info.getCmd() == "validatedPicture") {
 			$(domElem).empty();
 			if (Webcam.container) {
 				Webcam.reset();
 			}
 			this.resetZone(domElem);
+
 		} else if (info.getCmd() == "removeInfo") {
 			$(domElem).empty();
 			if (Webcam.container) {
@@ -103,8 +112,8 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 		endCallback();
 	}
 
-	private waitMessage(domElem : any, socketId : string, lastPicUrl : string) {
-		var client_photobox_url = "http://localhost:9001/session/" + socketId;
+	private waitMessage(domElem : any, socketId : string, baseAppliUrl : string, lastPicUrl : string) {
+		var client_photobox_url = baseAppliUrl+"/session/" + socketId;
 
 		var wrapperDiv = $('<div>');
 		wrapperDiv.addClass("PhotoboxRenderer_wrapper");
@@ -158,11 +167,20 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 		qrCodeDiv.addClass("PhotoboxRenderer_rightpanel_qrcode");
 		rightPanelDiv.append(qrCodeDiv);
 
-		/*var qrCodeImg = $('<img>');
-		qrCodeImg.addClass("PhotoboxRenderer_rightpanel_qrcode_img");
-		qrCodeImg.attr('src', qrCodeUrl);
-		qrCodeDiv.append(qrCodeImg);
-		*/
+		//var qrCodeImg = $('<img>');
+		//qrCodeImg.addClass("PhotoboxRenderer_rightpanel_qrcode_img");
+		//qrCodeImg.attr('src', qrcodeurl);
+		//qrCodeDiv.append(qrCodeImg);
+
+		new QRCode(qrCodeDiv[0], {
+			text: client_photobox_url,
+			width: 128,
+			height: 128});
+
+		qrCodeDiv.textfill({
+			maxFontPixels: 500
+		});
+
 		var urlDiv = $('<div>');
 		urlDiv.addClass("PhotoboxRenderer_rightpanel_url");
 		var urlSpan = $('<span>');
@@ -332,13 +350,6 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 			var progressDiv = $('<div>');
 			progressDiv.addClass("progress");
 
-			var progressBar = $('<div>');
-			progressBar.addClass("progress-bar");
-			progressBar.addClass("progress-bar-info");
-			progressBar.addClass("progress-bar-striped");
-			progressBar.css('width', '0%');
-			progressDiv.append(progressBar);
-
 			divCounter.append(progressDiv);
 
 			progressTextDiv.textfill({
@@ -347,45 +358,6 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 
 			divCounter.show();
 
-			/*Webcam.on( 'uploadProgress', function(progress) {
-
-				var progressPercent = Math.round(progress*100);
-
-				progressBar.css('width', progressPercent + '%');
-			});
-
-			Webcam.on( 'uploadComplete', function(code, text) {
-				divCounter.empty();
-				if (code == 200) {
-					if (Webcam.container) {
-						Webcam.reset();
-					}
-
-					var spanCounter = $('<span>');
-					spanCounter.html("L'image a été traitée avec succès ! Merci de valider la photo sur votre téléphone pour continuer.");
-					divCounter.append(spanCounter);
-					divCounter.textfill({
-						maxFontPixels: 500
-					});
-				} else {
-					var spanCounter = $('<span>');
-					spanCounter.html("Une erreur a eu lieu durant le traitement de l'image. Nous vous invitons à recommencer votre photo.");
-					divCounter.append(spanCounter);
-					divCounter.textfill({
-						maxFontPixels: 500
-					});
-
-					var retry = function () {
-						if (Webcam.container) {
-							Webcam.reset();
-						}
-					};
-					setTimeout(retry, 3000);
-				}
-			});
-
-			Webcam.upload(data_uri, servicePostPic);
-			*/
 			MessageBus.publishToCall(callChannel, "PostPicture", data_uri);
 		};
 
@@ -433,6 +405,15 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 		};
 
 		setTimeout(timeoutFunction, 1000);
+	}
+
+	private postedPicture(domElem : any) {
+		var spanCounter = $('<span>');
+		spanCounter.html("L'image a été traitée avec succès ! Merci de valider la photo sur votre téléphone pour continuer.");
+		domElem.append(spanCounter);
+		domElem.textfill({
+			maxFontPixels: 500
+		});
 	}
 
 	private resetZone(domElem : any) {
