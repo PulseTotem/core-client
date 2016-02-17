@@ -61,6 +61,27 @@ class SideBySideFeedNodeRenderer implements Renderer<FeedNode> {
 		var nodeHTMLWrapper = $("<div>");
 		nodeHTMLWrapper.addClass("SideBySideFeedNodeRenderer_wrapper");
 
+		//Facebook logo
+		var facebookHTMLLogoContainer = $("<div>");
+		facebookHTMLLogoContainer.addClass("SideBySideFeedNodeRenderer_facebook_logo_container");
+
+		nodeHTMLWrapper.append(facebookHTMLLogoContainer);
+
+		var facebookHTMLLogoShadow = $("<div>");
+		facebookHTMLLogoShadow.addClass("SideBySideFeedNodeRenderer_facebook_logo_shadow");
+
+		facebookHTMLLogoContainer.append(facebookHTMLLogoShadow);
+
+		var facebookHTMLLogoColor = $("<div>");
+		facebookHTMLLogoColor.addClass("SideBySideFeedNodeRenderer_facebook_logo_color");
+
+		facebookHTMLLogoContainer.append(facebookHTMLLogoColor);
+
+		var facebookHTMLLogo = $("<div>");
+		facebookHTMLLogo.addClass("SideBySideFeedNodeRenderer_facebook_logo");
+
+		facebookHTMLLogoContainer.append(facebookHTMLLogo);
+
 		// Arrow
 		var nodeWrapperArrow = $("<div>");
 		nodeWrapperArrow.addClass("SideBySideFeedNodeRenderer_wrapper_arrow");
@@ -193,6 +214,7 @@ class SideBySideFeedNodeRenderer implements Renderer<FeedNode> {
 			nodeMainPicture.css("background-image", "url('" + info.getMediaUrl() + "')");
 		}
 
+		$(domElem).css("overflow", "visible");
 		$(domElem).append(nodeHTMLWrapper);
 
 		if(info.getMediaUrl() != null && info.getMediaUrl() != "") {
@@ -209,6 +231,7 @@ class SideBySideFeedNodeRenderer implements Renderer<FeedNode> {
 		});
 
 		nodeMainMessageContent.textfill({
+			minFontPixels: 30,
 			maxFontPixels: 600
 		});
 
@@ -291,6 +314,7 @@ class SideBySideFeedNodeRenderer implements Renderer<FeedNode> {
 		nodeMainMessageContent.append(nodeMainMessageContentSpan);
 
 		nodeMainMessageContent.textfill({
+			minFontPixels: 30,
 			maxFontPixels: 600
 		});
 
