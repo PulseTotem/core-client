@@ -72,6 +72,27 @@ class SideBySideTweetRenderer implements Renderer<Tweet> {
 		var tweetHTMLWrapper = $("<div>");
 		tweetHTMLWrapper.addClass("SideBySideTweetRenderer_wrapper");
 
+		//Tweet logo
+		var tweetHTMLLogoContainer = $("<div>");
+		tweetHTMLLogoContainer.addClass("SideBySideTweetRenderer_twitter_logo_container");
+
+		tweetHTMLWrapper.append(tweetHTMLLogoContainer);
+
+		var tweetHTMLLogoShadow = $("<div>");
+		tweetHTMLLogoShadow.addClass("SideBySideTweetRenderer_twitter_logo_shadow");
+
+		tweetHTMLLogoContainer.append(tweetHTMLLogoShadow);
+
+		var tweetHTMLLogoColor = $("<div>");
+		tweetHTMLLogoColor.addClass("SideBySideTweetRenderer_twitter_logo_color");
+
+		tweetHTMLLogoContainer.append(tweetHTMLLogoColor);
+
+		var tweetHTMLLogo = $("<div>");
+		tweetHTMLLogo.addClass("SideBySideTweetRenderer_twitter_logo");
+
+		tweetHTMLLogoContainer.append(tweetHTMLLogo);
+
 		//Profil
 		var tweetProfil = $("<div>");
 		tweetProfil.addClass("SideBySideTweetRenderer_profil");
@@ -224,6 +245,7 @@ class SideBySideTweetRenderer implements Renderer<Tweet> {
 		clearFixtweetHTMLWrapper.addClass("clearfix");
 		tweetHTMLWrapper.append(clearFixtweetHTMLWrapper);
 
+		$(domElem).css("overflow", "visible");
 		$(domElem).append(tweetHTMLWrapper);
 
 		var contentWidth = tweetContent.width() + 10;
@@ -244,6 +266,7 @@ class SideBySideTweetRenderer implements Renderer<Tweet> {
 		});
 
 		tweetContentMessageMain.textfill({
+			minFontPixels: 30,
 			maxFontPixels: 500
 		});
 
@@ -309,6 +332,7 @@ class SideBySideTweetRenderer implements Renderer<Tweet> {
 		tweetContentMessageSpan.html(info.getMessage());
 
 		tweetContentMessageMain.textfill({
+			minFontPixels: 30,
 			maxFontPixels: 500
 		});
 
