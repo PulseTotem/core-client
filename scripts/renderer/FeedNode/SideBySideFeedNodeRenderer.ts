@@ -39,22 +39,10 @@ class SideBySideFeedNodeRenderer implements Renderer<FeedNode> {
 				var fn : FeedNode = fcFeedNodes[iFN];
 				feedNodes.push(fn);
 
-				//TODO
-				/*t.getPictures().forEach(function(picture : Picture) {
-					var picSizeToLoad : string = "";
-					if(picture.getOriginal() != null) {
-						picSizeToLoad = "";
-					} else if(picture.getLarge() != null) {
-						picSizeToLoad = "large";
-					} else if(picture.getMedium() != null) {
-						picSizeToLoad = "medium";
-					} else if(picture.getSmall() != null) {
-						picSizeToLoad = "small";
-					} else if(picture.getThumb() != null) {
-						picSizeToLoad = "thumb";
-					}
-					PictureHelper.preloadImage(picture, picSizeToLoad);
-				});*/
+				if(fn.getMediaUrl() != null && fn.getMediaUrl() != "") {
+					var img = new Image();
+					img.src = fn.getMediaUrl();
+				}
 			}
 		}
 
@@ -70,190 +58,170 @@ class SideBySideFeedNodeRenderer implements Renderer<FeedNode> {
 	 * @param {Function} endCallback - Callback function called at the end of render method.
 	 */
 	render(info : FeedNode, domElem : any, endCallback : Function) {
-		var tweetHTMLWrapper = $("<div>");
-		tweetHTMLWrapper.addClass("SideBySideFeedNodeRenderer_wrapper");
+		var nodeHTMLWrapper = $("<div>");
+		nodeHTMLWrapper.addClass("SideBySideFeedNodeRenderer_wrapper");
 
-		//Profil
-		var tweetProfil = $("<div>");
-		tweetProfil.addClass("SideBySideFeedNodeRenderer_profil");
-		tweetProfil.addClass("pull-left");
+		// Arrow
+		var nodeWrapperArrow = $("<div>");
+		nodeWrapperArrow.addClass("SideBySideFeedNodeRenderer_wrapper_arrow");
+		nodeWrapperArrow.html("&#9658;");
+		nodeHTMLWrapper.append(nodeWrapperArrow);
 
-		tweetHTMLWrapper.append(tweetProfil);
+		//Header
+		var nodeHeader = $("<div>");
+		nodeHeader.addClass("SideBySideFeedNodeRenderer_header");
 
-		var tweetProfilPictureDiv = $("<div>");
-		tweetProfilPictureDiv.addClass("SideBySideFeedNodeRenderer_profil_picture");
-		//tweetProfilPictureDiv.css("background-image", "url('" + info.getOwner().getProfilPicture() + "')");
+		nodeHTMLWrapper.append(nodeHeader);
 
-		var tweetProfilPictureImg = $("<img>");
-		tweetProfilPictureImg.addClass("SideBySideFeedNodeRenderer_profil_picture_img");
-		tweetProfilPictureImg.attr("src", info.getOwner().getProfilPicture());
-		tweetProfilPictureDiv.append(tweetProfilPictureImg);
+		//Header -> Author
+		var nodeHeaderAuthor = $("<div>");
+		nodeHeaderAuthor.addClass("SideBySideFeedNodeRenderer_header_author");
+		nodeHeaderAuthor.addClass("pull-left");
 
-		tweetProfil.append(tweetProfilPictureDiv);
+		var nodeHeaderAuthorSpan = $("<span>");
+		nodeHeaderAuthorSpan.html(info.getAuthor());
+		nodeHeaderAuthor.append(nodeHeaderAuthorSpan);
 
-		var tweetProfilRealname = $("<div>");
-		tweetProfilRealname.addClass("SideBySideFeedNodeRenderer_profil_realname");
-		var tweetProfilRealnameSpan = $("<span>");
-		tweetProfilRealnameSpan.html(info.getOwner().getRealname());
-		tweetProfilRealname.append(tweetProfilRealnameSpan);
+		nodeHeader.append(nodeHeaderAuthor);
 
-		tweetProfil.append(tweetProfilRealname);
+		//Header -> date
+		var nodeHeaderDate = $("<div>");
+		nodeHeaderDate.addClass("SideBySideFeedNodeRenderer_header_date");
+		nodeHeaderDate.addClass("pull-left");
 
-		var tweetProfilUsername = $("<div>");
-		tweetProfilUsername.addClass("SideBySideFeedNodeRenderer_profil_username");
-		var tweetProfilUsernameSpan = $("<span>");
-		tweetProfilUsernameSpan.html(info.getOwner().getUsername());
-		tweetProfilUsername.append(tweetProfilUsernameSpan);
-
-		tweetProfil.append(tweetProfilUsername);
-
-		//Content
-		var tweetContent = $("<div>");
-		tweetContent.addClass("SideBySideFeedNodeRenderer_content");
-		tweetContent.addClass("pull-left");
-
-		tweetHTMLWrapper.append(tweetContent);
-
-		//Content -> Arrow
-		var tweetContentArrow = $("<div>");
-		tweetContentArrow.addClass("SideBySideFeedNodeRenderer_content_arrow");
-		tweetContentArrow.html("&#9664;");
-		tweetContent.append(tweetContentArrow);
-
-		//Content -> Message
-		var tweetContentMessage = $("<div>");
-		tweetContentMessage.addClass("SideBySideFeedNodeRenderer_content_message");
-
-		tweetContent.append(tweetContentMessage);
-
-		//Content -> Message -> Header
-		var tweetContentMessageHeader = $("<div>");
-		tweetContentMessageHeader.addClass("SideBySideFeedNodeRenderer_content_message_header");
-
-		tweetContentMessage.append(tweetContentMessageHeader);
+		nodeHeader.append(nodeHeaderDate);
 
 		var creationDate : any = moment(info.getCreationDate());
 		var displayCreationDate = creationDate.fromNow();
-		var tweetContentMessageHeaderSpan = $("<span>");
-		tweetContentMessageHeaderSpan.html(displayCreationDate);
+		var nodeHeaderDateSpan = $("<span>");
+		nodeHeaderDateSpan.html(displayCreationDate);
 
-		tweetContentMessageHeader.append(tweetContentMessageHeaderSpan);
+		nodeHeaderDate.append(nodeHeaderDateSpan);
 
-		//Content -> Message -> Main
-		var tweetContentMessageMain = $("<div>");
-		tweetContentMessageMain.addClass("SideBySideFeedNodeRenderer_content_message_main");
+		var clearFixNodeHeader = $("<div>");
+		clearFixNodeHeader.addClass("clearfix");
+		nodeHeader.append(clearFixNodeHeader);
 
-		tweetContentMessage.append(tweetContentMessageMain);
+		//Main
+		var nodeMain = $("<div>");
+		nodeMain.addClass("SideBySideFeedNodeRenderer_main");
 
-		var tweetContentMessageSpan = $("<span>");
-		tweetContentMessageSpan.html(info.getMessage());
+		nodeHTMLWrapper.append(nodeMain);
 
-		tweetContentMessageMain.append(tweetContentMessageSpan);
+		//Main -> Message
+		var nodeMainMessage = $("<div>");
+		nodeMainMessage.addClass("SideBySideFeedNodeRenderer_main_message");
 
-		//Content -> Message -> Footer
-		var tweetContentMessageFooter = $("<div>");
-		tweetContentMessageFooter.addClass("SideBySideFeedNodeRenderer_content_message_footer");
+		nodeMain.append(nodeMainMessage);
 
-		tweetContentMessage.append(tweetContentMessageFooter);
+		//Main -> Message -> Content
+		var nodeMainMessageContent = $("<div>");
+		nodeMainMessageContent.addClass("SideBySideFeedNodeRenderer_main_message_content");
 
-		//Content -> Message -> Footer -> Favorite
-		var favoriteSpan = $("<span>");
-		favoriteSpan.addClass("SideBySideFeedNodeRenderer_content_message_footer_favorite");
-		favoriteSpan.addClass("pull-right");
-		var favoriteContent = $("<span>");
-		favoriteContent.addClass("badge");
-		var glyphiconStar = $("<span>");
-		glyphiconStar.addClass("glyphicon");
-		glyphiconStar.addClass("glyphicon-star");
+		nodeMainMessage.append(nodeMainMessageContent);
 
-		favoriteContent.append(glyphiconStar);
-		favoriteContent.append("&nbsp;" + info.getFavoriteCount());
-		favoriteSpan.append(favoriteContent);
+		var nodeMainMessageContentSpan = $("<span>");
+		nodeMainMessageContentSpan.html(info.getDescription());
 
-		tweetContentMessageFooter.append(favoriteSpan);
+		nodeMainMessageContent.append(nodeMainMessageContentSpan);
 
-		//Content -> Message -> Footer -> Retweet
-		var retweetSpan = $("<span>");
-		retweetSpan.addClass("SideBySideFeedNodeRenderer_content_message_footer_retweet");
-		retweetSpan.addClass("pull-right");
-		var retweetContent = $("<span>");
-		retweetContent.addClass("badge");
-		var glyphiconRetweet = $("<span>");
-		glyphiconRetweet.addClass("glyphicon");
-		glyphiconRetweet.addClass("glyphicon-retweet");
+		//Main -> Message -> Footer
+		var nodeMainMessageFooter = $("<div>");
+		nodeMainMessageFooter.addClass("SideBySideFeedNodeRenderer_main_message_footer");
 
-		retweetContent.append(glyphiconRetweet);
-		retweetContent.append("&nbsp;" + info.getRetweetCount());
-		retweetSpan.append(retweetContent);
+		nodeMainMessage.append(nodeMainMessageFooter);
 
-		tweetContentMessageFooter.append(retweetSpan);
+		//Main -> Message -> Footer -> Like
+		var likeSpan = $("<span>");
+		likeSpan.addClass("SideBySideFeedNodeRenderer_main_message_footer_like");
+		likeSpan.addClass("pull-right");
+		var likeContent = $("<span>");
+		likeContent.addClass("badge");
+		var glyphiconLike = $("<span>");
+		glyphiconLike.addClass("glyphicon");
+		glyphiconLike.addClass("glyphicon-heart");
 
-		var clearFixtweetContentMessageFooter = $("<div>");
-		clearFixtweetContentMessageFooter.addClass("clearfix");
-		tweetContentMessageFooter.append(clearFixtweetContentMessageFooter);
+		likeContent.append(glyphiconLike);
+		likeContent.append("&nbsp;" + info.getSocialStats().likeCount());
+		likeSpan.append(likeContent);
 
-		//Content -> Pictures
-		var picturesHTMLElems = [];
-		info.getPictures().forEach(function(picture : Picture) {
-			var tweetContentPicture = $("<div>");
-			tweetContentPicture.addClass("SideBySideFeedNodeRenderer_content_picture");
-			tweetContentPicture.addClass("SideBySideFeedNodeRenderer_content_picture_" + picture.getId());
+		nodeMainMessageFooter.append(likeSpan);
 
-			tweetContent.append(tweetContentPicture);
+		//Main -> Message -> Footer -> Share
+		var shareSpan = $("<span>");
+		shareSpan.addClass("SideBySideFeedNodeRenderer_main_message_footer_share");
+		shareSpan.addClass("pull-right");
+		var shareContent = $("<span>");
+		shareContent.addClass("badge");
+		var glyphiconShare = $("<span>");
+		glyphiconShare.addClass("glyphicon");
+		glyphiconShare.addClass("glyphicon-retweet");
 
-			var picURL : PictureURL = null;
-			if(picture.getOriginal() != null) {
-				picURL = picture.getOriginal();
-			} else if(picture.getLarge() != null) {
-				picURL = picture.getLarge();
-			} else if(picture.getMedium() != null) {
-				picURL = picture.getMedium();
-			} else if(picture.getSmall() != null) {
-				picURL = picture.getSmall();
-			} else if(picture.getThumb() != null) {
-				picURL = picture.getThumb();
-			}
+		shareContent.append(glyphiconShare);
+		shareContent.append("&nbsp;" + info.getSocialStats().shareCount());
+		shareSpan.append(shareContent);
 
-			tweetContentPicture.css("background-image", "url('" + picURL.getURL() + "')");
+		nodeMainMessageFooter.append(shareSpan);
 
-			picturesHTMLElems.push(tweetContentPicture);
+		//Main -> Message -> Footer -> Comment
+		var commentSpan = $("<span>");
+		commentSpan.addClass("SideBySideFeedNodeRenderer_main_message_footer_comment");
+		commentSpan.addClass("pull-right");
+		var commentContent = $("<span>");
+		commentContent.addClass("badge");
+		var glyphiconComment = $("<span>");
+		glyphiconComment.addClass("glyphicon");
+		glyphiconComment.addClass("glyphicon-comment");
+
+		commentContent.append(glyphiconComment);
+		commentContent.append("&nbsp;" + info.getSocialStats().commentCount());
+		commentSpan.append(commentContent);
+
+		nodeMainMessageFooter.append(commentSpan);
+
+		var clearFixNodeMainMessageFooter = $("<div>");
+		clearFixNodeMainMessageFooter.addClass("clearfix");
+		nodeMainMessageFooter.append(clearFixNodeMainMessageFooter);
+
+		//Main -> Picture
+		if(info.getMediaUrl() != null && info.getMediaUrl() != "") {
+			var nodeMainPicture = $("<div>");
+			nodeMainPicture.addClass("SideBySideFeedNodeRenderer_main_picture");
+
+			nodeMain.append(nodeMainPicture);
+
+			nodeMainPicture.css("background-image", "url('" + info.getMediaUrl() + "')");
+		}
+
+		$(domElem).append(nodeHTMLWrapper);
+
+		if(info.getMediaUrl() != null && info.getMediaUrl() != "") {
+			var contentWidth = nodeMain.width() + 50;
+			nodeMainPicture.css("transform", "translateX(" + contentWidth + "px)");
+		}
+
+		nodeHeaderAuthor.textfill({
+			maxFontPixels: 600
 		});
 
-
-		//Clearfix for Wrapper
-		var clearFixtweetHTMLWrapper = $("<div>");
-		clearFixtweetHTMLWrapper.addClass("clearfix");
-		tweetHTMLWrapper.append(clearFixtweetHTMLWrapper);
-
-		$(domElem).append(tweetHTMLWrapper);
-
-		var contentWidth = tweetContent.width() + 10;
-		picturesHTMLElems.forEach(function(elem : any) {
-			elem.css("transform", "translateX(" + contentWidth + "px)");
+		nodeHeaderDate.textfill({
+			maxFontPixels: 600
 		});
 
-		tweetProfilRealname.textfill({
-			maxFontPixels: 500
+		nodeMainMessageContent.textfill({
+			maxFontPixels: 600
 		});
 
-		tweetProfilUsername.textfill({
-			maxFontPixels: 500
+		likeSpan.textfill({
+			maxFontPixels: 600
 		});
 
-		tweetContentMessageHeader.textfill({
-			maxFontPixels: 500
+		shareSpan.textfill({
+			maxFontPixels: 600
 		});
 
-		tweetContentMessageMain.textfill({
-			maxFontPixels: 500
-		});
-
-		favoriteSpan.textfill({
-			maxFontPixels: 500
-		});
-
-		retweetSpan.textfill({
-			maxFontPixels: 500
+		commentSpan.textfill({
+			maxFontPixels: 600
 		});
 
 		endCallback();
@@ -268,98 +236,110 @@ class SideBySideFeedNodeRenderer implements Renderer<FeedNode> {
 	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
 	updateRender(info : FeedNode, domElem : any, endCallback : Function) {
+		if(info.getMediaUrl() != null && info.getMediaUrl() != "") {
 
-		var tweetProfilPictureImg = $(domElem).find(".SideBySideFeedNodeRenderer_profil_picture_img").first();
-		tweetProfilPictureImg.attr("src", info.getOwner().getProfilPicture());
+			var nodeMainPictures = $(domElem).find(".SideBySideFeedNodeRenderer_main_picture");
+			var nodeMainPicture;
+			if(nodeMainPictures.length > 0) {
+				nodeMainPicture = nodeMainPictures.first();
+			} else {
+				nodeMainPicture = $("<div>");
+				nodeMainPicture.addClass("SideBySideFeedNodeRenderer_main_picture");
 
-		var tweetProfilRealname = $(domElem).find(".SideBySideFeedNodeRenderer_profil_realname").first();
-		tweetProfilRealname.empty();
-		var tweetProfilRealnameSpan = $("<span>");
-		tweetProfilRealnameSpan.html(info.getOwner().getRealname());
-		tweetProfilRealname.append(tweetProfilRealnameSpan);
+				var nodeMain = $(domElem).find(".SideBySideFeedNodeRenderer_main").first();
+				nodeMain.append(nodeMainPicture);
 
-		tweetProfilRealname.textfill({
-			maxFontPixels: 500
-		});
-
-		var tweetProfilUsername = $(domElem).find(".SideBySideFeedNodeRenderer_profil_username").first();
-		tweetProfilUsername.empty();
-		var tweetProfilUsernameSpan = $("<span>");
-		tweetProfilUsernameSpan.html(info.getOwner().getUsername());
-		tweetProfilUsername.append(tweetProfilUsernameSpan);
-
-		tweetProfilUsername.textfill({
-			maxFontPixels: 500
-		});
-
-		var tweetContentMessageHeader = $(domElem).find(".SideBySideFeedNodeRenderer_content_message_header").first();
-		tweetContentMessageHeader.empty();
-		var creationDate : any = moment(info.getCreationDate());
-		var displayCreationDate = creationDate.fromNow();
-		var tweetContentMessageHeaderSpan = $("<span>");
-		tweetContentMessageHeaderSpan.html(displayCreationDate);
-		tweetContentMessageHeader.append(tweetContentMessageHeaderSpan);
-
-		tweetContentMessageHeader.textfill({
-			maxFontPixels: 500
-		});
-
-		var tweetContentMessageMain = $(domElem).find(".SideBySideFeedNodeRenderer_content_message_main").first();
-		tweetContentMessageMain.empty();
-		var tweetContentMessageSpan = $("<span>");
-		tweetContentMessageSpan.html(info.getMessage());
-
-		tweetContentMessageMain.textfill({
-			maxFontPixels: 500
-		});
-
-		var favoriteSpan = $(domElem).find(".SideBySideFeedNodeRenderer_content_message_footer_favorite").first();
-		favoriteSpan.empty();
-		var favoriteContent = $("<span>");
-		favoriteContent.addClass("badge");
-		var glyphiconStar = $("<span>");
-		glyphiconStar.addClass("glyphicon");
-		glyphiconStar.addClass("glyphicon-star");
-		favoriteContent.append(glyphiconStar);
-		favoriteContent.append("&nbsp;" + info.getFavoriteCount());
-		favoriteSpan.append(favoriteContent);
-
-		favoriteSpan.textfill({
-			maxFontPixels: 500
-		});
-
-		var retweetSpan = $(domElem).find(".SideBySideFeedNodeRenderer_content_message_footer_retweet");
-		retweetSpan.empty();
-		var retweetContent = $("<span>");
-		retweetContent.addClass("badge");
-		var glyphiconRetweet = $("<span>");
-		glyphiconRetweet.addClass("glyphicon");
-		glyphiconRetweet.addClass("glyphicon-retweet");
-		retweetContent.append(glyphiconRetweet);
-		retweetContent.append("&nbsp;" + info.getRetweetCount());
-		retweetSpan.append(retweetContent);
-
-		retweetSpan.textfill({
-			maxFontPixels: 500
-		});
-
-		info.getPictures().forEach(function(picture : Picture) {
-			var tweetContentPicture = $(domElem).find(".SideBySideFeedNodeRenderer_content_picture_" + picture.getId()).first();
-
-			var picURL : PictureURL = null;
-			if(picture.getOriginal() != null) {
-				picURL = picture.getOriginal();
-			} else if(picture.getLarge() != null) {
-				picURL = picture.getLarge();
-			} else if(picture.getMedium() != null) {
-				picURL = picture.getMedium();
-			} else if(picture.getSmall() != null) {
-				picURL = picture.getSmall();
-			} else if(picture.getThumb() != null) {
-				picURL = picture.getThumb();
+				var contentWidth = nodeMain.width() + 50;
+				nodeMainPicture.css("transform", "translateX(" + contentWidth + "px)");
 			}
 
-			tweetContentPicture.css("background-image", "url('" + picURL.getURL() + "')");
+			nodeMainPicture.css("background-image", "url('" + info.getMediaUrl() + "')");
+		} else {
+			$(domElem).find(".SideBySideFeedNodeRenderer_main_picture").remove();
+		}
+
+		var nodeHeaderAuthor = $(domElem).find(".SideBySideFeedNodeRenderer_header_author").first();
+		nodeHeaderAuthor.empty();
+		var nodeHeaderAuthorSpan = $("<span>");
+		nodeHeaderAuthorSpan.html(info.getAuthor());
+		nodeHeaderAuthor.append(nodeHeaderAuthorSpan);
+
+		nodeHeaderAuthor.textfill({
+			maxFontPixels: 600
+		});
+
+
+		var nodeHeaderDate = $(domElem).find(".SideBySideFeedNodeRenderer_header_date").first();
+		nodeHeaderDate.empty();
+		var creationDate : any = moment(info.getCreationDate());
+		var displayCreationDate = creationDate.fromNow();
+		var nodeHeaderDateSpan = $("<span>");
+		nodeHeaderDateSpan.html(displayCreationDate);
+
+		nodeHeaderDate.append(nodeHeaderDateSpan);
+
+		nodeHeaderDate.textfill({
+			maxFontPixels: 600
+		});
+
+		var nodeMainMessageContent = $(domElem).find(".SideBySideFeedNodeRenderer_main_message_content").first();
+		nodeMainMessageContent.empty();
+
+		var nodeMainMessageContentSpan = $("<span>");
+		nodeMainMessageContentSpan.html(info.getDescription());
+
+		nodeMainMessageContent.append(nodeMainMessageContentSpan);
+
+		nodeMainMessageContent.textfill({
+			maxFontPixels: 600
+		});
+
+		var likeSpan = $(domElem).find(".SideBySideFeedNodeRenderer_main_message_footer_like").first();
+		likeSpan.empty();
+		var likeContent = $("<span>");
+		likeContent.addClass("badge");
+		var glyphiconLike = $("<span>");
+		glyphiconLike.addClass("glyphicon");
+		glyphiconLike.addClass("glyphicon-heart");
+
+		likeContent.append(glyphiconLike);
+		likeContent.append("&nbsp;" + info.getSocialStats().likeCount());
+		likeSpan.append(likeContent);
+
+		likeSpan.textfill({
+			maxFontPixels: 500
+		});
+
+		var shareSpan =  $(domElem).find(".SideBySideFeedNodeRenderer_main_message_footer_share").first();
+		shareSpan.empty();
+		var shareContent = $("<span>");
+		shareContent.addClass("badge");
+		var glyphiconShare = $("<span>");
+		glyphiconShare.addClass("glyphicon");
+		glyphiconShare.addClass("glyphicon-retweet");
+
+		shareContent.append(glyphiconShare);
+		shareContent.append("&nbsp;" + info.getSocialStats().shareCount());
+		shareSpan.append(shareContent);
+
+		shareSpan.textfill({
+			maxFontPixels: 600
+		});
+
+		var commentSpan = $(domElem).find(".SideBySideFeedNodeRenderer_main_message_footer_comment").first();
+		commentSpan.empty();
+		var commentContent = $("<span>");
+		commentContent.addClass("badge");
+		var glyphiconComment = $("<span>");
+		glyphiconComment.addClass("glyphicon");
+		glyphiconComment.addClass("glyphicon-comment");
+
+		commentContent.append(glyphiconComment);
+		commentContent.append("&nbsp;" + info.getSocialStats().commentCount());
+		commentSpan.append(commentContent);
+
+		commentSpan.textfill({
+			maxFontPixels: 600
 		});
 
 		endCallback();
@@ -374,18 +354,19 @@ class SideBySideFeedNodeRenderer implements Renderer<FeedNode> {
 	 * @param {Function} endCallback - Callback function called at the end of animation.
 	 */
 	animate(info : FeedNode, domElem : any, endCallback : Function) {
-		var totalDuration = info.getDurationToDisplay()*1000;
-		var nbItems = info.getPictures().length + 1;
-		var itemDuration = totalDuration/nbItems;
+		if(info.getMediaUrl() != null && info.getMediaUrl() != "") {
+			var totalDuration = info.getDurationToDisplay()*1000;
+			var itemDuration = totalDuration / 2;
 
-		$(domElem).find(".SideBySideFeedNodeRenderer_content_picture").each(function(index : any, elem : any) {
-			$(elem).transition({
+			var nodeMainPicture = $(domElem).find(".SideBySideFeedNodeRenderer_main_picture").first();
+
+			nodeMainPicture.transition({
 				'transform': 'translateX(0px)',
 				'easing': 'easeInOutBack',
 				'duration': 1000,
-				'delay' : itemDuration*(index+1)
+				'delay' : itemDuration
 			});
-		});
+		}
 
 		endCallback();
 	}
