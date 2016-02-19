@@ -19,7 +19,7 @@ class YoutubeSource extends StaticSource<VideoPlaylist> {
 	computeInfo() : VideoPlaylist {
 		var video : VideoURL = new VideoURL();
 		video.setId(this.params.YoutubeID);
-		video.setURL("http://www.youtube.com/embed/" + this.params.YoutubeID + "?autoplay=1&controls=0&modestbranding=1");
+		video.setURL("https://www.youtube.com/embed/" + this.params.YoutubeID + "?autoplay=1&controls=0&modestbranding=1");
 		video.setType(VideoType.HTML5);
 		video.setDurationToDisplay(this.params.InfoDuration);
 
