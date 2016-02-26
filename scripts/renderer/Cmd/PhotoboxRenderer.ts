@@ -113,94 +113,111 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 	}
 
 	private waitMessage(domElem : any, socketId : string, baseAppliUrl : string, lastPicUrl : string) {
-		var client_photobox_url = baseAppliUrl+"/session/" + socketId;
+		var client_photobox_url = baseAppliUrl+"session/" + socketId;
 
 		var wrapperDiv = $('<div>');
 		wrapperDiv.addClass("PhotoboxRenderer_wrapper");
 
+		//Header
+		var headerDiv = $('<div>');
+		headerDiv.addClass("PhotoboxRenderer_header");
+		wrapperDiv.append(headerDiv);
+
+		var headerSpan = $('<span>');
+		headerSpan.html('Prenez vous en photo !');
+		headerDiv.append(headerSpan);
+
+		//Content
 		var contentDiv = $('<div>');
 		contentDiv.addClass("PhotoboxRenderer_content");
 		wrapperDiv.append(contentDiv);
 
-		var leftPanelDiv = $('<div>');
-		leftPanelDiv.addClass("PhotoboxRenderer_leftpanel");
-		leftPanelDiv.addClass("pull-left");
-		contentDiv.append(leftPanelDiv);
+		//Content -> Left
+		var leftDiv = $('<div>');
+		leftDiv.addClass("PhotoboxRenderer_content_left");
+		leftDiv.addClass("pull-left");
+		contentDiv.append(leftDiv);
 
-		var leftTitleDiv = $('<div>');
-		leftTitleDiv.addClass("PhotoboxRenderer_leftpanel_title");
-		var leftTitleSpan = $('<span>');
-		leftTitleSpan.html("Envie d'un selfie ?");
-		leftTitleDiv.append(leftTitleSpan);
-		leftPanelDiv.append(leftTitleDiv);
+		//Content -> Right
+		var rightDiv = $('<div>');
+		rightDiv.addClass("PhotoboxRenderer_content_right");
+		rightDiv.addClass("pull-left");
+		contentDiv.append(rightDiv);
 
-		var lastPicDiv = $('<div>');
-		lastPicDiv.addClass("PhotoboxRenderer_leftpanel_lastpic");
-		leftPanelDiv.append(lastPicDiv);
+		//Content -> ClearFix
+		var clearFixRightDiv = $("<div>");
+		clearFixRightDiv.addClass("clearfix");
+		contentDiv.append(clearFixRightDiv);
 
-		var helperImg = $('<span>');
-		helperImg.addClass("PhotoboxRenderer_helper");
-		lastPicDiv.append(helperImg);
+		//Content -> Right -> Main
+		var rightMainDiv = $('<div>');
+		rightMainDiv.addClass("PhotoboxRenderer_content_right_main");
+		rightDiv.append(rightMainDiv);
 
-		var lastPicImg = $('<img>');
-		lastPicImg.addClass("PhotoboxRenderer_leftpanel_lastpic_img");
+		var rightMainSpan = $('<span>');
+		rightMainSpan.html('Flashez le QR Code !');
+		rightMainDiv.append(rightMainSpan);
+
+		//Content -> Right -> LastPhoto
+		var rightLastPhotoDiv = $('<div>');
+		rightLastPhotoDiv.addClass("PhotoboxRenderer_content_right_lastPhoto");
+		rightDiv.append(rightLastPhotoDiv);
+
 		if (lastPicUrl) {
-			lastPicImg.attr('src', lastPicUrl);
+			rightLastPhotoDiv.css('background-image', "url('" + lastPicUrl + "')");
 		} else {
-			lastPicImg.attr('src', "http://cdn.the6thscreen.fr/selfie/selfie_default.png");
+			rightLastPhotoDiv.css('background-image', "url('http://cdn.the6thscreen.fr/selfie/selfie_default.png')");
 		}
-		lastPicDiv.append(lastPicImg);
 
-		var rightPanelDiv = $('<div>');
-		rightPanelDiv.addClass("PhotoboxRenderer_rightpanel");
-		rightPanelDiv.addClass("pull-left");
-		contentDiv.append(rightPanelDiv);
+		$(domElem).append(wrapperDiv);
 
-		var rightTitleDiv = $('<div>');
-		rightTitleDiv.addClass("PhotoboxRenderer_rightpanel_title");
-		var rightTitleSpan = $('<span>');
-		rightTitleSpan.html("Flashez le QR Code !");
-		rightTitleDiv.append(rightTitleSpan);
-		rightPanelDiv.append(rightTitleDiv);
+		var rightDivWidth = rightDiv.width() + 50;
+		rightLastPhotoDiv.css("transform", "translateX(" + rightDivWidth + "px)");
 
-		var qrCodeDiv = $('<div>');
-		qrCodeDiv.addClass("PhotoboxRenderer_rightpanel_qrcode");
-		rightPanelDiv.append(qrCodeDiv);
+		headerDiv.textfill({
+			maxFontPixels: 500
+		});
 
-		//var qrCodeImg = $('<img>');
-		//qrCodeImg.addClass("PhotoboxRenderer_rightpanel_qrcode_img");
-		//qrCodeImg.attr('src', qrcodeurl);
-		//qrCodeDiv.append(qrCodeImg);
-
-		new QRCode(qrCodeDiv[0], {
+		new QRCode(leftDiv[0], {
 			text: client_photobox_url,
 			width: 128,
 			height: 128});
 
-		qrCodeDiv.textfill({
+		leftDiv.textfill({
 			maxFontPixels: 500
 		});
 
-		var urlDiv = $('<div>');
-		urlDiv.addClass("PhotoboxRenderer_rightpanel_url");
-		var urlSpan = $('<span>');
-		urlSpan.html(client_photobox_url);
-		urlDiv.append(urlSpan);
-		rightPanelDiv.append(urlDiv);
-
-		$(domElem).append(wrapperDiv);
-
-		leftTitleDiv.textfill({
+		rightMainDiv.textfill({
 			maxFontPixels: 500
 		});
 
-		rightTitleDiv.textfill({
-			maxFontPixels: 500
-		});
+		var isOut = true;
 
-		urlDiv.textfill({
-			maxFontPixels: 500
-		});
+		var animatePhoto = function() {
+			if(isOut) {
+				rightLastPhotoDiv.transition({
+					'transform': 'translateX(0px)',
+					'easing': 'easeInOutBack',
+					'duration': 1000,
+					'delay' : 5000
+				}, function() {
+					isOut = false;
+					animatePhoto();
+				});
+			} else {
+				rightLastPhotoDiv.transition({
+					'transform': "translateX(" + rightDivWidth + "px)",
+					'easing': 'easeInOutBack',
+					'duration': 1000,
+					'delay' : 5000
+				}, function() {
+					isOut = true;
+					animatePhoto();
+				});
+			}
+		};
+
+		animatePhoto();
 	}
 
 	private preventFallback() {

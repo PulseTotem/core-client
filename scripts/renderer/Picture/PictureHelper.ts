@@ -7,6 +7,14 @@ class PictureHelper {
 	static preloadImage(pic : Picture, sizeToLoad : string) {
 		var img = new Image();
 
+		var time = pic.getDurationToDisplay();
+		pic.setDurationToDisplay(0);
+
+		img.onload = function() {
+			pic.setDurationToDisplay(time);
+			img = null;
+		}
+
 		if (sizeToLoad == "thumb") {
 			img.src = pic.getThumb().getURL();
 		} else if (sizeToLoad == "small") {
@@ -17,13 +25,6 @@ class PictureHelper {
 			img.src = pic.getLarge().getURL();
 		} else {
 			img.src = pic.getOriginal().getURL();
-		}
-
-		var time = pic.getDurationToDisplay();
-		pic.setDurationToDisplay(0);
-
-		img.onload = function() {
-			pic.setDurationToDisplay(time);
 		}
 	}
 }

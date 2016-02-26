@@ -45,6 +45,59 @@
   bottom: 0;
   left: 0;
   right: 0;
+
+  .PhotoboxRenderer_header {
+    width: 100%;
+    height: 20%;
+    text-align: center;
+  }
+
+  .PhotoboxRenderer_content {
+    width: 100%;
+    height: 80%;
+
+    .PhotoboxRenderer_content_left {
+      width: 40%;
+      height: 100%;
+      padding: 2%;
+
+      img {
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+
+    .PhotoboxRenderer_content_right {
+      width: 60%;
+      height: 100%;
+      position: relative;
+
+      .PhotoboxRenderer_content_right_main {
+        width: 100%;
+        height: 100%;
+        padding: 1%;
+      }
+
+      .PhotoboxRenderer_content_right_lastPhoto {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+    }
+  }
+}
+
+/*.PhotoboxRenderer_wrapper {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   width: 100%;
   height: 100%;
   line-height: initial;
@@ -119,7 +172,7 @@
 
     }
   }
-}
+}*/
 
 .photobox_divcam {
   width: 100%;
