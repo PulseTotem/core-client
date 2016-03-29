@@ -37,23 +37,26 @@ class NotAnimateSideBySideTweetRenderer implements Renderer<Tweet> {
 			var tlTweets : Array<Tweet> = tl.getTweets();
 			for(var iT in tlTweets) {
 				var t : Tweet = tlTweets[iT];
-				tweets.push(t);
 
-				t.getPictures().forEach(function(picture : Picture) {
-					var picSizeToLoad : string = "";
-					if(picture.getOriginal() != null) {
-						picSizeToLoad = "";
-					} else if(picture.getLarge() != null) {
-						picSizeToLoad = "large";
-					} else if(picture.getMedium() != null) {
-						picSizeToLoad = "medium";
-					} else if(picture.getSmall() != null) {
-						picSizeToLoad = "small";
-					} else if(picture.getThumb() != null) {
-						picSizeToLoad = "thumb";
-					}
-					PictureHelper.preloadImage(picture, picSizeToLoad);
-				});
+				if(t.getMessage().trim() != "" || t.getPictures().length > 0) {
+					tweets.push(t);
+
+					t.getPictures().forEach(function (picture:Picture) {
+						var picSizeToLoad:string = "";
+						if (picture.getOriginal() != null) {
+							picSizeToLoad = "";
+						} else if (picture.getLarge() != null) {
+							picSizeToLoad = "large";
+						} else if (picture.getMedium() != null) {
+							picSizeToLoad = "medium";
+						} else if (picture.getSmall() != null) {
+							picSizeToLoad = "small";
+						} else if (picture.getThumb() != null) {
+							picSizeToLoad = "thumb";
+						}
+						PictureHelper.preloadImage(picture, picSizeToLoad);
+					});
+				}
 			}
 		}
 
@@ -238,8 +241,12 @@ class NotAnimateSideBySideTweetRenderer implements Renderer<Tweet> {
 
 			tweetContentPicture.css("background-image", "url('" + picURL.getURL() + "')");
 
-			tweetContentMessage.addClass("NotAnimateSideBySideTweetRenderer_content_message_with_picture");
-
+			if(info.getMessage().trim() != "") {
+				tweetContentMessage.addClass("NotAnimateSideBySideTweetRenderer_content_message_with_picture");
+			} else {
+				tweetContentMessage.addClass("NotAnimateSideBySideTweetRenderer_content_message_empty");
+				tweetContentPicture.addClass("NotAnimateSideBySideTweetRenderer_content_picture_alone");
+			}
 		}
 
 		//Clearfix for Content
