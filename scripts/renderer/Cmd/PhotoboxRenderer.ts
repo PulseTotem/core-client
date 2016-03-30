@@ -65,9 +65,10 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 	 * @method render
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of render method.
 	 */
-	render(info : Cmd, domElem : any, endCallback : Function) {
+	render(info : Cmd, domElem : any, rendererTheme : string, endCallback : Function) {
 
 		if (info.getCmd() == "Wait") {
 			$(domElem).empty();
@@ -468,9 +469,10 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 	 * @method updateRender
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
-	updateRender(info : Cmd, domElem : any, endCallback : Function) {
+	updateRender(info : Cmd, domElem : any, rendererTheme : string, endCallback : Function) {
 
 		/** On Going **/ //		if (info.getCmd() != "validatedPicture") {
 

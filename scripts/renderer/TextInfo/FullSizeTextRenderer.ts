@@ -47,9 +47,10 @@ class FullSizeTextRenderer implements Renderer<TextInfo> {
 	 * @method render
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of render method.
 	 */
-	render(info : TextInfo, domElem : any, endCallback : Function) {
+	render(info : TextInfo, domElem : any, rendererTheme : string, endCallback : Function) {
 		var self = this;
 
 		var textWrapper = $("<div>");
@@ -75,9 +76,10 @@ class FullSizeTextRenderer implements Renderer<TextInfo> {
 	 * @method updateRender
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
-	updateRender(info : TextInfo, domElem : any, endCallback : Function) {
+	updateRender(info : TextInfo, domElem : any, rendererTheme : string, endCallback : Function) {
 		this.render(info, domElem, endCallback);
 	}
 

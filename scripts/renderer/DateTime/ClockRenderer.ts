@@ -46,9 +46,10 @@ class ClockRenderer implements Renderer<DateTime> {
 	 * @method render
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of render method.
 	 */
-	render(info : DateTime, domElem : any, endCallback : Function) {
+	render(info : DateTime, domElem : any, rendererTheme : string, endCallback : Function) {
 		$(domElem).empty();
 		var dateTimeWrapper = $("<div>");
 		dateTimeWrapper.addClass("ClockRenderer_wrapper");
@@ -76,9 +77,10 @@ class ClockRenderer implements Renderer<DateTime> {
 	 * @method updateRender
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
-	updateRender(info : DateTime, domElem : any, endCallback : Function) {
+	updateRender(info : DateTime, domElem : any, rendererTheme : string, endCallback : Function) {
 		var dateTime = $(domElem).find(".ClockRenderer_time").first();
 
 		var formatDate = new moment(info.getDate());

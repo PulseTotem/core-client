@@ -46,9 +46,10 @@ class EventRenderer implements Renderer<EventCal> {
 	 * @method render
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of render method.
 	 */
-	render(info : EventCal, domElem : any, endCallback : Function) {
+	render(info : EventCal, domElem : any, rendererTheme : string, endCallback : Function) {
 		var eventStart = moment(info.getStart());
 		eventStart.locale("fr");
 		var eventEnd = moment(info.getEnd());
@@ -122,9 +123,10 @@ class EventRenderer implements Renderer<EventCal> {
 	 * @method updateRender
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
-	updateRender(info : EventCal, domElem : any, endCallback : Function) {
+	updateRender(info : EventCal, domElem : any, rendererTheme : string, endCallback : Function) {
 		$(domElem).empty();
 		this.render(info, domElem, endCallback);
 	}

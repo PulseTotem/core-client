@@ -54,9 +54,10 @@ class PictureAlbumRenderer implements Renderer<Picture> {
 	 * @method render
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of render method.
 	 */
-	render(info : Picture, domElem : any, endCallback : Function) {
+	render(info : Picture, domElem : any, rendererTheme : string, endCallback : Function) {
 
 		var domElemHeight = $(domElem).height();
 
@@ -140,9 +141,10 @@ class PictureAlbumRenderer implements Renderer<Picture> {
 	 * @method updateRender
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
-	updateRender(info : Picture, domElem : any, endCallback : Function) {
+	updateRender(info : Picture, domElem : any, rendererTheme : string, endCallback : Function) {
 		var pictureHeader = $(domElem).find(".PictureAlbumRenderer_header").first();
 		pictureHeader.empty();
 

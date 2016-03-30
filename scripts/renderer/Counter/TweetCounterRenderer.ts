@@ -47,9 +47,10 @@ class TweetCounterRenderer implements Renderer<Counter> {
 	 * @method render
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of render method.
 	 */
-	render(info : Counter, domElem : any, endCallback : Function) {
+	render(info : Counter, domElem : any, rendererTheme : string, endCallback : Function) {
 
 		var counterHTMLWrapper = $("<div>");
 		counterHTMLWrapper.addClass("TweetCounterRenderer_wrapper");
@@ -152,9 +153,10 @@ class TweetCounterRenderer implements Renderer<Counter> {
 	 * @method updateRender
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
-	updateRender(info : Counter, domElem : any, endCallback : Function) {
+	updateRender(info : Counter, domElem : any, rendererTheme : string, endCallback : Function) {
 		$(domElem).empty();
 		this.render(info, domElem, endCallback);
 	}
