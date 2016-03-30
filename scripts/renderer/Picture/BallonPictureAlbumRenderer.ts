@@ -104,7 +104,7 @@ class BallonPictureAlbumRenderer implements Renderer<PictureAlbum> {
 	 */
 	updateRender(info : PictureAlbum, domElem : any, rendererTheme : string, endCallback : Function) {
 		$(domElem).empty();
-		this.render(info, domElem, endCallback);
+		this.render(info, domElem, rendererTheme, endCallback);
 	}
 
 	/**
@@ -113,9 +113,10 @@ class BallonPictureAlbumRenderer implements Renderer<PictureAlbum> {
 	 * @method animate
 	 * @param {RenderInfo} info - The Info to animate.
 	 * @param {DOM Element} domElem - The DOM Element where animate the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of animation.
 	 */
-	animate(info : PictureAlbum, domElem : any, endCallback : Function) {
+	animate(info : PictureAlbum, domElem : any, rendererTheme : string, endCallback : Function) {
 		var delays = new Array();
 		var seconds = 0;
 

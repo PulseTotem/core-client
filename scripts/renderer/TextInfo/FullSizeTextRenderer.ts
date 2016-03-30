@@ -80,7 +80,7 @@ class FullSizeTextRenderer implements Renderer<TextInfo> {
 	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
 	updateRender(info : TextInfo, domElem : any, rendererTheme : string, endCallback : Function) {
-		this.render(info, domElem, endCallback);
+		this.render(info, domElem, rendererTheme, endCallback);
 	}
 
 	/**
@@ -89,9 +89,10 @@ class FullSizeTextRenderer implements Renderer<TextInfo> {
 	 * @method animate
 	 * @param {RenderInfo} info - The Info to animate.
 	 * @param {DOM Element} domElem - The DOM Element where animate the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of animation.
 	 */
-	animate(info : TextInfo, domElem : any, endCallback : Function) {
+	animate(info : TextInfo, domElem : any, rendererTheme : string, endCallback : Function) {
 		//Nothing to do.
 
 		endCallback();

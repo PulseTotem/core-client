@@ -156,9 +156,10 @@ class FeedNodeRendererGeneric implements Renderer<FeedNode> {
 	 * @method animate
 	 * @param {RenderInfo} info - The Info to animate.
 	 * @param {DOM Element} domElem - The DOM Element where animate the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of animation.
 	 */
-	animate(info : FeedNode, domElem : any, endCallback : Function) {
+	animate(info : FeedNode, domElem : any, rendererTheme : string, endCallback : Function) {
 		var descriptionContent = $(domElem).find(".FeedNodeRendererGeneric_description_content").first();
 		descriptionContent.removeClass("FeedNodeRendererGeneric_description_content_animation");
 		descriptionContent.addClass("FeedNodeRendererGeneric_description_content_animation");

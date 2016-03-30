@@ -158,7 +158,7 @@ class TweetCounterRenderer implements Renderer<Counter> {
 	 */
 	updateRender(info : Counter, domElem : any, rendererTheme : string, endCallback : Function) {
 		$(domElem).empty();
-		this.render(info, domElem, endCallback);
+		this.render(info, domElem, rendererTheme, endCallback);
 	}
 
 	/**
@@ -167,9 +167,10 @@ class TweetCounterRenderer implements Renderer<Counter> {
 	 * @method animate
 	 * @param {RenderInfo} info - The Info to animate.
 	 * @param {DOM Element} domElem - The DOM Element where animate the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of animation.
 	 */
-	animate(info : Counter, domElem : any, endCallback : Function) {
+	animate(info : Counter, domElem : any, rendererTheme : string, endCallback : Function) {
 		$(".TweetCounterRenderer_hashtag").textfill({
 			maxFontPixels: 500
 		});

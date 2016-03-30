@@ -128,7 +128,7 @@ class EventRenderer implements Renderer<EventCal> {
 	 */
 	updateRender(info : EventCal, domElem : any, rendererTheme : string, endCallback : Function) {
 		$(domElem).empty();
-		this.render(info, domElem, endCallback);
+		this.render(info, domElem, rendererTheme, endCallback);
 	}
 
 	/**
@@ -137,9 +137,10 @@ class EventRenderer implements Renderer<EventCal> {
 	 * @method animate
 	 * @param {RenderInfo} info - The Info to animate.
 	 * @param {DOM Element} domElem - The DOM Element where animate the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of animation.
 	 */
-	animate(info : EventCal, domElem : any, endCallback : Function) {
+	animate(info : EventCal, domElem : any, rendererTheme : string, endCallback : Function) {
 		//Nothing to do.
 
 		endCallback();
