@@ -222,7 +222,7 @@ class Carousel3DBehaviour extends Behaviour {
 
 							var currentItemPanelNumber = (-1)*(self._rotateAngle % 360)/60;
 							var currentItemPanel = $(self.getZone().getZoneDiv()).find(".Carousel3DBehaviour_carousel_item_" + currentItemPanelNumber).first();
-							currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), currentItemPanel, function() {});
+							currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), currentItemPanel, currentInfoRenderer.getRendererTheme(), function() {});
 
 							var data = {
 								action : MessageBusAction.DISPLAY,
@@ -282,7 +282,7 @@ class Carousel3DBehaviour extends Behaviour {
 				currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
 				var itemPanel = $(this.getZone().getZoneDiv()).find(".Carousel3DBehaviour_carousel_item_0").first();
 				this._displayInfoRenderer(currentInfoRenderer, itemPanel, function() {
-					currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), itemPanel, function() {});
+					currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), itemPanel, currentInfoRenderer.getRendererTheme(), function() {});
 
 					var data = {
 						action : MessageBusAction.DISPLAY,
@@ -363,6 +363,7 @@ class Carousel3DBehaviour extends Behaviour {
 		var self = this;
 
 		var renderer = infoRenderer.getRenderer();
+		var rendererTheme = infoRenderer.getRendererTheme();
 
 		$(itemSpace).empty();
 
@@ -372,7 +373,7 @@ class Carousel3DBehaviour extends Behaviour {
 			}
 		};
 
-		renderer.render(infoRenderer.getInfo(), $(itemSpace), endRender);
+		renderer.render(infoRenderer.getInfo(), $(itemSpace), rendererTheme, endRender);
 	}
 
 	/**
@@ -388,14 +389,15 @@ class Carousel3DBehaviour extends Behaviour {
 			var listInfoRenderers = this.getListInfoRenderers();
 			var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
 			var renderer = currentInfoRenderer.getRenderer();
+			var rendererTheme = currentInfoRenderer.getRendererTheme();
 
 			var endRender = function () {
-				renderer.animate(currentInfoRenderer.getInfo(), self.getZone().getZoneDiv(), function () {
+				renderer.animate(currentInfoRenderer.getInfo(), self.getZone().getZoneDiv(), rendererTheme, function () {
 				});
 				currentInfoRenderer.getInfo().setCastingDate(new Date());
 			};
 
-			renderer.updateRender(currentInfoRenderer.getInfo(), this.getZone().getZoneDiv(), endRender);
+			renderer.updateRender(currentInfoRenderer.getInfo(), this.getZone().getZoneDiv(), rendererTheme, endRender);
 		} else {
 			this._nextInfoRenderer();
 		}
@@ -550,7 +552,7 @@ class Carousel3DBehaviour extends Behaviour {
 			var currentItemPanel = $(this.getZone().getZoneDiv()).find(".Carousel3DBehaviour_carousel_item_" + currentItemPanelNumber).first();
 
 			this._displayInfoRenderer(currentInfoRenderer, currentItemPanel, function() {
-				currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), currentItemPanel, function() {
+				currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), currentItemPanel, currentInfoRenderer.getRendererTheme(), function() {
 					self._updateCarousel();
 				});
 			});
@@ -603,7 +605,7 @@ class Carousel3DBehaviour extends Behaviour {
 
 								var currentItemPanelNumber = (-1)*(self._rotateAngle % 360)/60;
 								var currentItemPanel = $(self.getZone().getZoneDiv()).find(".Carousel3DBehaviour_carousel_item_" + currentItemPanelNumber).first();
-								currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), currentItemPanel, function() {});
+								currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), currentItemPanel, currentInfoRenderer.getRendererTheme(), function() {});
 
 								self._updateCarousel();
 							});
@@ -668,7 +670,7 @@ class Carousel3DBehaviour extends Behaviour {
 
 								var currentItemPanelNumber = (-1)*(self._rotateAngle % 360)/60;
 								var currentItemPanel = $(self.getZone().getZoneDiv()).find(".Carousel3DBehaviour_carousel_item_" + currentItemPanelNumber).first();
-								currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), currentItemPanel, function() {});
+								currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), currentItemPanel, currentInfoRenderer.getRendererTheme(), function() {});
 
 								self._updateCarousel();
 							});
