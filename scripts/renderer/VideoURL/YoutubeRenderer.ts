@@ -42,6 +42,7 @@ class YoutubeRenderer implements Renderer<VideoURL> {
 	render(info : VideoURL, domElem : any, rendererTheme : string, endCallback : Function) {
 		var videoHTMLWrapper = $("<div>");
 		videoHTMLWrapper.addClass("YoutubeRenderer_wrapper");
+		videoHTMLWrapper.addClass(rendererTheme);
 
 		var videoTitle = $("<div>");
 		videoTitle.addClass("YoutubeRenderer_title");
