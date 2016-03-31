@@ -55,9 +55,10 @@ class SideBySideFeedNodeRenderer implements Renderer<FeedNode> {
 	 * @method render
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of render method.
 	 */
-	render(info : FeedNode, domElem : any, endCallback : Function) {
+	render(info : FeedNode, domElem : any, rendererTheme : string, endCallback : Function) {
 		var nodeHTMLWrapper = $("<div>");
 		nodeHTMLWrapper.addClass("SideBySideFeedNodeRenderer_wrapper");
 
@@ -256,9 +257,10 @@ class SideBySideFeedNodeRenderer implements Renderer<FeedNode> {
 	 * @method updateRender
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
-	updateRender(info : FeedNode, domElem : any, endCallback : Function) {
+	updateRender(info : FeedNode, domElem : any, rendererTheme : string, endCallback : Function) {
 		if(info.getMediaUrl() != null && info.getMediaUrl() != "") {
 
 			var nodeMainPictures = $(domElem).find(".SideBySideFeedNodeRenderer_main_picture");
@@ -375,9 +377,10 @@ class SideBySideFeedNodeRenderer implements Renderer<FeedNode> {
 	 * @method animate
 	 * @param {RenderInfo} info - The Info to animate.
 	 * @param {DOM Element} domElem - The DOM Element where animate the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of animation.
 	 */
-	animate(info : FeedNode, domElem : any, endCallback : Function) {
+	animate(info : FeedNode, domElem : any, rendererTheme : string, endCallback : Function) {
 		if(info.getMediaUrl() != null && info.getMediaUrl() != "") {
 			var totalDuration = info.getDurationToDisplay()*1000;
 			var itemDuration = totalDuration / 2;

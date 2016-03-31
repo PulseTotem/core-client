@@ -54,9 +54,10 @@ class OperaParisTagListDarkRenderer implements Renderer<TagList> {
 	 * @method render
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of render method.
 	 */
-	render(info : TagList, domElem : any, endCallback : Function) {
+	render(info : TagList, domElem : any, rendererTheme : string, endCallback : Function) {
 		var self = this;
 
 		var tagHTMLWrapper = $("<div>");
@@ -151,9 +152,10 @@ class OperaParisTagListDarkRenderer implements Renderer<TagList> {
 	 * @method updateRender
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
-	updateRender(info : TagList, domElem : any, endCallback : Function) {
+	updateRender(info : TagList, domElem : any, rendererTheme : string, endCallback : Function) {
 		var self = this;
 
 		var tagMainzone = $(domElem).find(".OperaParisTagListDarkRenderer_mainzone").first();
@@ -222,9 +224,10 @@ class OperaParisTagListDarkRenderer implements Renderer<TagList> {
 	 * @method animate
 	 * @param {RenderInfo} info - The Info to animate.
 	 * @param {DOM Element} domElem - The DOM Element where animate the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of animation.
 	 */
-	animate(info : TagList, domElem : any, endCallback : Function) {
+	animate(info : TagList, domElem : any, rendererTheme : string, endCallback : Function) {
 		$(".OperaParisTagListDarkRenderer_title_text").textfill({
 			maxFontPixels: 500
 		});

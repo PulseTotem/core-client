@@ -46,9 +46,10 @@ class TweetCardRenderer implements Renderer<Tweet> {
 	 * @method render
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of render method.
 	 */
-	render(info : Tweet, domElem : any, endCallback : Function) {
+	render(info : Tweet, domElem : any, rendererTheme : string, endCallback : Function) {
 		var tweetHTMLWrapper = $("<div>");
 		tweetHTMLWrapper.addClass("TweetCardRenderer_wrapper");
 
@@ -187,9 +188,10 @@ class TweetCardRenderer implements Renderer<Tweet> {
 	 * @method updateRender
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
-	updateRender(info : Tweet, domElem : any, endCallback : Function) {
+	updateRender(info : Tweet, domElem : any, rendererTheme : string, endCallback : Function) {
 		var tweetHTMLWrapperBackground = $(domElem).find(".TweetCardRenderer_wrapperbackground").first();
 		var tweetHTML = $(domElem).find(".TweetCardRenderer_tweet").first();
 
@@ -255,9 +257,10 @@ class TweetCardRenderer implements Renderer<Tweet> {
 	 * @method animate
 	 * @param {RenderInfo} info - The Info to animate.
 	 * @param {DOM Element} domElem - The DOM Element where animate the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of animation.
 	 */
-	animate(info : Tweet, domElem : any, endCallback : Function) {
+	animate(info : Tweet, domElem : any, rendererTheme : string, endCallback : Function) {
 		//Nothing to do.
 
 		endCallback();

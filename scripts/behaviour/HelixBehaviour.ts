@@ -206,10 +206,10 @@ class HelixBehaviour extends Behaviour {
 
 					var beginMoment = moment();
 
-					currentInfoRenderer.getRenderer().updateRender(currentInfoRenderer.getInfo(), currentItemPanel, function() {
+					currentInfoRenderer.getRenderer().updateRender(currentInfoRenderer.getInfo(), currentItemPanel, currentInfoRenderer.getRendererTheme(), function() {
 						self._updateHelix();
 
-						currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), currentItemPanel, function() {
+						currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), currentItemPanel,  currentInfoRenderer.getRendererTheme(),function() {
 
 							var diffWithBegin = moment().diff(beginMoment);
 
@@ -285,7 +285,7 @@ class HelixBehaviour extends Behaviour {
 
 				this._displayInfoRenderer(currentInfoRenderer, itemPanel, function() {
 					self._updateHelix();
-					currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), itemPanel, function() {
+					currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), itemPanel,  currentInfoRenderer.getRendererTheme(),function() {
 						var diffWithBegin = moment().diff(beginMoment);
 
 						currentInfoRenderer.getInfo().setCastingDate(new Date());
@@ -372,6 +372,7 @@ class HelixBehaviour extends Behaviour {
 		var self = this;
 
 		var renderer = infoRenderer.getRenderer();
+		var rendererTheme = infoRenderer.getRendererTheme();
 
 		$(itemSpace).empty();
 
@@ -381,7 +382,7 @@ class HelixBehaviour extends Behaviour {
 			}
 		};
 
-		renderer.render(infoRenderer.getInfo(), $(itemSpace), endRender);
+		renderer.render(infoRenderer.getInfo(), $(itemSpace), rendererTheme, endRender);
 	}
 
 	/**
@@ -397,14 +398,15 @@ class HelixBehaviour extends Behaviour {
 			var listInfoRenderers = this.getListInfoRenderers();
 			var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
 			var renderer = currentInfoRenderer.getRenderer();
+			var rendererTheme = currentInfoRenderer.getRendererTheme();
 
 			var endRender = function () {
-				renderer.animate(currentInfoRenderer.getInfo(), self.getZone().getZoneDiv(), function () {
+				renderer.animate(currentInfoRenderer.getInfo(), self.getZone().getZoneDiv(), rendererTheme, function () {
 				});
 				currentInfoRenderer.getInfo().setCastingDate(new Date());
 			};
 
-			renderer.updateRender(currentInfoRenderer.getInfo(), this.getZone().getZoneDiv(), endRender);
+			renderer.updateRender(currentInfoRenderer.getInfo(), this.getZone().getZoneDiv(), rendererTheme, endRender);
 		} else {
 			this._nextInfoRenderer();
 		}
@@ -553,7 +555,7 @@ class HelixBehaviour extends Behaviour {
 			var currentItemPanel = $(this.getZone().getZoneDiv()).find(".HelixBehaviour_helix_item_" + currentItemPanelNumber).first();
 
 			this._displayInfoRenderer(currentInfoRenderer, currentItemPanel, function() {
-				currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), currentItemPanel, function() {
+				currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), currentItemPanel, currentInfoRenderer.getRendererTheme(), function() {
 					self._updateHelix();
 				});
 			});
@@ -607,7 +609,7 @@ class HelixBehaviour extends Behaviour {
 						$(self.getZone().getZoneDiv()).css("overflow", "visible");
 
 						var currentItemPanel = $(self.getZone().getZoneDiv()).find(".HelixBehaviour_helix_item_" + currentItemPanelNumber).first();
-						currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), currentItemPanel, function() {});
+						currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), currentItemPanel, currentInfoRenderer.getRendererTheme(), function() {});
 
 						self._updateHelix();
 					});
@@ -668,7 +670,7 @@ class HelixBehaviour extends Behaviour {
 						$(self.getZone().getZoneDiv()).css("overflow", "visible");
 
 						var currentItemPanel = $(self.getZone().getZoneDiv()).find(".HelixBehaviour_helix_item_" + currentItemPanelNumber).first();
-						currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), currentItemPanel, function() {});
+						currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), currentItemPanel, currentInfoRenderer.getRendererTheme(), function() {});
 
 						self._updateHelix();
 					});

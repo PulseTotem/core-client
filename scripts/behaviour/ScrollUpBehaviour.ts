@@ -154,7 +154,7 @@ class ScrollUpBehaviour extends Behaviour {
 
 				var iRContainer = $(self.getZone().getZoneDiv()).find(".ScrollUpBehaviour_info_" + self._currentInfoRendererId).first();
 
-				currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), iRContainer, function() {
+				currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), iRContainer, currentInfoRenderer.getRendererTheme(), function() {
 
 				});
 
@@ -250,6 +250,7 @@ class ScrollUpBehaviour extends Behaviour {
 		var self = this;
 
 		var renderer = infoRenderer.getRenderer();
+		var rendererTheme = infoRenderer.getRendererTheme();
 
 		$(itemSpace).empty();
 
@@ -259,7 +260,7 @@ class ScrollUpBehaviour extends Behaviour {
 			}
 		};
 
-		renderer.render(infoRenderer.getInfo(), $(itemSpace), endRender);
+		renderer.render(infoRenderer.getInfo(), $(itemSpace), rendererTheme, endRender);
 	}
 
 	/**
@@ -281,8 +282,8 @@ class ScrollUpBehaviour extends Behaviour {
 
 			var iRContainer = $(self.getZone().getZoneDiv()).find(".ScrollUpBehaviour_info_" + listInfoIndex).first();
 
-			infoRenderer.getRenderer().updateRender(infoRenderer.getInfo(), iRContainer, function() {
-				infoRenderer.getRenderer().animate(infoRenderer.getInfo(), iRContainer, function() {
+			infoRenderer.getRenderer().updateRender(infoRenderer.getInfo(), iRContainer, infoRenderer.getRendererTheme(), function() {
+				infoRenderer.getRenderer().animate(infoRenderer.getInfo(), iRContainer, infoRenderer.getRendererTheme(), function() {
 				});
 				listInfoIndex++;
 				refreshRenderer();
@@ -379,8 +380,8 @@ class ScrollUpBehaviour extends Behaviour {
 
 				var iRContainer = $(self.getZone().getZoneDiv()).find(".ScrollUpBehaviour_info_" + self._currentInfoRendererId).first();
 
-				currentInfoRenderer.getRenderer().updateRender(currentInfoRenderer.getInfo(), iRContainer, function() {
-					currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), iRContainer, function() {
+				currentInfoRenderer.getRenderer().updateRender(currentInfoRenderer.getInfo(), iRContainer, currentInfoRenderer.getRendererTheme(), function() {
+					currentInfoRenderer.getRenderer().animate(currentInfoRenderer.getInfo(), iRContainer, currentInfoRenderer.getRendererTheme(), function() {
 					});
 				});
 			});

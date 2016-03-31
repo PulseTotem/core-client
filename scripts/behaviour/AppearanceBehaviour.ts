@@ -124,11 +124,12 @@ class AppearanceBehaviour extends Behaviour {
 		var self = this;
 
 		var renderer = infoRenderer.getRenderer();
+		var rendererTheme = infoRenderer.getRendererTheme();
 
 		$(this.getZone().getZoneDiv()).empty();
 
 		var endRender = function() {
-			renderer.animate(infoRenderer.getInfo(), self.getZone().getZoneDiv(), function() {});
+			renderer.animate(infoRenderer.getInfo(), self.getZone().getZoneDiv(), rendererTheme, function() {});
 			infoRenderer.getInfo().setCastingDate(new Date());
 
 			var data = {
@@ -138,7 +139,7 @@ class AppearanceBehaviour extends Behaviour {
 			MessageBus.publish(MessageBusChannel.BEHAVIOUR, data);
 		};
 
-		renderer.render(infoRenderer.getInfo(), this.getZone().getZoneDiv(), endRender);
+		renderer.render(infoRenderer.getInfo(), this.getZone().getZoneDiv(), rendererTheme, endRender);
 	}
 
 	/**
@@ -154,14 +155,15 @@ class AppearanceBehaviour extends Behaviour {
 			var listInfoRenderers = this.getListInfoRenderers();
 			var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
 			var renderer = currentInfoRenderer.getRenderer();
+			var rendererTheme = currentInfoRenderer.getRendererTheme();
 
 			var endRender = function () {
-				renderer.animate(currentInfoRenderer.getInfo(), self.getZone().getZoneDiv(), function () {
+				renderer.animate(currentInfoRenderer.getInfo(), self.getZone().getZoneDiv(), rendererTheme, function () {
 				});
 				currentInfoRenderer.getInfo().setCastingDate(new Date());
 			};
 
-			renderer.updateRender(currentInfoRenderer.getInfo(), this.getZone().getZoneDiv(), endRender);
+			renderer.updateRender(currentInfoRenderer.getInfo(), this.getZone().getZoneDiv(), rendererTheme, endRender);
 		} else {
 			this._nextInfoRenderer();
 		}

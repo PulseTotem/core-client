@@ -76,12 +76,14 @@ class DefaultRunner extends TimelineRunner {
 
 		var renderer : Renderer<any> = currentEvent.getCall().getCallType().getRenderer();
 
+		var rendererTheme : string = currentEvent.getCall().getRendererTheme();
+
 		var listInfos : Array<Info> = currentEvent.getCall().getListInfos();
 
 		if(listInfos.length > 0) {
 
 			var listInfoRenderers:Array<InfoRenderer<any>> = listInfos.map(function (e, i) {
-				return new InfoRenderer(e, renderer);
+				return new InfoRenderer(e, renderer, rendererTheme);
 			});
 
 			if (listInfoRenderers.length > 0) {
@@ -185,12 +187,14 @@ class DefaultRunner extends TimelineRunner {
 
 			var renderer:Renderer<any> = currentEvent.getCall().getCallType().getRenderer();
 
+			var rendererTheme : string = currentEvent.getCall().getRendererTheme();
+
 			var listInfos:Array<Info> = currentEvent.getCall().getListInfos();
 
 			if (listInfos.length > 0) {
 
 				var listInfoRenderers:Array<InfoRenderer<any>> = listInfos.map(function (e, i) {
-					return new InfoRenderer(e, renderer);
+					return new InfoRenderer(e, renderer, rendererTheme);
 				});
 
 				if (listInfoRenderers.length > 0) {
@@ -255,12 +259,14 @@ class DefaultRunner extends TimelineRunner {
 
 			var renderer:Renderer<any> = currentEvent.getCall().getCallType().getRenderer();
 
+			var rendererTheme : string = currentEvent.getCall().getRendererTheme();
+
 			var listInfos:Array<Info> = currentEvent.getCall().getListInfos();
 
 			if (listInfos.length > 0) {
 
 				var listInfoRenderers:Array<InfoRenderer<any>> = listInfos.map(function (e, i) {
-					return new InfoRenderer(e, renderer);
+					return new InfoRenderer(e, renderer, rendererTheme);
 				});
 
 				if (listInfoRenderers.length > 0) {

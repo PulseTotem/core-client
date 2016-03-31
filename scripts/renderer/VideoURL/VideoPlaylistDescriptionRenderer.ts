@@ -36,9 +36,10 @@ class VideoPlaylistDescriptionRenderer implements Renderer<VideoPlaylist> {
 	 * @method render
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of render method.
 	 */
-	render(info : VideoPlaylist, domElem : any, endCallback : Function) {
+	render(info : VideoPlaylist, domElem : any, rendererTheme : string, endCallback : Function) {
 		var playlistWrapper = $("<div>");
 		playlistWrapper.addClass("VideoPlaylistDescriptionRenderer_wrapper");
 
@@ -77,9 +78,10 @@ class VideoPlaylistDescriptionRenderer implements Renderer<VideoPlaylist> {
 	 * @method updateRender
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
-	updateRender(info : VideoPlaylist, domElem : any, endCallback : Function) {
+	updateRender(info : VideoPlaylist, domElem : any, rendererTheme : string, endCallback : Function) {
 		//TODO
 
 		endCallback();
@@ -91,9 +93,10 @@ class VideoPlaylistDescriptionRenderer implements Renderer<VideoPlaylist> {
 	 * @method animate
 	 * @param {RenderInfo} info - The Info to animate.
 	 * @param {DOM Element} domElem - The DOM Element where animate the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of animation.
 	 */
-	animate(info : VideoPlaylist, domElem : any, endCallback : Function) {
+	animate(info : VideoPlaylist, domElem : any, rendererTheme : string, endCallback : Function) {
 		//Nothing to do.
 
 		endCallback();

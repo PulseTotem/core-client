@@ -36,9 +36,10 @@ class EventListRenderer implements Renderer<EventList> {
 	 * @method render
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of render method.
 	 */
-	render(info : EventList, domElem : any, endCallback : Function) {
+	render(info : EventList, domElem : any, rendererTheme : string, endCallback : Function) {
 		var wrapperHTML = $("<div>");
 		wrapperHTML.addClass("EventListRenderer_wrapper");
 
@@ -111,11 +112,12 @@ class EventListRenderer implements Renderer<EventList> {
 	 * @method updateRender
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
-	updateRender(info : EventList, domElem : any, endCallback : Function) {
+	updateRender(info : EventList, domElem : any, rendererTheme : string, endCallback : Function) {
 		$(domElem).empty();
-		this.render(info, domElem, endCallback);
+		this.render(info, domElem, rendererTheme, endCallback);
 	}
 
 	/**
@@ -124,9 +126,10 @@ class EventListRenderer implements Renderer<EventList> {
 	 * @method animate
 	 * @param {RenderInfo} info - The Info to animate.
 	 * @param {DOM Element} domElem - The DOM Element where animate the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of animation.
 	 */
-	animate(info : EventList, domElem : any, endCallback : Function) {
+	animate(info : EventList, domElem : any, rendererTheme : string, endCallback : Function) {
 		//Nothing to do.
 
 		endCallback();

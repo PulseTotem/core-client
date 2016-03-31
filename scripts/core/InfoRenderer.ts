@@ -24,15 +24,25 @@ class InfoRenderer<T extends Info> {
     private _renderer : Renderer<T>;
 
 	/**
+	 * Renderer's Theme.
+	 *
+	 * @property _rendererTheme
+	 * @type string
+	 */
+	private _rendererTheme : string;
+
+	/**
 	 * Constructor.
 	 *
 	 * @constructor
 	 * @param {T extends Info} info - The InfoRenderer's info.
 	 * @param {Renderer<T extends Info>} renderer - The InfoRenderer's renderer.
+	 * @param {string} rendererTheme - The InfoRenderer's rendererTheme.
 	 */
-    constructor(info : T, renderer : Renderer<T>) {
+    constructor(info : T, renderer : Renderer<T>, rendererTheme : string = "default") {
         this._info = info;
         this._renderer = renderer;
+		this._rendererTheme = rendererTheme;
     }
 
 	/**
@@ -63,5 +73,15 @@ class InfoRenderer<T extends Info> {
 	 */
 	getRenderer() : Renderer<T> {
 		return this._renderer;
+	}
+
+	/**
+	 * Get the InfoRenderer's rendererTheme.
+	 *
+	 * @method getRendererTheme
+	 * @return {string} rendererTheme - The InfoRenderer's rendererTheme.
+	 */
+	getRendererTheme() : string {
+		return this._rendererTheme;
 	}
 }

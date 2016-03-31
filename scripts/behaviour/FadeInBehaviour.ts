@@ -122,6 +122,7 @@ class FadeInBehaviour extends Behaviour {
 		var self = this;
 
 		var renderer = infoRenderer.getRenderer();
+		var rendererTheme = infoRenderer.getRendererTheme();
 
 		$(self.getZone().getZoneDiv())
 			.find(".FadeInBehaviour_show")
@@ -138,7 +139,7 @@ class FadeInBehaviour extends Behaviour {
 				new Timer(function() {
 					$(self.getZone().getZoneDiv()).find(".FadeInBehaviour_hide").addClass("FadeInBehaviour_show");
 
-					renderer.animate(infoRenderer.getInfo(), content, function() {});
+					renderer.animate(infoRenderer.getInfo(), content, rendererTheme, function() {});
 
 					var data = {
 						action : MessageBusAction.DISPLAY,
@@ -149,7 +150,7 @@ class FadeInBehaviour extends Behaviour {
 				}, 100);
 			};
 
-			renderer.render(infoRenderer.getInfo(), content, endRender);
+			renderer.render(infoRenderer.getInfo(), content, rendererTheme, endRender);
 		}, 1000);
 	}
 
@@ -167,16 +168,17 @@ class FadeInBehaviour extends Behaviour {
 			var listInfoRenderers = this.getListInfoRenderers();
 			var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
 			var renderer = currentInfoRenderer.getRenderer();
+			var rendererTheme = currentInfoRenderer.getRendererTheme();
 
 			var content = $(self.getZone().getZoneDiv()).find(".FadeInBehaviour_show").first();
 
 			var endRender = function () {
-				renderer.animate(currentInfoRenderer.getInfo(), content, function () {
+				renderer.animate(currentInfoRenderer.getInfo(), content, rendererTheme, function () {
 				});
 				currentInfoRenderer.getInfo().setCastingDate(new Date());
 			};
 
-			renderer.updateRender(currentInfoRenderer.getInfo(), content, endRender);
+			renderer.updateRender(currentInfoRenderer.getInfo(), content, rendererTheme, endRender);
 		} else {
 			this._nextInfoRenderer();
 		}

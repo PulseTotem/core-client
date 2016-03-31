@@ -46,9 +46,10 @@ class UserRenderer implements Renderer<User> {
 	 * @method render
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of render method.
 	 */
-	render(info : User, domElem : any, endCallback : Function) {
+	render(info : User, domElem : any, rendererTheme : string, endCallback : Function) {
 		var userHTML = $("<div>");
 		userHTML.addClass("UserRenderer_user");
 
@@ -69,9 +70,10 @@ class UserRenderer implements Renderer<User> {
 	 * @method updateRender
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
-	updateRender(info : User, domElem : any, endCallback : Function) {
+	updateRender(info : User, domElem : any, rendererTheme : string, endCallback : Function) {
 		var userContent = $(domElem).find(".UserRenderer_content").first();
 		userContent.html("Welcome " + info.getUsername() + " !!!");
 
@@ -84,9 +86,10 @@ class UserRenderer implements Renderer<User> {
 	 * @method animate
 	 * @param {RenderInfo} info - The Info to animate.
 	 * @param {DOM Element} domElem - The DOM Element where animate the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of animation.
 	 */
-	animate(info : User, domElem : any, endCallback : Function) {
+	animate(info : User, domElem : any, rendererTheme : string, endCallback : Function) {
 		//Nothing to do.
 
 		endCallback();

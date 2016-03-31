@@ -56,9 +56,10 @@ class CounterRenderer implements Renderer<Counter> {
 	 * @method render
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of render method.
 	 */
-	render(info : Counter, domElem : any, endCallback : Function) {
+	render(info : Counter, domElem : any, rendererTheme : string, endCallback : Function) {
 		var self = this;
 
 		var counterHTMLWrapper = $("<div>");
@@ -163,8 +164,8 @@ class CounterRenderer implements Renderer<Counter> {
 
 				var resizeTimer = new Timer(function () {
 					self._resizeEvents[info.getId()] = null;
-					self.updateRender(info, domElem, function () {
-						self.animate(info, domElem, function () {
+					self.updateRender(info, domElem, rendererTheme, function () {
+						self.animate(info, domElem, rendererTheme, function () {
 						});
 					});
 				}, 500);
@@ -184,11 +185,12 @@ class CounterRenderer implements Renderer<Counter> {
 	 * @method updateRender
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
-	updateRender(info : Counter, domElem : any, endCallback : Function) {
+	updateRender(info : Counter, domElem : any, rendererTheme : string, endCallback : Function) {
 		$(domElem).empty();
-		this.render(info, domElem, endCallback);
+		this.render(info, domElem, rendererTheme, endCallback);
 	}
 
 	/**
@@ -197,9 +199,10 @@ class CounterRenderer implements Renderer<Counter> {
 	 * @method animate
 	 * @param {RenderInfo} info - The Info to animate.
 	 * @param {DOM Element} domElem - The DOM Element where animate the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of animation.
 	 */
-	animate(info : Counter, domElem : any, endCallback : Function) {$
+	animate(info : Counter, domElem : any, rendererTheme : string, endCallback : Function) {
 		var self = this;
 
 		if (self._resizeEvents[info.getId()] == null) {

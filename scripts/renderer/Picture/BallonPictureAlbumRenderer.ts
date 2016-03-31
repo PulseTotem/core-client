@@ -53,9 +53,10 @@ class BallonPictureAlbumRenderer implements Renderer<PictureAlbum> {
 	 * @method render
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of render method.
 	 */
-	render(info : PictureAlbum, domElem : any, endCallback : Function) {
+	render(info : PictureAlbum, domElem : any, rendererTheme : string, endCallback : Function) {
 
 		var wrapperHTML = $("<div>");
 		wrapperHTML.addClass("BallonPictureAlbumRenderer_wrapper");
@@ -98,11 +99,12 @@ class BallonPictureAlbumRenderer implements Renderer<PictureAlbum> {
 	 * @method updateRender
 	 * @param {RenderInfo} info - The Info to render.
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
-	updateRender(info : PictureAlbum, domElem : any, endCallback : Function) {
+	updateRender(info : PictureAlbum, domElem : any, rendererTheme : string, endCallback : Function) {
 		$(domElem).empty();
-		this.render(info, domElem, endCallback);
+		this.render(info, domElem, rendererTheme, endCallback);
 	}
 
 	/**
@@ -111,9 +113,10 @@ class BallonPictureAlbumRenderer implements Renderer<PictureAlbum> {
 	 * @method animate
 	 * @param {RenderInfo} info - The Info to animate.
 	 * @param {DOM Element} domElem - The DOM Element where animate the info.
+	 * @param {string} rendererTheme - The Renderer's theme.
 	 * @param {Function} endCallback - Callback function called at the end of animation.
 	 */
-	animate(info : PictureAlbum, domElem : any, endCallback : Function) {
+	animate(info : PictureAlbum, domElem : any, rendererTheme : string, endCallback : Function) {
 		var delays = new Array();
 		var seconds = 0;
 
