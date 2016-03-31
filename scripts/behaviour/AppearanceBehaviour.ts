@@ -155,6 +155,7 @@ class AppearanceBehaviour extends Behaviour {
 			var listInfoRenderers = this.getListInfoRenderers();
 			var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
 			var renderer = currentInfoRenderer.getRenderer();
+			var rendererTheme = currentInfoRenderer.getRendererTheme();
 
 			var endRender = function () {
 				renderer.animate(currentInfoRenderer.getInfo(), self.getZone().getZoneDiv(), rendererTheme, function () {

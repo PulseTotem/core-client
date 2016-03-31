@@ -164,8 +164,8 @@ class CounterRenderer implements Renderer<Counter> {
 
 				var resizeTimer = new Timer(function () {
 					self._resizeEvents[info.getId()] = null;
-					self.updateRender(info, domElem, function () {
-						self.animate(info, domElem, function () {
+					self.updateRender(info, domElem, rendererTheme, function () {
+						self.animate(info, domElem, rendererTheme, function () {
 						});
 					});
 				}, 500);
