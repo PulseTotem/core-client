@@ -38,7 +38,7 @@ class NotAnimateSideBySideFacebookRenderer implements Renderer<FeedNode> {
 			for(var iFN in fcFeedNodes) {
 				var fn : FeedNode = fcFeedNodes[iFN];
 
-				if(fn.getDescription().trim() != "" || (fn.getMediaUrl() != null && fn.getMediaUrl() != "")) {
+				if((fn.getDescription() != null && fn.getDescription().trim() != "") || (fn.getMediaUrl() != null && fn.getMediaUrl() != "")) {
 					feedNodes.push(fn);
 
 					if (fn.getMediaUrl() != null && fn.getMediaUrl() != "") {
@@ -104,7 +104,9 @@ class NotAnimateSideBySideFacebookRenderer implements Renderer<FeedNode> {
 		nodeHeaderAuthor.addClass("pull-left");
 
 		var nodeHeaderAuthorSpan = $("<span>");
-		nodeHeaderAuthorSpan.html(info.getAuthor());
+		if(info.getAuthor() != null) {
+			nodeHeaderAuthorSpan.html(info.getAuthor());
+		}
 		nodeHeaderAuthor.append(nodeHeaderAuthorSpan);
 
 		nodeHeader.append(nodeHeaderAuthor);
@@ -116,10 +118,13 @@ class NotAnimateSideBySideFacebookRenderer implements Renderer<FeedNode> {
 
 		nodeHeader.append(nodeHeaderDate);
 
-		var creationDate : any = moment(info.getCreationDate());
-		var displayCreationDate = creationDate.fromNow();
 		var nodeHeaderDateSpan = $("<span>");
-		nodeHeaderDateSpan.html(displayCreationDate);
+
+		if(info.getCreationDate() != null) {
+			var creationDate:any = moment(info.getCreationDate());
+			var displayCreationDate = creationDate.fromNow();
+			nodeHeaderDateSpan.html(displayCreationDate);
+		}
 
 		nodeHeaderDate.append(nodeHeaderDateSpan);
 
@@ -147,8 +152,9 @@ class NotAnimateSideBySideFacebookRenderer implements Renderer<FeedNode> {
 		nodeMainMessage.append(nodeMainMessageContent);
 
 		var nodeMainMessageContentSpan = $("<span>");
-		nodeMainMessageContentSpan.html(info.getDescription());
-
+		if(info.getDescription() != null) {
+			nodeMainMessageContentSpan.html(info.getDescription());
+		}
 		nodeMainMessageContent.append(nodeMainMessageContentSpan);
 
 		//Main -> Message -> Footer
@@ -219,7 +225,7 @@ class NotAnimateSideBySideFacebookRenderer implements Renderer<FeedNode> {
 
 			nodeMainPicture.css("background-image", "url('" + info.getMediaUrl() + "')");
 
-			if(info.getDescription().trim() != "") {
+			if(info.getDescription() != null && info.getDescription().trim() != "") {
 				nodeMainMessage.addClass("NotAnimateSideBySideFacebookRenderer_main_message_with_picture");
 			} else {
 				nodeMainMessage.addClass("NotAnimateSideBySideFacebookRenderer_main_message_empty");
@@ -298,7 +304,9 @@ class NotAnimateSideBySideFacebookRenderer implements Renderer<FeedNode> {
 		var nodeHeaderAuthor = $(domElem).find(".NotAnimateSideBySideFacebookRenderer_header_author").first();
 		nodeHeaderAuthor.empty();
 		var nodeHeaderAuthorSpan = $("<span>");
-		nodeHeaderAuthorSpan.html(info.getAuthor());
+		if(info.getAuthor() != null) {
+			nodeHeaderAuthorSpan.html(info.getAuthor());
+		}
 		nodeHeaderAuthor.append(nodeHeaderAuthorSpan);
 
 		nodeHeaderAuthor.textfill({
@@ -308,10 +316,14 @@ class NotAnimateSideBySideFacebookRenderer implements Renderer<FeedNode> {
 
 		var nodeHeaderDate = $(domElem).find(".NotAnimateSideBySideFacebookRenderer_header_date").first();
 		nodeHeaderDate.empty();
-		var creationDate : any = moment(info.getCreationDate());
-		var displayCreationDate = creationDate.fromNow();
+
 		var nodeHeaderDateSpan = $("<span>");
-		nodeHeaderDateSpan.html(displayCreationDate);
+
+		if(info.getCreationDate() != null) {
+			var creationDate:any = moment(info.getCreationDate());
+			var displayCreationDate = creationDate.fromNow();
+			nodeHeaderDateSpan.html(displayCreationDate);
+		}
 
 		nodeHeaderDate.append(nodeHeaderDateSpan);
 
@@ -323,7 +335,9 @@ class NotAnimateSideBySideFacebookRenderer implements Renderer<FeedNode> {
 		nodeMainMessageContent.empty();
 
 		var nodeMainMessageContentSpan = $("<span>");
-		nodeMainMessageContentSpan.html(info.getDescription());
+		if(info.getDescription() != null) {
+			nodeMainMessageContentSpan.html(info.getDescription());
+		}
 
 		nodeMainMessageContent.append(nodeMainMessageContentSpan);
 
