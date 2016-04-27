@@ -50,12 +50,12 @@ class VideoSource extends StaticSource<VideoPlaylist> {
 			video.setId(this.params.URL);
 			video.setURL(this.params.URL);
 			video.setType(VideoType.HTML5);
-			video.setDurationToDisplay(this.params.InfoDuration);
+			video.setDurationToDisplay(parseInt(this.params.InfoDuration));
 
 			var playlist : VideoPlaylist = new VideoPlaylist();
 			playlist.setId(this.params.URL);
 			playlist.addVideo(video);
-			playlist.setDurationToDisplay(this.params.InfoDuration);
+			playlist.setDurationToDisplay(parseInt(this.params.InfoDuration));
 
 			return playlist;
 		} else {
