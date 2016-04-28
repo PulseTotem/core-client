@@ -25,6 +25,7 @@ class MapSource extends StaticSource<MapList> {
         map.setApiKey(this.params.ApiKey);
         map.setLatitude(parseFloat(this.params.Latitude));
         map.setLongitude(parseFloat(this.params.Longitude));
+        map.setZoom(parseInt(this.params.Zoom));
 
         switch(this.params.MapType) {
             case 'ROADMAP':

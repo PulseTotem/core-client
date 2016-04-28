@@ -80,11 +80,16 @@ class GMapRenderer implements Renderer<MapInfo> {
                     break;
             }
 
-            var map = new google.maps.Map(mapWrapper, {
-                center: {lat: info.getLatitude(), lng: info.getLongitude()},
+            var mapOptions = {
+                center: {
+                    lat: info.getLatitude(),
+                    lng: info.getLongitude()
+                },
                 zoom: info.getZoom(),
                 mapTypeId: typeMap
-            });
+            };
+
+            var map = new google.maps.Map(mapWrapper[0],mapOptions);
 
             if (info.getWithTraffic()) {
                 var trafficLayer = new google.maps.TrafficLayer();
@@ -95,7 +100,7 @@ class GMapRenderer implements Renderer<MapInfo> {
                 var transitLayer = new google.maps.TransitLayer();
                 transitLayer.setMap(map);
             }
-            
+
             endCallback();
         };
 
@@ -105,7 +110,16 @@ class GMapRenderer implements Renderer<MapInfo> {
             endCallback();
         };
 
-        $.getScript("https://maps.googleapis.com/maps/api/js?key="+info.getApiKey()).done(loadMap).fail(fail);
+        var apiUrl = "https://maps.googleapis.com/maps/api/js?key="+info.getApiKey();
+
+        var len = $('script[src="'+apiUrl+'"]').length;
+
+        if (len == 0) {
+            $.getScript(apiUrl).done(loadMap).fail(fail);
+        } else {
+            loadMap();
+        }
+
     }
 
     /**
