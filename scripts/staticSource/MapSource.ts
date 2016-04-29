@@ -19,7 +19,7 @@ class MapSource extends StaticSource<MapList> {
      */
     computeInfo() : MapList {
         var map : MapInfo = new MapInfo();
-        map.setId(moment().toString());
+        map.setId(moment().format());
         map.setDurationToDisplay(parseInt(this.params.InfoDuration));
         map.setAddress(this.params.Address);
         map.setApiKey(this.params.ApiKey);

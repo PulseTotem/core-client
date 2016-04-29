@@ -11,6 +11,8 @@ declare var google: any; // Use of Google Maps
 
 class GMapRenderer implements Renderer<MapInfo> {
 
+    private static api_loaded = false;
+    private static api_loading = false;
     private _gmap = null;
     private _domElement = null;
     private _trafficLayer = null;
@@ -66,7 +68,7 @@ class GMapRenderer implements Renderer<MapInfo> {
         $(domElem).append(this._domElement);
 
         var loadMap = function () {
-
+            GMapRenderer.api_loaded = true;
             var typeMap;
 
             switch (info.getType()) {
@@ -131,27 +133,36 @@ class GMapRenderer implements Renderer<MapInfo> {
 
         var apiUrl = "https://maps.googleapis.com/maps/api/js?key="+info.getApiKey();
 
-        var len = $('script').filter(function () {
-            console.log($(this).attr('src'));
-            console.log(apiUrl);
-            var src = $(this).attr('src');
+        var cachedScript = function( url ) {
 
-            if (src) {
-                return (src.indexOf(apiUrl) != -1);
-            } else {
-                return false;
-            }
-        }).length;
+            // Allow user to set any option except for dataType, cache, and url
+            var options = {
+                dataType: "script",
+                cache: true,
+                url: url
+            };
 
-        console.log("Taille : "+len);
+            // Use $.ajax() since it is more flexible than $.getScript
+            // Return the jqXHR object so we can chain callbacks
+            return $.ajax( options );
+        };
 
         //var len = $('script[src="'+apiUrl+'"]').length;
 
-        if (len == 0) {
-            console.log("Load map API");
-            $.getScript(apiUrl).done(loadMap).fail(fail);
-        } else {
+        if (!GMapRenderer.api_loaded && !GMapRenderer.api_loading) {
+            GMapRenderer.api_loading = true;
+            cachedScript(apiUrl).done(loadMap).fail(fail);
+        } else if (GMapRenderer.api_loaded) {
             loadMap();
+        } else if (GMapRenderer.api_loading) {
+            var waitForLoaded = function () {
+                if (GMapRenderer.api_loaded) {
+                    loadMap();
+                } else {
+                    setTimeout(waitForLoaded, 500);
+                }
+            };
+            waitForLoaded();
         }
 
     }
@@ -166,6 +177,7 @@ class GMapRenderer implements Renderer<MapInfo> {
      * @param {Function} endCallback - Callback function called at the end of updateRender method.
      */
     updateRender(info : MapInfo, domElem : any, rendererTheme : string, endCallback : Function) {
+        console.log("Update renderer");
         this.render(info, domElem, rendererTheme, endCallback);
     }
 
