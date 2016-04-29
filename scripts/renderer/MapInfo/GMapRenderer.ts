@@ -11,6 +11,11 @@ declare var google: any; // Use of Google Maps
 
 class GMapRenderer implements Renderer<MapInfo> {
 
+    private _gmap = null;
+    private _domElement = null;
+    private _trafficLayer = null;
+    private _transitLayer = null;
+
     /**
      * Transform the Info list to another Info list.
      *
@@ -53,10 +58,12 @@ class GMapRenderer implements Renderer<MapInfo> {
     render(info : MapInfo, domElem : any, rendererTheme : string, endCallback : Function) {
         var self = this;
 
-        var mapWrapper = $("<div>");
-        mapWrapper.addClass("GMapRenderer_wrapper");
+        if (this._domElement == null) {
+            this._domElement = $("<div>");
+        }
 
-        $(domElem).append(mapWrapper);
+        this._domElement.addClass("GMapRenderer_wrapper");
+        $(domElem).append(this._domElement);
 
         var loadMap = function () {
 
@@ -90,16 +97,27 @@ class GMapRenderer implements Renderer<MapInfo> {
                 disableDefaultUI: true
             };
 
-            var map = new google.maps.Map(mapWrapper[0],mapOptions);
-
-            if (info.getWithTraffic()) {
-                var trafficLayer = new google.maps.TrafficLayer();
-                trafficLayer.setMap(map);
+            if (self._gmap == null) {
+                self._gmap = new google.maps.Map(self._domElement[0],mapOptions);
+            } else {
+                self._gmap.setOptions(mapOptions);
             }
 
-            if (info.getWithTransit()) {
-                var transitLayer = new google.maps.TransitLayer();
-                transitLayer.setMap(map);
+
+            if (info.getWithTraffic() && self._trafficLayer == null) {
+                self._trafficLayer = new google.maps.TrafficLayer();
+                self._trafficLayer.setMap(self._gmap);
+            } else if (!info.getWithTraffic() && self._trafficLayer != null) {
+                self._trafficLayer.setMap(null);
+                self._trafficLayer = null;
+            }
+
+            if (info.getWithTransit() && self._transitLayer == null) {
+                self._transitLayer = new google.maps.TransitLayer();
+                self._transitLayer.setMap(self._gmap);
+            } else if (!info.getWithTransit() && self._transitLayer != null) {
+                self._transitLayer.setMap(null);
+                self._transitLayer = null;
             }
 
             endCallback();
