@@ -86,7 +86,8 @@ class GMapRenderer implements Renderer<MapInfo> {
                     lng: info.getLongitude()
                 },
                 zoom: info.getZoom(),
-                mapTypeId: typeMap
+                mapTypeId: typeMap,
+                disableDefaultUI: true
             };
 
             var map = new google.maps.Map(mapWrapper[0],mapOptions);
@@ -112,9 +113,24 @@ class GMapRenderer implements Renderer<MapInfo> {
 
         var apiUrl = "https://maps.googleapis.com/maps/api/js?key="+info.getApiKey();
 
-        var len = $('script[src="'+apiUrl+'"]').length;
+        var len = $('script').filter(function () {
+            console.log($(this).attr('src'));
+            console.log(apiUrl);
+            var src = $(this).attr('src');
+
+            if (src) {
+                return (src.indexOf(apiUrl) != -1);
+            } else {
+                return false;
+            }
+        }).length;
+
+        console.log("Taille : "+len);
+
+        //var len = $('script[src="'+apiUrl+'"]').length;
 
         if (len == 0) {
+            console.log("Load map API");
             $.getScript(apiUrl).done(loadMap).fail(fail);
         } else {
             loadMap();
