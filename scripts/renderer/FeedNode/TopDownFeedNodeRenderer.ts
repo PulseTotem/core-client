@@ -62,6 +62,7 @@ class TopDownFeedNodeRenderer implements Renderer<FeedNode> {
 	render(info : FeedNode, domElem : any, rendererTheme : string, endCallback : Function) {
 		var nodeHTMLWrapper = $("<div>");
 		nodeHTMLWrapper.addClass("TopDownFeedNodeRenderer_wrapper");
+		nodeHTMLWrapper.addClass(rendererTheme);
 
 		//FeedContent logo
 		var feedcontentHTMLLogoContainer = $("<div>");
