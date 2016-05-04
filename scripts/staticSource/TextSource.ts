@@ -23,8 +23,6 @@ class TextSource extends StaticSource<TextList> {
 		text.setId(this.params.TextValue);
 		text.setValue(this.params.TextValue);
 		text.setDurationToDisplay(this.params.InfoDuration);
-		console.log(this.params.InfoDuration);
-		console.log(typeof(this.params.InfoDuration));
 
 		var textList : TextList = new TextList();
 		textList.setId(this.params.TextValue);

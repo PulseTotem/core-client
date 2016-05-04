@@ -1,0 +1,80 @@
+@import "../../core.less";
+
+.EventVerticalTimelineRenderer_wrapper {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+
+  .EventVerticalTimelineRenderer_eventContainer {
+    width: 100%;
+
+    .EventVerticalTimelineRenderer_eventTimeContainer {
+      width: 30%;
+      height: 100%;
+      margin-right: 5%;
+      text-align: right;
+
+      .EventVerticalTimelineRenderer_eventBeginDay {
+        width: 100%;
+        height: 25%;
+        font-size: 20px;
+        text-transform: uppercase;
+        margin-bottom: -14%;
+        margin-top: 16%;
+      }
+
+      .EventVerticalTimelineRenderer_eventBeginTime {
+        width: 100%;
+        height: 45%;
+        font-weight: bold;
+      }
+
+      .EventVerticalTimelineRenderer_eventEndTime {
+        width: 100%;
+        height: 25%;
+        font-size: 20px;
+        margin-top: -2%;
+      }
+
+    }
+
+    .EventVerticalTimelineRenderer_eventNameContainer {
+      width: 60%;
+      height: 100%;
+      border-left: 10px solid white;
+      position: relative;
+
+      .EventVerticalTimelineRenderer_eventPoint {
+        position: absolute;
+        top: 40%;
+        left: -25px;
+        width: 40px;
+        height: 40px;
+        border-radius: 100%;
+        background-color: white;
+      }
+
+      .EventVerticalTimelineRenderer_eventName {
+        width: 80%;
+        height: 80%;
+        margin-top: 5%;
+        margin-left: auto;
+        margin-right: auto;
+        border: 1px solid white;
+        border-radius: 10px;
+        color: #C93673;
+        background-color: white;
+        padding: 2%;
+        text-align: center;
+        font-size: 30px;
+        font-weight: bold;
+      }
+    }
+
+
+  }
+}
