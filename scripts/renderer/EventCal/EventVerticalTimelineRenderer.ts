@@ -44,6 +44,9 @@ class EventVerticalTimelineRenderer implements Renderer<EventList> {
 
 		var maxPercent = Math.floor((100 - info.getEvents().length + 1) / info.getEvents().length);
 
+		var nowMoment = moment();
+		nowMoment.locale("fr");
+
 		info.getEvents().forEach(function(eventCal : EventCal) {
 			var eventStart = moment(eventCal.getStart());
 			eventStart.locale("fr");
@@ -53,6 +56,10 @@ class EventVerticalTimelineRenderer implements Renderer<EventList> {
 			var eventDiv = $("<div>");
 			eventDiv.addClass("EventVerticalTimelineRenderer_eventContainer");
 			eventDiv.css("height", maxPercent + "%");
+
+			if(nowMoment.diff(eventStart) >= 0 && eventEnd.diff(nowMoment) > 0) {
+				eventDiv.addClass("EventVerticalTimelineRenderer_eventContainer EventVerticalTimelineRenderer_eventContainer_current");
+			}
 
 			var eventTimeContainer = $("<div>");
 			eventTimeContainer.addClass("EventVerticalTimelineRenderer_eventTimeContainer");
@@ -66,6 +73,15 @@ class EventVerticalTimelineRenderer implements Renderer<EventList> {
 
 			var eventBeginTime = $("<div>");
 			eventBeginTime.addClass("EventVerticalTimelineRenderer_eventBeginTime");
+
+			if(nowMoment.diff(eventStart) >= 0 && eventEnd.diff(nowMoment) > 0) {
+				// Arrow
+				var nowArrow = $("<div>");
+				nowArrow.addClass("EventVerticalTimelineRenderer_eventBeginTime_arrow");
+				nowArrow.html("&#9658;");
+				eventBeginTime.append(nowArrow);
+			}
+
 			var eventBeginTimeSpan = $("<span>");
 			eventBeginTimeSpan.html(eventStart.format("HH:mm"));
 			eventBeginTime.append(eventBeginTimeSpan);
