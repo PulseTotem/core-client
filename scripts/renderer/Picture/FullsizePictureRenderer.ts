@@ -59,8 +59,14 @@ class FullsizePictureRenderer implements Renderer<Picture> {
 	 */
 	render(info : Picture, domElem : any, rendererTheme : string, endCallback : Function) {
 
+		var pictureWrapper = $("<div>");
+		pictureWrapper.addClass("FullsizePictureRenderer_wrapper");
+		pictureWrapper.addClass(rendererTheme);
+
 		var pictureHTML = $("<div>");
 		pictureHTML.addClass("FullsizePictureRenderer_picture");
+
+		pictureWrapper.append(pictureHTML);
 
 		var picURL : PictureURL = null;
 		if(info.getMedium() != null) {
@@ -75,7 +81,7 @@ class FullsizePictureRenderer implements Renderer<Picture> {
 			pictureHTML.css("background-image", "url('" + picURL.getURL() + "')");
 		}
 
-		$(domElem).append(pictureHTML);
+		$(domElem).append(pictureWrapper);
 
 		endCallback();
 
