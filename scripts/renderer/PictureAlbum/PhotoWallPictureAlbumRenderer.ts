@@ -5,7 +5,7 @@
 /// <reference path="../../../t6s-core/core/scripts/infotype/PictureAlbum.ts" />
 /// <reference path="../../../t6s-core/core/scripts/infotype/Picture.ts" />
 /// <reference path="../../../t6s-core/core/scripts/infotype/PictureURL.ts" />
-/// <reference path="./PictureHelper.ts" />
+/// <reference path="../Picture/PictureHelper.ts" />
 /// <reference path="../Renderer.ts" />
 
 /// <reference path="../../core/Timer.ts" />
@@ -69,6 +69,7 @@ class PhotoWallPictureAlbumRenderer implements Renderer<PictureAlbum> {
 
 		var wrapperHTML = $("<div>");
 		wrapperHTML.addClass("PhotoWallPictureAlbumRenderer_wrapper");
+		wrapperHTML.addClass(rendererTheme);
 
 		var negative = -1;
 
@@ -124,20 +125,30 @@ class PhotoWallPictureAlbumRenderer implements Renderer<PictureAlbum> {
 	animate(info : PictureAlbum, domElem : any, rendererTheme : string, endCallback : Function) {
 		var self = this;
 
-		if(info.getPictures().length > 4) {
+		var htmlWrapper = $(domElem).find(".PhotoWallPictureAlbumRenderer_wrapper").first();
 
-			var nbMoves = Math.floor(info.getPictures().length / 4);
+		var picturesHTMLElems = $(domElem).find(".PhotoWallPictureAlbumRenderer_picture");
+
+		var firstPicture = picturesHTMLElems.first();
+
+		var nbPerRows = Math.round(htmlWrapper.width() / firstPicture.width());
+		var nbRows = Math.round(htmlWrapper.height() / firstPicture.height());
+
+		var nbPicturesPerView = nbPerRows * nbRows;
+
+		if(info.getPictures().length > nbPicturesPerView) {
+
+			var nbMoves = Math.floor(info.getPictures().length / nbPicturesPerView);
 
 			var nbMovesDone = 0;
 
-			var htmlWrapper = $(domElem).find(".PhotoWallPictureAlbumRenderer_wrapper").first();
 			var moveDuration = info.getDurationToDisplay() * 1000 / (nbMoves + 1);
 
 			var move = function() {
 
 				if(nbMovesDone < nbMoves) {
 					nbMovesDone++;
-					$(domElem).find(".PhotoWallPictureAlbumRenderer_picture").transition({y: '-' + htmlWrapper.height() * nbMovesDone + 'px'}, 2000);
+					picturesHTMLElems.transition({y: '-' + htmlWrapper.height() * nbMovesDone + 'px'}, 2000);
 
 					if(typeof(self._timers[info.getId()]) != "undefined") {
 						self._timers[info.getId()].stop();

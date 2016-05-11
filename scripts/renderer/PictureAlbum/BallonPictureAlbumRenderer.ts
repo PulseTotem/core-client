@@ -1,12 +1,11 @@
 /**
  * @author Christian Brel <christian@pulsetotem.fr, ch.brel@gmail.com>
- * @author Simon Urli <simon@pulsetotem.fr, simon.urli@gmail.com>
  */
 
 /// <reference path="../../../t6s-core/core/scripts/infotype/PictureAlbum.ts" />
 /// <reference path="../../../t6s-core/core/scripts/infotype/Picture.ts" />
 /// <reference path="../../../t6s-core/core/scripts/infotype/PictureURL.ts" />
-/// <reference path="./PictureHelper.ts" />
+/// <reference path="../Picture/PictureHelper.ts" />
 /// <reference path="../Renderer.ts" />
 
 declare var $: any; // Use of JQuery
