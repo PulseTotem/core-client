@@ -1,18 +1,27 @@
 /**
  * @author Christian Brel <christian@pulsetotem.fr, ch.brel@gmail.com>
- * @author Simon Urli <simon@pulsetotem.fr, simon.urli@gmail.com>
  */
 
 /// <reference path="../../../t6s-core/core/scripts/infotype/PictureAlbum.ts" />
 /// <reference path="../../../t6s-core/core/scripts/infotype/Picture.ts" />
 /// <reference path="../../../t6s-core/core/scripts/infotype/PictureURL.ts" />
-/// <reference path="./PictureHelper.ts" />
+/// <reference path="../Picture/PictureHelper.ts" />
 /// <reference path="../Renderer.ts" />
+
+/// <reference path="../../core/Timer.ts" />
 
 declare var $: any; // Use of JQuery
 declare var _: any; // Use of Lodash
 
-class BallonPictureAlbumRenderer implements Renderer<PictureAlbum> {
+class PhotoWallPictureAlbumRenderer implements Renderer<PictureAlbum> {
+
+	/**
+	 * Current timers.
+	 *
+	 * @property _timers
+	 * @type Object
+	 */
+	private _timers : Object = {};
 
 	/**
 	 * Transform the Info list to another Info list.
@@ -59,7 +68,8 @@ class BallonPictureAlbumRenderer implements Renderer<PictureAlbum> {
 	render(info : PictureAlbum, domElem : any, rendererTheme : string, endCallback : Function) {
 
 		var wrapperHTML = $("<div>");
-		wrapperHTML.addClass("BallonPictureAlbumRenderer_wrapper");
+		wrapperHTML.addClass("PhotoWallPictureAlbumRenderer_wrapper");
+		wrapperHTML.addClass(rendererTheme);
 
 		var negative = -1;
 
@@ -76,12 +86,8 @@ class BallonPictureAlbumRenderer implements Renderer<PictureAlbum> {
 
 			if(picURL != null) {
 				var pictureHTML = $("<div>");
-				pictureHTML.addClass("BallonPictureAlbumRenderer_picture");
+				pictureHTML.addClass("PhotoWallPictureAlbumRenderer_picture");
 				pictureHTML.css("background-image", "url('" + picURL.getURL() + "')");
-				var value = 1200*negative;
-				negative *= -1;
-				pictureHTML.css("transform", "translate(" + value + "px, 1200px)");
-				pictureHTML.css("border-radius", "100%");
 				wrapperHTML.append(pictureHTML);
 			}
 
@@ -117,22 +123,47 @@ class BallonPictureAlbumRenderer implements Renderer<PictureAlbum> {
 	 * @param {Function} endCallback - Callback function called at the end of animation.
 	 */
 	animate(info : PictureAlbum, domElem : any, rendererTheme : string, endCallback : Function) {
-		var delays = new Array();
-		var seconds = 0;
+		var self = this;
 
-		for(var i = 1; i < info.getPictures().length + 1; i++) {
-			seconds = (seconds + 1) % 5;
-			delays.push(seconds);
+		var htmlWrapper = $(domElem).find(".PhotoWallPictureAlbumRenderer_wrapper").first();
+
+		var picturesHTMLElems = $(domElem).find(".PhotoWallPictureAlbumRenderer_picture");
+
+		var firstPicture = picturesHTMLElems.first();
+
+		var nbPerRows = Math.round(htmlWrapper.width() / firstPicture.width());
+		var nbRows = Math.round(htmlWrapper.height() / firstPicture.height());
+
+		var nbPicturesPerView = nbPerRows * nbRows;
+
+		if(info.getPictures().length > nbPicturesPerView) {
+
+			var nbMoves = Math.floor(info.getPictures().length / nbPicturesPerView);
+
+			var nbMovesDone = 0;
+
+			var moveDuration = info.getDurationToDisplay() * 1000 / (nbMoves + 1);
+
+			var move = function() {
+
+				if(nbMovesDone < nbMoves) {
+					nbMovesDone++;
+					picturesHTMLElems.transition({y: '-' + htmlWrapper.height() * nbMovesDone + 'px'}, 2000);
+
+					if(typeof(self._timers[info.getId()]) != "undefined") {
+						self._timers[info.getId()].stop();
+					}
+
+					self._timers[info.getId()] = new Timer(move, moveDuration);
+				}
+			};
+
+			if(typeof(self._timers[info.getId()]) != "undefined") {
+				self._timers[info.getId()].stop();
+			}
+
+			self._timers[info.getId()] = new Timer(move, moveDuration);
 		}
-		var shuffledDelays = _.shuffle(delays);
-
-
-		$(domElem).find(".BallonPictureAlbumRenderer_picture").each(function(index, elem) {
-			var delay = shuffledDelays[index];
-			var duration = Math.floor((Math.random() * 3) + 1) + 2;
-
-			$(elem).transition({ y: '0px', x: '0px', delay: delay * 1000 }, duration * 1000).transition({'border-radius': '0%'}, 2 * 1000);
-		});
 
 		endCallback();
 	}
