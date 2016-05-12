@@ -53,6 +53,7 @@ class TweetHalfPictureHalfUserRenderer implements Renderer<Tweet> {
 	render(info : Tweet, domElem : any, rendererTheme : string, endCallback : Function) {
 		var tweetHTMLWrapper = $("<div>");
 		tweetHTMLWrapper.addClass("TweetHalfPictureHalfUserRenderer_wrapper");
+		tweetHTMLWrapper.addClass(rendererTheme);
 
 		var tweetHTMLLogoContainer = $("<div>");
 		tweetHTMLLogoContainer.addClass("TweetHalfPictureHalfUserRenderer_twitter_logo_container");
@@ -111,9 +112,14 @@ class TweetHalfPictureHalfUserRenderer implements Renderer<Tweet> {
 
 		var tweetCreateDate = $("<div>");
 		tweetCreateDate.addClass("TweetHalfPictureHalfUserRenderer_create_date");
+
+		var tweetCreateDateSpan = $("<span>");
+
 		var creationDate : any = moment(info.getCreationDate());
 		var displayCreationDate = creationDate.fromNow();
-		tweetCreateDate.html(displayCreationDate);
+		tweetCreateDateSpan.html(displayCreationDate);
+
+		tweetCreateDate.append(tweetCreateDateSpan);
 
 		tweetFooter.append(tweetCreateDate);
 
@@ -210,6 +216,9 @@ class TweetHalfPictureHalfUserRenderer implements Renderer<Tweet> {
 
 			tweetHTMLContent.append(tweetFooter);
 		} else {
+			tweetHTMLTop.addClass("TweetHalfPictureHalfUserRenderer_top_no_image");
+			tweetHTMLBottom.addClass("TweetHalfPictureHalfUserRenderer_bottom_no_image");
+
 			var tweetHTMLContent = $("<div>");
 			tweetHTMLContent.addClass("TweetHalfPictureHalfUserRenderer_content");
 
@@ -238,6 +247,10 @@ class TweetHalfPictureHalfUserRenderer implements Renderer<Tweet> {
 			maxFontPixels: 500
 		});
 
+		tweetCreateDate.textfill({
+			maxFontPixels: 500
+		});
+
 
 		endCallback();
 	}
@@ -260,9 +273,18 @@ class TweetHalfPictureHalfUserRenderer implements Renderer<Tweet> {
 		tweetProfilPictureDiv.append(tweetProfilPictureImg);
 
 		var tweetCreateDate = $(domElem).find(".TweetHalfPictureHalfUserRenderer_create_date").first();
+		tweetCreateDate.empty();
+		var tweetCreateDateSpan = $("<span>");
+
 		var creationDate : any = moment(info.getCreationDate());
 		var displayCreationDate = creationDate.fromNow();
-		tweetCreateDate.html(displayCreationDate);
+		tweetCreateDateSpan.html(displayCreationDate);
+
+		tweetCreateDate.append(tweetCreateDateSpan);
+
+		tweetCreateDate.textfill({
+			maxFontPixels: 500
+		});
 
 		var tweetFavoriteDiv = $(domElem).find(".TweetHalfPictureHalfUserRenderer_favorite_count").first();
 		tweetFavoriteDiv.empty();
