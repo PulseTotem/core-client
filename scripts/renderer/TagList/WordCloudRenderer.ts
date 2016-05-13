@@ -128,6 +128,7 @@ class WordCloudRenderer implements Renderer<TagList> {
      */
     updateRender(info : TagList, domElem : any, rendererTheme : string, endCallback : Function) {
         var self = this;
+        $(domElem).empty();
         this.render(info, domElem, rendererTheme, endCallback);
     }
 
