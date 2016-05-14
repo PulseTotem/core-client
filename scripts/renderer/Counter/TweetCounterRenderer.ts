@@ -9,6 +9,7 @@
 /// <reference path="../../core/Timer.ts" />
 
 declare var $: any; // Use of JQuery
+declare var moment: any; // Use of MomentJS
 
 class TweetCounterRenderer implements Renderer<Counter> {
 	/**
@@ -57,8 +58,16 @@ class TweetCounterRenderer implements Renderer<Counter> {
 
 		var hashtagDiv = $("<div>");
 		hashtagDiv.addClass("TweetCounterRenderer_hashtag");
+
+		var spanPresentQuery = $("<span>");
+		spanPresentQuery.addClass("TweetCounterRenderer_presentquery");
+		spanPresentQuery.html("Tweets à propos de : ");
+        hashtagDiv.append(spanPresentQuery);
+
 		var hashtagSpan = $("<span>");
-		hashtagSpan.html("#OperaDeParis");
+        hashtagSpan.addClass("TweetCounterRenderer_query");
+        var query = decodeURIComponent(info.getQuery());
+		hashtagSpan.html(query);
 		hashtagDiv.append(hashtagSpan);
 
 		counterHTMLWrapper.append(hashtagDiv);
@@ -103,7 +112,8 @@ class TweetCounterRenderer implements Renderer<Counter> {
 		nbTweetsTxtDiv.addClass("TweetCounterRenderer_nbtweets");
 
 		var nbTweetsTxtSpan = $("<span>");
-		nbTweetsTxtSpan.html("Nombre de Tweets aujourd'hui");
+		var dateSince = moment(info.getSince());
+		nbTweetsTxtSpan.html("Depuis "+dateSince.calendar());
 
 		nbTweetsTxtDiv.append(nbTweetsTxtSpan);
 
