@@ -42,11 +42,13 @@ class TweetListRenderer implements Renderer<TweetList> {
 
 		var allTweets = $("<div>");
 		allTweets.addClass("TweetListRenderer_allTweets");
+		allTweets.addClass(rendererTheme);
 
 		$(domElem).append(allTweets);
 
-		var index = 0;
+
 		var nbTweets = info.getTweets().length;
+		var index = nbTweets-1;
 		
 		var nextTweet = function () {
 			var currentTweet : Tweet = info.getTweets()[index];
@@ -130,8 +132,8 @@ class TweetListRenderer implements Renderer<TweetList> {
 			content.textfill(optionTextFill);
 			tweetDateWrapper.textfill(optionTextFill);
 
-			if (index < nbTweets-1) {
-				index++;
+			if (index > -1) {
+				index--;
 				setTimeout(nextTweet, currentTweet.getDurationToDisplay()*1000);
 			} else {
 				endCallback();
