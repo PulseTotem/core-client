@@ -101,10 +101,31 @@ class CountdownRenderer implements Renderer<DateTime> {
 	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
 	updateRender(info : DateTime, domElem : any, rendererTheme : string, endCallback : Function) {
+		var formatDate = moment(info.getDate());
+
+		var now = moment();
+
+		var diff = formatDate.diff(now);
+
+		var duration = moment.duration(diff);
+
+		var diffHours = Math.floor(duration.asHours());
+
+		var diffMinutes = Math.floor(duration.asMinutes()) - diffHours * 60;
+
+		var diffHoursTxt = "" + diffHours;
+		if(diffHours < 10) {
+			diffHoursTxt = "0" + diffHours;
+		}
+
+		var diffMinutesTxt = "" + diffMinutes;
+		if(diffMinutes < 10) {
+			diffMinutesTxt = "0" + diffMinutes;
+		}
+
 		var dateTime = $(domElem).find(".CountdownRenderer_time").first();
 
-		var formatDate = new moment(info.getDate());
-		dateTime.html(formatDate.format("HH:mm:ss"));
+		dateTime.html("H-" + diffHoursTxt + ":" + diffMinutesTxt);
 
 		var dateTimeWrapper = $(domElem).find(".CountdownRenderer_wrapper").first();
 		dateTimeWrapper.textfill({
