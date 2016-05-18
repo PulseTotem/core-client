@@ -64,6 +64,7 @@ class NotAnimateSideBySideFacebookRenderer implements Renderer<FeedNode> {
 	render(info : FeedNode, domElem : any, rendererTheme : string, endCallback : Function) {
 		var nodeHTMLWrapper = $("<div>");
 		nodeHTMLWrapper.addClass("NotAnimateSideBySideFacebookRenderer_wrapper");
+		nodeHTMLWrapper.addClass(rendererTheme);
 
 		//Facebook logo
 		var facebookHTMLLogoContainer = $("<div>");
