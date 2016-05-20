@@ -108,8 +108,11 @@ class ForPersonIntroductionFeedNodeRenderer implements Renderer<FeedNode> {
 
 		nodeMain.append(nodeMainMessage);
 
-		if(((info.getTitle() != null && info.getTitle().trim() != "") || (info.getSummary() != null && info.getSummary().trim() != "") || (info.getDescription() != null && info.getDescription().trim() != "")) && info.getMediaUrl() != null && info.getMediaUrl() != "") {
-			nodeMainMessage.addClass("ForPersonIntroductionFeedNodeRenderer_main_message_with_picture");
+		if((info.getTitle() != null && info.getTitle().trim() != "") || (info.getSummary() != null && info.getSummary().trim() != "") || (info.getDescription() != null && info.getDescription().trim() != "")) {
+
+			if(info.getMediaUrl() != null && info.getMediaUrl() != "") {
+				nodeMainMessage.addClass("ForPersonIntroductionFeedNodeRenderer_main_message_with_picture");
+			}
 		} else {
 			nodeMainMessage.addClass("ForPersonIntroductionFeedNodeRenderer_main_message_empty");
 
@@ -197,9 +200,12 @@ class ForPersonIntroductionFeedNodeRenderer implements Renderer<FeedNode> {
 	updateRender(info : FeedNode, domElem : any, rendererTheme : string, endCallback : Function) {
 		var nodeMain = $(domElem).find(".ForPersonIntroductionFeedNodeRenderer_main");
 
+		var nodeMainMessage = $(domElem).find(".ForPersonIntroductionFeedNodeRenderer_main_message").first();
+
+		var nodeMainPicture : any = null;
+
 		if(info.getMediaUrl() != null && info.getMediaUrl() != "") {
 			var nodeMainPictures = $(domElem).find(".ForPersonIntroductionFeedNodeRenderer_main_picture");
-			var nodeMainPicture;
 			if(nodeMainPictures.length > 0) {
 				nodeMainPicture = nodeMainPictures.first();
 			} else {
@@ -211,69 +217,33 @@ class ForPersonIntroductionFeedNodeRenderer implements Renderer<FeedNode> {
 
 			nodeMainPicture.css("background-image", "url('" + info.getMediaUrl() + "')");
 
-			var nodeMainMessage = $(domElem).find(".ForPersonIntroductionFeedNodeRenderer_main_message").first();
+
 			nodeMainMessage.removeClass("ForPersonIntroductionFeedNodeRenderer_main_message_with_picture");
 			nodeMainMessage.removeClass("ForPersonIntroductionFeedNodeRenderer_main_message_empty");
-			nodeMainMessage.removeClass("ForPersonIntroductionFeedNodeRenderer_main_picture_alone");
-
-			if(info.getDescription() != null && info.getDescription().trim() != "") {
-				nodeMainMessage.addClass("ForPersonIntroductionFeedNodeRenderer_main_message_with_picture");
-			} else {
-				nodeMainMessage.addClass("ForPersonIntroductionFeedNodeRenderer_main_message_empty");
-				nodeMainPicture.addClass("ForPersonIntroductionFeedNodeRenderer_main_picture_alone");
-			}
-
+			nodeMainPicture.removeClass("ForPersonIntroductionFeedNodeRenderer_main_picture_alone");
 		} else {
 			$(domElem).find(".ForPersonIntroductionFeedNodeRenderer_main_picture").remove();
 		}
 
-		var nodeFooterAuthor = $(domElem).find(".ForPersonIntroductionFeedNodeRenderer_footer_author").first();
-		nodeFooterAuthor.empty();
-		var nodeFooterAuthorSpan = $("<span>");
-		if(info.getAuthor() != null) {
-			nodeFooterAuthorSpan.html(info.getAuthor());
-		}
-		nodeFooterAuthor.append(nodeFooterAuthorSpan);
-
-		nodeFooterAuthor.textfill({
-			maxFontPixels: 600
-		});
-
-		var nodeFooterDate = $(domElem).find(".ForPersonIntroductionFeedNodeRenderer_footer_date").first();
-		nodeFooterDate.empty();
-
-		var nodeFooterDateSpan = $("<span>");
-
-		if(info.getCreationDate() != null) {
-			var creationDate:any = moment(info.getCreationDate());
-			var displayCreationDate = creationDate.fromNow();
-			nodeFooterDateSpan.html(displayCreationDate);
-		}
-
-		nodeFooterDate.append(nodeFooterDateSpan);
-
-		nodeFooterDate.textfill({
-			maxFontPixels: 600
-		});
-
-
-		var nodeMainMessage = $(domElem).find(".ForPersonIntroductionFeedNodeRenderer_main_message").first();
-		nodeMainMessage.empty();
+		var messageContent = $(domElem).find(".ForPersonIntroductionFeedNodeRenderer_main_message_content").first();
+		messageContent.empty();
 
 		var nodeMainMessageSpan = $("<span>");
 		if(info.getDescription() != null) {
 			nodeMainMessageSpan.html(info.getDescription());
+		} else if(info.getSummary() != null) {
+			nodeMainMessageSpan.html(info.getSummary());
 		}
+		messageContent.append(nodeMainMessageSpan);
 
-		nodeMainMessage.append(nodeMainMessageSpan);
-
-		nodeMainMessage.textfill({
+		messageContent.textfill({
 			minFontPixels: 30,
 			maxFontPixels: 600
 		});
 
-		var titleContainer = $(domElem).find(".ForPersonIntroductionFeedNodeRenderer_title_container").first();
-		titleContainer.empty();
+
+		var titleDiv = $(domElem).find(".ForPersonIntroductionFeedNodeRenderer_main_message_title_container_title").first();
+		titleDiv.empty();
 
 		var titleContainerSpan = $("<span>");
 		if(info.getTitle() != null) {
@@ -281,13 +251,25 @@ class ForPersonIntroductionFeedNodeRenderer implements Renderer<FeedNode> {
 		} else {
 			titleContainerSpan.html("");
 		}
+		titleDiv.append(titleContainerSpan);
 
-		titleContainer.append(titleContainerSpan);
-
-		titleContainer.textfill({
+		titleDiv.textfill({
 			minFontPixels: 30,
 			maxFontPixels: 600
 		});
+
+		if((info.getTitle() != null && info.getTitle().trim() != "") || (info.getSummary() != null && info.getSummary().trim() != "") || (info.getDescription() != null && info.getDescription().trim() != "")) {
+
+			if(info.getMediaUrl() != null && info.getMediaUrl() != "") {
+				nodeMainMessage.addClass("ForPersonIntroductionFeedNodeRenderer_main_message_with_picture");
+			}
+		} else {
+			nodeMainMessage.addClass("ForPersonIntroductionFeedNodeRenderer_main_message_empty");
+
+			if(nodeMainPicture != null && info.getMediaUrl() != null && info.getMediaUrl() != "") {
+				nodeMainPicture.addClass("ForPersonIntroductionFeedNodeRenderer_main_picture_alone");
+			}
+		}
 
 		endCallback();
 	}
