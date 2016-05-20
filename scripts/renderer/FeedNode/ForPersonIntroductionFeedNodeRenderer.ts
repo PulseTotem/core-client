@@ -112,7 +112,10 @@ class ForPersonIntroductionFeedNodeRenderer implements Renderer<FeedNode> {
 			nodeMainMessage.addClass("ForPersonIntroductionFeedNodeRenderer_main_message_with_picture");
 		} else {
 			nodeMainMessage.addClass("ForPersonIntroductionFeedNodeRenderer_main_message_empty");
-			nodeMainPicture.addClass("ForPersonIntroductionFeedNodeRenderer_main_picture_alone");
+
+			if(info.getMediaUrl() != null && info.getMediaUrl() != "") {
+				nodeMainPicture.addClass("ForPersonIntroductionFeedNodeRenderer_main_picture_alone");
+			}
 		}
 
 		//Main -> Message -> TitleContainer
@@ -192,8 +195,9 @@ class ForPersonIntroductionFeedNodeRenderer implements Renderer<FeedNode> {
 	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
 	updateRender(info : FeedNode, domElem : any, rendererTheme : string, endCallback : Function) {
-		if(info.getMediaUrl() != null && info.getMediaUrl() != "") {
+		var nodeMain = $(domElem).find(".ForPersonIntroductionFeedNodeRenderer_main");
 
+		if(info.getMediaUrl() != null && info.getMediaUrl() != "") {
 			var nodeMainPictures = $(domElem).find(".ForPersonIntroductionFeedNodeRenderer_main_picture");
 			var nodeMainPicture;
 			if(nodeMainPictures.length > 0) {
@@ -202,6 +206,7 @@ class ForPersonIntroductionFeedNodeRenderer implements Renderer<FeedNode> {
 				nodeMainPicture = $("<div>");
 				nodeMainPicture.addClass("ForPersonIntroductionFeedNodeRenderer_main_picture");
 				nodeMainPicture.addClass("pull-left");
+				nodeMain.append(nodeMainPicture);
 			}
 
 			nodeMainPicture.css("background-image", "url('" + info.getMediaUrl() + "')");

@@ -64,6 +64,7 @@ class CounterRenderer implements Renderer<Counter> {
 
 		var counterHTMLWrapper = $("<div>");
 		counterHTMLWrapper.addClass("CounterRenderer_wrapper");
+		counterHTMLWrapper.addClass(rendererTheme);
 
 		var counterMainzone = $("<div>");
 		counterMainzone.addClass("CounterRenderer_mainzone");
@@ -75,7 +76,7 @@ class CounterRenderer implements Renderer<Counter> {
 
 		counterMainzone.append(counterDiv);
 
-		for(var i = 0; i < 6; i++) {
+		for(var i = 0; i < 4; i++) {
 			if(i!=0) {
 				var digitListInter = $("<ul>");
 				digitListInter.addClass("CounterRenderer_digitList_inter");
@@ -110,6 +111,19 @@ class CounterRenderer implements Renderer<Counter> {
 		clearDigitList.addClass("clearfix");
 
 		counterDiv.append(clearDigitList);
+
+		var counterSinceZone = $("<div>");
+		counterSinceZone.addClass("CounterRenderer_sincezone");
+
+		if(typeof(info.getSince()) != "undefined" && info.getSince() != null) {
+			var counterSinceZoneSpan = $("<span>");
+			var sinceDate = moment(info.getSince());
+			sinceDate.locale("fr");
+			counterSinceZoneSpan.html("Depuis le : " + sinceDate.format("LLL"));
+			counterSinceZone.append(counterSinceZoneSpan);
+		}
+
+		counterHTMLWrapper.append(counterSinceZone);
 
 		$(domElem).append(counterHTMLWrapper);
 
@@ -209,16 +223,16 @@ class CounterRenderer implements Renderer<Counter> {
 			var nbDigit = info.getValue().toString().length;
 			var infoValue = info.getValue();
 
-			if (nbDigit < 6) {
-				for (var i = 6; i > nbDigit; i--) {
-					var digitElemNumber = 6 - i;
+			if (nbDigit < 4) {
+				for (var i = 4; i > nbDigit; i--) {
+					var digitElemNumber = 4 - i;
 
 					$(domElem).find(".CounterRenderer_digitList" + digitElemNumber.toString()).first().transition({y: '0px'}, 2000);
 				}
 			}
 
 			for (var k = nbDigit; k > 0; k--) {
-				var digitElemNumber = 6 - k;
+				var digitElemNumber = 4 - k;
 				var digitElemValue = (infoValue - (infoValue % Math.pow(10, k - 1))) / Math.pow(10, k - 1);
 				infoValue = infoValue - (digitElemValue * Math.pow(10, k - 1));
 

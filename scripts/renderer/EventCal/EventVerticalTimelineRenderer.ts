@@ -41,6 +41,7 @@ class EventVerticalTimelineRenderer implements Renderer<EventList> {
 	render(info : EventList, domElem : any, rendererTheme : string, endCallback : Function) {
 		var wrapperHTML = $("<div>");
 		wrapperHTML.addClass("EventVerticalTimelineRenderer_wrapper");
+		wrapperHTML.addClass(rendererTheme);
 
 		var maxPercent = Math.floor((100 - info.getEvents().length + 1) / info.getEvents().length);
 
