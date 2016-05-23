@@ -215,11 +215,11 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
             self.connectToClientSocket(socketId, baseAppliUrl);
         };
 
-        document.onkeypress = function (event) {
+        document.addEventListener('keypress', function (event) {
             if (event.keyCode == 65 && event.shiftKey) {
                 initWebsocket();
             }
-        };
+        });
     }
 
     private listen(socketId : string) {
