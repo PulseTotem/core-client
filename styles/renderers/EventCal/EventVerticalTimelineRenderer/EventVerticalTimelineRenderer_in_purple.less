@@ -1,7 +1,7 @@
 @import "./EventVerticalTimelineRenderer.less";
 
 .EventVerticalTimelineRenderer_in_purple {
-  .EventVerticalTimelineRenderer_eventContainer {
+  .EventVerticalTimelineRenderer_eventContainer_not_current {
 
     .EventVerticalTimelineRenderer_eventTimeContainer {
       
@@ -31,9 +31,17 @@
 
     .EventVerticalTimelineRenderer_eventTimeContainer {
       color: #342A4C !important;
+
+      .EventVerticalTimelineRenderer_eventBeginTime {
+
+        .EventVerticalTimelineRenderer_eventBeginTime_arrow {
+          color: #342A4C !important;
+        }
+      }
     }
 
     .EventVerticalTimelineRenderer_eventName {
+      background-color: white !important;
       color: #342A4C !important;
     }
   }
