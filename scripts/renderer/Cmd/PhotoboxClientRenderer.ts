@@ -26,16 +26,6 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
         height: 0
     };
 
-    private _websockets = {};
-
-    /**
-     * Last photo.
-     *
-     * @property _lastPhoto
-     * @type string
-     */
-    private _lastPhoto : String;
-
     /**
      * Transform the Info list to another Info list.
      *
@@ -77,126 +67,31 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
      */
     render(info : Cmd, domElem : any, rendererTheme : string, endCallback : Function) {
 
-        if (info.getCmd() == "Wait") {
+        if (info.getCmd() == "WaitOneClick") {
             $(domElem).empty();
-            var socketId = info.getArgs()[0];
-            var baseAppliUrl = info.getArgs()[1];
-            var lastPic = info.getArgs()[2];
-
-            this.waitMessage(domElem, socketId, baseAppliUrl, lastPic);
-
-        } else	if (info.getCmd() == "startSession") {
+            var counterTime : number = parseInt(info.getArgs()[0]);
+            this.initListener(domElem, info.getCallChannel(), counterTime, info.getId());
+        } else {
             $(domElem).empty();
-            this.startSession(domElem);
-
-        } else if (info.getCmd() == "counter") {
-            $(domElem).empty();
-            if (info.getArgs().length != 1) {
-                this.startSession(domElem);
-            }
-            var counterTime = parseInt(info.getArgs()[0]);
-
-            this.countAndSnap(domElem, counterTime, info.getCallChannel());
-
-        } else if (info.getCmd() == "postedPicture") {
-
-            this.postedPicture(domElem);
-
-        } else if (info.getCmd() == "validatedPicture") {
-            $(domElem).empty();
+            console.error("PhotoboxClientRenderer - Wrong command ! cmd : "+info.getCmd());
             if (Webcam.container) {
                 Webcam.reset();
             }
-            this.resetZone(domElem);
-
-        } else if (info.getCmd() == "removeInfo") {
-            $(domElem).empty();
-            if (Webcam.container) {
-                Webcam.reset();
-            }
-            this.resetZone(domElem);
         }
 
         endCallback();
     }
 
-    private waitMessage(domElem : any, socketId : string, baseAppliUrl : string, lastPicUrl : string) {
+    private initListener(domElem: any, callChannel : string, counterTime : number, infoId : string) {
         var self = this;
-        var initWebsocket = function () {
-            self.connectToClientSocket(socketId, baseAppliUrl);
-        };
 
 		MessageBus.subscribe(MessageBusChannel.USERTRIGGER, function(channel : any, data : any) {
 			if(typeof(data.action) != "undefined" && data.action == MessageBusAction.TRIGGER) {
-				initWebsocket();
+                self.countAndSnap(domElem, counterTime, callChannel);
 			}
 		});
-    }
 
-    private listen(socketId : string) {
-        var self = this;
-
-        this._websockets[socketId].on("LockedControl", function () {
-            self._websockets[socketId].emit("StartCounter");
-        });
-
-        this._websockets[socketId].on("DisplayPicture", function () {
-            self._websockets[socketId].emit("ValidatePicture");
-        });
-
-        this._websockets[socketId].on("SessionEndedWithValidation", function () {
-            self._websockets[socketId].disconnect();
-            delete self._websockets[socketId];
-        });
-    }
-
-    private connectToClientSocket(socketId : string, appliUrl : string) {
-        var self = this;
-
-        this._websockets[socketId] = io(appliUrl,
-            {"reconnection" : true, 'reconnectionAttempts' : 10, "reconnectionDelay" : 1000, "reconnectionDelayMax" : 5000, "timeout" : 5000, "autoConnect" : true, "multiplex": false});
-
-        this.listen(socketId);
-
-        this._websockets[socketId].on("connect", function() {
-            console.log("Connected ! ");
-            console.log("Emit on : "+self._websockets[socketId]);
-            self._websockets[socketId].emit("TakeControl", {'callSocketId': socketId});
-        });
-
-        this._websockets[socketId].on("error", function(errorData) {
-            Logger.error("An error occurred during connection to Backend.");
-        });
-
-        this._websockets[socketId].on("disconnect", function() {
-            Logger.info("Disconnected to Backend.");
-        });
-
-        this._websockets[socketId].on("reconnect", function(attemptNumber) {
-            Logger.info("Connected to Backend after " + attemptNumber + " attempts.");
-        });
-
-        this._websockets[socketId].on("reconnect_attempt", function() {
-            Logger.info("Trying to reconnect to Backend.");
-        });
-
-        this._websockets[socketId].on("reconnecting", function(attemptNumber) {
-            Logger.info("Trying to connect to Backend - Attempt number " + attemptNumber + ".");
-        });
-
-        this._websockets[socketId].on("reconnect_error", function(errorData) {
-            Logger.error("An error occurred during reconnection to Backend.");
-        });
-
-        this._websockets[socketId].on("reconnect_failed", function() {
-            Logger.error("Failed to connect to Backend. New attempt will be done in 5 seconds. Administrators received an Alert !");
-            //TODO: Send an email and Notification to Admins !
-
-            setTimeout(function() {
-                self._websockets[socketId] = null;
-                self.connectToClientSocket(socketId, appliUrl);
-            }, 5000);
-        });
+        MessageBus.publishToCall(callChannel, "DestroyInitInfo", {"infoId":infoId});
     }
 
     private preventFallback() {
@@ -214,19 +109,6 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
                 alert(err);
             }
         });
-    }
-
-    private startSession(domElem : any) {
-        var divCam = $('<div>');
-        divCam.attr("id","webCamview");
-        divCam.addClass("photobox_divcam");
-
-        domElem.append(divCam);
-        this.preventFallback();
-
-        Webcam.set(this.webcam_settings);
-
-        Webcam.attach("#webCamview");
     }
 
     private countAndSnap(domElem : any, counterTime : number, callChannel : string) {
@@ -296,8 +178,6 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
         var managePicture = function(data_uri) {
             Webcam.freeze();
 
-            self._lastPhoto = data_uri;
-
             var divResultPhotoImg = $('<img>');
             divResultPhotoImg.addClass("PhotoboxRenderer_result_photo_img");
             divResultPhotoImg.attr('src', data_uri);
@@ -342,18 +222,13 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
 
             divCounter.append(progressTextDiv);
 
-            var progressDiv = $('<div>');
-            progressDiv.addClass("progress");
-
-            divCounter.append(progressDiv);
-
             progressTextDiv.textfill({
                 maxFontPixels: 500
             });
 
             divCounter.show();
 
-            MessageBus.publishToCall(callChannel, "PostPicture", data_uri);
+            MessageBus.publishToCall(callChannel, "PostAndValidate", data_uri);
         };
 
         var timeoutFunction = function () {
@@ -402,37 +277,6 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
         setTimeout(timeoutFunction, 1000);
     }
 
-    private postedPicture(domElem : any) {
-    }
-
-    private resetZone(domElem : any) {
-        var divResultPhoto = $('<div>');
-        divResultPhoto.addClass('PhotoboxRenderer_result_photo');
-
-        var divResultPhotoImg = $('<img>');
-        divResultPhotoImg.addClass("PhotoboxRenderer_result_photo_img");
-        divResultPhotoImg.attr('src', this._lastPhoto);
-
-        divResultPhoto.append(divResultPhotoImg);
-
-        $(domElem).append(divResultPhoto);
-
-        var divMessage = $('<div>');
-        divMessage.addClass("PhotoboxRenderer_messageFin");
-
-        var divMessageContent = $('<div>');
-        divMessageContent.addClass("PhotoboxRenderer_messageFin_content");
-
-        var messageSpan = $('<span>');
-        messageSpan.html("Merci pour votre participation !");
-        divMessageContent.append(messageSpan);
-        divMessage.append(divMessageContent);
-        $(domElem).append(divMessage);
-
-        divMessage.textfill({
-            maxFontPixels: 500
-        });
-    }
 
     /**
      * Update rendering Info in specified DOM Element.
