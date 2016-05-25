@@ -132,7 +132,6 @@ class DefaultRunner extends TimelineRunner {
 	 * @method pause
 	 */
 	pause() {
-		this.relativeTimeline.pause();
 		if(this._timer != null) {
 			this._timer.pause();
 		}
@@ -144,7 +143,6 @@ class DefaultRunner extends TimelineRunner {
 	 * @method resume
 	 */
 	resume() {
-		this.relativeTimeline.resume();
 		if(this._timer != null) {
 			this._timer.resume();
 		}
@@ -156,7 +154,7 @@ class DefaultRunner extends TimelineRunner {
 	 * @method stop
 	 */
 	stop() {
-		this.relativeTimeline.pause();
+		this.relativeTimeline.getBehaviour().stop();
 		if(this._timer != null) {
 			this._timer.stop();
 			this._timer = null;
