@@ -72,10 +72,10 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
         if (info.getCmd() == "WaitOneClick" && info.getArgs().length > 0) {
             $(domElem).empty();
             this.initListener(info.getCallChannel(), info.getId());
-        } else if(info.getCmd() == "Snap" && info.getArgs().length > 0) {
+        } else if(info.getCmd() == "counter" && info.getArgs().length > 0) {
             $(domElem).empty();
             var counterTime:number = parseInt(info.getArgs()[0]);
-            this.countAndSnap(domElem, counterTime, info.getCallChannel());
+            this.countAndSnap(domElem, counterTime, info.getCallChannel(), info.getId());
         } else if (info.getCmd() == "removeInfo") {
             $(domElem).empty();
             if (Webcam.container) {
@@ -96,9 +96,14 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
     private initListener(callChannel : string, infoId : string) {
         var self = this;
 
+        var snap = function () {
+            console.debug("Emit snap !");
+            MessageBus.publishToCall(callChannel, "Snap", {});
+        };
+
 		MessageBus.subscribe(MessageBusChannel.USERTRIGGER, function(channel : any, data : any) {
 			if(typeof(data.action) != "undefined" && data.action == MessageBusAction.TRIGGER) {
-                MessageBus.publishToCall(callChannel, "Snap", {});
+                snap();
 			}
 		});
 
@@ -122,7 +127,7 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
         });
     }
 
-    private countAndSnap(domElem : any, counterTime : number, callChannel : string) {
+    private countAndSnap(domElem : any, counterTime : number, callChannel : string, infoid : string) {
 
         var counter = counterTime;
 
@@ -241,7 +246,7 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
 
             divCounter.show();
 
-            MessageBus.publishToCall(callChannel, "PostAndValidate", data_uri);
+            MessageBus.publishToCall(callChannel, "PostAndValidate", {"image": data_uri, "id": infoid});
         };
 
         var timeoutFunction = function () {
