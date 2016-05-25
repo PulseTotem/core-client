@@ -12,12 +12,30 @@ declare var $: any; // Use of JQuery
 class OneArmedBanditRenderer implements Renderer<Cmd> {
 
 	/**
-	 * Resize event memory.
+	 * Number of Rolls.
 	 *
-	 * @property _resizeEvents
-	 * @type Array
+	 * @property _nbRolls
+	 * @type number
 	 */
-	private _resizeEvents : any;
+	private _nbRolls : number;
+
+	/**
+	 * Number of Cells.
+	 *
+	 * @property _nbCells
+	 * @type number
+	 */
+	private _nbCells : number;
+
+	/**
+	 * Constructor.
+	 *
+	 * @constructor
+	 */
+	constructor() {
+		this._nbRolls = 3;
+		this._nbCells = 5;
+	}
 
 	/**
 	 * Transform the Info list to another Info list.
@@ -61,135 +79,54 @@ class OneArmedBanditRenderer implements Renderer<Cmd> {
 	render(info : Cmd, domElem : any, rendererTheme : string, endCallback : Function) {
 		var self = this;
 
-		var cmdHTMLWrapper = $("<div>");
-		cmdHTMLWrapper.addClass("OneArmedBanditRenderer_wrapper");
-		cmdHTMLWrapper.addClass(rendererTheme);
+		var oneArmedBanditHTMLWrapper = $("<div>");
+		oneArmedBanditHTMLWrapper.addClass("OneArmedBanditRenderer_wrapper");
+		oneArmedBanditHTMLWrapper.addClass(rendererTheme);
 
-		/*var cmdMainzone = $("<div>");
-		cmdMainzone.addClass("OneArmedBanditRenderer_mainzone");
+		var oneArmedBanditMainzone = $("<div>");
+		oneArmedBanditMainzone.addClass("OneArmedBanditRenderer_mainzone");
 
-		cmdHTMLWrapper.append(cmdMainzone);
+		oneArmedBanditHTMLWrapper.append(oneArmedBanditMainzone);
 
-		var cmdDiv = $("<div>");
-		cmdDiv.addClass("OneArmedBanditRenderer_cmd");
+		var oneArmedBanditDiv = $("<div>");
+		oneArmedBanditDiv.addClass("OneArmedBanditRenderer_oneArmedBandit");
 
-		cmdMainzone.append(cmdDiv);
+		oneArmedBanditMainzone.append(oneArmedBanditDiv);
 
-		for(var i = 0; i < 4; i++) {
-			if(i!=0) {
-				var digitListInter = $("<ul>");
-				digitListInter.addClass("OneArmedBanditRenderer_digitList_inter");
+		for(var i = 0; i < self._nbRolls; i++) {
+			var roll = $("<div>");
+			roll.addClass("OneArmedBanditRenderer_roll");
+			roll.addClass("OneArmedBanditRenderer_roll" + i.toString());
+			roll.css("left", ( (100 / self._nbRolls) * i ) + "%");
+			roll.css("animation-play-state", "paused");
 
-				var digitListInterContent = $("<li>");
-				digitListInterContent.addClass("OneArmedBanditRenderer_digiList_inter_content");
-
-				digitListInter.append(digitListInterContent);
-
-				cmdDiv.append(digitListInter);
-			}
-
-			var digitList = $("<ul>");
-			digitList.addClass("OneArmedBanditRenderer_digitList");
-			digitList.addClass("OneArmedBanditRenderer_digitList" + i.toString());
-
-			for(var j = 0; j < 11; j++) {
-				var digitElem = $("<li>");
-				digitElem.addClass("OneArmedBanditRenderer_digit");
-				digitElem.addClass("OneArmedBanditRenderer_digit" + j.toString());
+			for(var j = 0; j < self._nbCells+1; j++) {
+				var digitElem = $("<div>");
+				digitElem.addClass("OneArmedBanditRenderer_roll_item");
+				digitElem.addClass("OneArmedBanditRenderer_roll_item" + j.toString());
 				var digitElemSpan = $("<span>");
-				digitElemSpan.html((j%10).toString());
+				digitElemSpan.html((j%self._nbCells).toString());
 				digitElem.append(digitElemSpan);
 
-				digitList.append(digitElem);
+				roll.append(digitElem);
 			}
 
-			cmdDiv.append(digitList);
+			oneArmedBanditDiv.append(roll);
 		}
 
-		var clearDigitList = $("<div>");
-		clearDigitList.addClass("clearfix");
+		$(domElem).append(oneArmedBanditHTMLWrapper);
 
-		cmdDiv.append(clearDigitList);
+		if(info.getCmd() == "Start") {
+			for (var i = 0; i < self._nbRolls; i++) {
+				(function (index) {
 
-		var cmdSinceZone = $("<div>");
-		cmdSinceZone.addClass("OneArmedBanditRenderer_sincezone");
-
-		if(typeof(info.getSince()) != "undefined" && info.getSince() != null) {
-			var cmdSinceZoneSpan = $("<span>");
-			var sinceDate = moment(info.getSince());
-			sinceDate.locale("fr");
-			cmdSinceZoneSpan.html("Depuis le : " + sinceDate.format("LLL"));
-			cmdSinceZone.append(cmdSinceZoneSpan);
+					new Timer(function () {
+						var roll = $(domElem).find(".OneArmedBanditRenderer_roll" + index.toString()).first();
+						roll.css("animation-play-state", "running");
+					}, 500 * (index + 1));
+				})(i);
+			}
 		}
-
-		cmdHTMLWrapper.append(cmdSinceZone);
-
-		$(domElem).append(cmdHTMLWrapper);
-
-		var responsiveResize = function(doneCallback) {
-			var textHeight = "";
-
-			var finishResponsiveResize = function() {
-				$(domElem).find(".OneArmedBanditRenderer_digitList").css("height", textHeight);
-				$(domElem).find(".OneArmedBanditRenderer_digit").css("line-height", textHeight);
-				$(domElem).find(".OneArmedBanditRenderer_digit span").css("font-size", textHeight);
-
-				var fullHeight = $(domElem).find(".OneArmedBanditRenderer_mainzone").first().height();
-
-				$(domElem).find(".OneArmedBanditRenderer_cmd").css("height", textHeight);
-				$(domElem).find(".OneArmedBanditRenderer_cmd").css("margin-top", ((fullHeight - parseFloat(textHeight.slice(0, -2))) / 2) + "px");
-
-				var interHeight = $(domElem).find(".OneArmedBanditRenderer_digitList_inter").first().height();
-				$(domElem).find(".OneArmedBanditRenderer_digitList_inter").css("margin-top", ( (parseFloat(textHeight.slice(0, -2)) - interHeight ) / 2) + "px");
-
-				if(typeof(doneCallback) != "undefined" && doneCallback != null) {
-					doneCallback();
-				}
-			};
-
-			var digitList0 = $(domElem).find(".OneArmedBanditRenderer_digitList0").first();
-			digitList0.css("height", digitList0.css("height"));
-			var digitElem0 = digitList0.find(".OneArmedBanditRenderer_digit0");
-			digitElem0.css("line-height", digitList0.css("height"));
-
-			digitElem0.textfill({
-				maxFontPixels: 500,
-				success: function () {
-					textHeight = digitElem0.find("span").first().css("font-size");
-
-					finishResponsiveResize();
-				}
-			});
-		};
-
-		if(typeof(self._resizeEvents) == "undefined") {
-			self._resizeEvents = [];
-		}
-
-		if(typeof(self._resizeEvents[info.getId()]) == "undefined") {
-			self._resizeEvents[info.getId()] = null;
-
-			$(window).resize(function () {
-				if (self._resizeEvents[info.getId()] != null) {
-					self._resizeEvents[info.getId()].stop();
-					self._resizeEvents[info.getId()] = null;
-				}
-
-				var resizeTimer = new Timer(function () {
-					self._resizeEvents[info.getId()] = null;
-					self.updateRender(info, domElem, rendererTheme, function () {
-						self.animate(info, domElem, rendererTheme, function () {
-						});
-					});
-				}, 500);
-
-				self._resizeEvents[info.getId()] = resizeTimer;
-			});
-		}
-
-		responsiveResize(function() {
-			endCallback();
-		});*/
 	}
 
 	/**
@@ -202,8 +139,7 @@ class OneArmedBanditRenderer implements Renderer<Cmd> {
 	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
 	updateRender(info : Cmd, domElem : any, rendererTheme : string, endCallback : Function) {
-		$(domElem).empty();
-		this.render(info, domElem, rendererTheme, endCallback);
+		endCallback();
 	}
 
 	/**
@@ -218,30 +154,51 @@ class OneArmedBanditRenderer implements Renderer<Cmd> {
 	animate(info : Cmd, domElem : any, rendererTheme : string, endCallback : Function) {
 		var self = this;
 
-		/*if (self._resizeEvents[info.getId()] == null) {
-			var nbDigit = info.getValue().toString().length;
-			var infoValue = info.getValue();
+		if(info.getCmd() == "Stop") {
+			var resultDisplayDuration = parseInt(info.getArgs()[0]);
+			var result = (info.getArgs()[1] == "true");
 
-			if (nbDigit < 4) {
-				for (var i = 4; i > nbDigit; i--) {
-					var digitElemNumber = 4 - i;
+			if(result) {
+				for (var i = 0; i < self._nbRolls; i++) {
+					(function (index) {
+						new Timer(function () {
+							var roll = $(domElem).find(".OneArmedBanditRenderer_roll" + index.toString()).first();
+							roll.css("animation", "1s OneArmedBanditWin linear forwards");
+							new Timer(function() {
+								roll.css("animation", "2s OneArmedBanditRolling infinite linear");
+							}, resultDisplayDuration * 1000);
+						}, 500 * (index + 1));
+					})(i);
+				}
+			} else {
+				var winRollNumber = Math.floor(Math.random() * (self._nbRolls + 1));
 
-					$(domElem).find(".OneArmedBanditRenderer_digitList" + digitElemNumber.toString()).first().transition({y: '0px'}, 2000);
+				for (var i = 0; i < self._nbRolls; i++) {
+					(function (index) {
+						new Timer(function () {
+							var roll = $(domElem).find(".OneArmedBanditRenderer_roll" + index.toString()).first();
+							if(index == winRollNumber) {
+								roll.css("animation", "1s OneArmedBanditWin linear forwards");
+							} else {
+								roll.css("animation", "1s OneArmedBanditLose linear forwards");
+							}
+							new Timer(function() {
+								roll.css("animation", "2s OneArmedBanditRolling infinite linear");
+							}, resultDisplayDuration * 1000 + 500*(self._nbRolls-index));
+						}, 500 * (index + 1));
+					})(i);
 				}
 			}
+		} else {
+			for (var i = 0; i < self._nbRolls; i++) {
+				(function(index) {
 
-			for (var k = nbDigit; k > 0; k--) {
-				var digitElemNumber = 4 - k;
-				var digitElemValue = (infoValue - (infoValue % Math.pow(10, k - 1))) / Math.pow(10, k - 1);
-				infoValue = infoValue - (digitElemValue * Math.pow(10, k - 1));
-
-				var digitList = $(domElem).find(".OneArmedBanditRenderer_digitList" + digitElemNumber.toString()).first();
-				digitList.transition({y: '' + (-digitList.height() * digitElemValue) + 'px'}, 2000);
+					new Timer(function () {
+						var roll = $(domElem).find(".OneArmedBanditRenderer_roll" + index.toString()).first();
+						roll.css("animation-play-state", "running");
+					}, 500 * (index + 1));
+				})(i);
 			}
-
-			new Timer(function () {
-				endCallback();
-			}, 2000);
-		}*/
+		}
 	}
 }
