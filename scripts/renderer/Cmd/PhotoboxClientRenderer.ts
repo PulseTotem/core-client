@@ -26,6 +26,8 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
         height: 0
     };
 
+    private _lastPhoto : string;
+
     /**
      * Transform the Info list to another Info list.
      *
@@ -67,10 +69,19 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
      */
     render(info : Cmd, domElem : any, rendererTheme : string, endCallback : Function) {
 
-        if (info.getCmd() == "WaitOneClick") {
+        if (info.getCmd() == "WaitOneClick" && info.getArgs().length > 0) {
             $(domElem).empty();
-            var counterTime : number = parseInt(info.getArgs()[0]);
-            this.initListener(domElem, info.getCallChannel(), counterTime, info.getId());
+            this.initListener(info.getCallChannel(), info.getId());
+        } else if(info.getCmd() == "Snap" && info.getArgs().length > 0) {
+            $(domElem).empty();
+            var counterTime:number = parseInt(info.getArgs()[0]);
+            this.countAndSnap(domElem, counterTime, info.getCallChannel());
+        } else if (info.getCmd() == "removeInfo") {
+            $(domElem).empty();
+            if (Webcam.container) {
+                Webcam.reset();
+            }
+            this.resetZone(domElem);
         } else {
             $(domElem).empty();
             console.error("PhotoboxClientRenderer - Wrong command ! cmd : "+info.getCmd());
@@ -82,12 +93,12 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
         endCallback();
     }
 
-    private initListener(domElem: any, callChannel : string, counterTime : number, infoId : string) {
+    private initListener(callChannel : string, infoId : string) {
         var self = this;
 
 		MessageBus.subscribe(MessageBusChannel.USERTRIGGER, function(channel : any, data : any) {
 			if(typeof(data.action) != "undefined" && data.action == MessageBusAction.TRIGGER) {
-                self.countAndSnap(domElem, counterTime, callChannel);
+                MessageBus.publishToCall(callChannel, "Snap", {});
 			}
 		});
 
@@ -181,6 +192,8 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
             var divResultPhotoImg = $('<img>');
             divResultPhotoImg.addClass("PhotoboxRenderer_result_photo_img");
             divResultPhotoImg.attr('src', data_uri);
+
+            self._lastPhoto = data_uri;
 
             divResultPhoto.append(divResultPhotoImg);
             divResultPhoto.show();
@@ -277,6 +290,34 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
         setTimeout(timeoutFunction, 1000);
     }
 
+    private resetZone(domElem : any) {
+        var divResultPhoto = $('<div>');
+        divResultPhoto.addClass('PhotoboxRenderer_result_photo');
+
+        var divResultPhotoImg = $('<img>');
+        divResultPhotoImg.addClass("PhotoboxRenderer_result_photo_img");
+        divResultPhotoImg.attr('src', this._lastPhoto);
+
+        divResultPhoto.append(divResultPhotoImg);
+
+        $(domElem).append(divResultPhoto);
+
+        var divMessage = $('<div>');
+        divMessage.addClass("PhotoboxRenderer_messageFin");
+
+        var divMessageContent = $('<div>');
+        divMessageContent.addClass("PhotoboxRenderer_messageFin_content");
+
+        var messageSpan = $('<span>');
+        messageSpan.html("Merci pour votre participation !");
+        divMessageContent.append(messageSpan);
+        divMessage.append(divMessageContent);
+        $(domElem).append(divMessage);
+
+        divMessage.textfill({
+            maxFontPixels: 500
+        });
+    }
 
     /**
      * Update rendering Info in specified DOM Element.
