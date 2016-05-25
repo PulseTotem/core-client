@@ -5,6 +5,10 @@
 /// <reference path="../../../t6s-core/core/scripts/infotype/CmdList.ts" />
 /// <reference path="../Renderer.ts" />
 
+/// <reference path="../../core/MessageBus.ts" />
+/// <reference path="../../core/MessageBusChannel.ts" />
+/// <reference path="../../core/MessageBusAction.ts" />
+
 declare var $: any; // Use of JQuery
 declare var Webcam: any; // use of WebcamJS
 declare var io: any; // Use of Socket.IO lib
@@ -122,11 +126,11 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
             self.connectToClientSocket(socketId, baseAppliUrl);
         };
 
-        document.addEventListener('keypress', function (event) {
-            if (event.keyCode == 65 && event.shiftKey) {
-                initWebsocket();
-            }
-        });
+		MessageBus.subscribe(MessageBusChannel.USERTRIGGER, function(channel : any, data : any) {
+			if(typeof(data.action) != "undefined" && data.action == MessageBusAction.TRIGGER) {
+				initWebsocket();
+			}
+		});
     }
 
     private listen(socketId : string) {
