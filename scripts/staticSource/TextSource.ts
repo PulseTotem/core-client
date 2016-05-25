@@ -8,7 +8,7 @@
 /// <reference path="./StaticSource.ts" />
 
 /**
- * Represent a static Logo Source in the client
+ * Represent a static Text Source in the client
  */
 class TextSource extends StaticSource<TextList> {
 
