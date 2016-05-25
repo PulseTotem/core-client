@@ -117,99 +117,6 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
     }
 
     private waitMessage(domElem : any, socketId : string, baseAppliUrl : string, lastPicUrl : string) {
-        var wrapperDiv = $('<div>');
-        wrapperDiv.addClass("PhotoboxRenderer_wrapper");
-
-        //Header
-        var headerDiv = $('<div>');
-        headerDiv.addClass("PhotoboxRenderer_header");
-        wrapperDiv.append(headerDiv);
-
-        var headerSpan = $('<span>');
-        headerSpan.html('Prenez vous en photo !');
-        headerDiv.append(headerSpan);
-
-        //Content
-        var contentDiv = $('<div>');
-        contentDiv.addClass("PhotoboxRenderer_content");
-        wrapperDiv.append(contentDiv);
-
-        //Content -> Left
-        var leftDiv = $('<div>');
-        leftDiv.addClass("PhotoboxRenderer_content_left");
-        leftDiv.addClass("pull-left");
-        contentDiv.append(leftDiv);
-
-        //Content -> Right
-        var rightDiv = $('<div>');
-        rightDiv.addClass("PhotoboxRenderer_content_right");
-        rightDiv.addClass("pull-left");
-        contentDiv.append(rightDiv);
-
-        //Content -> ClearFix
-        var clearFixRightDiv = $("<div>");
-        clearFixRightDiv.addClass("clearfix");
-        contentDiv.append(clearFixRightDiv);
-
-        //Content -> Right -> Main
-        var rightMainDiv = $('<div>');
-        rightMainDiv.addClass("PhotoboxRenderer_content_right_main");
-        rightDiv.append(rightMainDiv);
-
-        var rightMainSpan = $('<span>');
-        rightMainSpan.html('Flashez le QR Code !');
-        rightMainDiv.append(rightMainSpan);
-
-        //Content -> Right -> LastPhoto
-        var rightLastPhotoDiv = $('<div>');
-        rightLastPhotoDiv.addClass("PhotoboxRenderer_content_right_lastPhoto");
-        rightDiv.append(rightLastPhotoDiv);
-
-        $(domElem).append(wrapperDiv);
-
-        var rightDivWidth = rightDiv.width() + 50;
-        rightLastPhotoDiv.css("transform", "translateX(" + rightDivWidth + "px)");
-
-        headerDiv.textfill({
-            maxFontPixels: 500
-        });
-
-        leftDiv.textfill({
-            maxFontPixels: 500
-        });
-
-        rightMainDiv.textfill({
-            maxFontPixels: 500
-        });
-
-        var isOut = true;
-
-        var animatePhoto = function() {
-            if(isOut) {
-                rightLastPhotoDiv.transition({
-                    'transform': 'translateX(0px)',
-                    'easing': 'easeInOutBack',
-                    'duration': 1000,
-                    'delay' : 5000
-                }, function() {
-                    isOut = false;
-                    animatePhoto();
-                });
-            } else {
-                rightLastPhotoDiv.transition({
-                    'transform': "translateX(" + rightDivWidth + "px)",
-                    'easing': 'easeInOutBack',
-                    'duration': 1000,
-                    'delay' : 5000
-                }, function() {
-                    isOut = true;
-                    animatePhoto();
-                });
-            }
-        };
-
-        animatePhoto();
-
         var self = this;
         var initWebsocket = function () {
             self.connectToClientSocket(socketId, baseAppliUrl);
@@ -366,8 +273,7 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
 
         html.append(divCounter);
 
-        // TODO move to CDN
-        var audio = $('<audio src="http://www.soundjay.com/mechanical/camera-shutter-click-08.mp3">');
+        var audio = $('<audio src="http://cdn.the6thscreen.fr/static/sound/camera-shutter-click-08.mp3">');
         html.append(audio);
 
         domElem.append(html);
@@ -493,12 +399,6 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
     }
 
     private postedPicture(domElem : any) {
-        var spanCounter = $('<span>');
-        spanCounter.html("L'image a été traitée avec succès ! Merci de valider la photo sur votre téléphone pour continuer.");
-        domElem.append(spanCounter);
-        domElem.textfill({
-            maxFontPixels: 500
-        });
     }
 
     private resetZone(domElem : any) {
