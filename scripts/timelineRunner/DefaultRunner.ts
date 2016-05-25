@@ -79,6 +79,7 @@ class DefaultRunner extends TimelineRunner {
 		var rendererTheme : string = currentEvent.getCall().getRendererTheme();
 
 		var listInfos : Array<Info> = currentEvent.getCall().getListInfos();
+		//Logger.debug("Nb info runner : "+listInfos.length);
 
 		if(listInfos.length > 0) {
 
@@ -131,6 +132,7 @@ class DefaultRunner extends TimelineRunner {
 	 * @method pause
 	 */
 	pause() {
+		this.relativeTimeline.pause();
 		if(this._timer != null) {
 			this._timer.pause();
 		}
@@ -142,6 +144,7 @@ class DefaultRunner extends TimelineRunner {
 	 * @method resume
 	 */
 	resume() {
+		this.relativeTimeline.resume();
 		if(this._timer != null) {
 			this._timer.resume();
 		}
@@ -153,6 +156,7 @@ class DefaultRunner extends TimelineRunner {
 	 * @method stop
 	 */
 	stop() {
+		this.relativeTimeline.pause();
 		if(this._timer != null) {
 			this._timer.stop();
 			this._timer = null;
