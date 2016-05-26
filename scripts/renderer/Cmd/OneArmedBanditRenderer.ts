@@ -181,6 +181,9 @@ class OneArmedBanditRenderer implements Renderer<Cmd> {
 							roll.css("animation", "1s OneArmedBanditWin linear forwards");
 							new Timer(function() {
 								roll.css("animation", "2s OneArmedBanditRolling infinite linear");
+								if(index == (self._nbRolls - 1)) {
+									endCallback();
+								}
 							}, resultDisplayDuration * 1000);
 						}, 500 * (index + 1));
 					})(i);
@@ -199,6 +202,9 @@ class OneArmedBanditRenderer implements Renderer<Cmd> {
 							}
 							new Timer(function() {
 								roll.css("animation", "2s OneArmedBanditRolling infinite linear");
+								if(index == (self._nbRolls - 1)) {
+									endCallback();
+								}
 							}, resultDisplayDuration * 1000);
 						}, 500 * (index + 1));
 					})(i);
@@ -211,6 +217,9 @@ class OneArmedBanditRenderer implements Renderer<Cmd> {
 					new Timer(function () {
 						var roll = $(domElem).find(".OneArmedBanditRenderer_roll" + index.toString()).first();
 						roll.css("animation-play-state", "running");
+						if(index == (self._nbRolls - 1)) {
+							endCallback();
+						}
 					}, 500 * (index + 1));
 				})(i);
 			}
