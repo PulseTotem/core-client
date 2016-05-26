@@ -56,7 +56,6 @@ class StaticCounterSource extends StaticSource<CounterList> {
 		var self = this;
 
 		var info = self.computeInfo();
-		console.log(info);
 
 		if (info != null) {
 			self.getCall().onNewInfo(info);

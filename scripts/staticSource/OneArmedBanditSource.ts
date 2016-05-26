@@ -8,6 +8,7 @@
 /// <reference path="../core/MessageBus.ts" />
 /// <reference path="../core/MessageBusChannel.ts" />
 /// <reference path="../core/MessageBusAction.ts" />
+/// <reference path="../core/Timer.ts" />
 
 declare var uuid: any; // Use of uuid
 
@@ -18,6 +19,14 @@ declare var uuid: any; // Use of uuid
  * @extends StaticSource<CmdList>
  */
 class OneArmedBanditSource extends StaticSource<CmdList> {
+
+	/**
+	 * OneArmedBandit's timer.
+	 *
+	 * @property _timer
+	 * @type Timer
+	 */
+	private _timer : Timer;
 
 	/**
 	 * OneArmedBandit's counter.
@@ -45,6 +54,7 @@ class OneArmedBanditSource extends StaticSource<CmdList> {
 	constructor(refreshTime : number = 60, params : any = []) {
 		super(refreshTime, params);
 
+		this._timer = null;
 		this._counter = null;
 		this._oneArmedBanditHash = uuid.v1();
 	}
@@ -63,10 +73,17 @@ class OneArmedBanditSource extends StaticSource<CmdList> {
 
 		MessageBus.subscribe(MessageBusChannel.USERTRIGGER, function(channel : any, data : any) {
 			if(typeof(data.action) != "undefined" && data.action == MessageBusAction.TRIGGER) {
-				var info = self.computeInfo();
+				if(self._timer == null) {
+					var info = self.computeInfo();
 
-				if (info != null) {
-					self.getCall().onNewInfo(info);
+					if (info != null) {
+						self.getCall().onNewInfo(info);
+					}
+
+					self._timer = new Timer(function() {
+						self._timer.stop();
+						self._timer = null;
+					}, parseInt(self.params.ResultDisplayDuration) * 1000);
 				}
 			}
 		});
@@ -78,6 +95,9 @@ class OneArmedBanditSource extends StaticSource<CmdList> {
 	 * @method computeInfo
 	 */
 	computeInfo() : CmdList {
+
+		var initOneArmedBandit = false;
+
 		if(this._counter != null) {
 			if(this._counter > 0) {
 				this._counter = this._counter - 1;
@@ -88,18 +108,29 @@ class OneArmedBanditSource extends StaticSource<CmdList> {
 			} else {
 				this._counter = 50;
 			}
+			initOneArmedBandit = true;
 		}
 
 		var cmd : Cmd = new Cmd();
 		cmd.setId(this._oneArmedBanditHash);
 		cmd.setDurationToDisplay(this.params.InfoDuration);
-		cmd.setCmd("Stop");
+		if(initOneArmedBandit) {
+			cmd.setCmd("Start");
+		} else {
+			cmd.setCmd("Stop");
+		}
 
 		var args : Array<string> = new Array<string>();
-		if(this._counter > 0) {
-			args.push("true");
+		if(initOneArmedBandit) {
+			args.push(this.params.WinImageURL);
+			args.push(this.params.LoseImageURL);
 		} else {
-			args.push("true");
+			args.push(this.params.ResultDisplayDuration.toString());
+			if (this._counter > 0) {
+				args.push("true");
+			} else {
+				args.push("false");
+			}
 		}
 		cmd.setArgs(args);
 

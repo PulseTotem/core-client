@@ -1,1 +1,91 @@
 @import "../../../core.less";
+
+@keyframes OneArmedBanditRolling {
+  from { top: 0; }
+  to   { top: -500%; }
+}
+
+@keyframes OneArmedBanditWin {
+  to   { top: -200%; }
+}
+
+@keyframes OneArmedBanditLose {
+  to   { top: -400%; }
+}
+
+/*@keyframes OneArmedBanditRolling {
+  0% { top: 0; }
+  20% { top: -100%; }
+  40% { top: -200%; }
+  60% { top: -300%; }
+  80% { top: -400%; }
+  100% { top: -500%; }
+}*/
+
+/*@keyframes OneArmedBanditRolling {
+  0% { top: 0; }
+  16.66666% { top: -(100% / 6) * 1; }
+  33.33333% { top: -(100% / 6) * 2; }
+  50% { top: -(100% / 6) * 3; }
+  66.66666% { top: -(100% / 6) * 4; }
+  83.33333% { top: -(100% / 6) * 5; }
+  100% { top: -(100% / 6) * 6; }
+}*/
+
+@nbRolls: 3;
+@nbRollsMinus: @nbRolls - 1;
+@nbCells: 5;
+@nbCellsPlus: @nbCells + 1;
+
+.OneArmedBanditRenderer_wrapper {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+
+  .OneArmedBanditRenderer_mainzone {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+
+    .OneArmedBanditRenderer_oneArmedBandit {
+      position: relative;
+      overflow: hidden;
+      height: 100%;
+      line-height: 100%;
+      width: 100%;
+      vertical-align: middle;
+
+      .OneArmedBanditRenderer_roll {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100% / @nbRolls;
+        list-style: none;
+        text-align: center;
+        font-weight: bold;
+        height: 100% * @nbCellsPlus;
+        margin-top: 0;
+        margin-bottom: 0;
+        animation: 2s OneArmedBanditRolling infinite linear;
+
+        .OneArmedBanditRenderer_roll_item {
+          height: 100% / @nbCellsPlus;
+          width: 100%;
+          border: 1px solid black;
+          background-repeat: no-repeat;
+          background-position: center;
+          background-size: 100% 100%;
+        }
+
+      }
+    }
+  }
+}
