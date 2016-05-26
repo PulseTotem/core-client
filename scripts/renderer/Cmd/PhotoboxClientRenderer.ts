@@ -28,6 +28,14 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
 
     private _lastPhoto : string;
 
+    private _isWaiting : boolean;
+    private _isInitalized : boolean;
+
+    constructor() {
+        this._isWaiting = false;
+        this._isInitalized = false;
+    }
+
     /**
      * Transform the Info list to another Info list.
      *
@@ -75,6 +83,7 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
         } else if(info.getCmd() == "counter" && info.getArgs().length > 0) {
             $(domElem).empty();
             var counterTime:number = parseInt(info.getArgs()[0]);
+            this._isWaiting = false;
             this.countAndSnap(domElem, counterTime, info.getCallChannel(), info.getId());
         } else if (info.getCmd() == "removeInfo") {
             $(domElem).empty();
@@ -82,12 +91,14 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
                 Webcam.reset();
             }
             this.resetZone(domElem);
+            this._isWaiting = true;
         } else {
             $(domElem).empty();
             console.error("PhotoboxClientRenderer - Wrong command ! cmd : "+info.getCmd());
             if (Webcam.container) {
                 Webcam.reset();
             }
+            this._isWaiting = true;
         }
 
         endCallback();
@@ -96,18 +107,23 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
     private initListener(callChannel : string, infoId : string) {
         var self = this;
 
-        var snap = function () {
-            console.debug("Emit snap !");
-            MessageBus.publishToCall(callChannel, "Snap", {});
-        };
-
-		MessageBus.subscribe(MessageBusChannel.USERTRIGGER, function(channel : any, data : any) {
-			if(typeof(data.action) != "undefined" && data.action == MessageBusAction.TRIGGER) {
-                snap();
-			}
-		});
+        if (!this._isInitalized) {
+            var snap = function () {
+                console.debug("Emit snap !");
+                if (self._isWaiting) {
+                    MessageBus.publishToCall(callChannel, "Snap", {});
+                }
+            };
+            MessageBus.subscribe(MessageBusChannel.USERTRIGGER, function(channel : any, data : any) {
+                if(typeof(data.action) != "undefined" && data.action == MessageBusAction.TRIGGER) {
+                    snap();
+                }
+            });
+            this._isInitalized = true;
+        }
 
         MessageBus.publishToCall(callChannel, "DestroyInitInfo", {"infoId":infoId});
+        this._isWaiting = true;
     }
 
     private preventFallback() {
@@ -128,7 +144,6 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
     }
 
     private countAndSnap(domElem : any, counterTime : number, callChannel : string, infoid : string) {
-
         var counter = counterTime;
 
         var html = $('<div>');
