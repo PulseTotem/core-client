@@ -79,6 +79,7 @@ class DefaultRunner extends TimelineRunner {
 		var rendererTheme : string = currentEvent.getCall().getRendererTheme();
 
 		var listInfos : Array<Info> = currentEvent.getCall().getListInfos();
+		//Logger.debug("Nb info runner : "+listInfos.length);
 
 		if(listInfos.length > 0) {
 
@@ -153,6 +154,7 @@ class DefaultRunner extends TimelineRunner {
 	 * @method stop
 	 */
 	stop() {
+		this.relativeTimeline.getBehaviour().stop();
 		if(this._timer != null) {
 			this._timer.stop();
 			this._timer = null;
