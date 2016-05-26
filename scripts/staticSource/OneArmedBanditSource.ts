@@ -121,15 +121,18 @@ class OneArmedBanditSource extends StaticSource<CmdList> {
 		}
 
 		var args : Array<string> = new Array<string>();
-		if(!initOneArmedBandit) {
+		if(initOneArmedBandit) {
+			args.push(this.params.WinImageURL);
+			args.push(this.params.LoseImageURL);
+		} else {
 			args.push(this.params.ResultDisplayDuration.toString());
 			if (this._counter > 0) {
 				args.push("true");
 			} else {
 				args.push("false");
 			}
-			cmd.setArgs(args);
 		}
+		cmd.setArgs(args);
 
 		var cmdList : CmdList = new CmdList();
 		cmdList.setId(this._oneArmedBanditHash);

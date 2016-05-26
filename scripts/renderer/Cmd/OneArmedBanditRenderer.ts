@@ -79,6 +79,14 @@ class OneArmedBanditRenderer implements Renderer<Cmd> {
 	render(info : Cmd, domElem : any, rendererTheme : string, endCallback : Function) {
 		var self = this;
 
+		var winImageURL = null;
+		var loseImageURL = null;
+
+		if(info.getCmd() == "Start") {
+			winImageURL = info.getArgs()[0];
+			loseImageURL = info.getArgs()[1];
+		}
+
 		var oneArmedBanditHTMLWrapper = $("<div>");
 		oneArmedBanditHTMLWrapper.addClass("OneArmedBanditRenderer_wrapper");
 		oneArmedBanditHTMLWrapper.addClass(rendererTheme);
@@ -104,9 +112,16 @@ class OneArmedBanditRenderer implements Renderer<Cmd> {
 				var digitElem = $("<div>");
 				digitElem.addClass("OneArmedBanditRenderer_roll_item");
 				digitElem.addClass("OneArmedBanditRenderer_roll_item" + j.toString());
-				var digitElemSpan = $("<span>");
-				digitElemSpan.html((j%self._nbCells).toString());
-				digitElem.append(digitElemSpan);
+
+				if(j == 2) {
+					if(winImageURL != null) {
+						digitElem.css("background-image", "url('" + winImageURL + "')");
+					}
+				} else {
+					if(loseImageURL != null) {
+						digitElem.css("background-image", "url('" + loseImageURL + "')");
+					}
+				}
 
 				roll.append(digitElem);
 			}
@@ -184,7 +199,7 @@ class OneArmedBanditRenderer implements Renderer<Cmd> {
 							}
 							new Timer(function() {
 								roll.css("animation", "2s OneArmedBanditRolling infinite linear");
-							}, resultDisplayDuration * 1000 + 500*(self._nbRolls-index));
+							}, resultDisplayDuration * 1000);
 						}, 500 * (index + 1));
 					})(i);
 				}
