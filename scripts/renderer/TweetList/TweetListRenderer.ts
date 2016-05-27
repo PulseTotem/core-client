@@ -1,15 +1,70 @@
 /**
- * @author Christian Brel <christian@the6thscreen.fr, ch.brel@gmail.com>
- * @author Simon Urli <simon@the6thscreen.fr, simon.urli@gmail.com>
+ * @author Simon Urli <simon@pulsetotem.fr, simon.urli@gmail.com>
+ * @author Christian Brel <christian@pulsetotem.fr, ch.brel@gmail.com>
  */
 
 /// <reference path="../../../t6s-core/core/scripts/infotype/TweetList.ts" />
 /// <reference path="../../../t6s-core/core/scripts/infotype/Tweet.ts" />
 /// <reference path="../Renderer.ts" />
+/// <reference path="../../core/Timer.ts" />
 
 declare var $: any; // Use of JQuery
 
 class TweetListRenderer implements Renderer<TweetList> {
+
+	/**
+	 * Subscriptions.
+	 *
+	 * @property _subscriptions
+	 * @type Array
+	 */
+	private _subscriptions : any;
+
+	/**
+	 * DOM contents for each info.
+	 *
+	 * @property _domContents
+	 * @type Array
+	 */
+	private _domContents : any;
+
+	/**
+	 * Tweets to display.
+	 *
+	 * @property _tweetsToDisplay
+	 * @type Array
+	 */
+	private _tweetsToDisplay : any;
+
+	/**
+	 * Last inserted tweet.
+	 *
+	 * @property _lastInsertedTweet
+	 * @type Array
+	 */
+	private _lastInsertedTweet : any;
+
+	/**
+	 * Timers.
+	 *
+	 * @property _timers
+	 * @type Array
+	 */
+	private _timers : any;
+
+	/**
+	 * Constructor.
+	 *
+	 * @constructor
+	 */
+	constructor() {
+		this._subscriptions = [];
+		this._domContents = [];
+		this._tweetsToDisplay = [];
+		this._timers = [];
+		this._lastInsertedTweet = [];
+	}
+
 	/**
 	 * Transform the Info list to another Info list.
 	 *
@@ -40,104 +95,31 @@ class TweetListRenderer implements Renderer<TweetList> {
 	 */
 	render(info : TweetList, domElem : any, rendererTheme : string, endCallback : Function) {
 
-		var allTweets = $("<div>");
-		allTweets.addClass("TweetListRenderer_allTweets");
+		if(typeof(this._subscriptions[info.getId()]) == "undefined") {
+			MessageBus.subscribe(MessageBusChannel.RENDERER, function(channel : any, data : any) {
+				if(typeof(data.action) != "undefined" && data.action == MessageBusAction.REFRESH) {
+					MessageBus.publishToCall(info.getCallChannel(), "RefreshInfos", null);
+				}
+			});
 
-		$(domElem).append(allTweets);
+			this._subscriptions[info.getId()] = true;
+		}
 
-		var index = 0;
-		var nbTweets = info.getTweets().length;
-		
-		var nextTweet = function () {
-			var currentTweet : Tweet = info.getTweets()[index];
+		if(typeof(this._domContents[info.getId()]) == "undefined") {
+			var allTweets = $("<div>");
+			allTweets.addClass("TweetListRenderer_allTweets");
+			allTweets.addClass(rendererTheme);
 
-			var tweetHTMLWrapper = $("<div>");
-			tweetHTMLWrapper.addClass("TweetListRenderer_wrapper");
+			$(domElem).append(allTweets);
 
-			var tweetHTMLTweet = $("<div>");
-			tweetHTMLTweet.addClass("TweetListRenderer_tweet");
+			this._domContents[info.getId()] = allTweets;
+		} else {
+			$(domElem).append(this._domContents[info.getId()]);
+		}
 
-			if (currentTweet.getPictures().length > 0) {
-				var tweetPic = $("<div>");
-				tweetPic.addClass("TweetListRenderer_Picture");
-				var pic : Picture = currentTweet.getPictures()[0];
-				tweetPic.css("background-image","url("+pic.getOriginal().getURL()+")");
-				tweetHTMLWrapper.css("height","45%");
-				tweetHTMLWrapper.append(tweetPic);
-				tweetHTMLTweet.css("height","33%");
-			} else {
-				tweetHTMLWrapper.css("height","15%");
-				tweetHTMLTweet.css("height","100%");
-			}
+		this.refreshTweetsToDisplay(info);
 
-			var profilPic = $("<div>");
-			profilPic.addClass("TweetListRenderer_profilpic");
-			profilPic.css("background-image","url("+currentTweet.getOwner().getProfilPicture()+")");
-			tweetHTMLTweet.append(profilPic);
-
-			var allcontent = $("<div>");
-			allcontent.addClass("TweetListRenderer_allcontent");
-
-			var tweetHeader = $("<div>");
-			tweetHeader.addClass("TweetListRenderer_header");
-
-			var tweetDate = $("<span>");
-			var DateClass : any = <any>Date;
-			var creationDate : any = new DateClass(currentTweet.getCreationDate());
-			var displayCreationDate = creationDate.toString("dd/MM/yyyy ") + creationDate.toString("HH") + "h" + creationDate.toString("mm");
-			tweetDate.html(displayCreationDate);
-
-			var tweetDateWrapper = $("<div>");
-			tweetDateWrapper.addClass("TweetListRenderer_date");
-			tweetDateWrapper.append(tweetDate);
-
-			tweetHeader.append(tweetDateWrapper);
-
-			var fullName = $("<div>");
-			fullName.addClass("TweetListRenderer_fullname");
-			fullName.html(currentTweet.getOwner().getRealname());
-			tweetHeader.append(fullName);
-
-			var username = $("<div>");
-			username.addClass("TweetListRenderer_tweetname");
-			username.html("@"+currentTweet.getOwner().getUsername());
-			tweetHeader.append(username);
-
-			allcontent.append(tweetHeader);
-
-			var content = $("<div>");
-			content.addClass("TweetListRenderer_content");
-
-			var contentSpan = $("<span>");
-			contentSpan.html(currentTweet.getMessage());
-			content.append(contentSpan);
-
-			allcontent.append(content);
-
-			tweetHTMLTweet.append(allcontent);
-
-			tweetHTMLWrapper.append(tweetHTMLTweet);
-
-			allTweets.prepend(tweetHTMLWrapper);
-			tweetHTMLWrapper.show('slow');
-
-			var optionTextFill = {
-				maxFontPixels: 500
-			};
-
-			fullName.textfill(optionTextFill);
-			username.textfill(optionTextFill);
-			content.textfill(optionTextFill);
-			tweetDateWrapper.textfill(optionTextFill);
-
-			if (index < nbTweets-1) {
-				index++;
-				setTimeout(nextTweet, currentTweet.getDurationToDisplay()*1000);
-			} else {
-				endCallback();
-			}
-		};
-		nextTweet();
+		endCallback();
 	}
 
 	/**
@@ -150,8 +132,58 @@ class TweetListRenderer implements Renderer<TweetList> {
 	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
 	updateRender(info : TweetList, domElem : any, rendererTheme : string, endCallback : Function) {
-		this.render(info, domElem, rendererTheme, endCallback);
+		this.refreshTweetsToDisplay(info);
 		endCallback();
+	}
+
+	/**
+	 * Refresh list of tweets to display.
+	 *
+	 * @method refreshTweetsToDisplay
+	 * @param {RenderInfo} info - The Info to render.
+	 */
+	refreshTweetsToDisplay(info : TweetList) {
+		var tweets = info.getTweets();
+		var nbTweets = tweets.length;
+
+		if(nbTweets > 0) {
+			if(typeof(this._tweetsToDisplay[info.getId()]) == "undefined") {
+				this._tweetsToDisplay[info.getId()] = [];
+			}
+
+			if(typeof(this._lastInsertedTweet[info.getId()]) == "undefined") {
+				this._lastInsertedTweet[info.getId()] = null;
+			}
+
+			var tweetsToDisplay = this._tweetsToDisplay[info.getId()];
+
+			var insertFromIndex = nbTweets - 1;
+
+			if(tweetsToDisplay.length > 0) {
+				for (var i = 0; i < nbTweets; i++) {
+					for (var j = (tweetsToDisplay.length - 1); j >= 0; j--) {
+						if (tweetsToDisplay[j].getId() == tweets[i].getId()) {
+							insertFromIndex = i - 1;
+						}
+					}
+				}
+			} else {
+				if(this._lastInsertedTweet[info.getId()] != null) {
+					for (var i = 0; i < nbTweets; i++) {
+						if (this._lastInsertedTweet[info.getId()].getId() == tweets[i].getId()) {
+							insertFromIndex = i - 1;
+						}
+					}
+				}
+			}
+
+			for(var k = insertFromIndex; k >= 0; k--) {
+				tweetsToDisplay.push(tweets[k]);
+				this._lastInsertedTweet[info.getId()] = tweets[k];
+			}
+
+			this._tweetsToDisplay[info.getId()] = tweetsToDisplay;
+		}
 	}
 
 	/**
@@ -164,7 +196,151 @@ class TweetListRenderer implements Renderer<TweetList> {
 	 * @param {Function} endCallback - Callback function called at the end of animation.
 	 */
 	animate(info : TweetList, domElem : any, rendererTheme : string, endCallback : Function) {
-		//Nothing to do.
+		var self = this;
+
+		if(typeof(self._timers[info.getId()]) == "undefined") {
+			self._timers[info.getId()] = null;
+		}
+
+		var displayNextTweet = function() {
+			var currentTweet : Tweet = self._tweetsToDisplay[info.getId()].shift();
+
+			var tweetWrapper = $("<div>");
+			tweetWrapper.addClass("TweetListRenderer_tweet_wrapper");
+
+			//Main
+			var tweetMain = $("<div>");
+			tweetMain.addClass("TweetListRenderer_main");
+
+			if (currentTweet.getPictures().length > 0) {
+
+				//PictureWrapper -> Picture
+
+				var tweetPic = $("<div>");
+				tweetPic.addClass("TweetListRenderer_picture");
+				var pic : Picture = currentTweet.getPictures()[0];
+				tweetPic.css("background-image","url("+pic.getOriginal().getURL()+")");
+				var tweetPicWrapper = $("<div>");
+				tweetPicWrapper.addClass("TweetListRenderer_picture_wrapper");
+				tweetPicWrapper.append(tweetPic);
+
+				tweetWrapper.append(tweetPicWrapper);
+			} else {
+				tweetWrapper.addClass("TweetListRenderer_tweet_wrapper_without_picture");
+				tweetMain.addClass("TweetListRenderer_main_without_picture");
+			}
+
+			tweetWrapper.append(tweetMain);
+
+			//Main -> Profil Picture
+			var profilPicWrapper = $("<div>");
+			profilPicWrapper.addClass("TweetListRenderer_main_profilpic_wrapper");
+			profilPicWrapper.addClass("pull-left");
+			tweetMain.append(profilPicWrapper);
+
+			var profilPic = $("<div>");
+			profilPic.addClass("TweetListRenderer_main_profilpic");
+			profilPic.css("background-image","url("+currentTweet.getOwner().getProfilPicture()+")");
+			profilPicWrapper.append(profilPic);
+
+			//Main -> Content
+			var mainContent = $("<div>");
+			mainContent.addClass("TweetListRenderer_main_content");
+			mainContent.addClass("pull-left");
+			tweetMain.append(mainContent);
+
+			//Main -> Content -> Header
+			var contentHeader = $("<div>");
+			contentHeader.addClass("TweetListRenderer_main_content_header");
+			mainContent.append(contentHeader);
+
+			//Main -> Content -> Header -> Profil
+			var headerProfil = $("<div>");
+			headerProfil.addClass("TweetListRenderer_main_content_header_profil");
+			headerProfil.addClass("pull-left");
+			contentHeader.append(headerProfil);
+
+			//Main -> Content -> Header -> Profil -> Fullname
+			var fullName = $("<div>");
+			fullName.addClass("TweetListRenderer_main_content_header_profil_fullname");
+			var fullNameSpan = $("<span>");
+			fullNameSpan.html(currentTweet.getOwner().getRealname());
+			fullName.append(fullNameSpan);
+			headerProfil.append(fullName);
+
+
+			//Main -> Content -> Header -> Profil -> Username
+			var username = $("<div>");
+			username.addClass("TweetListRenderer_main_content_header_profil_username");
+			var usernameSpan = $("<span>");
+			usernameSpan.html("@" + currentTweet.getOwner().getUsername());
+			username.append(usernameSpan);
+			headerProfil.append(username);
+
+			//Main -> Content -> Header -> Date
+			var tweetCreateDate = $("<div>");
+			tweetCreateDate.addClass("TweetListRenderer_main_content_header_date");
+			tweetCreateDate.addClass("pull-left");
+			contentHeader.append(tweetCreateDate);
+			var tweetCreateDateSpan = $("<span>");
+			var creationDate : any = moment(currentTweet.getCreationDate());
+			var displayCreationDate = creationDate.fromNow();
+			tweetCreateDateSpan.html(displayCreationDate);
+			tweetCreateDate.append(tweetCreateDateSpan);
+
+			//Main -> Content -> Header -> Clearfix
+			var clearHeader = $("<div>");
+			clearHeader.addClass("clearfix");
+			contentHeader.append(clearHeader);
+
+			//Main -> Content -> Message
+			var contentMessage = $("<div>");
+			contentMessage.addClass("TweetListRenderer_main_content_message");
+			mainContent.append(contentMessage);
+
+			var contentMessageSpan = $("<span>");
+			contentMessageSpan.html(currentTweet.getMessage());
+			contentMessage.append(contentMessageSpan);
+
+			//Main- > Clearfix
+			var clearMain = $("<div>");
+			clearMain.addClass("clearfix");
+			tweetMain.append(clearMain);
+
+			if (currentTweet.getPictures().length > 0) {
+				self._domContents[info.getId()].css("transform", "translateY(-62%)");
+			} else {
+				self._domContents[info.getId()].css("transform", "translateY(-32%)");
+			}
+
+			self._domContents[info.getId()].prepend(tweetWrapper);
+
+			var optionTextFill = {
+				maxFontPixels: 500
+			};
+
+			fullName.textfill(optionTextFill);
+			username.textfill(optionTextFill);
+			contentMessage.textfill(optionTextFill);
+			tweetCreateDate.textfill(optionTextFill);
+
+			self._domContents[info.getId()].transition({
+				'transform': 'translateY(0%)',
+				'easing': 'in-out',
+				'duration': 1000
+			}, function() {
+				self._timers[info.getId()] = new Timer(function() {
+					self._timers[info.getId()] = null;
+					if(self._tweetsToDisplay[info.getId()].length > 0) {
+						displayNextTweet();
+					}
+				}, currentTweet.getDurationToDisplay() * 1000 - 1000);
+			});
+		};
+
+		if(self._tweetsToDisplay[info.getId()].length > 0 && self._timers[info.getId()] == null) {
+			displayNextTweet();
+		}
 
 		endCallback();
 	}
