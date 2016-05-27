@@ -11,7 +11,7 @@
 
 declare var $: any; // Use of JQuery
 declare var Webcam: any; // use of WebcamJS
-declare var io: any; // Use of Socket.IO lib
+declare var ProgressBar : any;
 
 class PhotoboxClientRenderer implements Renderer<Cmd> {
 
@@ -132,7 +132,32 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
             });
 
             if (messages) {
-                // TODO
+                var separator = "||";
+                var allMessages = messages.split(separator);
+
+                if (allMessages[0]) {
+                    this._initMsg = allMessages[0];
+                } else {
+                    this._initMsg = PhotoboxClientRenderer.DEFAULT_INIT_MSG;
+                }
+
+                if (allMessages[1]) {
+                    this._counterMsg = allMessages[1];
+                } else {
+                    this._counterMsg = PhotoboxClientRenderer.DEFAULT_COUNTER_MSG;
+                }
+
+                if (allMessages[2]) {
+                    this._processMsg = allMessages[2];
+                } else {
+                    this._processMsg = PhotoboxClientRenderer.DEFAULT_PROCESS_MSG;
+                }
+
+                if (allMessages[3]) {
+                    this._endMsg = allMessages[3];
+                } else {
+                    this._endMsg = PhotoboxClientRenderer.DEFAULT_END_MSG;
+                }
             } else {
                 this._initMsg = PhotoboxClientRenderer.DEFAULT_INIT_MSG;
                 this._counterMsg = PhotoboxClientRenderer.DEFAULT_COUNTER_MSG;
@@ -176,7 +201,6 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
         var headerTextSpan = $('<span>');
         headerTextSpan.html(this._initMsg);
         headerTextSpan.addClass("PhotoboxClientRenderer_header_span");
-        headerTextSpan.append(headerTextSpan);
 
         divHeader.append(headerTextSpan);
         divWrapper.append(divHeader);
@@ -202,7 +226,7 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
 
     private countAndSnap(domElem : any, counterTime : number, callChannel : string, infoid : string) {
         var counter = counterTime;
-
+        var counterMax = counter;
         var divWrapper = $('<div>');
         divWrapper.addClass("PhotoboxClientRenderer_wrapper");
 
@@ -212,10 +236,15 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
         var headerTextSpan = $('<span>');
         headerTextSpan.html(this._counterMsg);
         headerTextSpan.addClass("PhotoboxClientRenderer_header_span");
-        headerTextSpan.append(headerTextSpan);
 
         divHeader.append(headerTextSpan);
         divWrapper.append(divHeader);
+
+
+        var randomId = "divCounter"+(Math.round(Math.random()*1000));
+        var divCounter = $('<div id="'+randomId+'">');
+        divCounter.addClass("PhotoboxClientRenderer_counter");
+        divWrapper.append(divCounter);
 
         var divCam = $('<div>');
         divCam.attr("id","webCamview");
@@ -249,6 +278,31 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
 
         domElem.append(divWrapper);
 
+        var circle = new ProgressBar.Circle(divCounter[0], {
+            color: '#FFA500',
+            strokeWidth: 10,
+            trailColor: 'rgba(0,0,0,1)',
+            trailWidth: 10,
+            svgStyle: {
+                display: 'block',
+
+                // Important: make sure that your container has same
+                // aspect ratio as the SVG canvas. See SVG canvas sizes above.
+                width: '100%'
+            },
+            fill: 'rgba(0,0,0,0.5)',
+            text: {
+                autoStyleContainer: false,
+                className: 'PhotoboxClientRenderer_counter_span',
+                style: {
+                    position: 'absolute',
+                    left: '0',
+                    top: '20%',
+                }
+            }
+        });
+        circle.setText(counter);
+
         headerTextSpan.textfill({
             maxFontPixels: 500
         });
@@ -262,6 +316,7 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
         var self = this;
         var managePicture = function(data_uri) {
             Webcam.freeze();
+            self._lastPhoto = data_uri;
 
             topLeftShutter.transition({
                 'top': '-100%',
@@ -298,12 +353,21 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
             });
 
             MessageBus.publishToCall(callChannel, "PostAndValidate", {"image": data_uri, "id": infoid});
-            MessageBus.publishToCall(MessageBusChannel.RENDERER, MessageBusChannel.REFRESH);
+            var data = {
+                action : MessageBusAction.REFRESH
+            };
+            MessageBus.publish(MessageBusChannel.RENDERER, data);
         };
 
         var timeoutFunction = function () {
             counter--;
+
+            circle.set(0);
+            circle.animate(1);
+            circle.setText(counter);
+
             if (counter == 0) {
+                divCounter.hide();
                 audio[0].play();
                 topLeftShutter.transition({
                     'top': '0',
@@ -343,29 +407,26 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
     }
 
     private resetZone(domElem : any) {
-        var divResultPhoto = $('<div>');
-        divResultPhoto.addClass('PhotoboxClientRenderer_result_photo');
+        var divWrapper = $('<div>');
+        divWrapper.addClass("PhotoboxClientRenderer_wrapper");
 
-        var divResultPhotoImg = $('<img>');
-        divResultPhotoImg.addClass("PhotoboxClientRenderer_result_photo_img");
-        divResultPhotoImg.attr('src', this._lastPhoto);
-
-        divResultPhoto.append(divResultPhotoImg);
-
-        $(domElem).append(divResultPhoto);
+        var divResultPhotoImg = $('<div>');
+        divResultPhotoImg.addClass("PhotoboxClientRenderer_photoResult");
+        divResultPhotoImg.css('background-image', 'url('+this._lastPhoto+')');
 
         var divMessage = $('<div>');
         divMessage.addClass("PhotoboxClientRenderer_messageFin");
 
-        var divMessageContent = $('<div>');
-        divMessageContent.addClass("PhotoboxClientRenderer_messageFin_content");
-
         var messageSpan = $('<span>');
-        messageSpan.html("Find your pictures on Twitter with the following hashtag: #IWANTMYAPP");
-        divMessageContent.append(messageSpan);
+        messageSpan.html(this._endMsg);
+        divMessage.append(messageSpan);
 
-        divMessage.append(divMessageContent);
-        $(domElem).append(divMessage);
+        divResultPhotoImg.append(divMessage);
+
+        divWrapper.append(divResultPhotoImg);
+
+
+        $(domElem).append(divWrapper);
 
         divMessage.textfill({
             maxFontPixels: 500
