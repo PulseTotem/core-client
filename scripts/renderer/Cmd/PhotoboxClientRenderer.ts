@@ -15,6 +15,11 @@ declare var io: any; // Use of Socket.IO lib
 
 class PhotoboxClientRenderer implements Renderer<Cmd> {
 
+    private static DEFAULT_INIT_MSG = "Appuyez sur le bouton et prenez la pose !";
+    private static DEFAULT_COUNTER_MSG = "La photo sera prise dans... ";
+    private static DEFAULT_PROCESS_MSG = "Veuillez patienter pendant l'envoie de l'image...";
+    private static DEFAULT_END_MSG = "Merci pour votre participation !";
+
     private webcam_settings = {
         image_format: 'jpeg',
         jpeg_quality: 90,
@@ -30,6 +35,11 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
 
     private _isWaiting : boolean;
     private _isInitalized : boolean;
+
+    private _initMsg : string;
+    private _counterMsg : string;
+    private _processMsg : string;
+    private _endMsg : string;
 
     constructor() {
         this._isWaiting = false;
@@ -79,7 +89,8 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
 
         if (info.getCmd() == "WaitOneClick" && info.getArgs().length > 0) {
             $(domElem).empty();
-            this.initListener(info.getCallChannel(), info.getId());
+            this.initListener(info.getCallChannel(), info.getId(), info.getArgs()[1]);
+            this.startSession(domElem);
         } else if(info.getCmd() == "counter" && info.getArgs().length > 0) {
             $(domElem).empty();
             var counterTime:number = parseInt(info.getArgs()[0]);
@@ -104,7 +115,7 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
         endCallback();
     }
 
-    private initListener(callChannel : string, infoId : string) {
+    private initListener(callChannel : string, infoId : string, messages : string) {
         var self = this;
 
         if (!this._isInitalized) {
@@ -119,10 +130,21 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
                     snap();
                 }
             });
+
+            if (messages) {
+                // TODO
+            } else {
+                this._initMsg = PhotoboxClientRenderer.DEFAULT_INIT_MSG;
+                this._counterMsg = PhotoboxClientRenderer.DEFAULT_COUNTER_MSG;
+                this._processMsg = PhotoboxClientRenderer.DEFAULT_PROCESS_MSG;
+                this._endMsg = PhotoboxClientRenderer.DEFAULT_END_MSG;
+            }
+
+
             this._isInitalized = true;
         }
 
-        MessageBus.publishToCall(callChannel, "DestroyInitInfo", {"infoId":infoId});
+        //MessageBus.publishToCall(callChannel, "DestroyInitInfo", {"infoId":infoId});
         this._isWaiting = true;
     }
 
@@ -143,59 +165,91 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
         });
     }
 
-    private countAndSnap(domElem : any, counterTime : number, callChannel : string, infoid : string) {
-        var counter = counterTime;
+    private startSession(domElem : any) {
 
-        var html = $('<div>');
-        html.addClass("photobox_divcam");
+        var divWrapper = $('<div>');
+        divWrapper.addClass("PhotoboxClientRenderer_wrapper");
+
+        var divHeader = $('<div>');
+        divHeader.addClass("PhotoboxClientRenderer_header");
+
+        var headerTextSpan = $('<span>');
+        headerTextSpan.html(this._initMsg);
+        headerTextSpan.addClass("PhotoboxClientRenderer_header_span");
+        headerTextSpan.append(headerTextSpan);
+
+        divHeader.append(headerTextSpan);
+        divWrapper.append(divHeader);
 
         var divCam = $('<div>');
         divCam.attr("id","webCamview");
-        divCam.addClass("photobox_divcam");
+        divCam.addClass("PhotoboxClientRenderer_WebcamView");
 
-        html.append(divCam);
+        divWrapper.append(divCam);
 
-        var divResultPhoto = $('<div>');
-        divResultPhoto.addClass('PhotoboxRenderer_result_photo');
-        divResultPhoto.hide();
+        domElem.append(divWrapper);
 
-        html.append(divResultPhoto);
+        headerTextSpan.textfill({
+            maxFontPixels: 500
+        });
+
+        this.preventFallback();
+
+        Webcam.set(this.webcam_settings);
+
+        Webcam.attach("#webCamview");
+    }
+
+    private countAndSnap(domElem : any, counterTime : number, callChannel : string, infoid : string) {
+        var counter = counterTime;
+
+        var divWrapper = $('<div>');
+        divWrapper.addClass("PhotoboxClientRenderer_wrapper");
+
+        var divHeader = $('<div>');
+        divHeader.addClass("PhotoboxClientRenderer_header");
+
+        var headerTextSpan = $('<span>');
+        headerTextSpan.html(this._counterMsg);
+        headerTextSpan.addClass("PhotoboxClientRenderer_header_span");
+        headerTextSpan.append(headerTextSpan);
+
+        divHeader.append(headerTextSpan);
+        divWrapper.append(divHeader);
+
+        var divCam = $('<div>');
+        divCam.attr("id","webCamview");
+        divCam.addClass("PhotoboxClientRenderer_WebcamView");
+
+        divWrapper.append(divCam);
 
         var divShutter = $('<div>');
-        divShutter.addClass("PhotoboxRenderer_shutter");
+        divShutter.addClass("PhotoboxClientRenderer_shutter");
 
         var topLeftShutter = $('<div>');
-        topLeftShutter.addClass("PhotoboxRenderer_shutter_top_left");
+        topLeftShutter.addClass("PhotoboxClientRenderer_shutter_top_left");
         divShutter.append(topLeftShutter);
 
         var topRightShutter = $('<div>');
-        topRightShutter.addClass("PhotoboxRenderer_shutter_top_right");
+        topRightShutter.addClass("PhotoboxClientRenderer_shutter_top_right");
         divShutter.append(topRightShutter);
 
         var bottomLeftShutter = $('<div>');
-        bottomLeftShutter.addClass("PhotoboxRenderer_shutter_bottom_left");
+        bottomLeftShutter.addClass("PhotoboxClientRenderer_shutter_bottom_left");
         divShutter.append(bottomLeftShutter);
 
         var bottomRightShutter = $('<div>');
-        bottomRightShutter.addClass("PhotoboxRenderer_shutter_bottom_right");
+        bottomRightShutter.addClass("PhotoboxClientRenderer_shutter_bottom_right");
         divShutter.append(bottomRightShutter);
 
-        html.append(divShutter);
-
-        var divCounter = $('<div>');
-        divCounter.addClass("PhotoboxRenderer_counter");
-        var spanCounter = $('<span>');
-        spanCounter.html(counter);
-        divCounter.append(spanCounter);
-
-        html.append(divCounter);
+        divWrapper.append(divShutter);
 
         var audio = $('<audio src="http://cdn.the6thscreen.fr/static/sound/camera-shutter-click-08.mp3">');
-        html.append(audio);
+        divWrapper.append(audio);
 
-        domElem.append(html);
+        domElem.append(divWrapper);
 
-        divCounter.textfill({
+        headerTextSpan.textfill({
             maxFontPixels: 500
         });
 
@@ -208,15 +262,6 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
         var self = this;
         var managePicture = function(data_uri) {
             Webcam.freeze();
-
-            var divResultPhotoImg = $('<img>');
-            divResultPhotoImg.addClass("PhotoboxRenderer_result_photo_img");
-            divResultPhotoImg.attr('src', data_uri);
-
-            self._lastPhoto = data_uri;
-
-            divResultPhoto.append(divResultPhotoImg);
-            divResultPhoto.show();
 
             topLeftShutter.transition({
                 'top': '-100%',
@@ -246,28 +291,19 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
                 'duration': 1000
             });
 
-            divCounter.empty();
+            headerTextSpan.html(self._processMsg);
 
-            var progressTextDiv = $('<div>');
-            var progressTextSpan = $('<span>');
-            progressTextSpan.html("Traitement en cours...");
-            progressTextDiv.append(progressTextSpan);
-
-            divCounter.append(progressTextDiv);
-
-            progressTextDiv.textfill({
+            headerTextSpan.textfill({
                 maxFontPixels: 500
             });
 
-            divCounter.show();
-
             MessageBus.publishToCall(callChannel, "PostAndValidate", {"image": data_uri, "id": infoid});
+            MessageBus.publishToCall(MessageBusChannel.RENDERER, MessageBusChannel.REFRESH);
         };
 
         var timeoutFunction = function () {
             counter--;
             if (counter == 0) {
-                divCounter.hide();
                 audio[0].play();
                 topLeftShutter.transition({
                     'top': '0',
@@ -299,10 +335,6 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
                     Webcam.snap(managePicture);
                 });
             } else {
-                spanCounter.html(counter);
-                divCounter.textfill({
-                    maxFontPixels: 500
-                });
                 setTimeout(timeoutFunction, 1000);
             }
         };
@@ -312,10 +344,10 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
 
     private resetZone(domElem : any) {
         var divResultPhoto = $('<div>');
-        divResultPhoto.addClass('PhotoboxRenderer_result_photo');
+        divResultPhoto.addClass('PhotoboxClientRenderer_result_photo');
 
         var divResultPhotoImg = $('<img>');
-        divResultPhotoImg.addClass("PhotoboxRenderer_result_photo_img");
+        divResultPhotoImg.addClass("PhotoboxClientRenderer_result_photo_img");
         divResultPhotoImg.attr('src', this._lastPhoto);
 
         divResultPhoto.append(divResultPhotoImg);
@@ -323,14 +355,15 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
         $(domElem).append(divResultPhoto);
 
         var divMessage = $('<div>');
-        divMessage.addClass("PhotoboxRenderer_messageFin");
+        divMessage.addClass("PhotoboxClientRenderer_messageFin");
 
         var divMessageContent = $('<div>');
-        divMessageContent.addClass("PhotoboxRenderer_messageFin_content");
+        divMessageContent.addClass("PhotoboxClientRenderer_messageFin_content");
 
         var messageSpan = $('<span>');
-        messageSpan.html("Merci pour votre participation !");
+        messageSpan.html("Find your pictures on Twitter with the following hashtag: #IWANTMYAPP");
         divMessageContent.append(messageSpan);
+
         divMessage.append(divMessageContent);
         $(domElem).append(divMessage);
 
