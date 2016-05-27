@@ -6,4 +6,5 @@ class MessageBusAction {
 	static DISPLAY : string = "display";
 	static SELECT : string = "select";
 	static TRIGGER : string = "trigger";
+	static REFRESH : string = "refresh";
 }
