@@ -141,6 +141,7 @@ class ShuffleRunner extends TimelineRunner {
 	 * @method stop
 	 */
 	stop() {
+		//this.relativeTimeline.getBehaviour().stop();
 		if(this._timer != null) {
 			this._timer.stop();
 			this._timer = null;

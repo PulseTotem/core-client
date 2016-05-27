@@ -41,6 +41,7 @@ class EventVerticalTimelineRenderer implements Renderer<EventList> {
 	render(info : EventList, domElem : any, rendererTheme : string, endCallback : Function) {
 		var wrapperHTML = $("<div>");
 		wrapperHTML.addClass("EventVerticalTimelineRenderer_wrapper");
+		wrapperHTML.addClass(rendererTheme);
 
 		var maxPercent = Math.floor((100 - info.getEvents().length + 1) / info.getEvents().length);
 
@@ -58,7 +59,9 @@ class EventVerticalTimelineRenderer implements Renderer<EventList> {
 			eventDiv.css("height", maxPercent + "%");
 
 			if(nowMoment.diff(eventStart) >= 0 && eventEnd.diff(nowMoment) > 0) {
-				eventDiv.addClass("EventVerticalTimelineRenderer_eventContainer EventVerticalTimelineRenderer_eventContainer_current");
+				eventDiv.addClass("EventVerticalTimelineRenderer_eventContainer_current");
+			} else {
+				eventDiv.addClass("EventVerticalTimelineRenderer_eventContainer_not_current");
 			}
 
 			var eventTimeContainer = $("<div>");

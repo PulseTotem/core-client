@@ -299,8 +299,7 @@ class PhotoboxRenderer implements Renderer<Cmd> {
 
 		html.append(divCounter);
 
-		// TODO move to CDN
-		var audio = $('<audio src="http://www.soundjay.com/mechanical/camera-shutter-click-08.mp3">');
+		var audio = $('<audio src="http://cdn.the6thscreen.fr/static/sound/camera-shutter-click-08.mp3">');
 		html.append(audio);
 
 		domElem.append(html);
