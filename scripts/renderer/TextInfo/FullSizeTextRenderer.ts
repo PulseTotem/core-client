@@ -55,6 +55,7 @@ class FullSizeTextRenderer implements Renderer<TextInfo> {
 
 		var textWrapper = $("<div>");
 		textWrapper.addClass("FullSizeTextRenderer_wrapper");
+		textWrapper.addClass(rendererTheme);
 
 		var textSpan = $("<span>");
 		textSpan.addClass("FullSizeTextRenderer_text");
