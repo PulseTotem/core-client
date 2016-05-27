@@ -20,6 +20,14 @@ class TweetListRenderer implements Renderer<TweetList> {
 	private _subscriptions : any;
 
 	/**
+	 * DOM contents for each info.
+	 *
+	 * @property _domContents
+	 * @type Array
+	 */
+	private _domContents : any;
+
+	/**
 	 * Transform the Info list to another Info list.
 	 *
 	 * @method transformInfo<ProcessInfo extends Info>
@@ -63,11 +71,23 @@ class TweetListRenderer implements Renderer<TweetList> {
 			this._subscriptions[info.getId()] = true;
 		}
 
-		var allTweets = $("<div>");
-		allTweets.addClass("TweetListRenderer_allTweets");
-		allTweets.addClass(rendererTheme);
+		if(typeof(this._domContents) == "undefined") {
+			this._domContents = [];
+		}
 
-		$(domElem).append(allTweets);
+		if(typeof(this._domContents[info.getId()]) == "undefined") {
+			var allTweets = $("<div>");
+			allTweets.addClass("TweetListRenderer_allTweets");
+			allTweets.addClass(rendererTheme);
+
+			$(domElem).append(allTweets);
+
+			this._domContents[info.getId()] = allTweets;
+		} else {
+			$(domElem).append(this._domContents[info.getId()]);
+		}
+
+
 
 
 		var nbTweets = info.getTweets().length;
