@@ -62,7 +62,6 @@ class RedButtonUserTrigger extends UserTrigger {
 	 * @param {JQuery event} event - The event produce by user.
 	 */
 	private redButtonPressed(event : any) {
-		console.log("redButtonPressed !!!!");
 		var self = this;
 
 		if(this._timer == null) {
