@@ -63,6 +63,15 @@ class PictureTitleFeedNodeRenderer implements Renderer<FeedNode> {
 		nodeHTMLWrapper.addClass("PictureTitleFeedNodeRenderer_wrapper");
 		nodeHTMLWrapper.addClass(rendererTheme);
 
+		var backgroundColors = [];
+		backgroundColors.push("rgba(233,98,24,.5)");
+		backgroundColors.push("rgba(248,226,7,.5)");
+		backgroundColors.push("rgba(227,35,43,.5)");
+		backgroundColors.push("rgba(250,250,250,.7)");
+
+		var indexBackgroundColors = Math.floor(Math.random() * backgroundColors.length);
+
+		nodeHTMLWrapper.css("background-color", backgroundColors[indexBackgroundColors]);
 
 		//Main -> Picture
 		if(info.getMediaUrl() != null && info.getMediaUrl() != "") {
