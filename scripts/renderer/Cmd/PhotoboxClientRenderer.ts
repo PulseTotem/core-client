@@ -80,6 +80,7 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
         if (info.getCmd() == "WaitOneClick" && info.getArgs().length > 0) {
             $(domElem).empty();
             this.initListener(info.getCallChannel(), info.getId());
+            this.startSession(domElem);
         } else if(info.getCmd() == "counter" && info.getArgs().length > 0) {
             $(domElem).empty();
             var counterTime:number = parseInt(info.getArgs()[0]);
@@ -122,7 +123,7 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
             this._isInitalized = true;
         }
 
-        MessageBus.publishToCall(callChannel, "DestroyInitInfo", {"infoId":infoId});
+        //MessageBus.publishToCall(callChannel, "DestroyInitInfo", {"infoId":infoId});
         this._isWaiting = true;
     }
 
@@ -141,6 +142,19 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
                 alert(err);
             }
         });
+    }
+
+    private startSession(domElem : any) {
+        var divCam = $('<div>');
+        divCam.attr("id","webCamview");
+        divCam.addClass("photobox_divcam");
+
+        domElem.append(divCam);
+        this.preventFallback();
+
+        Webcam.set(this.webcam_settings);
+
+        Webcam.attach("#webCamview");
     }
 
     private countAndSnap(domElem : any, counterTime : number, callChannel : string, infoid : string) {
