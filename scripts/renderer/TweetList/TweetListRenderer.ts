@@ -1,6 +1,6 @@
 /**
- * @author Christian Brel <christian@the6thscreen.fr, ch.brel@gmail.com>
- * @author Simon Urli <simon@the6thscreen.fr, simon.urli@gmail.com>
+ * @author Simon Urli <simon@pulsetotem.fr, simon.urli@gmail.com>
+ * @author Christian Brel <christian@pulsetotem.fr, ch.brel@gmail.com>
  */
 
 /// <reference path="../../../t6s-core/core/scripts/infotype/TweetList.ts" />
@@ -10,6 +10,15 @@
 declare var $: any; // Use of JQuery
 
 class TweetListRenderer implements Renderer<TweetList> {
+
+	/**
+	 * Subscriptions.
+	 *
+	 * @property _subscriptions
+	 * @type Array
+	 */
+	private _subscriptions : any;
+
 	/**
 	 * Transform the Info list to another Info list.
 	 *
@@ -39,6 +48,20 @@ class TweetListRenderer implements Renderer<TweetList> {
 	 * @param {Function} endCallback - Callback function called at the end of render method.
 	 */
 	render(info : TweetList, domElem : any, rendererTheme : string, endCallback : Function) {
+
+		if(typeof(this._subscriptions) == "undefined") {
+			this._subscriptions = [];
+		}
+
+		if(typeof(this._subscriptions[info.getId()]) == "undefined") {
+			MessageBus.subscribe(MessageBusChannel.RENDERER, function(channel : any, data : any) {
+				if(typeof(data.action) != "undefined" && data.action == MessageBusAction.REFRESH) {
+					MessageBus.publishToCall(info.getCallChannel(), "RefreshInfos", null);
+				}
+			});
+
+			this._subscriptions[info.getId()] = true;
+		}
 
 		var allTweets = $("<div>");
 		allTweets.addClass("TweetListRenderer_allTweets");
