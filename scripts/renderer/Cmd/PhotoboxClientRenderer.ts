@@ -120,7 +120,7 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
 
         if (!this._isInitalized) {
             var snap = function () {
-                console.debug("Emit snap !");
+                //console.debug("Emit snap !");
                 if (self._isWaiting) {
                     MessageBus.publishToCall(callChannel, "Snap", {});
                 }
@@ -353,10 +353,12 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
             });
 
             MessageBus.publishToCall(callChannel, "PostAndValidate", {"image": data_uri, "id": infoid});
-            var data = {
-                action : MessageBusAction.REFRESH
-            };
-            MessageBus.publish(MessageBusChannel.RENDERER, data);
+			new Timer(function() {
+				var data = {
+					action : MessageBusAction.REFRESH
+				};
+				MessageBus.publish(MessageBusChannel.RENDERER, data);
+			}, 5000);
         };
 
         var timeoutFunction = function () {
