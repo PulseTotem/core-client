@@ -12,6 +12,24 @@ declare var $: any; // Use of JQuery
 declare var moment: any; // Use of MomentJS
 
 class TweetCounterRenderer implements Renderer<Counter> {
+
+	/**
+	 * Subscriptions.
+	 *
+	 * @property _subscriptions
+	 * @type Array
+	 */
+	private _subscriptions : any;
+
+	/**
+	 * Constructor.
+	 *
+	 * @constructor
+	 */
+	constructor() {
+		this._subscriptions = [];
+	}
+
 	/**
 	 * Transform the Info list to another Info list.
 	 *
@@ -52,6 +70,16 @@ class TweetCounterRenderer implements Renderer<Counter> {
 	 * @param {Function} endCallback - Callback function called at the end of render method.
 	 */
 	render(info : Counter, domElem : any, rendererTheme : string, endCallback : Function) {
+
+		if(typeof(this._subscriptions[info.getId()]) == "undefined") {
+			MessageBus.subscribe(MessageBusChannel.RENDERER, function(channel : any, data : any) {
+				if(typeof(data.action) != "undefined" && data.action == MessageBusAction.REFRESH) {
+					MessageBus.publishToCall(info.getCallChannel(), "RefreshInfos", null);
+				}
+			});
+
+			this._subscriptions[info.getId()] = true;
+		}
 
 		var counterHTMLWrapper = $("<div>");
 		counterHTMLWrapper.addClass("TweetCounterRenderer_wrapper");
