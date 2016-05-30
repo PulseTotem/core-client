@@ -213,7 +213,7 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
 
         domElem.append(divWrapper);
 
-        headerTextSpan.textfill({
+        divHeader.textfill({
             maxFontPixels: 500
         });
 
@@ -303,7 +303,7 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
         });
         circle.setText(counter);
 
-        headerTextSpan.textfill({
+        divHeader.textfill({
             maxFontPixels: 500
         });
 
@@ -348,7 +348,7 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
 
             headerTextSpan.html(self._processMsg);
 
-            headerTextSpan.textfill({
+            divHeader.textfill({
                 maxFontPixels: 500
             });
 
