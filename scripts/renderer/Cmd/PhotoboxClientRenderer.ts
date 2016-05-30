@@ -94,7 +94,6 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
         } else if(info.getCmd() == "counter" && info.getArgs().length > 0) {
             $(domElem).empty();
             var counterTime:number = parseInt(info.getArgs()[0]);
-            this._isWaiting = false;
             this.countAndSnap(domElem, counterTime, info.getCallChannel(), info.getId());
         } else if (info.getCmd() == "removeInfo") {
             $(domElem).empty();
@@ -123,6 +122,7 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
                 console.debug("Emit snap !");
                 if (self._isWaiting) {
                     MessageBus.publishToCall(callChannel, "Snap", {});
+                    self._isWaiting = false;
                 }
             };
             MessageBus.subscribe(MessageBusChannel.USERTRIGGER, function(channel : any, data : any) {
