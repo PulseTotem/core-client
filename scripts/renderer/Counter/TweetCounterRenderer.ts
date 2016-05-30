@@ -83,6 +83,7 @@ class TweetCounterRenderer implements Renderer<Counter> {
 
 		var counterHTMLWrapper = $("<div>");
 		counterHTMLWrapper.addClass("TweetCounterRenderer_wrapper");
+		counterHTMLWrapper.addClass(rendererTheme);
 
 		var hashtagDiv = $("<div>");
 		hashtagDiv.addClass("TweetCounterRenderer_hashtag");
@@ -110,7 +111,18 @@ class TweetCounterRenderer implements Renderer<Counter> {
 
 		counterMainzone.append(counterDiv);
 
-		for(var i = 0; i < 5; i++) {
+
+		var nbDigit = info.getValue().toString().length;
+
+		if(nbDigit < 3) {
+			nbDigit = 3;
+		} else if(nbDigit > 3) {
+			nbDigit = nbDigit + 1;
+		}
+
+		var digitListWidth = (100/nbDigit) - 2;
+
+		for(var i = 0; i < nbDigit; i++) {
 			if(i!=0) {
 				var digitListInter = $("<ul>");
 				digitListInter.addClass("TweetCounterRenderer_digitList_inter");
@@ -121,6 +133,7 @@ class TweetCounterRenderer implements Renderer<Counter> {
 			var digitList = $("<ul>");
 			digitList.addClass("TweetCounterRenderer_digitList");
 			digitList.addClass("TweetCounterRenderer_digitList" + i.toString());
+			digitList.css("width", digitListWidth + "%");
 
 			counterDiv.append(digitList);
 		}
@@ -135,7 +148,6 @@ class TweetCounterRenderer implements Renderer<Counter> {
 
 		counterMainzone.append(twitterLogo);
 
-
 		var nbTweetsTxtDiv = $("<div>");
 		nbTweetsTxtDiv.addClass("TweetCounterRenderer_nbtweets");
 
@@ -149,7 +161,7 @@ class TweetCounterRenderer implements Renderer<Counter> {
 
 		$(domElem).append(counterHTMLWrapper);
 
-		for(var i = 0; i < 5; i++) {
+		for(var i = 0; i < nbDigit; i++) {
 			var digitList = $(domElem).find(".TweetCounterRenderer_digitList" + i.toString()).first();
 			digitList.css("height", digitList.css( "height" ));
 
@@ -195,8 +207,23 @@ class TweetCounterRenderer implements Renderer<Counter> {
 	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
 	updateRender(info : Counter, domElem : any, rendererTheme : string, endCallback : Function) {
-		$(domElem).empty();
-		this.render(info, domElem, rendererTheme, endCallback);
+		var nbDigit = info.getValue().toString().length;
+
+		if(nbDigit < 3) {
+			nbDigit = 3;
+		} else if(nbDigit > 3) {
+			nbDigit = nbDigit + 1;
+		}
+
+		var currentNbDigit = $(domElem).find(".TweetCounterRenderer_digitList").length;
+
+		if(nbDigit != currentNbDigit) {
+
+			$(domElem).empty();
+			this.render(info, domElem, rendererTheme, endCallback);
+		} else {
+			endCallback();
+		}
 	}
 
 	/**
@@ -220,16 +247,18 @@ class TweetCounterRenderer implements Renderer<Counter> {
 		var nbDigit = info.getValue().toString().length;
 		var infoValue = info.getValue();
 
-		if(nbDigit < 5) {
-			for(var i = 5; i > nbDigit; i--) {
-				var digitElemNumber = 5 - i;
+		var currentNbDigit = $(domElem).find(".TweetCounterRenderer_digitList").length;
+
+		if(nbDigit < currentNbDigit) {
+			for(var i = currentNbDigit; i > nbDigit; i--) {
+				var digitElemNumber = currentNbDigit - i;
 
 				$(domElem).find(".TweetCounterRenderer_digitList" + digitElemNumber.toString()).first().transition({ y: '0px' }, 2000);
 			}
 		}
 
 		for(var k = nbDigit; k > 0; k--) {
-			var digitElemNumber = 5 - k;
+			var digitElemNumber = currentNbDigit - k;
 			var digitElemValue = (infoValue-(infoValue%Math.pow(10, k-1)))/Math.pow(10, k-1);
 			infoValue = infoValue - (digitElemValue*Math.pow(10, k-1));
 

@@ -65,7 +65,12 @@ class FullSizeTextRenderer implements Renderer<TextInfo> {
 		$(domElem).append(textWrapper);
 
 		textWrapper.textfill({
-			maxFontPixels: 500
+			maxFontPixels: 500,
+			success: function() {
+				var newFontSize = textWrapper.find("span").first().css("font-size");
+				var newFontSizeInt = parseInt(newFontSize.substring(0, newFontSize.length-2));
+				textWrapper.find("span").first().css("font-size", (newFontSizeInt - 4).toString() + "px");
+			}
 		});
 
 		endCallback();
