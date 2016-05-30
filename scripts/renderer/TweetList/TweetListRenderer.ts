@@ -208,13 +208,59 @@ class TweetListRenderer implements Renderer<TweetList> {
 			var tweetWrapper = $("<div>");
 			tweetWrapper.addClass("TweetListRenderer_tweet_wrapper");
 
-			//Main
+
+			//TweetWrapper -> ProfilPictureWrapper
+			var profilPicWrapper = $("<div>");
+			profilPicWrapper.addClass("TweetListRenderer_main_profilpic_wrapper");
+			profilPicWrapper.addClass("pull-left");
+			tweetWrapper.append(profilPicWrapper);
+
+			//TweetWrapper -> ProfilPictureWrapper -> Profil
+			var headerProfil = $("<div>");
+			headerProfil.addClass("TweetListRenderer_main_content_header_profil");
+			profilPicWrapper.append(headerProfil);
+
+			//TweetWrapper -> ProfilPictureWrapper -> Profil -> Fullname
+			var fullName = $("<div>");
+			fullName.addClass("TweetListRenderer_main_content_header_profil_fullname");
+			var fullNameSpan = $("<span>");
+			fullNameSpan.html(currentTweet.getOwner().getRealname());
+			fullName.append(fullNameSpan);
+			headerProfil.append(fullName);
+
+			//TweetWrapper -> ProfilPictureWrapper -> Profil -> Username
+			var username = $("<div>");
+			username.addClass("TweetListRenderer_main_content_header_profil_username");
+			var usernameSpan = $("<span>");
+			usernameSpan.html("@" + currentTweet.getOwner().getUsername());
+			username.append(usernameSpan);
+			headerProfil.append(username);
+
+			//TweetWrapper -> ProfilPictureWrapper -> Picture
+			var profilPic = $("<div>");
+			profilPic.addClass("TweetListRenderer_main_profilpic");
+			profilPic.css("background-image","url("+currentTweet.getOwner().getProfilPicture()+")");
+			profilPicWrapper.append(profilPic);
+
+			//TweetWrapper -> WrapperContent
+			var tweetWrapperContent = $("<div>");
+			tweetWrapperContent.addClass("TweetListRenderer_tweet_wrapper_content");
+			tweetWrapperContent.addClass("pull-left");
+
+			tweetWrapper.append(tweetWrapperContent);
+
+			//TweetWrapper -> Clearfix
+			var clearTweetWrapper = $("<div>");
+			clearTweetWrapper.addClass("clearfix");
+			tweetWrapper.append(clearTweetWrapper);
+
+			//WrapperContent -> Main
 			var tweetMain = $("<div>");
 			tweetMain.addClass("TweetListRenderer_main");
 
 			if (currentTweet.getPictures().length > 0) {
 
-				//PictureWrapper -> Picture
+				//WrapperContent -> PictureWrapper -> Picture
 
 				var tweetPic = $("<div>");
 				tweetPic.addClass("TweetListRenderer_picture");
@@ -224,60 +270,25 @@ class TweetListRenderer implements Renderer<TweetList> {
 				tweetPicWrapper.addClass("TweetListRenderer_picture_wrapper");
 				tweetPicWrapper.append(tweetPic);
 
-				tweetWrapper.append(tweetPicWrapper);
+				tweetWrapperContent.append(tweetPicWrapper);
 			} else {
 				tweetWrapper.addClass("TweetListRenderer_tweet_wrapper_without_picture");
 				tweetMain.addClass("TweetListRenderer_main_without_picture");
 			}
 
-			tweetWrapper.append(tweetMain);
+			tweetWrapperContent.append(tweetMain);
 
-			//Main -> Profil Picture
-			var profilPicWrapper = $("<div>");
-			profilPicWrapper.addClass("TweetListRenderer_main_profilpic_wrapper");
-			profilPicWrapper.addClass("pull-left");
-			tweetMain.append(profilPicWrapper);
-
-			var profilPic = $("<div>");
-			profilPic.addClass("TweetListRenderer_main_profilpic");
-			profilPic.css("background-image","url("+currentTweet.getOwner().getProfilPicture()+")");
-			profilPicWrapper.append(profilPic);
-
-			//Main -> Content
+			//WrapperContent -> Main -> Content
 			var mainContent = $("<div>");
 			mainContent.addClass("TweetListRenderer_main_content");
-			mainContent.addClass("pull-left");
 			tweetMain.append(mainContent);
 
-			//Main -> Content -> Header
+			//WrapperContent -> Main -> Content -> Header
 			var contentHeader = $("<div>");
 			contentHeader.addClass("TweetListRenderer_main_content_header");
 			mainContent.append(contentHeader);
 
-			//Main -> Content -> Header -> Profil
-			var headerProfil = $("<div>");
-			headerProfil.addClass("TweetListRenderer_main_content_header_profil");
-			headerProfil.addClass("pull-left");
-			contentHeader.append(headerProfil);
-
-			//Main -> Content -> Header -> Profil -> Fullname
-			var fullName = $("<div>");
-			fullName.addClass("TweetListRenderer_main_content_header_profil_fullname");
-			var fullNameSpan = $("<span>");
-			fullNameSpan.html(currentTweet.getOwner().getRealname());
-			fullName.append(fullNameSpan);
-			headerProfil.append(fullName);
-
-
-			//Main -> Content -> Header -> Profil -> Username
-			var username = $("<div>");
-			username.addClass("TweetListRenderer_main_content_header_profil_username");
-			var usernameSpan = $("<span>");
-			usernameSpan.html("@" + currentTweet.getOwner().getUsername());
-			username.append(usernameSpan);
-			headerProfil.append(username);
-
-			//Main -> Content -> Header -> Date
+			//WrapperContent -> Main -> Content -> Header -> Date
 			var tweetCreateDate = $("<div>");
 			tweetCreateDate.addClass("TweetListRenderer_main_content_header_date");
 			tweetCreateDate.addClass("pull-left");
@@ -288,12 +299,12 @@ class TweetListRenderer implements Renderer<TweetList> {
 			tweetCreateDateSpan.html(displayCreationDate);
 			tweetCreateDate.append(tweetCreateDateSpan);
 
-			//Main -> Content -> Header -> Clearfix
+			//WrapperContent -> Main -> Content -> Header -> Clearfix
 			var clearHeader = $("<div>");
 			clearHeader.addClass("clearfix");
 			contentHeader.append(clearHeader);
 
-			//Main -> Content -> Message
+			//WrapperContent -> Main -> Content -> Message
 			var contentMessage = $("<div>");
 			contentMessage.addClass("TweetListRenderer_main_content_message");
 			mainContent.append(contentMessage);
@@ -301,11 +312,6 @@ class TweetListRenderer implements Renderer<TweetList> {
 			var contentMessageSpan = $("<span>");
 			contentMessageSpan.html(currentTweet.getMessage());
 			contentMessage.append(contentMessageSpan);
-
-			//Main- > Clearfix
-			var clearMain = $("<div>");
-			clearMain.addClass("clearfix");
-			tweetMain.append(clearMain);
 
 			if (currentTweet.getPictures().length > 0) {
 				self._domContents[info.getId()].css("transform", "translateY(-62%)");

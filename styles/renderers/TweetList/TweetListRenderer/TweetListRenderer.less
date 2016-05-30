@@ -17,87 +17,101 @@
     height: 60%;
     margin-top: 2%;
 
+    .TweetListRenderer_main_profilpic_wrapper {
+      height: 100%;
+      width: 30%;
+      position: relative;
 
-    .TweetListRenderer_picture_wrapper {
-      height: 58%;
-      width: 100%;
-      margin-bottom: 1%;
+      .TweetListRenderer_main_content_header_profil {
+        position: absolute;
+        top: 50%;
+        left: 5%;
+        margin-top: -25%;
+        margin-left: auto;
+        margin-right: auto;
+        width: 80%;
+        text-align: center;
+        color: white;
+        font-family: PoetsenOne,Emoji;
+        text-shadow: 1px 2px 3px #000;
 
-      .TweetListRenderer_picture {
-        width: 100%;
+        .TweetListRenderer_main_content_header_profil_fullname {
+          width: 100%;
+          font-weight: bold;
+          padding-left: 3%;
+        }
+
+        .TweetListRenderer_main_content_header_profil_username {
+          width: 100%;
+          font-style: italic;
+          padding-left: 3%;
+        }
+      }
+
+      .TweetListRenderer_main_profilpic {
         height: 100%;
+        width: 90%;
+        margin: auto;
         background-size: contain;
         background-repeat: no-repeat;
         background-position: center;
       }
     }
 
-    .TweetListRenderer_main_without_picture {
-      height: 100% !important;
-    }
+    .TweetListRenderer_tweet_wrapper_content {
+      height: 100%;
+      width: 70%;
 
-    .TweetListRenderer_main {
-      height: 40%;
+      .TweetListRenderer_picture_wrapper {
+        height: 58%;
+        width: 100%;
+        margin-bottom: 1%;
 
-      .TweetListRenderer_main_profilpic_wrapper {
-        height: 100%;
-        width: 20%;
-
-        .TweetListRenderer_main_profilpic {
+        .TweetListRenderer_picture {
+          width: 100%;
           height: 100%;
-          width: 90%;
-          margin: auto;
           background-size: contain;
           background-repeat: no-repeat;
           background-position: center;
         }
       }
 
-      .TweetListRenderer_main_content {
-        height: 100%;
-        width: 80%;
-        background-color: white;
-        color: black;
+      .TweetListRenderer_main_without_picture {
+        height: 100% !important;
+      }
 
-        .TweetListRenderer_main_content_header {
-          height: 30%;
+      .TweetListRenderer_main {
+        height: 40%;
+        width: 100%;
+
+        .TweetListRenderer_main_content {
+          height: 100%;
           width: 100%;
+          background-color: white;
+          color: black;
+          font-family: Titillium;
 
-          .TweetListRenderer_main_content_header_profil {
-            height: 100%;
-            width: 50%;
+          .TweetListRenderer_main_content_header {
+            height: 30%;
+            width: 100%;
 
-            .TweetListRenderer_main_content_header_profil_fullname {
-              height: 50%;
+            .TweetListRenderer_main_content_header_date {
+              height: 100%;
               width: 100%;
-              font-weight: bold;
-              padding-left: 3%;
-            }
-
-            .TweetListRenderer_main_content_header_profil_username {
-              height: 50%;
-              width: 100%;
-              font-style: italic;
-              padding-left: 3%;
+              text-align: right;
+              padding-right: 5px;
+              padding-top: 2%;
             }
           }
 
-          .TweetListRenderer_main_content_header_date {
-            height: 100%;
-            width: 50%;
-            text-align: right;
-            padding-right: 5px;
-            padding-top: 4%;
+          .TweetListRenderer_main_content_message {
+            height: 60%;
+            width: 94%;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 2%;
+            line-height: 1;
           }
-        }
-
-        .TweetListRenderer_main_content_message {
-          height: 60%;
-          width: 94%;
-          margin-left: auto;
-          margin-right: auto;
-          margin-top: 2%;
-          line-height: 1;
         }
       }
     }
