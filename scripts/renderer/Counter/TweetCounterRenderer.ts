@@ -90,7 +90,7 @@ class TweetCounterRenderer implements Renderer<Counter> {
 
 		var spanPresentQuery = $("<span>");
 		spanPresentQuery.addClass("TweetCounterRenderer_presentquery");
-		spanPresentQuery.html("Tweets à propos de : "+info.getQuery());
+		spanPresentQuery.html("Tweets à propos de : "+decodeURIComponent(info.getQuery()));
         hashtagDiv.append(spanPresentQuery);
 
 		counterHTMLWrapper.append(hashtagDiv);
