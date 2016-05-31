@@ -198,26 +198,30 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
 
         var divWrapper = $('<div>');
         divWrapper.addClass("PhotoboxClientRenderer_wrapper");
-
-        var divHeader = $('<div>');
-        divHeader.addClass("PhotoboxClientRenderer_header");
-
-        var headerTextSpan = $('<span>');
-        headerTextSpan.html(this._initMsg);
-        headerTextSpan.addClass("PhotoboxClientRenderer_header_span");
-
-        divHeader.append(headerTextSpan);
-        divWrapper.append(divHeader);
-
         var divCam = $('<div>');
         divCam.attr("id","webCamview");
         divCam.addClass("PhotoboxClientRenderer_WebcamView");
 
         divWrapper.append(divCam);
 
+        var divCommand = $('<div>');
+        divCommand.addClass("PhotoboxClientRenderer_command");
+
+        var imgPush = $('<div>');
+        imgPush.addClass("PhotoboxClientRenderer_command_pic");
+        imgPush.css("background-image","url('https://cms.pulsetotem.fr/images/d4052200-2772-11e6-83f6-33e3ba783274/raw')");
+        divCommand.append(imgPush);
+
+        var headerTextSpan = $('<span>');
+        headerTextSpan.html(this._initMsg);
+        headerTextSpan.addClass("PhotoboxClientRenderer_command_span");
+
+        divCommand.append(headerTextSpan);
+        divWrapper.append(divCommand);
+
         domElem.append(divWrapper);
 
-        divHeader.textfill({
+        divCommand.textfill({
             maxFontPixels: 500
         });
 
@@ -234,17 +238,6 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
         var divWrapper = $('<div>');
         divWrapper.addClass("PhotoboxClientRenderer_wrapper");
 
-        var divHeader = $('<div>');
-        divHeader.addClass("PhotoboxClientRenderer_header");
-
-        var headerTextSpan = $('<span>');
-        headerTextSpan.html(this._counterMsg);
-        headerTextSpan.addClass("PhotoboxClientRenderer_header_span");
-
-        divHeader.append(headerTextSpan);
-        divWrapper.append(divHeader);
-
-
         var randomId = "divCounter"+(Math.round(Math.random()*1000));
         var divCounter = $('<div id="'+randomId+'">');
         divCounter.addClass("PhotoboxClientRenderer_counter");
@@ -255,6 +248,16 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
         divCam.addClass("PhotoboxClientRenderer_WebcamView");
 
         divWrapper.append(divCam);
+
+        var divCommand = $('<div>');
+        divCommand.addClass("PhotoboxClientRenderer_command");
+
+        var headerTextSpan = $('<span>');
+        headerTextSpan.html(this._counterMsg);
+        headerTextSpan.addClass("PhotoboxClientRenderer_command_span");
+
+        divCommand.append(headerTextSpan);
+        divWrapper.append(divCommand);
 
         var divShutter = $('<div>');
         divShutter.addClass("PhotoboxClientRenderer_shutter");
@@ -307,7 +310,7 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
         });
         circle.setText(counter);
 
-        divHeader.textfill({
+        divCommand.textfill({
             maxFontPixels: 500
         });
 
@@ -352,7 +355,7 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
 
             headerTextSpan.html(self._processMsg);
 
-            divHeader.textfill({
+            divCommand.textfill({
                 maxFontPixels: 500
             });
 
