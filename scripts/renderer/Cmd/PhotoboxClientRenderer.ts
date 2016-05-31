@@ -96,11 +96,15 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
             var counterTime:number = parseInt(info.getArgs()[0]);
             this.countAndSnap(domElem, counterTime, info.getCallChannel(), info.getId());
         } else if (info.getCmd() == "removeInfo") {
+            var data = {
+                action : MessageBusAction.REFRESH
+            };
+            MessageBus.publish(MessageBusChannel.RENDERER, data);
             $(domElem).empty();
             if (Webcam.container) {
                 Webcam.reset();
             }
-            this.resetZone(domElem);
+            this.displayEndMessage(domElem);
             this._isWaiting = true;
         } else {
             $(domElem).empty();
@@ -353,12 +357,6 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
             });
 
             MessageBus.publishToCall(callChannel, "PostAndValidate", {"image": data_uri, "id": infoid});
-			new Timer(function() {
-				var data = {
-					action : MessageBusAction.REFRESH
-				};
-				MessageBus.publish(MessageBusChannel.RENDERER, data);
-			}, 5000);
         };
 
         var timeoutFunction = function () {
@@ -408,7 +406,7 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
         setTimeout(timeoutFunction, 1000);
     }
 
-    private resetZone(domElem : any) {
+    private displayEndMessage(domElem : any) {
         var divWrapper = $('<div>');
         divWrapper.addClass("PhotoboxClientRenderer_wrapper");
 
