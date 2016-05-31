@@ -250,6 +250,7 @@ class TweetListMedaillonRenderer implements Renderer<TweetList> {
 			contentHeader.append(tweetCreateDate);
 			var tweetCreateDateSpan = $("<span>");
 			var creationDate : any = moment(currentTweet.getCreationDate());
+			creationDate.locale("en");
 			var displayCreationDate = creationDate.fromNow();
 			tweetCreateDateSpan.html(displayCreationDate);
 			tweetCreateDate.append(tweetCreateDateSpan);
