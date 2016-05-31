@@ -82,26 +82,26 @@ class TweetCounterRendererEnglishNoBars implements Renderer<Counter> {
 		}
 
 		var counterHTMLWrapper = $("<div>");
-		counterHTMLWrapper.addClass("TweetCounterRenderer_wrapper");
+		counterHTMLWrapper.addClass("TweetCounterRendererEnglishNoBars_wrapper");
 		counterHTMLWrapper.addClass(rendererTheme);
 
 		var hashtagDiv = $("<div>");
-		hashtagDiv.addClass("TweetCounterRenderer_hashtag");
+		hashtagDiv.addClass("TweetCounterRendererEnglishNoBars_hashtag");
 
 		var spanPresentQuery = $("<span>");
-		spanPresentQuery.addClass("TweetCounterRenderer_presentquery");
+		spanPresentQuery.addClass("TweetCounterRendererEnglishNoBars_presentquery");
 		spanPresentQuery.html("Tweets about: "+decodeURIComponent(info.getQuery()));
         hashtagDiv.append(spanPresentQuery);
 
 		counterHTMLWrapper.append(hashtagDiv);
 
 		var counterMainzone = $("<div>");
-		counterMainzone.addClass("TweetCounterRenderer_mainzone");
+		counterMainzone.addClass("TweetCounterRendererEnglishNoBars_mainzone");
 
 		counterHTMLWrapper.append(counterMainzone);
 
 		var counterDiv = $("<div>");
-		counterDiv.addClass("TweetCounterRenderer_counter");
+		counterDiv.addClass("TweetCounterRendererEnglishNoBars_counter");
 
 		counterMainzone.append(counterDiv);
 
@@ -118,8 +118,8 @@ class TweetCounterRendererEnglishNoBars implements Renderer<Counter> {
 
 		for(var i = 0; i < nbDigit; i++) {
 			var digitList = $("<ul>");
-			digitList.addClass("TweetCounterRenderer_digitList");
-			digitList.addClass("TweetCounterRenderer_digitList" + i.toString());
+			digitList.addClass("TweetCounterRendererEnglishNoBars_digitList");
+			digitList.addClass("TweetCounterRendererEnglishNoBars_digitList" + i.toString());
 			digitList.css("width", digitListWidth + "%");
 
 			counterDiv.append(digitList);
@@ -131,12 +131,12 @@ class TweetCounterRendererEnglishNoBars implements Renderer<Counter> {
 		counterDiv.append(clearDigitList);
 
 		var twitterLogo = $("<div>");
-		twitterLogo.addClass("TweetCounterRenderer_twitter_logo");
+		twitterLogo.addClass("TweetCounterRendererEnglishNoBars_twitter_logo");
 
 		counterMainzone.append(twitterLogo);
 
 		var nbTweetsTxtDiv = $("<div>");
-		nbTweetsTxtDiv.addClass("TweetCounterRenderer_nbtweets");
+		nbTweetsTxtDiv.addClass("TweetCounterRendererEnglishNoBars_nbtweets");
 
 		var nbTweetsTxtSpan = $("<span>");
 		var dateSince = moment(info.getSince()).locale('en');
@@ -149,12 +149,12 @@ class TweetCounterRendererEnglishNoBars implements Renderer<Counter> {
 		$(domElem).append(counterHTMLWrapper);
 
 		for(var i = 0; i < nbDigit; i++) {
-			var digitList = $(domElem).find(".TweetCounterRenderer_digitList" + i.toString()).first();
+			var digitList = $(domElem).find(".TweetCounterRendererEnglishNoBars_digitList" + i.toString()).first();
 			digitList.css("height", digitList.css( "height" ));
 
 			for(var j = 0; j < 11; j++) {
 				var digitElem = $("<li>");
-				digitElem.addClass("TweetCounterRenderer_digit" + j.toString());
+				digitElem.addClass("TweetCounterRendererEnglishNoBars_digit" + j.toString());
 				digitElem.css("line-height", digitList.css( "height" ));
 				var digitElemSpan = $("<span>");
 				digitElemSpan.html((j%10).toString());
@@ -202,7 +202,7 @@ class TweetCounterRendererEnglishNoBars implements Renderer<Counter> {
 			nbDigit = nbDigit + 1;
 		}
 
-		var currentNbDigit = $(domElem).find(".TweetCounterRenderer_digitList").length;
+		var currentNbDigit = $(domElem).find(".TweetCounterRendererEnglishNoBars_digitList").length;
 
 		if(nbDigit != currentNbDigit) {
 
@@ -223,24 +223,24 @@ class TweetCounterRendererEnglishNoBars implements Renderer<Counter> {
 	 * @param {Function} endCallback - Callback function called at the end of animation.
 	 */
 	animate(info : Counter, domElem : any, rendererTheme : string, endCallback : Function) {
-		$(".TweetCounterRenderer_hashtag").textfill({
+		$(".TweetCounterRendererEnglishNoBars_hashtag").textfill({
 			maxFontPixels: 500
 		});
 
-		$(".TweetCounterRenderer_nbtweets").textfill({
+		$(".TweetCounterRendererEnglishNoBars_nbtweets").textfill({
 			maxFontPixels: 500
 		});
 
 		var nbDigit = info.getValue().toString().length;
 		var infoValue = info.getValue();
 
-		var currentNbDigit = $(domElem).find(".TweetCounterRenderer_digitList").length;
+		var currentNbDigit = $(domElem).find(".TweetCounterRendererEnglishNoBars_digitList").length;
 
 		if(nbDigit < currentNbDigit) {
 			for(var i = currentNbDigit; i > nbDigit; i--) {
 				var digitElemNumber = currentNbDigit - i;
 
-				$(domElem).find(".TweetCounterRenderer_digitList" + digitElemNumber.toString()).first().transition({ y: '0px' }, 2000);
+				$(domElem).find(".TweetCounterRendererEnglishNoBars_digitList" + digitElemNumber.toString()).first().transition({ y: '0px' }, 2000);
 			}
 		}
 
@@ -249,7 +249,7 @@ class TweetCounterRendererEnglishNoBars implements Renderer<Counter> {
 			var digitElemValue = (infoValue-(infoValue%Math.pow(10, k-1)))/Math.pow(10, k-1);
 			infoValue = infoValue - (digitElemValue*Math.pow(10, k-1));
 
-			var digitList = $(domElem).find(".TweetCounterRenderer_digitList" + digitElemNumber.toString()).first();
+			var digitList = $(domElem).find(".TweetCounterRendererEnglishNoBars_digitList" + digitElemNumber.toString()).first();
 			digitList.transition({ y: '' + (-digitList.height()*digitElemValue) + 'px' }, 2000);
 		}
 
