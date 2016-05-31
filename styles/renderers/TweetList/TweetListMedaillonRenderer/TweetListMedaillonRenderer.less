@@ -1,0 +1,111 @@
+@import "../../../core.less";
+
+.TweetListMedaillonRenderer_allTweets {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+
+  .TweetListMedaillonRenderer_tweet_wrapper_without_picture {
+    height: 30% !important;
+  }
+
+  .TweetListMedaillonRenderer_tweet_wrapper {
+    height: 60%;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2%;
+
+    .TweetListMedaillonRenderer_profilpic {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      height: 150px;
+      width: 150px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      border: 6px solid white;
+      border-radius: 50%;
+    }
+    
+    .TweetListMedaillonRenderer_picture_wrapper {
+      height: 58%;
+      width: 100%;
+      margin-bottom: 1%;
+      position: relative;
+
+      .TweetListMedaillonRenderer_picture {
+        width: 100%;
+        height: 100%;
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+    }
+
+    .TweetListMedaillonRenderer_main {
+      height: 40%;
+      width: 100%;
+      background-color: rgba(255, 255, 255, 0.6);
+      color: black;
+      font-family: Titillium;
+      
+      .TweetListMedaillonRenderer_main_header {
+        height: 20%;
+        width: 100%;
+        
+        .TweetListMedaillonRenderer_main_header_date {
+          height: 100%;
+          width: 100%;
+          text-align: left;
+          padding-left: 5%;
+          padding-top: 1%;
+          font-style: italic;
+        }
+      }
+      
+      .TweetListMedaillonRenderer_main_message_wrapper {
+        position: relative;
+        height: 70%;
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 2%;
+        font-style: italic;
+
+        .TweetListMedaillonRenderer_main_message {
+          height: 100%;
+          width: 100%;
+          line-height: 1.3;
+          text-align: justify;
+        }
+      }
+      
+    }
+
+    .TweetListMedaillonRenderer_main_without_picture {
+      height: 100% !important;
+
+      .TweetListMedaillonRenderer_main_message_wrapper {
+
+        .TweetListMedaillonRenderer_profilpic {
+          top: 0px !important;
+          left: 0px !important;
+          height: 130px !important;
+          width: 130px !important;
+        }
+
+        .TweetListMedaillonRenderer_main_message {
+          padding-left: 150px !important;
+        }
+      }
+    }
+  }
+}
+
+
