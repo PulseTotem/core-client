@@ -36,7 +36,6 @@
     .TweetListMedaillonRenderer_picture_wrapper {
       height: 58%;
       width: 100%;
-      margin-bottom: 1%;
       position: relative;
 
       .TweetListMedaillonRenderer_picture {
@@ -56,7 +55,7 @@
       font-family: Titillium;
       
       .TweetListMedaillonRenderer_main_header {
-        height: 20%;
+        height: 15%;
         width: 100%;
         
         .TweetListMedaillonRenderer_main_header_date {
@@ -65,17 +64,19 @@
           text-align: left;
           padding-left: 5%;
           padding-top: 1%;
-          font-style: italic;
+          //color: #878787;
+          font-weight: lighter;
         }
       }
       
       .TweetListMedaillonRenderer_main_message_wrapper {
         position: relative;
-        height: 70%;
+        height: 80%;
         width: 90%;
         margin-left: auto;
         margin-right: auto;
         margin-top: 2%;
+        margin-bottom: 2%;
         font-style: italic;
 
         .TweetListMedaillonRenderer_main_message {
@@ -83,6 +84,14 @@
           width: 100%;
           line-height: 1.3;
           text-align: justify;
+        }
+
+        .TweetListMedaillonRenderer_main_message_hashtag {
+          color: darkblue;
+        }
+
+        .TweetListMedaillonRenderer_main_message_mention {
+          font-variant: small-caps;
         }
       }
       

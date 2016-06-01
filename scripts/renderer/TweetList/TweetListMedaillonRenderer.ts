@@ -269,7 +269,12 @@ class TweetListMedaillonRenderer implements Renderer<TweetList> {
 			contentMessageWrapper.append(contentMessage);
 
 			var contentMessageSpan = $("<span>");
-			contentMessageSpan.html(currentTweet.getMessage());
+
+			var originalMessage = currentTweet.getMessage();
+			var emphasizeHashtag = self.emphasizeHashtag(originalMessage);
+			var emphasizeMention = self.emphasizeMention(emphasizeHashtag);
+
+			contentMessageSpan.html(emphasizeMention);
 			contentMessage.append(contentMessageSpan);
 
 			if (currentTweet.getPictures().length > 0) {
@@ -308,5 +313,19 @@ class TweetListMedaillonRenderer implements Renderer<TweetList> {
 		}
 
 		endCallback();
+	}
+
+	private emphasizeHashtag(message : string) : string {
+		var regexp = /#(\w*)(\W)/g;
+		var retour = "<span class=\"TweetListMedaillonRenderer_main_message_hashtag\">#$1$2</span>";
+
+		return message.replace(regexp, retour);
+	}
+
+	private emphasizeMention(message : string) : string {
+		var regexp = /@(\w*)(\W)/g;
+		var retour = "<span class=\"TweetListMedaillonRenderer_main_message_mention\">@$1$2</span>";
+
+		return message.replace(regexp, retour);
 	}
 }
