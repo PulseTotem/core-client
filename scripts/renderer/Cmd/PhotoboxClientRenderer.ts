@@ -215,6 +215,20 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
 		var divCommandText = $('<div>');
 		divCommandText.addClass("PhotoboxClientRenderer_command_text");
 
+        var simulateKeyEvent = function (element) {
+            console.log("Click detected !");
+            var e = $.Event('keypress');
+            e.keyCode = 65; // Character 'A'
+            e.shiftKey = true;
+            $(document).trigger(e);
+        };
+
+        divCommandText.click(function() {
+            simulateKeyEvent(divCommandText);
+        });
+
+        divCommandText.css('cursor','pointer');
+
         var headerTextSpan = $('<span>');
         headerTextSpan.html(this._initMsg);
         headerTextSpan.addClass("PhotoboxClientRenderer_command_span");
