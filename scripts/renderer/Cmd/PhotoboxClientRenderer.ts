@@ -212,16 +212,20 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
         imgPush.css("background-image","url('https://cms.pulsetotem.fr/images/d4052200-2772-11e6-83f6-33e3ba783274/raw')");
         divCommand.append(imgPush);
 
+		var divCommandText = $('<div>');
+		divCommandText.addClass("PhotoboxClientRenderer_command_text");
+
         var headerTextSpan = $('<span>');
         headerTextSpan.html(this._initMsg);
         headerTextSpan.addClass("PhotoboxClientRenderer_command_span");
 
-        divCommand.append(headerTextSpan);
+		divCommandText.append(headerTextSpan);
+		divCommand.append(divCommandText);
         divWrapper.append(divCommand);
 
         domElem.append(divWrapper);
 
-        divCommand.textfill({
+		divCommandText.textfill({
             maxFontPixels: 500
         });
 
@@ -416,6 +420,29 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
         var divResultPhotoImg = $('<div>');
         divResultPhotoImg.addClass("PhotoboxClientRenderer_photoResult");
         divResultPhotoImg.css('background-image', 'url('+this._lastPhoto+')');
+
+		/*
+		 var divCommand = $('<div>');
+		 divCommand.addClass("PhotoboxClientRenderer_command");
+
+		 var divCommandText = $('<div>');
+		 divCommandText.addClass("PhotoboxClientRenderer_command_text");
+
+		 var headerTextSpan = $('<span>');
+		 headerTextSpan.html(this._endMsg);
+		 headerTextSpan.addClass("PhotoboxClientRenderer_command_span");
+
+		 divCommandText.append(headerTextSpan);
+		 divCommand.append(divCommandText);
+		 divWrapper.append(divCommand);
+
+		 $(domElem).append(divWrapper);
+
+		 divCommandText.textfill({
+		 maxFontPixels: 500
+		 });
+
+		 */
 
         var divMessage = $('<div>');
         divMessage.addClass("PhotoboxClientRenderer_messageFin");
