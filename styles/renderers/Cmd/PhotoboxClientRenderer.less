@@ -126,23 +126,46 @@
   }
 
   .PhotoboxClientRenderer_photoResult {
-    width: 100%;
-    height: 100%;
+    width: 90%;
+    height: 90%;
     background-size: cover;
     margin: auto;
 
     .PhotoboxClientRenderer_messageFin {
       position: relative;
       width: 90%;
-      height: 90%;
-      background-color: rgba(0,0,0,0.5);
-      font-family: Titillium, Tahoma, Roboto, Arial, sans-serif;
-      color: white;
-      text-align: center;
-      top: 5%;
-      bottom: 5%;
+      height: 20%;
+      top: 90%;
       left: 5%;
       right: 5%;
+      font-family: Titillium, Tahoma, Roboto, Arial, sans-serif;
+      background-color: #ffdb35;
+      color: black;
+      font-weight: bold;
+      text-align: center;
+
+      .PhotoboxClientRenderer_command_text {
+        height: 90%;
+        margin-top: 2%;
+
+        .PhotoboxClientRenderer_command_span {
+          /*line-height: 100%;
+          vertical-align: sub;*/
+        }
+      }
+    }
+
+    .PhotoboxClientRenderer_profilpic {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      height: 150px;
+      width: 150px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      border: 6px solid white;
+      border-radius: 50%;
     }
   }
 }
