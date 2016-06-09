@@ -40,10 +40,13 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
     private _counterMsg : string;
     private _processMsg : string;
     private _endMsg : string;
+	private _medaillonPicture : string;
 
     constructor() {
         this._isWaiting = false;
         this._isInitalized = false;
+
+		this._medaillonPicture = "https://cms.pulsetotem.fr/images/d27d44f0-224d-11e6-83f6-33e3ba783274/raw?size=small";
     }
 
     /**
@@ -435,9 +438,8 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
         divResultPhotoImg.addClass("PhotoboxClientRenderer_photoResult");
         divResultPhotoImg.css('background-image', 'url('+this._lastPhoto+')');
 
-		/*
 		 var divCommand = $('<div>');
-		 divCommand.addClass("PhotoboxClientRenderer_command");
+		 divCommand.addClass("PhotoboxClientRenderer_messageFin");
 
 		 var divCommandText = $('<div>');
 		 divCommandText.addClass("PhotoboxClientRenderer_command_text");
@@ -448,33 +450,22 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
 
 		 divCommandText.append(headerTextSpan);
 		 divCommand.append(divCommandText);
-		 divWrapper.append(divCommand);
+		divResultPhotoImg.append(divCommand);
+
+		var medaillon = $("<div>");
+		medaillon.addClass("PhotoboxClientRenderer_profilpic");
+		medaillon.css("background-image","url(" + this._medaillonPicture + ")");
+
+
+		divResultPhotoImg.append(medaillon);
+
+		divWrapper.append(divResultPhotoImg);
 
 		 $(domElem).append(divWrapper);
 
 		 divCommandText.textfill({
-		 maxFontPixels: 500
+		 	maxFontPixels: 500
 		 });
-
-		 */
-
-        var divMessage = $('<div>');
-        divMessage.addClass("PhotoboxClientRenderer_messageFin");
-
-        var messageSpan = $('<span>');
-        messageSpan.html(this._endMsg);
-        divMessage.append(messageSpan);
-
-        divResultPhotoImg.append(divMessage);
-
-        divWrapper.append(divResultPhotoImg);
-
-
-        $(domElem).append(divWrapper);
-
-        divMessage.textfill({
-            maxFontPixels: 500
-        });
     }
 
     /**
@@ -488,14 +479,11 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
      */
     updateRender(info : Cmd, domElem : any, rendererTheme : string, endCallback : Function) {
 
-        /** On Going **/ //		if (info.getCmd() != "validatedPicture") {
-
         if (Webcam.container) {
             Webcam.reset();
         }
 
         this.render(info, domElem, rendererTheme, endCallback);
-        /** On Going **/ //		}
     }
 
     /**

@@ -90,7 +90,7 @@ class TweetCounterRendererEnglishNoBars implements Renderer<Counter> {
 
 		var spanPresentQuery = $("<span>");
 		spanPresentQuery.addClass("TweetCounterRendererEnglishNoBars_presentquery");
-		spanPresentQuery.html("Tweets about: "+decodeURIComponent(info.getQuery()));
+		spanPresentQuery.html("Tweets about: <span>"+decodeURIComponent(info.getQuery()) + "<span>");
         hashtagDiv.append(spanPresentQuery);
 
 		counterHTMLWrapper.append(hashtagDiv);
