@@ -43,8 +43,8 @@ class IRSAMWeatherRenderer implements Renderer<Weather> {
         wrapperHTML.addClass("IRSAMWeatherRenderer_wrapper");
         wrapperHTML.addClass(rendererTheme);
 
-        var divSymbol = $("<div>");
-        divSymbol.addClass("IRSAMWeatherRenderer_divSymbol");
+        var spanWeather = $("<span>");
+        spanWeather.addClass("IRSAMWeatherRenderer_spanWeather");
 
         var symbol = "";
         switch(info.getStatus()) {
@@ -94,35 +94,33 @@ class IRSAMWeatherRenderer implements Renderer<Weather> {
         }
 
         var spanSymbol = $("<i>");
+        spanSymbol.addClass("IRSAMWeatherRenderer_iSymbol");
         spanSymbol.addClass("wi");
         spanSymbol.addClass(symbol);
-        divSymbol.append(spanSymbol);
-        wrapperHTML.append(divSymbol);
-
-        var divTemperature = $("<div>");
-        divTemperature.addClass("IRSAMWeatherRenderer_divTemperature");
+        spanWeather.append(spanSymbol);
 
         var spanTemperature = $("<span>");
-        spanTemperature.html(info.getTemperature());
-        divTemperature.append(spanTemperature);
+        spanTemperature.addClass("IRSAMWeatherRenderer_spanTemperature");
+        spanTemperature.html("   "+Math.round(info.getTemperature()));
 
-        var liTemperatureSymbol = $("<li>");
+        var liTemperatureSymbol = $("<i>");
         liTemperatureSymbol.addClass("wi");
         liTemperatureSymbol.addClass("wi-celsius");
 
-        divTemperature.append(liTemperatureSymbol);
+        spanTemperature.append(liTemperatureSymbol);
 
-        wrapperHTML.append(divTemperature);
+        spanWeather.append(spanTemperature);
+
+        wrapperHTML.append(spanWeather);
 
         $(domElem).append(wrapperHTML);
 
-        divSymbol.textfill({
+        wrapperHTML.textfill({
             maxFontPixels: 500
         });
 
-        divTemperature.textfill({
-            maxFontPixels: 500
-        });
+        wrapperHTML.css("line-height",wrapperHTML.height()+"px");
+
         endCallback();
     }
 
