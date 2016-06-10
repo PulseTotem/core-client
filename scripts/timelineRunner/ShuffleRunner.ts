@@ -68,17 +68,32 @@ class ShuffleRunner extends TimelineRunner {
 		relativeEvents.forEach(function(relativeEvent : RelativeEventItf) {
 			var renderer : Renderer<any> = relativeEvent.getCall().getCallType().getRenderer();
 
+			var rendererTheme : string = relativeEvent.getCall().getRendererTheme();
+
 			var listInfos : Array<Info> = relativeEvent.getCall().getListInfos();
 
 			if(listInfos.length > 0) {
 
 				var listInfoRenderers:Array<InfoRenderer<any>> = listInfos.map(function (e, i) {
-					return new InfoRenderer(e, renderer);
+					return new InfoRenderer(e, renderer, rendererTheme);
 				});
 
 				if (listInfoRenderers.length > 0) {
 					allInfoRenderers = allInfoRenderers.concat(listInfoRenderers);
-					totalTime += relativeEvent.getDuration();
+
+					//TODO: Manage boolean to force to use current.getDuration() or cumulated time of Info List...
+					//Default: we choose cumulated time of Info List
+
+					var totalDuration : number = 0;
+
+					listInfoRenderers.forEach(function(infoRenderer) {
+						totalDuration += infoRenderer.getInfo().getDurationToDisplay();
+					});
+
+					totalTime += totalDuration;
+
+					//else if we use relativeEvent.getDuration()
+					//totalTime += relativeEvent.getDuration();
 				}
 			}
 		});
@@ -126,9 +141,87 @@ class ShuffleRunner extends TimelineRunner {
 	 * @method stop
 	 */
 	stop() {
+		//this.relativeTimeline.getBehaviour().stop();
 		if(this._timer != null) {
 			this._timer.stop();
 			this._timer = null;
+		}
+	}
+
+	/**
+	 * Display last Info of Previous Event.
+	 *
+	 * @method displayLastInfoOfPreviousEvent
+	 */
+	displayLastInfoOfPreviousEvent() {
+		this.relativeTimeline.displayLastInfo();
+	}
+
+	/**
+	 * Display first Info of Next Event.
+	 *
+	 * @method displayFirstInfoOfNextEvent
+	 */
+	displayFirstInfoOfNextEvent() {
+		this.relativeTimeline.displayFirstInfo();
+	}
+
+	/**
+	 * Update current timer from list of current displayed Infos
+	 *
+	 * @method updateCurrentTimer
+	 */
+	updateCurrentTimer() {
+		var self = this;
+
+		if(this._timer != null) {
+
+			var relativeEvents:Array<RelativeEventItf> = this.relativeTimeline.getRelativeEvents();
+
+			var totalTime:number = 0;
+
+			relativeEvents.forEach(function (relativeEvent:RelativeEventItf) {
+				var listInfos:Array<Info> = relativeEvent.getCall().getListInfos();
+
+				if (listInfos.length > 0) {
+
+					//TODO: Manage boolean to force to use current.getDuration() or cumulated time of Info List...
+					//Default: we choose cumulated time of Info List
+
+					var totalDuration:number = 0;
+
+					listInfos.forEach(function (info) {
+						totalDuration += info.getDurationToDisplay();
+					});
+
+					totalTime += totalDuration;
+				}
+			});
+
+			this._timer.pause();
+
+			var prevTime = this._timer.getDelay();
+
+			var diffDelay = (totalTime * 1000) - prevTime;
+
+			if (diffDelay >= 0) {
+				this._timer.addToDelay(diffDelay);
+				this._timer.resume();
+			} else {
+				diffDelay = diffDelay * (-1); //because diffDelay is negative before this operation
+
+				var remainingTime = this._timer.getRemaining();
+
+				var diffRemaining = remainingTime - diffDelay;
+
+				if (diffRemaining > 0) {
+					this._timer.removeToDelay(diffDelay);
+					this._timer.resume();
+				} else {
+					this._timer.stop();
+					self._shuffle();
+				}
+			}
 		}
 	}
 }

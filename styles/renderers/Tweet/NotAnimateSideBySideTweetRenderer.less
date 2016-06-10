@@ -1,0 +1,204 @@
+@import "../../core.less";
+
+.NotAnimateSideBySideTweetRenderer_wrapper {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+
+  .NotAnimateSideBySideTweetRenderer_twitter_logo_container {
+    position: absolute;
+    top: 3%;
+    left: -10px;
+    width: 30px;
+    height: 30px;
+
+    .NotAnimateSideBySideTweetRenderer_twitter_logo_shadow {
+      background-color: grey;
+      width: 10px;
+      height: 10px;
+      bottom: 0px;
+      transform: scale(1) scaleZ(1) rotateZ(-30deg);
+      transform-origin: 100%100%;
+      position: absolute;
+      left: 4px;
+    }
+
+    .NotAnimateSideBySideTweetRenderer_twitter_logo_color {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #55ACEE;
+    }
+
+    .NotAnimateSideBySideTweetRenderer_twitter_logo {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url("../static/images/Twitter_logo_white.png");
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+    }
+  }
+
+  .NotAnimateSideBySideTweetRenderer_profil {
+    width: 20%;
+    height: 100%;
+    padding-top: 5%;
+    padding-bottom: 5%;
+
+
+    .NotAnimateSideBySideTweetRenderer_profil_picture {
+      width: 90%;
+      height: 60%;
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+
+      .NotAnimateSideBySideTweetRenderer_profil_picture_img {
+        max-width: 100%;
+        max-height: 100%;
+        border-radius: 100%;
+        border-style: solid;
+        border-width: 5px;
+      }
+    }
+
+    .NotAnimateSideBySideTweetRenderer_profil_realname {
+      width: 90%;
+      height: 17%;
+      font-weight: bold;
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .NotAnimateSideBySideTweetRenderer_profil_username > span::before {
+      content: "@";
+    }
+
+    .NotAnimateSideBySideTweetRenderer_profil_username {
+      width: 90%;
+      height: 13%;
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  .NotAnimateSideBySideTweetRenderer_content {
+    width: 79%;
+    height: 100%;
+    border-left: 5px solid;
+    margin-left: 1%;
+
+    .NotAnimateSideBySideTweetRenderer_content_arrow {
+      position: absolute;
+      top: 50%;
+      margin-left: -21px;
+    }
+
+    .NotAnimateSideBySideTweetRenderer_content_message_with_picture {
+      width: 50% !important;
+    }
+
+    .NotAnimateSideBySideTweetRenderer_content_message_empty {
+      width: 0% !important;
+    }
+
+    .NotAnimateSideBySideTweetRenderer_content_message {
+      line-height: initial;
+      width: 100%;
+      height: 100%;
+
+      .NotAnimateSideBySideTweetRenderer_content_message_header {
+        width: 96%;
+        height: 12%;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 1%;
+        text-align: right;
+      }
+
+      .NotAnimateSideBySideTweetRenderer_content_message_main {
+        width: 90%;
+        height: 69%;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 1%;
+        position: relative;
+        text-align: justify;
+        font-family: 'Roboto', sans-serif;
+
+        span::before {
+          //content: "\00ab";
+          content: "\201C";
+          //transform: rotate(30deg);
+          position: absolute;
+          /*top: -40px;
+          left: -30px;*/
+          top: -6%;
+          left: -3%;
+          font-size: 30px;
+        }
+
+        /*span::after {
+          //content: "\00bb";
+          content: "\201D";
+          //transform: rotate(27deg);
+          position: absolute;
+          //bottom: -30px;
+          //right: -40px;
+          bottom: -6%;
+          right: -5%;
+          font-size: 2em;
+        }*/
+      }
+
+      .NotAnimateSideBySideTweetRenderer_content_message_footer {
+        width: 96%;
+        height: 12%;
+        margin-left: auto;
+        margin-right: auto;
+
+        .NotAnimateSideBySideTweetRenderer_content_message_footer_favorite {
+
+          .badge {
+            background-color: transparent;
+            color: inherit;
+          }
+        }
+
+        .NotAnimateSideBySideTweetRenderer_content_message_footer_retweet {
+
+          .badge {
+            background-color: transparent;
+            color: inherit;
+          }
+        }
+      }
+    }
+
+    .NotAnimateSideBySideTweetRenderer_content_picture_alone {
+      width: 100% !important;
+    }
+
+    .NotAnimateSideBySideTweetRenderer_content_picture {
+      width: 50%;
+      height: 100%;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      border: 10px solid;
+    }
+  }
+}

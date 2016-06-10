@@ -1,0 +1,173 @@
+@import "../../core.less";
+
+.PhotoboxClientRenderer_wrapper {
+  width: 100%;
+  height: 100%;
+
+  .PhotoboxClientRenderer_header {
+    font-family: Titillium, Tahoma, Roboto, Arial, sans-serif;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+    height: 10%;
+
+    .PhotoboxClientRenderer_header_span {
+      line-height: 100%;
+      vertical-align: sub;
+    }
+  }
+
+  .PhotoboxClientRenderer_command {
+    font-family: Titillium, Tahoma, Roboto, Arial, sans-serif;
+    background-color: #ffdb35;
+    color: black;
+    font-weight: bold;
+    text-align: center;
+    width: 50%;
+    height: 10%;
+    position: relative;
+    bottom: 5%;
+    margin: auto;
+    padding: 2px;
+
+    .PhotoboxClientRenderer_command_text {
+        height: 90%;
+        margin-top: 2%;
+
+      .PhotoboxClientRenderer_command_span {
+        /*line-height: 100%;
+        vertical-align: sub;*/
+      }
+    }
+
+    .PhotoboxClientRenderer_command_pic {
+      height: 100%;
+      width: 10%;
+      float: left;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position-x: 10px;
+    }
+  }
+
+  .PhotoboxClientRenderer_WebcamView {
+    width: 100%;
+    height: 90%;
+  }
+
+  .PhotoboxClientRenderer_counter {
+    position: absolute;
+    top: 5%;
+    left: 45%;
+    margin-top: 1em;
+    width: 150px;
+    height: 150px;
+    color: orange;
+    z-index: 1;
+    text-align: center;
+
+    .PhotoboxClientRenderer_counter_span {
+      line-height: 100%;
+      vertical-align: middle;
+      width: 100%;
+      height: 100%;
+      padding: 20%;
+      font-family: Titillium, Tahoma, Roboto, Arial, sans-serif;
+      font-size: 50px;
+      font-weight: bold;
+    }
+  }
+
+  .PhotoboxClientRenderer_shutter {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    .PhotoboxClientRenderer_shutter_top_left {
+      position: absolute;
+      top: -100%;
+      left: -100%;
+      width: 50%;
+      height: 50%;
+      background: linear-gradient(135deg, rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%); /* W3C */
+    }
+
+    .PhotoboxClientRenderer_shutter_top_right {
+      position: absolute;
+      top: -100%;
+      right: -100%;
+      width: 50%;
+      height: 50%;
+      background: linear-gradient(45deg, rgba(14,14,14,1) 0%,rgba(125,126,125,1) 100%); /* W3C */
+    }
+
+    .PhotoboxClientRenderer_shutter_bottom_left {
+      position: absolute;
+      bottom: -100%;
+      left: -100%;
+      width: 50%;
+      height: 50%;
+      background: linear-gradient(45deg, rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%); /* W3C */
+    }
+
+    .PhotoboxClientRenderer_shutter_bottom_right {
+      position: absolute;
+      bottom: -100%;
+      right: -100%;
+      width: 50%;
+      height: 50%;
+      background: linear-gradient(135deg, rgba(14,14,14,1) 0%,rgba(125,126,125,1) 100%); /* W3C */
+    }
+
+  }
+
+  .PhotoboxClientRenderer_photoResult {
+    width: 90%;
+    height: 90%;
+    background-size: cover;
+    margin: auto;
+
+    .PhotoboxClientRenderer_messageFin {
+      position: relative;
+      width: 90%;
+      height: 20%;
+      top: 100px;
+      left: 35px;
+      right: 5%;
+      font-family: Titillium, Tahoma, Roboto, Arial, sans-serif;
+      background-color: #ffdb35;
+      color: black;
+      font-weight: bold;
+      text-align: center;
+      padding-left: 75px;
+
+      .PhotoboxClientRenderer_command_text {
+        height: 100%;
+        padding-top: 1%;
+
+        .PhotoboxClientRenderer_command_span {
+          /*line-height: 100%;
+          vertical-align: sub;*/
+        }
+      }
+    }
+
+    .PhotoboxClientRenderer_profilpic {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      height: 150px;
+      width: 150px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      border: 6px solid white;
+      border-radius: 50%;
+    }
+  }
+}
+

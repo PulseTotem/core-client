@@ -4,6 +4,7 @@
  */
 
 /// <reference path="../timeline/RelativeTimelineItf.ts" />
+/// <reference path="../../t6s-core/core/scripts/infotype/Info.ts" />
 
 /**
  * Represents a TimelineRunner of The6thScreen Client.
@@ -73,5 +74,32 @@ class TimelineRunner {
 	 */
 	stop() {
 		Logger.error("TimelineRunner - stop : Method need to be implemented.");
+	}
+
+	/**
+	 * Display last Info of Previous Event.
+	 *
+	 * @method displayLastInfoOfPreviousEvent
+	 */
+	displayLastInfoOfPreviousEvent() {
+		Logger.error("TimelineRunner - displayLastInfoOfPreviousEvent : Method need to be implemented.");
+	}
+
+	/**
+	 * Display first Info of Next Event.
+	 *
+	 * @method displayFirstInfoOfNextEvent
+	 */
+	displayFirstInfoOfNextEvent() {
+		Logger.error("TimelineRunner - displayFirstInfoOfNextEvent : Method need to be implemented.");
+	}
+
+	/**
+	 * Update current timer from list of current displayed Infos
+	 *
+	 * @method updateCurrentTimer
+	 */
+	updateCurrentTimer() {
+		Logger.error("TimelineRunner - updateCurrentTimer : Method need to be implemented.");
 	}
 }

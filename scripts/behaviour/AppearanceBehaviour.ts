@@ -1,15 +1,19 @@
 /**
- * @author Christian Brel <christian@the6thscreen.fr, ch.brel@gmail.com>
- * @author Simon Urli <simon@the6thscreen.fr, simon.urli@gmail.com>
+ * @author Christian Brel <christian@pulsetotem.fr, ch.brel@gmail.com>
+ * @author Simon Urli <simon@pulsetotem.fr, simon.urli@gmail.com>
  */
 
 /// <reference path="./Behaviour.ts" />
 /// <reference path="../core/Timer.ts" />
+/// <reference path="../core/MessageBus.ts" />
+/// <reference path="../core/MessageBusChannel.ts" />
+/// <reference path="../core/MessageBusAction.ts" />
 
 /**
  * Represents "Appearance" Behaviour of The6thScreen Client.
  *
  * @class AppearanceBehaviour
+ * @extends Behaviour
  */
 class AppearanceBehaviour extends Behaviour {
 
@@ -91,19 +95,22 @@ class AppearanceBehaviour extends Behaviour {
 
 		var listInfoRenderers = this.getListInfoRenderers();
 
-		if(this._currentInfoRendererId == null) {
-			this._currentInfoRendererId = 0;
-		} else {
-			this._currentInfoRendererId = (this._currentInfoRendererId + 1) % (listInfoRenderers.length);
+		if(listInfoRenderers.length > 0) {
+
+			if (this._currentInfoRendererId == null) {
+				this._currentInfoRendererId = 0;
+			} else {
+				this._currentInfoRendererId = (this._currentInfoRendererId + 1) % (listInfoRenderers.length);
+			}
+
+			var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
+
+			this._displayInfoRenderer(currentInfoRenderer);
+
+			this._timer = new Timer(function () {
+				self._nextInfoRenderer();
+			}, currentInfoRenderer.getInfo().getDurationToDisplay() * 1000);
 		}
-
-		var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
-
-		this._displayInfoRenderer(currentInfoRenderer);
-
-		this._timer = new Timer(function() {
-			self._nextInfoRenderer();
-		}, currentInfoRenderer.getInfo().getDurationToDisplay()*1000);
 	}
 
 	/**
@@ -114,12 +121,98 @@ class AppearanceBehaviour extends Behaviour {
 	 * @param {InfoRenderer} infoRenderer - The InfoRenderer to display.
 	 */
 	private _displayInfoRenderer(infoRenderer : InfoRenderer<any>) {
+		var self = this;
+
 		var renderer = infoRenderer.getRenderer();
+		var rendererTheme = infoRenderer.getRendererTheme();
 
 		$(this.getZone().getZoneDiv()).empty();
-		renderer.render(infoRenderer.getInfo(), this.getZone().getZoneDiv());
 
-		infoRenderer.getInfo().setCastingDate(new Date());
+		var endRender = function() {
+			renderer.animate(infoRenderer.getInfo(), self.getZone().getZoneDiv(), rendererTheme, function() {});
+			infoRenderer.getInfo().setCastingDate(new Date());
+
+			var data = {
+				action : MessageBusAction.DISPLAY,
+				message: infoRenderer.getInfo()
+			};
+			MessageBus.publish(MessageBusChannel.BEHAVIOUR, data);
+		};
+
+		renderer.render(infoRenderer.getInfo(), this.getZone().getZoneDiv(), rendererTheme, endRender);
+	}
+
+	/**
+	 * Refresh view.
+	 *
+	 * @method _refreshView
+	 * @private
+	 */
+	private _refreshView() {
+		var self = this;
+
+		if(this._haveEnoughTime()) {
+			var listInfoRenderers = this.getListInfoRenderers();
+			var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
+			var renderer = currentInfoRenderer.getRenderer();
+			var rendererTheme = currentInfoRenderer.getRendererTheme();
+
+			var endRender = function () {
+				renderer.animate(currentInfoRenderer.getInfo(), self.getZone().getZoneDiv(), rendererTheme, function () {
+				});
+				currentInfoRenderer.getInfo().setCastingDate(new Date());
+			};
+
+			renderer.updateRender(currentInfoRenderer.getInfo(), this.getZone().getZoneDiv(), rendererTheme, endRender);
+		} else {
+			this._nextInfoRenderer();
+		}
+	}
+
+	/**
+	 * Test if updated current info have enough time to display.
+	 *
+	 * @method _haveEnoughTime
+	 * @private
+	 */
+	private _haveEnoughTime() {
+		var self = this;
+
+		if(this._timer != null) {
+
+			var listInfoRenderers = this.getListInfoRenderers();
+			var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
+			var info = currentInfoRenderer.getInfo();
+
+			this._timer.pause();
+
+			var prevTime = this._timer.getDelay();
+
+			var diffDelay = (info.getDurationToDisplay() * 1000) - prevTime;
+
+			if (diffDelay >= 0) {
+				this._timer.addToDelay(diffDelay);
+				this._timer.resume();
+				return true;
+			} else {
+				diffDelay = diffDelay * (-1); //because diffDelay is negative before this operation
+
+				var remainingTime = this._timer.getRemaining();
+
+				var diffRemaining = remainingTime - diffDelay;
+
+				if (diffRemaining > 0) {
+					this._timer.removeToDelay(diffDelay);
+					this._timer.resume();
+					return true;
+				} else {
+					this.stop();
+					return false;
+				}
+			}
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -141,6 +234,8 @@ class AppearanceBehaviour extends Behaviour {
 	resume() {
 		if(this._timer != null) {
 			this._timer.resume();
+		} else {
+			this.start();
 		}
 	}
 
@@ -188,5 +283,175 @@ class AppearanceBehaviour extends Behaviour {
 			this._timer = this._timerBackup;
 			this._timerBackup = null;
 		}
+	}
+
+	/**
+	 * Display previous Info.
+	 *
+	 * @method displayPreviousInfo
+	 */
+	displayPreviousInfo() {
+		var listInfoRenderers = this.getListInfoRenderers();
+
+		if(listInfoRenderers.length > 0) {
+			if(this._currentInfoRendererId != null) {
+				if (this._currentInfoRendererId > 0) {
+					this._currentInfoRendererId = this._currentInfoRendererId - 1;
+					var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
+
+					this._displayInfoRenderer(currentInfoRenderer);
+					return true;
+				} else {
+					if (this._currentInfoRendererId == 0) {
+						return false;
+					}
+				}
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Display next Info.
+	 *
+	 * @method displayNextInfo
+	 */
+	displayNextInfo() {
+		var listInfoRenderers = this.getListInfoRenderers();
+
+		if(listInfoRenderers.length > 0) {
+			if (this._currentInfoRendererId != null) {
+				if (this._currentInfoRendererId < (listInfoRenderers.length - 1)) {
+					this._currentInfoRendererId = this._currentInfoRendererId + 1;
+					var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
+
+					this._displayInfoRenderer(currentInfoRenderer);
+					return true;
+				} else {
+					if (this._currentInfoRendererId == (listInfoRenderers.length - 1)) {
+						return false;
+					}
+				}
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Display last Info.
+	 *
+	 * @method displayLastInfo
+	 */
+	displayLastInfo() {
+		var self = this;
+
+		var listInfoRenderers = this.getListInfoRenderers();
+
+		if(listInfoRenderers.length > 0) {
+
+			this._currentInfoRendererId = listInfoRenderers.length - 1;
+			var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
+
+			this._displayInfoRenderer(currentInfoRenderer);
+
+			this._timer = new Timer(function () {
+				self._nextInfoRenderer();
+			}, currentInfoRenderer.getInfo().getDurationToDisplay() * 1000);
+
+			this.pause();
+		} else {
+			this.stop();
+		}
+	}
+
+	/**
+	 * Display first Info.
+	 *
+	 * @method displayFirstInfo
+	 */
+	displayFirstInfo() {
+		var self = this;
+
+		var listInfoRenderers = this.getListInfoRenderers();
+
+		if(listInfoRenderers.length > 0) {
+
+			this._currentInfoRendererId = 0;
+			var currentInfoRenderer = listInfoRenderers[this._currentInfoRendererId];
+
+			this._displayInfoRenderer(currentInfoRenderer);
+
+			this._timer = new Timer(function () {
+				self._nextInfoRenderer();
+			}, currentInfoRenderer.getInfo().getDurationToDisplay() * 1000);
+
+			this.pause();
+		} else {
+			this.stop();
+		}
+	}
+
+	/**
+	 * Update Info if it's in current list to display (or currently displayed)
+	 *
+	 * @method updateInfo
+	 * @param {Info} info - Info to update.
+	 * @return {boolean} 'true' if done, else otherwise
+	 */
+	updateInfo(info : Info) : boolean {
+		var self = this;
+
+		var listInfoRenderers = this.getListInfoRenderers();
+
+		if(listInfoRenderers.length > 0) {
+
+			var updated = false;
+
+			listInfoRenderers.forEach(function(infoRenderer : InfoRenderer<any>) {
+				if (infoRenderer.getInfo().getId() == info.getId()) {
+					var currentInfoRenderer = listInfoRenderers[self._currentInfoRendererId];
+					if(typeof(currentInfoRenderer) != "undefined"
+					   && currentInfoRenderer != null
+					   && currentInfoRenderer.getInfo().getId() == info.getId()
+					   && ! currentInfoRenderer.getInfo().equals(info)) {
+
+						currentInfoRenderer.setInfo(info);
+						self._refreshView();
+
+					} else {
+						infoRenderer.setInfo(info);
+					}
+					updated = true;
+				}
+			});
+
+			return updated;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Method called after enabling fullscreen on zone.
+	 *
+	 * @method afterEnableFullscreenZone
+	 */
+	afterEnableFullscreenZone() {
+		this._refreshView();
+	}
+
+	/**
+	 * Method called after disabling fullscreen on zone.
+	 *
+	 * @method afterDisableFullscreenZone
+	 */
+	afterDisableFullscreenZone() {
+		this._refreshView();
 	}
 }

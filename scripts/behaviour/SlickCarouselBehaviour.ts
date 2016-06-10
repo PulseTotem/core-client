@@ -10,6 +10,7 @@
  * Represents "Appearance" Behaviour of The6thScreen Client.
  *
  * @class AppearanceBehaviour
+ *  @extends Behaviour
  */
 class SlickCarouselBehaviour extends Behaviour {
 
@@ -76,18 +77,27 @@ class SlickCarouselBehaviour extends Behaviour {
 	 */
 	start() {
 		$(this.getZone().getZoneDiv()).empty();
+
+		var divSlick = $('<div style="height: 100%; width: 100%; position: relative; padding: 15px;">');
+
 		for (var infoRendererKey in this.getListInfoRenderers()) {
 			var infoRenderer : InfoRenderer<any> = this.getListInfoRenderers()[infoRendererKey];
 			var renderer = infoRenderer.getRenderer();
-			renderer.render(infoRenderer.getInfo(), this.getZone().getZoneDiv());
+			var rendererTheme = infoRenderer.getRendererTheme();
+			var divCarousel = $('<div style="height: 100%; width: 100%; position: relative">');
+			renderer.render(infoRenderer.getInfo(), divCarousel, rendererTheme, function() {
+				divSlick.append(divCarousel);
+			});
 		}
-		$(this.getZone().getZoneDiv()).slick({
+
+		$(this.getZone().getZoneDiv()).append(divSlick);
+		divSlick.slick({
 			centerMode: true,
 			centerPadding: '60px',
 			slidesToShow: 3,
 			infinite: true,
 			autoplay: true,
-			speed: 300,
+			autoplaySpeed: 5000,
 			responsive: [
 				{
 					breakpoint: 768,
@@ -129,6 +139,8 @@ class SlickCarouselBehaviour extends Behaviour {
 	resume() {
 		if(this._timer != null) {
 			this._timer.resume();
+		} else {
+			this.start();
 		}
 	}
 
@@ -162,5 +174,61 @@ class SlickCarouselBehaviour extends Behaviour {
 	 */
 	restore() {
 		super.restore();
+	}
+
+
+
+	/**
+	 * Display previous Info.
+	 *
+	 * @method displayPreviousInfo
+	 */
+	displayPreviousInfo() {
+		//TODO
+		Logger.debug("TODO -> SlickCarouselBehaviour - displayPreviousInfo : Method need to be implemented.");
+	}
+
+	/**
+	 * Display next Info.
+	 *
+	 * @method displayNextInfo
+	 */
+	displayNextInfo() {
+		//TODO
+		Logger.debug("TODO -> SlickCarouselBehaviour - displayNextInfo : Method need to be implemented.");
+	}
+
+	/**
+	 * Display last Info.
+	 *
+	 * @method displayLastInfo
+	 */
+	displayLastInfo() {
+		//TODO
+		Logger.debug("TODO -> SlickCarouselBehaviour - displayLastInfo : Method need to be implemented.");
+	}
+
+	/**
+	 * Display first Info.
+	 *
+	 * @method displayFirstInfo
+	 */
+	displayFirstInfo() {
+		//TODO
+		Logger.debug("TODO -> SlickCarouselBehaviour - displayFirstInfo : Method need to be implemented.");
+	}
+
+	/**
+	 * Update Info if it's in current list to display (or currently displayed)
+	 *
+	 * @method updateInfo
+	 * @param {Info} info - Info to update.
+	 * @return {boolean} 'true' if done, else otherwise
+	 */
+	updateInfo(info : Info) : boolean {
+		//TODO
+		//TODO : Manage update of new Info and update display if info is displayed and different than previous one
+		Logger.debug("TODO -> SlickCarouselBehaviour - updateInfo : Method need to be implemented.");
+		return false;
 	}
 }

@@ -96,7 +96,7 @@ class Behaviour {
 
 		listInfoRenderers.forEach(function(infoR : InfoRenderer<any>) {
 			self._listInfoRenderers.push(infoR);
-		})
+		});
 	}
 
 	/**
@@ -136,6 +136,54 @@ class Behaviour {
 	}
 
 	/**
+	 * Display previous Info.
+	 *
+	 * @method displayPreviousInfo
+	 */
+	displayPreviousInfo() {
+		Logger.error("Behaviour - displayPreviousInfo : Method need to be implemented.");
+	}
+
+	/**
+	 * Display next Info.
+	 *
+	 * @method displayNextInfo
+	 */
+	displayNextInfo() {
+		Logger.error("Behaviour - displayNextInfo : Method need to be implemented.");
+	}
+
+	/**
+	 * Display last Info.
+	 *
+	 * @method displayLastInfo
+	 */
+	displayLastInfo() {
+		Logger.error("Behaviour - displayLastInfo : Method need to be implemented.");
+	}
+
+	/**
+	 * Display first Info.
+	 *
+	 * @method displayFirstInfo
+	 */
+	displayFirstInfo() {
+		Logger.error("Behaviour - displayFirstInfo : Method need to be implemented.");
+	}
+
+	/**
+	 * Update Info if it's in current list to display (or currently displayed)
+	 *
+	 * @method updateInfo
+	 * @param {Info} info - Info to update.
+	 * @return {boolean} 'true' if done, else otherwise
+	 */
+	updateInfo(info : Info) : boolean {
+		Logger.error("Behaviour - updateInfoIfCurrentlyDisplay : Method need to be implemented.");
+		return false;
+	}
+
+	/**
 	 * Save.
 	 *
 	 * @method save
@@ -154,5 +202,49 @@ class Behaviour {
 			this._listInfoRenderers = this._listInfoRenderersBackup;
 			this._listInfoRenderersBackup = null;
 		}
+	}
+
+	/**
+	 * Enable fullscreen on zone.
+	 *
+	 * @method enableFullscreenZone
+	 */
+	enableFullscreenZone() {
+		var self = this;
+
+		this._zone.enableFullscreen(function() {
+			self.afterEnableFullscreenZone();
+		});
+	}
+
+	/**
+	 * Method called after enabling fullscreen on zone.
+	 *
+	 * @method afterEnableFullscreenZone
+	 */
+	afterEnableFullscreenZone() {
+		Logger.warn("Behaviour - afterEnableFullscreenZone : Method should be implemented by all Behaviours.");
+	}
+
+	/**
+	 * Disable fullscreen on zone.
+	 *
+	 * @method disableFullscreenZone
+	 */
+	disableFullscreenZone() {
+		var self = this;
+
+		this._zone.disableFullscreen(function() {
+			self.afterDisableFullscreenZone();
+		});
+	}
+
+	/**
+	 * Method called after disabling fullscreen on zone.
+	 *
+	 * @method afterDisableFullscreenZone
+	 */
+	afterDisableFullscreenZone() {
+		Logger.warn("Behaviour - afterDisableFullscreenZone : Method should be implemented by all Behaviours.");
 	}
 }

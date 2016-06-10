@@ -22,9 +22,23 @@ interface CallItf {
 	getCallType() : CallTypeItf;
 
 	/**
+	 * Get the Call's rendererTheme.
+	 *
+	 * @method getRendererTheme
+	 * @return {string} rendererTheme - The CallType's RendererTheme.
+	 */
+	getRendererTheme() : string;
+
+	/**
 	 * Returns Call's Info List.
 	 *
 	 * @method getListInfos
 	 */
 	getListInfos() : Array<Info>;
+
+	/**
+	 * Method to call to inform the Call for a new information
+	 * @param info
+	 */
+	onNewInfo(info : any);
 }

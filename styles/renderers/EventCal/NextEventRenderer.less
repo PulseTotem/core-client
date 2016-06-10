@@ -1,0 +1,51 @@
+@import "../../core.less";
+
+.NextEventRenderer_wrapper {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+
+  .NextEventRenderer_headerContainer {
+    background-color: #E21A66;
+    color: white;
+    padding: 1%;
+    font-weight: bold;
+
+    .NextEventRenderer_nextTitle {
+      width: 22%;
+    }
+
+    .NextEventRenderer_eventTimeContainer {
+      text-align: right;
+      width: 77%;
+
+      .NextEventRenderer_eventTimeLogo {
+        margin-right: 2%;
+      }
+
+      .NextEventRenderer_eventTime {
+
+      }
+    }
+
+    .NextEventRenderer_headerContainerArrow {
+      width: 15px;
+      height: 15px;
+      position: absolute;
+      left: 50%;
+      background-color: inherit;
+      transform: rotate(45deg);
+      margin-top: -1px;
+    }
+  }
+
+  .NextEventRenderer_titleContainer {
+    padding: 1%;
+    padding-top: 2%;
+    text-align: center;
+  }
+}

@@ -1,0 +1,34 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+html, body {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+@tp-min: 480px;
+@tl-min: 800px;
+
+@dp-min: 600px;
+@dl-min: 1000px;
+
+@lp-min: 900px;
+@ll-min: 1500px;
+
+@pp-max: (@tp-min - 1);
+@pl-max: (@tl-min - 1);
+
+@phone-portrait:           ~"only screen and (max-width: @{pp-max}) and (orientation: portrait)";
+@phone-landscape:          ~"only screen and (max-width: @{pl-max}) and (orientation: landscape)";
+
+@tablet-portrait:          ~"only screen and (min-width: @{tp-min}) and (orientation: portrait)";
+@tablet-landscape:         ~"only screen and (min-width: @{tl-min}) and (orientation: landscape)";
+
+@desktop-portrait:         ~"only screen and (min-width: @{dp-min}) and (orientation: portrait)";
+@desktop-landscape:        ~"only screen and (min-width: @{dl-min}) and (orientation: landscape)";
+
+@large-portrait:           ~"only screen and (min-width: @{lp-min}) and (orientation: portrait)";
+@large-landscape:          ~"only screen and (min-width: @{ll-min}) and (orientation: landscape)";
