@@ -43,7 +43,8 @@ class EventVerticalTimelineRenderer implements Renderer<EventList> {
 		wrapperHTML.addClass("EventVerticalTimelineRenderer_wrapper");
 		wrapperHTML.addClass(rendererTheme);
 
-		var maxPercent = Math.floor((100 - info.getEvents().length + 1) / info.getEvents().length);
+		//var maxPercent = Math.floor((100 - info.getEvents().length + 1) / info.getEvents().length);
+		var maxPercent = Math.floor(100 / info.getEvents().length);
 
 		var nowMoment = moment();
 		nowMoment.locale("fr");
