@@ -1,0 +1,40 @@
+@import "./EventVerticalTimelineRenderer.less";
+
+.EventVerticalTimelineRenderer_without_hours_blue_grey {
+  .EventVerticalTimelineRenderer_eventContainer_not_current {
+
+    .EventVerticalTimelineRenderer_eventTimeContainer {
+      display: none !important;
+    }
+
+    .EventVerticalTimelineRenderer_eventNameContainer {
+      width: 100% !important;
+      margin-left: 3% !important;
+
+      .EventVerticalTimelineRenderer_eventPoint {
+        background-color: #38444D !important;
+      }
+
+      .EventVerticalTimelineRenderer_eventName {
+        background-color: #38444D !important;
+      }
+    }
+  }
+
+  .EventVerticalTimelineRenderer_eventContainer_current {
+
+    .EventVerticalTimelineRenderer_eventTimeContainer {
+      display: none !important;
+    }
+
+    .EventVerticalTimelineRenderer_eventNameContainer {
+      width: 100% !important;
+      margin-left: 3% !important;
+
+      .EventVerticalTimelineRenderer_eventName {
+        background-color: white !important;
+        color: #38444D !important;
+      }
+    }
+  }
+}
