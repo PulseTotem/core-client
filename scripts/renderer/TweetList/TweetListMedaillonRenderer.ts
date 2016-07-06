@@ -285,12 +285,17 @@ class TweetListMedaillonRenderer implements Renderer<TweetList> {
 
 			self._domContents[info.getId()].prepend(tweetWrapper);
 
-			var optionTextFill = {
-				maxFontPixels: 500
-			};
+			contentMessage.textfill({
+				maxFontPixels: 500,
+				success: function() {
+					var wrapperSpan = contentMessage.find("span").first();
+					twemoji.parse(wrapperSpan[0]);
+				}
+			});
 
-			contentMessage.textfill(optionTextFill);
-			tweetCreateDate.textfill(optionTextFill);
+			tweetCreateDate.textfill({
+				maxFontPixels: 500
+			});
 
 			self._domContents[info.getId()].transition({
 				'transform': 'translateY(0%)',

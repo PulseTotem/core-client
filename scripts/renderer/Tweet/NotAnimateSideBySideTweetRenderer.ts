@@ -277,7 +277,11 @@ class NotAnimateSideBySideTweetRenderer implements Renderer<Tweet> {
 
 		tweetContentMessageMain.textfill({
 			minFontPixels: 30,
-			maxFontPixels: 500
+			maxFontPixels: 500,
+			success: function() {
+				var wrapperSpan = tweetContentMessageMain.find("span").first();
+				twemoji.parse(wrapperSpan[0]);
+			}
 		});
 
 		favoriteSpan.textfill({
@@ -344,7 +348,11 @@ class NotAnimateSideBySideTweetRenderer implements Renderer<Tweet> {
 
 		tweetContentMessageMain.textfill({
 			minFontPixels: 30,
-			maxFontPixels: 500
+			maxFontPixels: 500,
+			success: function() {
+				var wrapperSpan = tweetContentMessageMain.find("span").first();
+				twemoji.parse(wrapperSpan[0]);
+			}
 		});
 
 		var favoriteSpan = $(domElem).find(".NotAnimateSideBySideTweetRenderer_content_message_footer_favorite").first();
