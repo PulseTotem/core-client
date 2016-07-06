@@ -9,6 +9,7 @@
 
 declare var $: any; // Use of JQuery
 declare var moment: any; // Use of MomentJS
+declare var twemoji: any; // Use of Twemoji
 
 class TweetHalfPictureHalfUserRenderer implements Renderer<Tweet> {
 	/**
@@ -236,7 +237,11 @@ class TweetHalfPictureHalfUserRenderer implements Renderer<Tweet> {
 		$(domElem).append(tweetHTMLWrapper);
 
 		tweetContentWrapper.textfill({
-			maxFontPixels: 500
+			maxFontPixels: 500,
+			success: function() {
+				var wrapperSpan = tweetContentWrapper.find("span").first();
+				twemoji.parse(wrapperSpan[0]);
+			}
 		});
 
 		tweetProfilRealname.textfill({
@@ -328,7 +333,11 @@ class TweetHalfPictureHalfUserRenderer implements Renderer<Tweet> {
 
 
 		tweetContentWrapper.textfill({
-			maxFontPixels: 500
+			maxFontPixels: 500,
+			success: function() {
+				var wrapperSpan = tweetContentWrapper.find("span").first();
+				twemoji.parse(wrapperSpan[0]);
+			}
 		});
 
 

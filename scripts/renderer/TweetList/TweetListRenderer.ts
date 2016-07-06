@@ -321,14 +321,25 @@ class TweetListRenderer implements Renderer<TweetList> {
 
 			self._domContents[info.getId()].prepend(tweetWrapper);
 
-			var optionTextFill = {
+			fullName.textfill({
 				maxFontPixels: 500
-			};
+			});
 
-			fullName.textfill(optionTextFill);
-			username.textfill(optionTextFill);
-			contentMessage.textfill(optionTextFill);
-			tweetCreateDate.textfill(optionTextFill);
+			username.textfill({
+				maxFontPixels: 500
+			});
+
+			contentMessage.textfill({
+				maxFontPixels: 500,
+				success: function() {
+					var wrapperSpan = contentMessage.find("span").first();
+					twemoji.parse(wrapperSpan[0]);
+				}
+			});
+
+			tweetCreateDate.textfill({
+				maxFontPixels: 500
+			});
 
 			self._domContents[info.getId()].transition({
 				'transform': 'translateY(0%)',
