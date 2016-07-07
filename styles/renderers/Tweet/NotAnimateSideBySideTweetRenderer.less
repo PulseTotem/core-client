@@ -199,6 +199,19 @@
       background-repeat: no-repeat;
       background-position: center;
       border: 10px solid;
+      position: relative;
+      overflow: hidden;
+
+      .NotAnimateSideBySideTweetRenderer_background_video {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        min-width: 100%;
+        min-height: 100%;
+        width: auto;
+        height: auto;
+        transform: translateX(-50%) translateY(-50%);
+      }
     }
   }
 }
