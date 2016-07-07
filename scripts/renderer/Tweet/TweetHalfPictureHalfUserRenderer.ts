@@ -178,25 +178,27 @@ class TweetHalfPictureHalfUserRenderer implements Renderer<Tweet> {
 
 		tweetContentWrapper.append(tweetContentWrapperSpan);
 
-		if(info.getPictures().length > 0) {
-
+		if(info.getAnimatedGifs().length > 0) {
 			tweetHTMLTop.addClass("TweetHalfPictureHalfUserRenderer_top_with_image");
 			tweetHTMLBottom.addClass("TweetHalfPictureHalfUserRenderer_bottom_with_image");
-
-			var picture : Picture = info.getPictures()[0];
-			var picURL : PictureURL = null;
-			if(picture.getMedium() != null) {
-				picURL = picture.getMedium();
-			} else if(picture.getSmall() != null) {
-				picURL = picture.getSmall();
-			} else if(picture.getThumb() != null) {
-				picURL = picture.getThumb();
-			}
 
 			var tweetHTMLWrapperBackground = $("<div>");
 			tweetHTMLWrapperBackground.addClass("TweetHalfPictureHalfUserRenderer_wrapperbackground");
 
-			tweetHTMLWrapperBackground.css("background-image", "url('" + picURL.getURL() + "')");
+			var animatedGif = info.getAnimatedGifs()[0];
+			var videoTag : any = null;
+			if(animatedGif.getMute().toString() == "true") {
+				videoTag = $("<video autoplay loop muted>");
+			} else {
+				videoTag = $("<video autoplay loop>");
+			}
+			videoTag.addClass("TweetHalfPictureHalfUserRenderer_background_video");
+			var zoneVideoSource = $("<source>");
+			zoneVideoSource.attr("src", animatedGif.getURL());
+
+			videoTag.append(zoneVideoSource);
+
+			tweetHTMLWrapperBackground.append(videoTag);
 
 			tweetHTMLTop.append(tweetHTMLWrapperBackground);
 
@@ -217,20 +219,60 @@ class TweetHalfPictureHalfUserRenderer implements Renderer<Tweet> {
 
 			tweetHTMLContent.append(tweetFooter);
 		} else {
-			tweetHTMLTop.addClass("TweetHalfPictureHalfUserRenderer_top_no_image");
-			tweetHTMLBottom.addClass("TweetHalfPictureHalfUserRenderer_bottom_no_image");
+			if (info.getPictures().length > 0) {
 
-			var tweetHTMLContent = $("<div>");
-			tweetHTMLContent.addClass("TweetHalfPictureHalfUserRenderer_content");
+				tweetHTMLTop.addClass("TweetHalfPictureHalfUserRenderer_top_with_image");
+				tweetHTMLBottom.addClass("TweetHalfPictureHalfUserRenderer_bottom_with_image");
 
-			tweetHTMLTop.append(tweetHTMLContent);
+				var picture:Picture = info.getPictures()[0];
+				var picURL:PictureURL = null;
+				if (picture.getMedium() != null) {
+					picURL = picture.getMedium();
+				} else if (picture.getSmall() != null) {
+					picURL = picture.getSmall();
+				} else if (picture.getThumb() != null) {
+					picURL = picture.getThumb();
+				}
 
-			//Adding content
-			tweetHTMLContent.append(tweetContentWrapper);
+				var tweetHTMLWrapperBackground = $("<div>");
+				tweetHTMLWrapperBackground.addClass("TweetHalfPictureHalfUserRenderer_wrapperbackground");
 
-			tweetHTMLContent.append(tweetFooter);
+				tweetHTMLWrapperBackground.css("background-image", "url('" + picURL.getURL() + "')");
 
-			tweetHTMLBottomContent.append(tweetProfilInfoDiv);
+				tweetHTMLTop.append(tweetHTMLWrapperBackground);
+
+				var tweetHTMLContent = $("<div>");
+				tweetHTMLContent.addClass("TweetHalfPictureHalfUserRenderer_content");
+
+				tweetHTMLBottomContent.append(tweetHTMLContent);
+
+				var tweetHTMLHeader = $("<div>");
+				tweetHTMLHeader.addClass("TweetHalfPictureHalfUserRenderer_header");
+
+				tweetHTMLContent.append(tweetHTMLHeader);
+
+				tweetHTMLHeader.append(tweetProfilInfoDiv);
+
+				//Adding content
+				tweetHTMLContent.append(tweetContentWrapper);
+
+				tweetHTMLContent.append(tweetFooter);
+			} else {
+				tweetHTMLTop.addClass("TweetHalfPictureHalfUserRenderer_top_no_image");
+				tweetHTMLBottom.addClass("TweetHalfPictureHalfUserRenderer_bottom_no_image");
+
+				var tweetHTMLContent = $("<div>");
+				tweetHTMLContent.addClass("TweetHalfPictureHalfUserRenderer_content");
+
+				tweetHTMLTop.append(tweetHTMLContent);
+
+				//Adding content
+				tweetHTMLContent.append(tweetContentWrapper);
+
+				tweetHTMLContent.append(tweetFooter);
+
+				tweetHTMLBottomContent.append(tweetProfilInfoDiv);
+			}
 		}
 
 		$(domElem).css("overflow", "visible");

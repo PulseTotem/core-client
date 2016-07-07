@@ -240,6 +240,30 @@ class SideBySideTweetRenderer implements Renderer<Tweet> {
 			picturesHTMLElems.push(tweetContentPicture);
 		});
 
+		info.getAnimatedGifs().forEach(function(animatedGif : VideoURL) {
+			var tweetContentPicture = $("<div>");
+			tweetContentPicture.addClass("SideBySideTweetRenderer_content_picture");
+			tweetContentPicture.addClass("SideBySideTweetRenderer_content_picture_" + animatedGif.getId());
+
+			tweetContent.append(tweetContentPicture);
+
+			var videoTag : any = null;
+			if(animatedGif.getMute().toString() == "true") {
+				videoTag = $("<video autoplay loop muted>");
+			} else {
+				videoTag = $("<video autoplay loop>");
+			}
+			videoTag.addClass("SideBySideTweetRenderer_background_video");
+			var zoneVideoSource = $("<source>");
+			zoneVideoSource.attr("src", animatedGif.getURL());
+
+			videoTag.append(zoneVideoSource);
+
+			tweetContentPicture.append(videoTag);
+
+			picturesHTMLElems.push(tweetContentPicture);
+		});
+
 
 		//Clearfix for Wrapper
 		var clearFixtweetHTMLWrapper = $("<div>");
@@ -395,6 +419,25 @@ class SideBySideTweetRenderer implements Renderer<Tweet> {
 			tweetContentPicture.css("background-image", "url('" + picURL.getURL() + "')");
 		});
 
+		info.getAnimatedGifs().forEach(function(animatedGif : VideoURL) {
+			var tweetContentPicture = $(domElem).find(".SideBySideTweetRenderer_content_picture_" + animatedGif.getId()).first();
+
+			var videoTag : any = null;
+			if(animatedGif.getMute().toString() == "true") {
+				videoTag = $("<video autoplay loop muted>");
+			} else {
+				videoTag = $("<video autoplay loop>");
+			}
+			videoTag.addClass("SideBySideTweetRenderer_background_video");
+			var zoneVideoSource = $("<source>");
+			zoneVideoSource.attr("src", animatedGif.getURL());
+
+			videoTag.append(zoneVideoSource);
+
+			tweetContentPicture.empty();
+			tweetContentPicture.append(videoTag);
+		});
+
 		endCallback();
 	}
 
@@ -409,7 +452,7 @@ class SideBySideTweetRenderer implements Renderer<Tweet> {
 	 */
 	animate(info : Tweet, domElem : any, rendererTheme : string, endCallback : Function) {
 		var totalDuration = info.getDurationToDisplay()*1000;
-		var nbItems = info.getPictures().length + 1;
+		var nbItems = info.getPictures().length + info.getAnimatedGifs().length + 1;
 		var itemDuration = totalDuration/nbItems;
 
 		$(domElem).find(".SideBySideTweetRenderer_content_picture").each(function(index : any, elem : any) {
