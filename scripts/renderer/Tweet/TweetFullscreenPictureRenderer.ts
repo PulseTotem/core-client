@@ -56,19 +56,37 @@ class TweetFullscreenPictureRenderer implements Renderer<Tweet> {
 		var tweetHTMLWrapperBackground = $("<div>");
 		tweetHTMLWrapperBackground.addClass("TweetFullscreenPictureRenderer_wrapperbackground");
 
-		if(info.getPictures().length > 0) {
+		if(info.getAnimatedGifs().length > 0) {
+			var animatedGif = info.getAnimatedGifs()[0];
 
-			var picture : Picture = info.getPictures()[0];
-			var picURL : PictureURL = null;
-			if(picture.getMedium() != null) {
-				picURL = picture.getMedium();
-			} else if(picture.getSmall() != null) {
-				picURL = picture.getSmall();
-			} else if(picture.getThumb() != null) {
-				picURL = picture.getThumb();
+			var videoTag : any = null;
+			if(animatedGif.getMute().toString() == "true") {
+				videoTag = $("<video autoplay loop muted>");
+			} else {
+				videoTag = $("<video autoplay loop>");
 			}
+			videoTag.addClass("TweetFullscreenPictureRenderer_background_video");
+			var zoneVideoSource = $("<source>");
+			zoneVideoSource.attr("src", animatedGif.getURL());
 
-			tweetHTMLWrapperBackground.css("background-image", "url('" + picURL.getURL() + "')");
+			videoTag.append(zoneVideoSource);
+
+			tweetHTMLWrapperBackground.append(videoTag);
+		} else {
+			if (info.getPictures().length > 0) {
+
+				var picture:Picture = info.getPictures()[0];
+				var picURL:PictureURL = null;
+				if (picture.getMedium() != null) {
+					picURL = picture.getMedium();
+				} else if (picture.getSmall() != null) {
+					picURL = picture.getSmall();
+				} else if (picture.getThumb() != null) {
+					picURL = picture.getThumb();
+				}
+
+				tweetHTMLWrapperBackground.css("background-image", "url('" + picURL.getURL() + "')");
+			}
 		}
 
 		tweetHTMLWrapper.append(tweetHTMLWrapperBackground);
@@ -179,19 +197,38 @@ class TweetFullscreenPictureRenderer implements Renderer<Tweet> {
 	updateRender(info : Tweet, domElem : any, rendererTheme : string, endCallback : Function) {
 		var tweetHTMLWrapperBackground = $(domElem).find(".TweetFullscreenPictureRenderer_wrapperbackground").first();
 
-		if(info.getPictures().length > 0) {
+		if(info.getAnimatedGifs().length > 0) {
+			var animatedGif = info.getAnimatedGifs()[0];
 
-			var picture : Picture = info.getPictures()[0];
-			var picURL : PictureURL = null;
-			if(picture.getMedium() != null) {
-				picURL = picture.getMedium();
-			} else if(picture.getSmall() != null) {
-				picURL = picture.getSmall();
-			} else if(picture.getThumb() != null) {
-				picURL = picture.getThumb();
+			var videoTag : any = null;
+			if(animatedGif.getMute().toString() == "true") {
+				videoTag = $("<video autoplay loop muted>");
+			} else {
+				videoTag = $("<video autoplay loop>");
 			}
+			videoTag.addClass("TweetFullscreenPictureRenderer_background_video");
+			var zoneVideoSource = $("<source>");
+			zoneVideoSource.attr("src", animatedGif.getURL());
 
-			tweetHTMLWrapperBackground.css("background-image", "url('" + picURL.getURL() + "')");
+			videoTag.append(zoneVideoSource);
+
+			tweetHTMLWrapperBackground.empty();
+			tweetHTMLWrapperBackground.append(videoTag);
+		} else {
+			if (info.getPictures().length > 0) {
+
+				var picture:Picture = info.getPictures()[0];
+				var picURL:PictureURL = null;
+				if (picture.getMedium() != null) {
+					picURL = picture.getMedium();
+				} else if (picture.getSmall() != null) {
+					picURL = picture.getSmall();
+				} else if (picture.getThumb() != null) {
+					picURL = picture.getThumb();
+				}
+
+				tweetHTMLWrapperBackground.css("background-image", "url('" + picURL.getURL() + "')");
+			}
 		}
 
 		var tweetProfilPictureDiv = $(domElem).find(".TweetFullscreenPictureRenderer_profil_picture").first();
