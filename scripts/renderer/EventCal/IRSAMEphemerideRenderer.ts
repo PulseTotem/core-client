@@ -44,7 +44,7 @@ class IRSAMEphemerideRenderer implements Renderer<EventList> {
         wrapperHTML.addClass(rendererTheme);
         var date = moment().format('dddd DD MMMM YYYY');
 
-        var texte = "Nous sommes le "+date;
+        var texte = date;
         var divDate = $('<div>');
         divDate.addClass("IRSAMEphemerideRenderer_date");
         var spanDate = $('<span>');
@@ -56,7 +56,7 @@ class IRSAMEphemerideRenderer implements Renderer<EventList> {
         var divSaints = $('<div>');
         divSaints.addClass("IRSAMEphemerideRenderer_divSaints");
         var spanDivSaints = $('<span>');
-        spanDivSaints.html("Aujourd'hui nous fêtons les : ");
+        spanDivSaints.html("Bonne fête ");
         divSaints.append(spanDivSaints);
 
         wrapperHTML.append(divSaints);

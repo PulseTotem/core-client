@@ -85,9 +85,13 @@ class IRSAMFeedRenderer implements Renderer<FeedNode> {
             }
         } else {
             if(info.getMediaUrl() != null && info.getMediaUrl() != "") {
+                nodeMainMessage.addClass("IRSAMFeedRenderer_mainMessageWithPicture");
                 nodeMainMessage.addClass("pull-right");
+                nodeMainPicture.addClass("pull-left");
+            } else {
+                nodeMainMessage.addClass("IRSAMFeedRenderer_mainMessageWithoutPicture");
             }
-            nodeMainPicture.addClass("pull-left");
+
         }
 
         //Main -> Message -> TitleContainer

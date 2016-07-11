@@ -44,7 +44,7 @@ class IRSAMBirthdayRenderer implements Renderer<EventList> {
         wrapperHTML.addClass(rendererTheme);
         var date = moment().format('dddd DD MMMM YYYY');
 
-        var texte = "Nous sommes le "+date;
+        var texte = date;
         var divDate = $('<div>');
         divDate.addClass("IRSAMBirthdayRenderer_date");
         var spanDate = $('<span>');
@@ -56,7 +56,7 @@ class IRSAMBirthdayRenderer implements Renderer<EventList> {
         var divBirthday = $('<div>');
         divBirthday.addClass("IRSAMBirthdayRenderer_divBirthday");
         var spanDivBirthday = $('<span>');
-        spanDivBirthday.html("Joyeux anniversaire à : ");
+        spanDivBirthday.html("Joyeux anniversaire ");
         divBirthday.append(spanDivBirthday);
 
         wrapperHTML.append(divBirthday);
