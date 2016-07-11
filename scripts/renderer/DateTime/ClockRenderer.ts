@@ -53,6 +53,7 @@ class ClockRenderer implements Renderer<DateTime> {
 		$(domElem).empty();
 		var dateTimeWrapper = $("<div>");
 		dateTimeWrapper.addClass("ClockRenderer_wrapper");
+		dateTimeWrapper.addClass(rendererTheme);
 
 		var dateTime = $("<span>");
 		dateTime.addClass("ClockRenderer_time");
@@ -65,7 +66,25 @@ class ClockRenderer implements Renderer<DateTime> {
 		$(domElem).append(dateTimeWrapper);
 
 		dateTimeWrapper.textfill({
-			maxFontPixels: 500
+			maxFontPixels: 500,
+			success: function() {
+				dateTime.empty();
+
+				var spanHour = $("<span>");
+				spanHour.addClass("ClockRenderer_time_hour");
+				spanHour.html(formatDate.format("HH"));
+				dateTime.append(spanHour);
+
+				var spanMinute = $("<span>");
+				spanMinute.addClass("ClockRenderer_time_minute");
+				spanMinute.html(formatDate.format(":mm"));
+				dateTime.append(spanMinute);
+
+				var spanSecond = $("<span>");
+				spanSecond.addClass("ClockRenderer_time_second");
+				spanSecond.html(formatDate.format(":ss"));
+				dateTime.append(spanSecond);
+			}
 		});
 
 		endCallback();
@@ -88,7 +107,25 @@ class ClockRenderer implements Renderer<DateTime> {
 
 		var dateTimeWrapper = $(domElem).find(".ClockRenderer_wrapper").first();
 		dateTimeWrapper.textfill({
-			maxFontPixels: 500
+			maxFontPixels: 500,
+			success: function() {
+				dateTime.empty();
+
+				var spanHour = $("<span>");
+				spanHour.addClass("ClockRenderer_time_hour");
+				spanHour.html(formatDate.format("HH"));
+				dateTime.append(spanHour);
+
+				var spanMinute = $("<span>");
+				 spanMinute.addClass("ClockRenderer_time_minute");
+				 spanMinute.html(formatDate.format(":mm"));
+				 dateTime.append(spanMinute);
+
+				 var spanSecond = $("<span>");
+				 spanSecond.addClass("ClockRenderer_time_second");
+				 spanSecond.html(formatDate.format(":ss"));
+				 dateTime.append(spanSecond);
+			}
 		});
 
 		endCallback();
