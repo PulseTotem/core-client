@@ -1,0 +1,130 @@
+@import "../../../core.less";
+
+.EventVerticalTimelineRenderer_wrapper {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+
+  .EventVerticalTimelineRenderer_eventContainer {
+    width: 100%;
+
+    .EventVerticalTimelineRenderer_eventTimeContainer {
+      width: 30%;
+      height: 100%;
+      margin-right: 5%;
+      text-align: right;
+      padding-right: 2%;
+
+      .EventVerticalTimelineRenderer_eventBeginDay {
+        width: 100%;
+        height: 25%;
+        font-size: 18px;
+        text-transform: uppercase;
+        margin-bottom: -5%;
+        margin-top: 9%;
+      }
+
+      .EventVerticalTimelineRenderer_eventBeginTime {
+        width: 100%;
+        height: 45%;
+        font-weight: bold;
+        position: relative;
+
+        .EventVerticalTimelineRenderer_eventBeginTime_arrow {
+          position: absolute;
+          left: -2px;
+          top: 38%;
+          color: #C93673;
+        }
+      }
+
+      .EventVerticalTimelineRenderer_eventEndTime {
+        width: 100%;
+        height: 25%;
+        font-size: 20px;
+        margin-top: -1%;
+      }
+
+    }
+
+    .EventVerticalTimelineRenderer_eventNameContainer {
+      width: 60%;
+      height: 100%;
+      border-left: 10px solid white;
+      position: relative;
+
+      .EventVerticalTimelineRenderer_eventPoint {
+        position: absolute;
+        top: 40%;
+        left: -25px;
+        width: 40px;
+        height: 40px;
+        border-radius: 100%;
+        /*background-color: white;*/
+
+        border: 5px solid white;
+        background-color: #C93673;
+      }
+
+      .EventVerticalTimelineRenderer_eventName {
+        width: 80%;
+        height: 80%;
+        margin-top: 5%;
+        margin-left: auto;
+        margin-right: auto;
+        border: 1px solid white;
+        border-radius: 10px;
+        /*color: #C93673;
+        background-color: white;*/
+        padding: 2%;
+        text-align: center;
+        font-size: 30px;
+        font-weight: bold;
+
+        background-color: #C93673;
+        color: white;
+      }
+    }
+  }
+
+  .EventVerticalTimelineRenderer_eventContainer_current {
+
+
+    .EventVerticalTimelineRenderer_eventTimeContainer {
+      background-color: white !important;
+      color: #C93673 !important;
+      border-radius: 10px;
+    }
+
+    /*.EventVerticalTimelineRenderer_eventBeginDay {
+      margin-bottom: 0% !important;
+      margin-top: 5% !important;
+    }
+
+    .EventVerticalTimelineRenderer_eventBeginTime {
+      background-color: white !important;
+      color: #C93673 !important;
+      border-radius: 10px !important;
+    }*/
+
+    .EventVerticalTimelineRenderer_eventPoint {
+      /*border: 5px solid white !important;
+      background-color: #C93673 !important;
+      */
+
+      background-color: white !important;
+    }
+
+    .EventVerticalTimelineRenderer_eventName {
+      /*background-color: #C93673 !important;
+      color: white !important;*/
+
+      background-color: white !important;
+      color: #C93673 !important;
+    }
+  }
+}

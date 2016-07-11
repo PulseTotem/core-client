@@ -1,0 +1,58 @@
+@import "../../core.less";
+
+.EventRenderer_wrapper {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+
+  .EventRenderer_headerContainer {
+    background-color: #E21A66;
+    color: white;
+    padding: 1%;
+    font-weight: bold;
+
+    .EventRenderer_eventTimeLogo {
+      width: 32%;
+      margin-right: 2%;
+    }
+
+    .EventRenderer_eventTime {
+      text-align: center;
+      width: 32%;
+    }
+
+    .EventRenderer_headerContainerArrow {
+      width: 15px;
+      height: 15px;
+      position: absolute;
+      left: 50%;
+      background-color: inherit;
+      transform: rotate(45deg);
+      margin-top: -1px;
+    }
+  }
+
+  .EventRenderer_titleContainer {
+    padding: 1%;
+    padding-top: 2%;
+    text-align: center;
+  }
+
+  .EventRenderer_footerContainer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background-color: rgba(226, 26, 102, 0.1);
+    padding: 1%;
+
+    .EventRenderer_eventTimeHumanEnd {
+      
+    }
+  }
+}
