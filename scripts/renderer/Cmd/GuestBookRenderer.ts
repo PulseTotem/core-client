@@ -145,6 +145,7 @@ class GuestBookRenderer implements Renderer<Cmd> {
 
 		var drawCanvas = $('<canvas>');
 		drawCanvas.addClass("GuestBookRenderer_canvas");
+		drawCanvas.css("background-image","url("+backgroundURL+")");
 		drawCanvasDiv.append(drawCanvas);
 
 		$(domElem).append(wrapperDiv);
