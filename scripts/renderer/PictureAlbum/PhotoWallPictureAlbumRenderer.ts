@@ -71,7 +71,18 @@ class PhotoWallPictureAlbumRenderer implements Renderer<PictureAlbum> {
 		wrapperHTML.addClass("PhotoWallPictureAlbumRenderer_wrapper");
 		wrapperHTML.addClass(rendererTheme);
 
-		var negative = -1;
+		var albumTitle = $("<div>");
+		albumTitle.addClass("PhotoWallPictureAlbumRenderer_album_title");
+		var albumTitleSpan = $("<span>");
+		albumTitleSpan.html(info.getName());
+		albumTitle.append(albumTitleSpan);
+
+		wrapperHTML.append(albumTitle);
+
+		var albumHTML = $("<div>");
+		albumHTML.addClass("PhotoWallPictureAlbumRenderer_album");
+
+		wrapperHTML.append(albumHTML);
 
 		info.getPictures().forEach(function(picture : Picture) {
 
@@ -88,12 +99,23 @@ class PhotoWallPictureAlbumRenderer implements Renderer<PictureAlbum> {
 				var pictureHTML = $("<div>");
 				pictureHTML.addClass("PhotoWallPictureAlbumRenderer_picture");
 				pictureHTML.css("background-image", "url('" + picURL.getURL() + "')");
-				wrapperHTML.append(pictureHTML);
+				albumHTML.append(pictureHTML);
 			}
 
 		});
 
 		$(domElem).append(wrapperHTML);
+
+		albumTitle.textfill({
+			maxFontPixels: 500,
+			success: function() {
+				var fontSize = albumTitle.find("span").first().css("font-size");
+				var fontSizeInt = parseInt(fontSize.substring(0, fontSize.length-2));
+				var newFontSize = fontSizeInt - 4;
+				albumTitle.find("span").first().css("font-size", newFontSize.toString() + "px");
+				albumTitle.find("span").first().css("line-height", (newFontSize * 2).toString() + "px");
+			}
+		});
 
 		endCallback();
 
@@ -125,7 +147,7 @@ class PhotoWallPictureAlbumRenderer implements Renderer<PictureAlbum> {
 	animate(info : PictureAlbum, domElem : any, rendererTheme : string, endCallback : Function) {
 		var self = this;
 
-		var htmlWrapper = $(domElem).find(".PhotoWallPictureAlbumRenderer_wrapper").first();
+		var htmlWrapper = $(domElem).find(".PhotoWallPictureAlbumRenderer_album").first();
 
 		var picturesHTMLElems = $(domElem).find(".PhotoWallPictureAlbumRenderer_picture");
 
