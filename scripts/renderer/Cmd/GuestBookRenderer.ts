@@ -55,16 +55,19 @@ class GuestBookRenderer implements Renderer<Cmd> {
 			case "Wait" :
 				$(domElem).empty();
 				var socketId = info.getArgs()[0];
+				var appliURL = info.getArgs()[1];
+				var backgroundURL = info.getArgs()[2];
 
-				this._renderWait(domElem, socketId);
+				this._renderWait(domElem, socketId, appliURL, backgroundURL);
 
 				break;
 			case "StartSession" :
 				$(domElem).empty();
 				var socketId = info.getArgs()[0];
 				var sessionDesc = JSON.parse(info.getArgs()[1]);
+				var backgroundURL = info.getArgs()[2];
 
-				this._renderStartSession(domElem);
+				this._renderStartSession(domElem, backgroundURL);
 
 				break;
 			case "NewDrawContent" :
@@ -92,12 +95,13 @@ class GuestBookRenderer implements Renderer<Cmd> {
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
 	 * @param {string} socketId - call socket's Id.
 	 */
-	private _renderWait(domElem : any, socketId : string) {
-		var client_guestbook_url = "http://client-guestbook.pulsetotem.fr/session/" + socketId;
+	private _renderWait(domElem : any, socketId : string, appliURL : string, backgroundURL : string) {
+		var client_guestbook_url = appliURL+"/session/" + socketId;
 		//var client_guestbook_url = "http://localhost:9002/session/" + socketId;
 
 		var wrapperDiv = $('<div>');
 		wrapperDiv.addClass("GuestBookRenderer_wrapper");
+		wrapperDiv.css("background-image","url("+backgroundURL+")");
 
 		var qrcodeDiv = $('<div>');
 		qrcodeDiv.addClass("GuestBookRenderer_qrcode");
@@ -130,9 +134,10 @@ class GuestBookRenderer implements Renderer<Cmd> {
 	 * @private
 	 * @param {DOM Element} domElem - The DOM Element where render the info.
 	 */
-	private _renderStartSession(domElem : any) {
+	private _renderStartSession(domElem : any, backgroundURL : string) {
 		var wrapperDiv = $('<div>');
 		wrapperDiv.addClass("GuestBookRenderer_wrapper");
+		wrapperDiv.css("background-image","url("+backgroundURL+")");
 
 		var drawCanvasDiv = $('<div>');
 		drawCanvasDiv.addClass("GuestBookRenderer_canvas_container");
