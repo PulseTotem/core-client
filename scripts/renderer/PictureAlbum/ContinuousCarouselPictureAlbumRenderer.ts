@@ -13,7 +13,7 @@
 declare var $: any; // Use of JQuery
 declare var _: any; // Use of Lodash
 
-class PhotoWallPictureAlbumRenderer implements Renderer<PictureAlbum> {
+class ContinuousCarouselPictureAlbumRenderer implements Renderer<PictureAlbum> {
 
 	/**
 	 * Current timers.
@@ -68,11 +68,11 @@ class PhotoWallPictureAlbumRenderer implements Renderer<PictureAlbum> {
 	render(info : PictureAlbum, domElem : any, rendererTheme : string, endCallback : Function) {
 
 		var wrapperHTML = $("<div>");
-		wrapperHTML.addClass("PhotoWallPictureAlbumRenderer_wrapper");
+		wrapperHTML.addClass("ContinuousCarouselPictureAlbumRenderer_wrapper");
 		wrapperHTML.addClass(rendererTheme);
 
 		var albumTitle = $("<div>");
-		albumTitle.addClass("PhotoWallPictureAlbumRenderer_album_title");
+		albumTitle.addClass("ContinuousCarouselPictureAlbumRenderer_album_title");
 		var albumTitleSpan = $("<span>");
 		albumTitleSpan.html(info.getName());
 		albumTitle.append(albumTitleSpan);
@@ -80,7 +80,7 @@ class PhotoWallPictureAlbumRenderer implements Renderer<PictureAlbum> {
 		wrapperHTML.append(albumTitle);
 
 		var albumHTML = $("<div>");
-		albumHTML.addClass("PhotoWallPictureAlbumRenderer_album");
+		albumHTML.addClass("ContinuousCarouselPictureAlbumRenderer_album");
 
 		wrapperHTML.append(albumHTML);
 
@@ -97,7 +97,7 @@ class PhotoWallPictureAlbumRenderer implements Renderer<PictureAlbum> {
 
 			if(picURL != null) {
 				var pictureHTML = $("<div>");
-				pictureHTML.addClass("PhotoWallPictureAlbumRenderer_picture");
+				pictureHTML.addClass("ContinuousCarouselPictureAlbumRenderer_picture");
 				pictureHTML.css("background-image", "url('" + picURL.getURL() + "')");
 				albumHTML.append(pictureHTML);
 			}
@@ -113,7 +113,7 @@ class PhotoWallPictureAlbumRenderer implements Renderer<PictureAlbum> {
 				var fontSizeInt = parseInt(fontSize.substring(0, fontSize.length-2));
 				var newFontSize = fontSizeInt - 4;
 				albumTitle.find("span").first().css("font-size", newFontSize.toString() + "px");
-				albumTitle.find("span").first().css("line-height", (newFontSize * 2).toString() + "px");
+				//albumTitle.find("span").first().css("line-height", (newFontSize * 2).toString() + "px");
 			}
 		});
 
@@ -147,46 +147,44 @@ class PhotoWallPictureAlbumRenderer implements Renderer<PictureAlbum> {
 	animate(info : PictureAlbum, domElem : any, rendererTheme : string, endCallback : Function) {
 		var self = this;
 
-		var htmlWrapper = $(domElem).find(".PhotoWallPictureAlbumRenderer_album").first();
+		var htmlWrapper = $(domElem).find(".ContinuousCarouselPictureAlbumRenderer_album").first();
 
-		var picturesHTMLElems = $(domElem).find(".PhotoWallPictureAlbumRenderer_picture");
+		var picturesHTMLElems = $(domElem).find(".ContinuousCarouselPictureAlbumRenderer_picture");
 
 		var firstPicture = picturesHTMLElems.first();
 		var firstPictureWidth = firstPicture.width();
 		var firstPictureHeight = firstPicture.height();
 
 		var nbPerRows = Math.round(htmlWrapper.width() / firstPictureWidth);
-		var nbRows = Math.round(htmlWrapper.height() / firstPictureHeight);
 
-		var nbPicturesPerView = nbPerRows * nbRows;
+		if(info.getPictures().length > nbPerRows) {
 
-		for(var i = 0; i < picturesHTMLElems.length ; i++) {
-			var jqueryPictureElem = $(picturesHTMLElems[i]);
-			jqueryPictureElem.removeClass("PhotoWallPictureAlbumRenderer_picture");
-			jqueryPictureElem.addClass("PhotoWallPictureAlbumRenderer_picture_without_size");
-			jqueryPictureElem.width(firstPictureWidth - 10);
-			jqueryPictureElem.height(firstPictureHeight - 10);
-			jqueryPictureElem.css("margin", "5px");
-		}
+			var panelHtml = $("<div>");
+			panelHtml.addClass("ContinuousCarouselPictureAlbumRenderer_panel");
+			panelHtml.width(firstPictureWidth * info.getPictures().length);
 
-		if(info.getPictures().length > nbPicturesPerView) {
-
-			var nbMoves = Math.floor(info.getPictures().length / nbPicturesPerView);
-
-			var totalDisplay = nbMoves*nbPicturesPerView;
-			if(totalDisplay == info.getPictures().length) {
-				nbMoves--;
+			for(var i = 0; i < picturesHTMLElems.length ; i++) {
+				panelHtml.append(picturesHTMLElems[i]);
+				$(picturesHTMLElems[i]).width(firstPictureWidth);
+				$(picturesHTMLElems[i]).height(firstPictureHeight - 10);
+				$(picturesHTMLElems[i]).css("margin-top", "5px");
 			}
+
+			htmlWrapper.empty();
+			panelHtml.css("transform", "translate(" + htmlWrapper.width() + "px, 0px)");
+			htmlWrapper.append(panelHtml);
+
+			endCallback();
+
+			var nbMoves = nbPerRows + info.getPictures().length;
+			var moveDuration = info.getDurationToDisplay() * 1000 / (nbMoves - 1);
 
 			var nbMovesDone = 0;
 
-			var moveDuration = info.getDurationToDisplay() * 1000 / (nbMoves + 1);
-
 			var move = function() {
-
 				if(nbMovesDone < nbMoves) {
 					nbMovesDone++;
-					picturesHTMLElems.transition({y: '-' + htmlWrapper.height() * nbMovesDone + 'px'}, 2000);
+					panelHtml.transition({x: (htmlWrapper.width() - (firstPicture.width() * nbMovesDone)) + 'px'}, 2000);
 
 					if(typeof(self._timers[info.getId()]) != "undefined") {
 						self._timers[info.getId()].stop();
@@ -196,11 +194,7 @@ class PhotoWallPictureAlbumRenderer implements Renderer<PictureAlbum> {
 				}
 			};
 
-			if(typeof(self._timers[info.getId()]) != "undefined") {
-				self._timers[info.getId()].stop();
-			}
-
-			self._timers[info.getId()] = new Timer(move, moveDuration);
+			move();
 		}
 
 		endCallback();
