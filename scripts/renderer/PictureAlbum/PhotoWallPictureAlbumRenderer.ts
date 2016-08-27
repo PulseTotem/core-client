@@ -152,15 +152,31 @@ class PhotoWallPictureAlbumRenderer implements Renderer<PictureAlbum> {
 		var picturesHTMLElems = $(domElem).find(".PhotoWallPictureAlbumRenderer_picture");
 
 		var firstPicture = picturesHTMLElems.first();
+		var firstPictureWidth = firstPicture.width();
+		var firstPictureHeight = firstPicture.height();
 
-		var nbPerRows = Math.round(htmlWrapper.width() / firstPicture.width());
-		var nbRows = Math.round(htmlWrapper.height() / firstPicture.height());
+		var nbPerRows = Math.round(htmlWrapper.width() / firstPictureWidth);
+		var nbRows = Math.round(htmlWrapper.height() / firstPictureHeight);
 
 		var nbPicturesPerView = nbPerRows * nbRows;
+
+		for(var i = 0; i < picturesHTMLElems.length ; i++) {
+			var jqueryPictureElem = $(picturesHTMLElems[i]);
+			jqueryPictureElem.removeClass("PhotoWallPictureAlbumRenderer_picture");
+			jqueryPictureElem.addClass("PhotoWallPictureAlbumRenderer_picture_without_size");
+			jqueryPictureElem.width(firstPictureWidth - 10);
+			jqueryPictureElem.height(firstPictureHeight - 10);
+			jqueryPictureElem.css("margin", "5px");
+		}
 
 		if(info.getPictures().length > nbPicturesPerView) {
 
 			var nbMoves = Math.floor(info.getPictures().length / nbPicturesPerView);
+
+			var totalDisplay = nbMoves*nbPicturesPerView;
+			if(totalDisplay == info.getPictures().length) {
+				nbMoves--;
+			}
 
 			var nbMovesDone = 0;
 
