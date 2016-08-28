@@ -1,0 +1,56 @@
+@import "../../../core.less";
+
+.ClearOnBlurPictureRenderer_wrapper {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+
+  .ClearOnBlurPictureRenderer_title {
+    position: relative;
+    width: 98%;
+    height: 10%;
+    overflow: hidden;
+    text-align: left;
+    padding-left: 1%;
+
+    span {
+      font-family: 'Roboto', "Helvetica Neue", Helvetica, Tahoma, Arial, sans-serif;
+    }
+  }
+
+  .ClearOnBlurPictureRenderer_container {
+    position: relative;
+    width: 100%;
+    height: 90%;
+    background-color: white;
+
+
+    .ClearOnBlurPictureRenderer_background_container {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+
+    .ClearOnBlurPictureRenderer_picture {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      opacity: 1;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+  }
+}
