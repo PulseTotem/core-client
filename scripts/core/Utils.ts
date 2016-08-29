@@ -1,6 +1,6 @@
 /**
- * @author Christian Brel <christian@the6thscreen.fr, ch.brel@gmail.com>
- * @author Simon Urli <simon@the6thscreen.fr, simon.urli@gmail.com>
+ * @author Christian Brel <christian@pulsetotem.fr, ch.brel@gmail.com>
+ * @author Simon Urli <simon@pulsetotem.fr, simon.urli@gmail.com>
  */
 
 /**
@@ -45,4 +45,20 @@ class Utils {
 
 		return pattern.test(value);
 	};
+
+	/**
+	 * Return a random int between min and mex (inclusive).
+	 *
+	 * @method getRandomInt
+	 * @static
+	 * @param {number} min - Min bound
+	 * @param {number} max - Max bound
+	 * @returns {number} value between min and max (inclusive)
+	 */
+	static getRandomInt(min : number, max : number) : number {
+		min = Math.ceil(min);
+		max = Math.floor(max);
+		return Math.floor(Math.random() * (max - min +1)) + min;
+	}
+
 }
