@@ -134,22 +134,8 @@ class ClearOnBlurPictureRenderer implements Renderer<Picture> {
 	 * @param {Function} endCallback - Callback function called at the end of updateRender method.
 	 */
 	updateRender(info : Picture, domElem : any, rendererTheme : string, endCallback : Function) {
-		var pictureHTML = $(domElem).find(".ClearOnBlurPictureRenderer_picture").first();
-
-		var picURL : PictureURL = null;
-		if(info.getMedium() != null) {
-			picURL = info.getMedium();
-		} else if(info.getSmall() != null) {
-			picURL = info.getSmall();
-		} else if(info.getThumb() != null) {
-			picURL = info.getThumb();
-		}
-
-		if(picURL != null) {
-			pictureHTML.css("background-image", "url('" + picURL.getURL() + "')");
-		}
-
-		endCallback();
+		$(domElem).empty();
+		this.render(info, domElem, rendererTheme, endCallback);
 	}
 
 	/**
