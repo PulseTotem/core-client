@@ -1,0 +1,62 @@
+@import "../../../core.less";
+
+.GrayToClearPictureRenderer_wrapper {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+
+  .GrayToClearPictureRenderer_title {
+    position: relative;
+    width: 98%;
+    height: 10%;
+    overflow: hidden;
+    text-align: left;
+    padding-left: 1%;
+
+    span {
+      font-family: 'Roboto', "Helvetica Neue", Helvetica, Tahoma, Arial, sans-serif;
+    }
+  }
+
+  .GrayToClearPictureRenderer_container {
+    position: relative;
+    width: 100%;
+    height: 90%;
+    background-color: white;
+
+    .GrayToClearPictureRenderer_picture_background {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      opacity: 1;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      border: solid white 10px;
+
+      filter: grayscale(0%) blur(0px);
+    }
+
+    .GrayToClearPictureRenderer_picture {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      opacity: 1;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+  }
+}
