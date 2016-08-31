@@ -9,11 +9,12 @@
 /// <reference path="../Renderer.ts" />
 
 /// <reference path="../../core/Timer.ts" />
+/// <reference path="../../core/Utils.ts" />
 
 declare var $: any; // Use of JQuery
 declare var _: any; // Use of Lodash
 
-class PhotoWallPictureAlbumRenderer implements Renderer<PictureAlbum> {
+class StackPictureAlbumRenderer implements Renderer<PictureAlbum> {
 
 	/**
 	 * Current timers.
@@ -66,13 +67,12 @@ class PhotoWallPictureAlbumRenderer implements Renderer<PictureAlbum> {
 	 * @param {Function} endCallback - Callback function called at the end of render method.
 	 */
 	render(info : PictureAlbum, domElem : any, rendererTheme : string, endCallback : Function) {
-
 		var wrapperHTML = $("<div>");
-		wrapperHTML.addClass("PhotoWallPictureAlbumRenderer_wrapper");
+		wrapperHTML.addClass("StackPictureAlbumRenderer_wrapper");
 		wrapperHTML.addClass(rendererTheme);
 
 		var albumTitle = $("<div>");
-		albumTitle.addClass("PhotoWallPictureAlbumRenderer_album_title");
+		albumTitle.addClass("StackPictureAlbumRenderer_album_title");
 		var albumTitleSpan = $("<span>");
 		albumTitleSpan.html(info.getName());
 		albumTitle.append(albumTitleSpan);
@@ -80,9 +80,12 @@ class PhotoWallPictureAlbumRenderer implements Renderer<PictureAlbum> {
 		wrapperHTML.append(albumTitle);
 
 		var albumHTML = $("<div>");
-		albumHTML.addClass("PhotoWallPictureAlbumRenderer_album");
+		albumHTML.addClass("StackPictureAlbumRenderer_album");
 
 		wrapperHTML.append(albumHTML);
+
+		var titles = [];
+		var picturesContainers = [];
 
 		info.getPictures().forEach(function(picture : Picture) {
 
@@ -96,15 +99,43 @@ class PhotoWallPictureAlbumRenderer implements Renderer<PictureAlbum> {
 			}
 
 			if(picURL != null) {
+				var pictureContainerHTML = $("<div>");
+				pictureContainerHTML.addClass("StackPictureAlbumRenderer_picture_container");
+
+				var rotateDeg = Utils.getRandomInt(1, 15);
+				var translation = "1000px";
+				var minus = Utils.getRandomInt(0, 10);
+				if(minus < 5) {
+					rotateDeg = rotateDeg*(-1);
+					translation = "-" + translation;
+				}
+				pictureContainerHTML.css("transform", "rotate(" + rotateDeg + "deg) translate(" + translation + ", 0px)")
+
 				var pictureHTML = $("<div>");
-				pictureHTML.addClass("PhotoWallPictureAlbumRenderer_picture");
+				pictureHTML.addClass("StackPictureAlbumRenderer_picture");
 				pictureHTML.css("background-image", "url('" + picURL.getURL() + "')");
-				albumHTML.append(pictureHTML);
+
+				pictureContainerHTML.append(pictureHTML);
+
+				albumHTML.append(pictureContainerHTML);
+
+				picturesContainers.push(pictureContainerHTML);
 			}
 
 		});
 
 		$(domElem).append(wrapperHTML);
+
+		var newContainerWidth = albumHTML.height() * 0.8;
+		var newContainerLeft = (albumHTML.width() - newContainerWidth) / 2;
+
+		picturesContainers.forEach(function(container : any) {
+			var newContainerTop = (albumHTML.height() - container.height()) / 2;
+
+			container.css("width", newContainerWidth + "px");
+			container.css("left", newContainerLeft + "px");
+			container.css("top", newContainerTop + "px");
+		});
 
 		albumTitle.textfill({
 			maxFontPixels: 500,
@@ -113,7 +144,23 @@ class PhotoWallPictureAlbumRenderer implements Renderer<PictureAlbum> {
 				var fontSizeInt = parseInt(fontSize.substring(0, fontSize.length-2));
 				var newFontSize = fontSizeInt - 4;
 				albumTitle.find("span").first().css("font-size", newFontSize.toString() + "px");
+				//albumTitle.find("span").first().css("line-height", (newFontSize * 2).toString() + "px");
 			}
+		});
+
+		titles.forEach(function(titleDiv : any) {
+			titleDiv.textfill({
+				maxFontPixels: 500,
+				success: function() {
+					var titleSpan = titleDiv.find("span").first();
+					var fontSize = titleSpan.css("font-size");
+					var fontSizeInt = parseInt(fontSize.substring(0, fontSize.length-2));
+					var newFontSize = fontSizeInt - 4;
+					titleSpan.css("font-size", newFontSize.toString() + "px");
+					var paddingTop = (titleDiv.height() - titleSpan.height()) / 2;
+					titleDiv.css("padding-top", paddingTop + "px");
+				}
+			});
 		});
 
 		endCallback();
@@ -146,61 +193,41 @@ class PhotoWallPictureAlbumRenderer implements Renderer<PictureAlbum> {
 	animate(info : PictureAlbum, domElem : any, rendererTheme : string, endCallback : Function) {
 		var self = this;
 
-		var htmlWrapper = $(domElem).find(".PhotoWallPictureAlbumRenderer_album").first();
+		var picturesContainersElems = $(domElem).find(".StackPictureAlbumRenderer_picture_container");
 
-		var picturesHTMLElems = $(domElem).find(".PhotoWallPictureAlbumRenderer_picture");
+		var nbMovesDone = 0;
+		var moveDuration = (info.getDurationToDisplay() / info.getPictures().length) * 1000 - 2000;
 
-		var firstPicture = picturesHTMLElems.first();
-		var firstPictureWidth = firstPicture.width();
-		var firstPictureHeight = firstPicture.height();
+		var move = function() {
+			if(nbMovesDone < picturesContainersElems.length) {
+				var rotateAngle = $(picturesContainersElems[nbMovesDone]).css('rotate');
+				var translateValue = $(picturesContainersElems[nbMovesDone]).css('translate');
+				$(picturesContainersElems[nbMovesDone]).css('transform', "translate(" + translateValue + ") rotate(-180deg)");
 
-		var nbPerRows = Math.round(htmlWrapper.width() / firstPictureWidth);
-		var nbRows = Math.round(htmlWrapper.height() / firstPictureHeight);
-
-		var nbPicturesPerView = nbPerRows * nbRows;
-
-		for(var i = 0; i < picturesHTMLElems.length ; i++) {
-			var jqueryPictureElem = $(picturesHTMLElems[i]);
-			jqueryPictureElem.removeClass("PhotoWallPictureAlbumRenderer_picture");
-			jqueryPictureElem.addClass("PhotoWallPictureAlbumRenderer_picture_without_size");
-			jqueryPictureElem.width(firstPictureWidth - 10);
-			jqueryPictureElem.height(firstPictureHeight - 10);
-			jqueryPictureElem.css("margin", "5px");
-		}
-
-		if(info.getPictures().length > nbPicturesPerView) {
-
-			var nbMoves = Math.floor(info.getPictures().length / nbPicturesPerView);
-
-			var totalDisplay = nbMoves*nbPicturesPerView;
-			if(totalDisplay == info.getPictures().length) {
-				nbMoves--;
-			}
-
-			var nbMovesDone = 0;
-
-			var moveDuration = info.getDurationToDisplay() * 1000 / (nbMoves + 1);
-
-			var move = function() {
-
-				if(nbMovesDone < nbMoves) {
-					nbMovesDone++;
-					picturesHTMLElems.transition({y: '-' + htmlWrapper.height() * nbMovesDone + 'px'}, 2000);
-
-					if(typeof(self._timers[info.getId()]) != "undefined") {
-						self._timers[info.getId()].stop();
-					}
-
-					self._timers[info.getId()] = new Timer(move, moveDuration);
+				var newTranslateX = Utils.getRandomInt(0, 30);
+				var minus = Utils.getRandomInt(0, 10);
+				if(minus < 5) {
+					newTranslateX = newTranslateX*(-1);
 				}
-			};
+				var newTranslateY = Utils.getRandomInt(0, 10);
+				minus = Utils.getRandomInt(0, 10);
+				if(minus < 5) {
+					newTranslateY = newTranslateY*(-1);
+				}
 
-			if(typeof(self._timers[info.getId()]) != "undefined") {
-				self._timers[info.getId()].stop();
+				$(picturesContainersElems[nbMovesDone]).transition({translate: newTranslateX + "px, " + newTranslateY + "px", rotate: rotateAngle}, 2000, 'easeInOutQuart');
+
+				if(typeof(self._timers[info.getId()]) != "undefined") {
+					self._timers[info.getId()].stop();
+				}
+
+				self._timers[info.getId()] = new Timer(move, moveDuration);
+
+				nbMovesDone++;
 			}
+		};
 
-			self._timers[info.getId()] = new Timer(move, moveDuration);
-		}
+		move();
 
 		endCallback();
 	}
