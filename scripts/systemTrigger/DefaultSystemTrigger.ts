@@ -199,6 +199,7 @@ class DefaultSystemTrigger extends SystemTrigger {
 		}
 
 		var renderer : Renderer<any> = event.getCall().getCallType().getRenderer();
+		var rendererTheme : string = event.getCall().getRendererTheme();
 
 		var listInfoRenderersToAdd:Array<InfoRenderer<any>> = new Array<InfoRenderer<any>>();
 		var listInfosToRemove:Array<Info> = new Array<Info>();
@@ -221,7 +222,7 @@ class DefaultSystemTrigger extends SystemTrigger {
 				}
 			} else {
 				if (info.getPriority() == InfoPriority.HIGH) {
-					listInfoRenderersToAdd.push(new InfoRenderer(info, renderer));
+					listInfoRenderersToAdd.push(new InfoRenderer(info, renderer, rendererTheme));
 					totalTime += info.getDurationToDisplay();
 				}
 			}

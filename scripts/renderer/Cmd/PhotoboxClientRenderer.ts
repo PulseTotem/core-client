@@ -1,5 +1,6 @@
 /**
- * @author Simon Urli <simon@the6thscreen.fr, simon.urli@gmail.com>
+ * @author Simon Urli <simon@pulsetotem.fr, simon.urli@gmail.com>
+ * @author Christian Brel <christian@pulsetotem.fr, ch.brel@gmail.com>
  */
 
 /// <reference path="../../../t6s-core/core/scripts/infotype/CmdList.ts" />
@@ -18,7 +19,7 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
     private static DEFAULT_INIT_MSG = "Appuyez sur le bouton et prenez la pose !";
     private static DEFAULT_COUNTER_MSG = "La photo sera prise dans... ";
     private static DEFAULT_PROCESS_MSG = "Veuillez patienter pendant l'envoie de l'image...";
-    private static DEFAULT_END_MSG = "Merci pour votre participation !";
+    private static DEFAULT_END_MSG = "Merci de votre participation !";
 
     private webcam_settings = {
         image_format: 'jpeg',
@@ -40,13 +41,13 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
     private _counterMsg : string;
     private _processMsg : string;
     private _endMsg : string;
-	private _medaillonPicture : string;
+	//private _medaillonPicture : string;
 
     constructor() {
         this._isWaiting = false;
         this._isInitalized = false;
 
-		this._medaillonPicture = "https://cms.pulsetotem.fr/images/d27d44f0-224d-11e6-83f6-33e3ba783274/raw?size=small";
+		//this._medaillonPicture = "";
     }
 
     /**
@@ -89,15 +90,14 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
      * @param {Function} endCallback - Callback function called at the end of render method.
      */
     render(info : Cmd, domElem : any, rendererTheme : string, endCallback : Function) {
-
-        if (info.getCmd() == "WaitOneClick" && info.getArgs().length > 0) {
+		if (info.getCmd() == "WaitOneClick" && info.getArgs().length > 0) {
             $(domElem).empty();
             this.initListener(info.getCallChannel(), info.getId(), info.getArgs()[1]);
-            this.startSession(domElem);
+            this.startSession(domElem, rendererTheme);
         } else if(info.getCmd() == "counter" && info.getArgs().length > 0) {
             $(domElem).empty();
             var counterTime:number = parseInt(info.getArgs()[0]);
-            this.countAndSnap(domElem, counterTime, info.getCallChannel(), info.getId());
+            this.countAndSnap(domElem, counterTime, info.getCallChannel(), info.getId(), rendererTheme);
         } else if (info.getCmd() == "removeInfo") {
             var data = {
                 action : MessageBusAction.REFRESH
@@ -107,7 +107,7 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
             if (Webcam.container) {
                 Webcam.reset();
             }
-            this.displayEndMessage(domElem);
+            this.displayEndMessage(domElem, rendererTheme);
             this._isWaiting = true;
         } else {
             $(domElem).empty();
@@ -197,10 +197,12 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
         });
     }
 
-    private startSession(domElem : any) {
+    private startSession(domElem : any, rendererTheme : string) {
 
         var divWrapper = $('<div>');
         divWrapper.addClass("PhotoboxClientRenderer_wrapper");
+		divWrapper.addClass(rendererTheme);
+
         var divCam = $('<div>');
         divCam.attr("id","webCamview");
         divCam.addClass("PhotoboxClientRenderer_WebcamView");
@@ -253,11 +255,12 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
         Webcam.attach("#webCamview");
     }
 
-    private countAndSnap(domElem : any, counterTime : number, callChannel : string, infoid : string) {
+    private countAndSnap(domElem : any, counterTime : number, callChannel : string, infoid : string, rendererTheme : string) {
         var counter = counterTime;
         var counterMax = counter;
         var divWrapper = $('<div>');
         divWrapper.addClass("PhotoboxClientRenderer_wrapper");
+		divWrapper.addClass(rendererTheme);
 
         var randomId = "divCounter"+(Math.round(Math.random()*1000));
         var divCounter = $('<div id="'+randomId+'">');
@@ -307,7 +310,7 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
         domElem.append(divWrapper);
 
         var circle = new ProgressBar.Circle(divCounter[0], {
-            color: '#FFA500',
+            color: divCounter.css('color'),
             strokeWidth: 10,
             trailColor: 'rgba(0,0,0,1)',
             trailWidth: 10,
@@ -430,9 +433,10 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
         setTimeout(timeoutFunction, 1000);
     }
 
-    private displayEndMessage(domElem : any) {
+    private displayEndMessage(domElem : any, rendererTheme : string) {
         var divWrapper = $('<div>');
         divWrapper.addClass("PhotoboxClientRenderer_wrapper");
+		divWrapper.addClass(rendererTheme);
 
         var divResultPhotoImg = $('<div>');
         divResultPhotoImg.addClass("PhotoboxClientRenderer_photoResult");
@@ -454,7 +458,7 @@ class PhotoboxClientRenderer implements Renderer<Cmd> {
 
 		var medaillon = $("<div>");
 		medaillon.addClass("PhotoboxClientRenderer_profilpic");
-		medaillon.css("background-image","url(" + this._medaillonPicture + ")");
+		//medaillon.css("background-image","url(" + this._medaillonPicture + ")");
 
 
 		divResultPhotoImg.append(medaillon);
