@@ -113,7 +113,6 @@ class PhotoWallPictureAlbumRenderer implements Renderer<PictureAlbum> {
 				var fontSizeInt = parseInt(fontSize.substring(0, fontSize.length-2));
 				var newFontSize = fontSizeInt - 4;
 				albumTitle.find("span").first().css("font-size", newFontSize.toString() + "px");
-				albumTitle.find("span").first().css("line-height", (newFontSize * 2).toString() + "px");
 			}
 		});
 
