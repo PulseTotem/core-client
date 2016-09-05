@@ -1,0 +1,70 @@
+@import "../../../core.less";
+
+
+.LogoDescriptionIntroductionFeedNodeRenderer_wrapper {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+
+  .LogoDescriptionIntroductionFeedNodeRenderer_main_picture_container {
+    width: 100%;
+    height: 50%;
+    padding-top: 2%;
+
+    .LogoDescriptionIntroductionFeedNodeRenderer_main_picture {
+      width: 50%;
+      height: 90%;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      border: 5px solid white;
+      padding: 0.5%;
+      border-radius: 5px;
+      box-shadow: 0 0 10px 0 rgba(0,0,0,.4);
+      margin: auto;
+    }
+
+  }
+
+  .LogoDescriptionIntroductionFeedNodeRenderer_description_container {
+    width: 80%;
+    height: 50%;
+    text-align: center;
+    color: #f6fbf3;
+    letter-spacing: 1px;
+    font-family: PoetsenOne,Emoji;
+    text-shadow: 0px 1px 0px #000;
+    font-size: 25px;
+    margin: auto;
+    position: relative;
+    padding-top: 2vw;
+
+    &::before {
+      display: inline;
+      content: '“';
+      left: -2.3vw;
+      top: -1.2vw;
+      font-size: 3em;
+      text-decoration: none;
+      color: #f6fbf3;
+      position: absolute;
+      box-sizing: border-box;
+    }
+
+    &::after {
+      display: inline;
+      content: '”';
+      right: -2vw;
+      bottom: -4vh;
+      font-size: 3em;
+      text-decoration: none;
+      color: #f6fbf3;
+      position: absolute;
+      box-sizing: border-box;
+    }
+  }
+}
