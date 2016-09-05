@@ -97,6 +97,7 @@ class CountdownCmdRenderer implements Renderer<Cmd> {
 				break;
 			case "run" :
 				if(this._timer != null) {
+					$(domElem).find(".CountdownCmdRenderer_pause").first().css("visibility", "hidden");
 					this._timer.resume();
 				} else {
 					$(domElem).empty();
@@ -106,6 +107,7 @@ class CountdownCmdRenderer implements Renderer<Cmd> {
 				break;
 			case "pause" :
 				if(this._timer != null) {
+					$(domElem).find(".CountdownCmdRenderer_pause").first().css("visibility", "visible");
 					this._timer.pause();
 				}
 				break;
@@ -333,6 +335,18 @@ class CountdownCmdRenderer implements Renderer<Cmd> {
 
 		wrapperDiv.append(contentContainerDiv);
 
+		var timerContainerDiv = $('<div>');
+		timerContainerDiv.addClass("CountdownCmdRenderer_timer_container");
+
+		contentContainerDiv.append(timerContainerDiv);
+
+		var hourglassIconDiv = $('<div>');
+		hourglassIconDiv.addClass("CountdownCmdRenderer_hourglass");
+		var hourglassIcon = $('<span class="glyphicon glyphicon-hourglass"></span>');
+		hourglassIconDiv.append(hourglassIcon);
+
+		timerContainerDiv.append(hourglassIconDiv);
+
 		var timerDiv = $('<div>');
 		timerDiv.addClass("CountdownCmdRenderer_timer");
 
@@ -358,7 +372,15 @@ class CountdownCmdRenderer implements Renderer<Cmd> {
 		timerSpan.html(timerString);
 		timerDiv.append(timerSpan);
 
-		contentContainerDiv.append(timerDiv);
+		timerContainerDiv.append(timerDiv);
+
+		var pauseIconDiv = $('<div>');
+		pauseIconDiv.addClass("CountdownCmdRenderer_pause");
+		var pauseIcon = $('<span class="glyphicon glyphicon-pause"></span>');
+		pauseIconDiv.append(pauseIcon);
+
+		timerContainerDiv.append(pauseIconDiv);
+
 
 		if(countdownDesc.content != "") {
 			var contentDiv = $('<div>');
@@ -385,6 +407,30 @@ class CountdownCmdRenderer implements Renderer<Cmd> {
 				}
 			});
 		}
+
+		hourglassIconDiv.textfill({
+			maxFontPixels: 500,
+			success: function() {
+				var fontSize = hourglassIconDiv.find("span").first().css("font-size");
+				var fontSizeInt = parseInt(fontSize.substring(0, fontSize.length-2));
+				var newFontSize = Math.floor(fontSizeInt / 2);
+				hourglassIconDiv.find("span").first().css("font-size", newFontSize.toString() + "px");
+				var newPaddingTop = Math.floor(newFontSize / 2) + 10;
+				hourglassIconDiv.css("padding-top", newPaddingTop + "px");
+			}
+		});
+
+		pauseIconDiv.textfill({
+			maxFontPixels: 500,
+			success: function() {
+				var fontSize = pauseIconDiv.find("span").first().css("font-size");
+				var fontSizeInt = parseInt(fontSize.substring(0, fontSize.length-2));
+				var newFontSize = Math.floor(fontSizeInt / 2);
+				pauseIconDiv.find("span").first().css("font-size", newFontSize.toString() + "px");
+				var newPaddingTop = Math.floor(newFontSize / 2) + 10;
+				pauseIconDiv.css("padding-top", newPaddingTop + "px");
+			}
+		});
 
 		timerDiv.textfill({
 			maxFontPixels: 500,
@@ -458,14 +504,30 @@ class CountdownCmdRenderer implements Renderer<Cmd> {
 
 		wrapperDiv.append(contentContainerDiv);
 
+		var timerContainerDiv = $('<div>');
+		timerContainerDiv.addClass("CountdownCmdRenderer_timer_container");
+
+		contentContainerDiv.append(timerContainerDiv);
+
+		var hourglassIconDiv = $('<div>');
+		hourglassIconDiv.addClass("CountdownCmdRenderer_hourglass");
+		var hourglassIcon = $('<span class="glyphicon glyphicon-hourglass"></span>');
+		hourglassIconDiv.append(hourglassIcon);
+
+		timerContainerDiv.append(hourglassIconDiv);
+
 		var timerDiv = $('<div>');
 		timerDiv.addClass("CountdownCmdRenderer_timer");
-
 		var timerSpan = $('<span>');
-
 		timerDiv.append(timerSpan);
+		timerContainerDiv.append(timerDiv);
 
-		contentContainerDiv.append(timerDiv);
+		var pauseIconDiv = $('<div>');
+		pauseIconDiv.addClass("CountdownCmdRenderer_pause");
+		var pauseIcon = $('<span class="glyphicon glyphicon-pause"></span>');
+		pauseIconDiv.append(pauseIcon);
+
+		timerContainerDiv.append(pauseIconDiv);
 
 		var contentDiv = $('<div>');
 		contentDiv.addClass("CountdownCmdRenderer_ready");
@@ -514,6 +576,9 @@ class CountdownCmdRenderer implements Renderer<Cmd> {
 						}
 					});
 				}
+
+				hourglassIconDiv.css("visibility", "hidden");
+				pauseIconDiv.css("visibility", "hidden");
 			} else {
 				var remainingHours = Math.floor(timerDuration / 3600);
 				var remainingMinutes = Math.floor(timerDuration / 60) - (remainingHours * 60);
@@ -545,6 +610,30 @@ class CountdownCmdRenderer implements Renderer<Cmd> {
 					var fontSizeInt = parseInt(fontSize.substring(0, fontSize.length-2));
 					var newFontSize = fontSizeInt - 4;
 					timerDiv.find("span").first().css("font-size", newFontSize.toString() + "px");
+				}
+			});
+
+			hourglassIconDiv.textfill({
+				maxFontPixels: 500,
+				success: function() {
+					var fontSize = hourglassIconDiv.find("span").first().css("font-size");
+					var fontSizeInt = parseInt(fontSize.substring(0, fontSize.length-2));
+					var newFontSize = Math.floor(fontSizeInt / 2);
+					hourglassIconDiv.find("span").first().css("font-size", newFontSize.toString() + "px");
+					var newPaddingTop = Math.floor(newFontSize / 2) + 10;
+					hourglassIconDiv.css("padding-top", newPaddingTop + "px");
+				}
+			});
+
+			pauseIconDiv.textfill({
+				maxFontPixels: 500,
+				success: function() {
+					var fontSize = pauseIconDiv.find("span").first().css("font-size");
+					var fontSizeInt = parseInt(fontSize.substring(0, fontSize.length-2));
+					var newFontSize = Math.floor(fontSizeInt / 2);
+					pauseIconDiv.find("span").first().css("font-size", newFontSize.toString() + "px");
+					var newPaddingTop = Math.floor(newFontSize / 2) + 10;
+					pauseIconDiv.css("padding-top", newPaddingTop + "px");
 				}
 			});
 
