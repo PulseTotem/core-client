@@ -165,7 +165,7 @@ class PhotoWallPictureAlbumRenderer implements Renderer<PictureAlbum> {
 			jqueryPictureElem.addClass("PhotoWallPictureAlbumRenderer_picture_without_size");
 			jqueryPictureElem.width(firstPictureWidth - 10);
 			jqueryPictureElem.height(firstPictureHeight - 10);
-			jqueryPictureElem.css("margin", "5px");
+			jqueryPictureElem.css("margin", "4px");
 		}
 
 		if(info.getPictures().length > nbPicturesPerView) {
